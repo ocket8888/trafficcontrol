@@ -44,7 +44,7 @@ function initBuildArea() {
 		 { echo "Could not copy to $dest/app: $?"; exit 1; }
 	tar -czvf "$dest".tgz -C "$RPMBUILD"/SOURCES $(basename "$dest") || \
 		 { echo "Could not create tar archive $dest.tgz: $?"; exit 1; }
-	cp "$TO_DIR"/build/*.spec "$RPMBUILD"/SPECS/. || \
+	cp "$TO_DIR"/build/traffic_ops.spec "$RPMBUILD"/SPECS/. || \
 		 { echo "Could not copy spec files: $?"; exit 1; }
 
 	echo "The build area has been initialized."
