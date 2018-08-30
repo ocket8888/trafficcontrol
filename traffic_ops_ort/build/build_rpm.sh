@@ -35,10 +35,13 @@ function initBuildArea() {
 	mkdir -p "$RPMBUILD"/{SPECS,SOURCES,RPMS,SRPMS,BUILD,BUILDROOT} || { echo "Could not create $RPMBUILD: $?"; exit 1; }
 
 	local dest=$(createSourceDir traffic_ops_ort)
-	cp -p traffic_ops_ort.pl "$dest"
-	cp -p supermicro_udev_mapper.pl "$dest"
+	cd "traffic_ops_ort" || { echo "Could not cd to ORT directory: $?"; exit 1; }
+	cp -p traffic_ops_ort.pl "$dest" || { echo "Could not copy ORT script: $?"; exit 1; }
+	cp -p supermicro_udev_mapper.pl "$dest" || { echo "Could not copy udev mapper script: $?"; exit 1; }
 	tar -czvf "$dest".tgz -C "$RPMBUILD"/SOURCES $(basename "$dest") || \
 	    { echo "Could not create tape archive $dest.tgz: $?"; exit 1; }
+	cp build/traffic_ops_ort.spec "$RPMBUILD"/SPECS/. || \
+	    { echo "Could not copy spec files: $?"; exit 1; }
 
 	echo "The build area has been initialized."
 }
