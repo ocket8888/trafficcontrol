@@ -1,17 +1,17 @@
-.. 
-.. 
+..
+..
 .. Licensed under the Apache License, Version 2.0 (the "License");
 .. you may not use this file except in compliance with the License.
 .. You may obtain a copy of the License at
-.. 
+..
 ..     http://www.apache.org/licenses/LICENSE-2.0
-.. 
+..
 .. Unless required by applicable law or agreed to in writing, software
 .. distributed under the License is distributed on an "AS IS" BASIS,
 .. WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 .. See the License for the specific language governing permissions and
 .. limitations under the License.
-.. 
+..
 
 .. _dev-building:
 
@@ -55,6 +55,7 @@ Usage
                 - traffic_monitor_build
                 - source
                 - traffic_ops_build
+                - traffic_ops_ort_build
                 - traffic_stats_build
 
 
@@ -85,10 +86,8 @@ Usage
 
     $ docker-compose -f ./infrastructure/docker/build/docker-compose.yml down -v
     $ docker-compose -f ./infrastructure/docker/build/docker-compose.yml up --build source traffic_ops_build
-    $ ls -1 dist/
+    $ ls dist/
     build-traffic_ops.log
-    traffic_ops-2.1.0-6396.07033d6d.el7.src.rpm
-    traffic_ops-2.1.0-6396.07033d6d.el7.x86_64.rpm
-    traffic_ops_ort-2.1.0-6396.07033d6d.el7.src.rpm
-    traffic_ops_ort-2.1.0-6396.07033d6d.el7.x86_64.rpm
-    apache-trafficcontrol-2.1.0.tar.gz
+    traffic_ops-<version>-<commit number>.<commit hash>.<RHEL version>.src.rpm
+    traffic_ops-<version>-<commit number>.<commit hash>.<RHEL version>.<architecture>.rpm
+    apache-trafficcontrol-<version>.tar.gz
