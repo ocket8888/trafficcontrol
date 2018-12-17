@@ -32,26 +32,27 @@ Request Structure
 -----------------
 .. table:: Request Query Parameters
 
-	+------------+----------+-----------------------------------------------------------------------------------------------------+
-	| Parameter  | Required | Description                                                                                         |
-	+============+==========+=====================================================================================================+
-	| cachegroup | no       | An integral, unique identifier for a :term:`Cache Group` - only ANSs for this :term:`Cache Group`   |
-	|            |          | will be returned.                                                                                   |
-	+------------+----------+-----------------------------------------------------------------------------------------------------+
-	| orderby    | no       | Choose the ordering of the results - must be the name of one of the fields of the objects in the    |
-	|            |          | ``response`` array                                                                                  |
-	+------------+----------+-----------------------------------------------------------------------------------------------------+
-	| sortOrder  | no       | Changes the order of sorting. Either ascending (default or "asc") or descending ("desc")            |
-	+------------+----------+-----------------------------------------------------------------------------------------------------+
-	| limit      | no       | Choose the maximum number of results to return                                                      |
-	+------------+----------+-----------------------------------------------------------------------------------------------------+
-	| offset     | no       | The number of results to skip before beginning to return results. Must use in conjunction with      |
-	|            |          | limit                                                                                               |
-	+------------+----------+-----------------------------------------------------------------------------------------------------+
-	| page       | no       | Return the n\ :sup:`th` page of results, where "n" is the value of this parameter, pages are        |
-	|            |          | ``limit`` long and the first page is 1. If ``offset`` was defined, this query parameter has no      |
-	|            |          | effect. ``limit`` must be defined to make use of ``page``.                                          |
-	+------------+----------+-----------------------------------------------------------------------------------------------------+
+	+----------------+----------+-----------------------------------------------------------------------------------------------------+
+	| Parameter      | Required | Description                                                                                         |
+	+================+==========+=====================================================================================================+
+	| asn            | no       | Only ASNs with this value will be returned                                                          |
+	+----------------+----------+-----------------------------------------------------------------------------------------------------+
+	| cachegroup     | no       | An integral, unique identifier for a Cache Group - only ANSs for this Cache Group will be returned. |
+	+----------------+----------+-----------------------------------------------------------------------------------------------------+
+	| cachegroupName | no       | The name of a Cache Group - only ASNs for this Cache Group will be returned                         |
+	+----------------+----------+-----------------------------------------------------------------------------------------------------+
+	| id             | no       | An integral, unique identifier for an ASN - only the ASN identified by this will be returned        |
+	+----------------+----------+-----------------------------------------------------------------------------------------------------+
+	| orderby        | no       | Choose the ordering of the results - must be the name of one of the fields of the objects in the    |
+	|                |          | ``response`` array                                                                                  |
+	+----------------+----------+-----------------------------------------------------------------------------------------------------+
+	| sortOrder      | no       | Changes the order of sorting. Either ascending (default or "asc") or descending ("desc")            |
+	+----------------+----------+-----------------------------------------------------------------------------------------------------+
+	| limit          | no       | Choose the maximum number of results to return                                                      |
+	+----------------+----------+-----------------------------------------------------------------------------------------------------+
+	| offset         | no       | The number of results to skip before beginning to return results. Must use in conjunction with      |
+	|                |          | limit                                                                                               |
+	+----------------+----------+-----------------------------------------------------------------------------------------------------+
 
 Response Structure
 ------------------
@@ -155,3 +156,128 @@ Response Structure
 		"id": 2,
 		"lastUpdated": "2018-11-01 18:57:08+00"
 	}}
+
+
+``PUT``
+=======
+.. table:: Request Query Parameters
+
+	+------+----------+------------------------------------------------------------+
+	| Name | Required | Description                                                |
+	+======+==========+============================================================+
+	|  id  | yes      | The integral, unique identifier for the ASN to be modified |
+	+------+----------+------------------------------------------------------------+
+
+Allows user to edit an existing Autonomous System Number (ASN).
+
+:Auth. Required: Yes
+:Roles Required: "admin" or "operations"
+:Response Type: Object
+
+Request Structure
+-----------------
+:asn:          The value of the new ASN
+:cachegroupId: The integral, unique identifier of a Cache Group to which this ASN will be assigned
+:cachegroup:   An optional field which, if present, specifies the name of a Cache Group to which this ASN will be assigned
+
+.. note:: While this endpoint accepts the ``cachegroup`` field, sending this in the request payload has no effect except that the response will (erroneously) name the Cache Group to which the ASN was assigned. Any subsequent requests will reveal that, in fact, the Cache Group name is set by the ``cachegroupId`` field.
+
+.. table:: Request Path Parameters
+
+	+------+----------------------------------------------------+
+	| Name |                 Description                        |
+	+======+====================================================+
+	|  ID  | The integral, unique identifier of the desired ASN |
+	+------+----------------------------------------------------+
+
+.. code-block:: http
+	:caption: Request Example
+
+	PUT /api/1.1/asns/1 HTTP/1.1
+	Host: trafficops.infra.ciab.test
+	User-Agent: curl/7.47.0
+	Accept: */*
+	Cookie: mojolicious=...
+	Content-Length: 29
+	Content-Type: application/x-www-form-urlencoded
+
+	{"asn": 2, "cachegroupId": 1}
+
+Response Structure
+------------------
+:asn:          Autonomous System Numbers per APNIC for identifying a service provider
+:cachegroup:   Related Cache Group name
+:cachegroupId: Related Cache Group ID
+:id:           An integer which uniquely identifies the ASN
+:lastUpdated:  The date and time at which this server entry was last updated in an ISO-like format
+
+.. code-block:: http
+	:caption: Response Example
+
+	HTTP/1.1 200 OK
+	Access-Control-Allow-Credentials: true
+	Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Set-Cookie, Cookie
+	Access-Control-Allow-Methods: POST,GET,OPTIONS,PUT,DELETE
+	Access-Control-Allow-Origin: *
+	Content-Type: application/json
+	Set-Cookie: mojolicious=...; Path=/; HttpOnly
+	Whole-Content-Sha512: /83P4LJVsrQx9BKHFxo5pbhQMlB4o3a9v3PpkspyOJcpNx1S/GJhCPpiANBki547sbY+0vTq76IriHZ4GYp8bA==
+	X-Server-Name: traffic_ops_golang/
+	Date: Thu, 08 Nov 2018 14:37:39 GMT
+	Content-Length: 160
+
+	{ "alerts": [
+		{
+			"text": "asn was updated.",
+			"level": "success"
+		}
+	],
+	"response": {
+		"asn": 2,
+		"cachegroup": null,
+		"cachegroupId": 1,
+		"id": 1,
+		"lastUpdated": "2018-11-08 14:37:39+00"
+	}}
+
+``DELETE``
+==========
+Deletes an Autonomous System Number (ASN).
+
+:Auth. Required: Yes
+:Roles Required: "admin" or "operations"
+:Response Type:  ``undefined``
+
+Request Structure
+-----------------
+.. table:: Request Query Parameters
+
+	+------+----------+-----------------------------------------------------------+
+	| Name | Required | Description                                               |
+	+======+==========+===========================================================+
+	|  id  | yes      | The integral, unique identifier for the ASN to be deleted |
+	+------+----------+-----------------------------------------------------------+
+
+Response Structure
+------------------
+.. code-block:: http
+	:caption: Response Example
+
+	HTTP/1.1 200 OK
+	Access-Control-Allow-Credentials: true
+	Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Set-Cookie, Cookie
+	Access-Control-Allow-Methods: POST,GET,OPTIONS,PUT,DELETE
+	Access-Control-Allow-Origin: *
+	Content-Type: application/json
+	Set-Cookie: mojolicious=...; Path=/; HttpOnly
+	Whole-Content-Sha512: 6t3WA+DOcfPJB5UnvDpzEVx5ySfmJgEV9wgkO71U5k32L1VXpxcaTdDVLNGgDDl9sdNftmYnKXf5jpfWUuFYJQ==
+	X-Server-Name: traffic_ops_golang/
+	Date: Wed, 07 Nov 2018 19:14:08 GMT
+	Content-Length: 58
+
+	{ "alerts": [
+		{
+			"text": "asn was deleted.",
+			"level": "success"
+		}
+	]}

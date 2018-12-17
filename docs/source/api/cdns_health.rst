@@ -43,17 +43,31 @@ Response Structure
 :totalOffline: Total number of OFFLINE caches across all Cache Groups which are assigned to any CDN
 :totalOnline:  Total number of ONLINE caches across all Cache Groups which are assigned to any CDN
 
-.. code-block:: json
+.. code-block:: http
 	:caption: Response Example
+
+	HTTP/1.1 200 OK
+	Access-Control-Allow-Credentials: true
+	Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept
+	Access-Control-Allow-Methods: POST,GET,OPTIONS,PUT,DELETE
+	Access-Control-Allow-Origin: *
+	Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+	Content-Type: application/json
+	Date: Mon, 17 Dec 2018 20:13:49 GMT
+	Server: Mojolicious (Perl)
+	Set-Cookie: mojolicious=...; expires=Tue, 18 Dec 2018 00:13:49 GMT; path=/; HttpOnly
+	Vary: Accept-Encoding
+	Whole-Content-Sha512: KpXViXeAgch58ueQqdyU8NuINBw1EUedE6Rv2ewcLUajJp6kowdbVynpwW7XiSvAyHdtClIOuT3OkhIimghzSA==
+	Content-Length: 115
 
 	{ "response": {
 		"totalOffline": 0,
 		"totalOnline": 1,
 		"cachegroups": [
 			{
-					"offline": 0,
-					"name": "CDN_in_a_Box_Edge",
-					"online": 1
-				}
+				"offline": 0,
+				"name": "CDN_in_a_Box_Edge",
+				"online": 1
+			}
 		]
 	}}

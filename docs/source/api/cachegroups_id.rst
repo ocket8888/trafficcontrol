@@ -22,6 +22,11 @@ Extracts information about a single :term:`Cache Group`
 
 ``GET``
 =======
+.. deprecated:: 1.1
+	Use the ``id`` query parameter (or better yet the ``name`` query parameter) of a ``GET`` request to :ref:`to-api-cachegroups` instead.
+
+Extracts information about a single Cache Group
+
 :Auth. Required: Yes
 :Roles Required: None
 :Response Type:  Array

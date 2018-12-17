@@ -21,6 +21,9 @@
 
 ``GET``
 =======
+.. deprecated:: 1.1
+	Use the ``name`` query parameter of a ``GET`` request to :ref:`to-api-cdns` instead.
+
 Extract information about a CDN, identified by name.
 
 :Auth. Required: Yes

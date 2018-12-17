@@ -21,7 +21,7 @@
 
 ``GET``
 =======
-Retrieve information about the assignment of servers to :term:`Delivery Services`
+Retrieve information about the assignment of servers to :term:`Delivery Services`.
 
 :Auth. Required: Yes
 :Roles Required: None\ [1]_

@@ -13,41 +13,30 @@
 .. limitations under the License.
 ..
 
-.. _to-api-cdns-name-name-dnsseckeys-delete:
+.. _to-api-keys-ping:
 
-****************************************
-``cdns/name/{{name}}/dnsseckeys/delete``
-****************************************
+*************
+``keys/ping``
+*************
+.. deprecated:: 1.1
+	Use :ref:`to-api-riak-ping` instead.
 
 ``GET``
 =======
-Delete :abbr:`DNSSEC (DNS Security Extensions)` keys for a CDN and all associated :term:`Delivery Services`.
+Retrieves the status of the connected Traffic Vault instance.
 
 :Auth. Required: Yes
-:Roles Required: "admin"
+:Roles Required: None
 :Response Type:  Object (string)
 
 Request Structure
 -----------------
-.. table:: Request Path Parameters
-
-	+------+-----------------------------------------------------------+
-	| Name |                       Description                         |
-	+======+===========================================================+
-	| name | The name of the CDN for which DNSSEC keys will be deleted |
-	+------+-----------------------------------------------------------+
-
-.. code-block:: http
-	:caption: Request Example
-
-	GET /api/1.1/cdns/name/CDN-in-a-Box/dnsseckeys/delete HTTP/1.1
-	Host: trafficops.infra.ciab.test
-	User-Agent: curl/7.47.0
-	Accept: */*
-	Cookie: mojolicious=...
+No parameters available.
 
 Response Structure
 ------------------
+.. important:: If the Traffic Vault server is unreachable, the TCP connection will be dropped without sending a "FIN" to the client, resulting in no HTTP response at all. Thus, ``response`` should always be ``"OK"`` because no response will be received in the event that the server is *not* "OK".
+
 .. code-block:: http
 	:caption: Response Example
 
@@ -58,11 +47,11 @@ Response Structure
 	Access-Control-Allow-Origin: *
 	Content-Type: application/json
 	Set-Cookie: mojolicious=...; Path=/; HttpOnly
-	Whole-Content-Sha512: lTtmzI90Gg4CN9MQIicW8uVoUeTjTb8/2/+yvjyV1Gq9ifRaZ8RXi+7sD9Wy+UusBd/t8u8f6+A9ZGrEj1sNbQ==
+	Whole-Content-Sha512: dvkoZxvL+RKFeZSSksXyq71HCvEH4DeIeGosqt16d8bzbtaeix2+/URJM/YDp5jYaH9Gdq9PriyzwDJOrZRHOw==
 	X-Server-Name: traffic_ops_golang/
-	Date: Mon, 17 Dec 2018 21:21:33 GMT
-	Content-Length: 59
+	Date: Tue, 18 Dec 2018 16:30:58 GMT
+	Content-Length: 17
 
 	{
-		"response": "Successfully deleted dnssec for CDN-in-a-Box"
+		"response": "OK"
 	}

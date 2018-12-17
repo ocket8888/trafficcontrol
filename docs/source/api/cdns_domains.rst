@@ -39,8 +39,20 @@ Response Structure
 :profileId:          The :ref:`profile-id` of the :term:`Profile` assigned to the Traffic Router responsible for serving ``domainName``
 :profileName:        The :ref:`profile-name` of the :term:`Profile` assigned to the Traffic Router responsible for serving ``domainName``
 
-.. code-block:: json
+.. code-block:: http
 	:caption: Response Example
+
+	HTTP/1.1 200 OK
+	Access-Control-Allow-Credentials: true
+	Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Set-Cookie, Cookie
+	Access-Control-Allow-Methods: POST,GET,OPTIONS,PUT,DELETE
+	Access-Control-Allow-Origin: *
+	Content-Type: application/json
+	Set-Cookie: mojolicious=...; Path=/; HttpOnly
+	Whole-Content-Sha512: lP2Cb84rV+ojiefy29AlaRaNh6+iMucOGmz5lM3tPT+SHucKo/kdg5wFAp9JXJ7Yl0VzWAQ1IoIbdydtMjv+VA==
+	X-Server-Name: traffic_ops_golang/
+	Date: Mon, 17 Dec 2018 20:11:19 GMT
+	Content-Length: 159
 
 	{ "response": [
 		{

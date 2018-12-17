@@ -13,13 +13,17 @@
 .. limitations under the License.
 ..
 
-.. _to-api-deliveryservices-request:
+.. _to-api-deliveryservice-requests:
 
 ****************************
-``deliveryservices/request``
+``deliveryservice_requests``
 ****************************
+.. versionadded:: 1.3
 
 .. seealso:: :ref:`ds_requests`
+
+``GET``
+=======
 
 ``POST``
 ========
@@ -85,8 +89,16 @@ Request Structure
 
 :emailTo: The email to which the Delivery Service request will be sent
 
-.. code-block:: json
+.. code-block:: http
 	:caption: Request Example
+
+	POST /api/1.3/deliveryservice_requests HTTP/1.1
+	Host: trafficops.infra.ciab.test
+	User-Agent: curl/7.47.0
+	Accept: */*
+	Cookie: mojolicious=...
+	Content-Length: 990
+	Content-Type: application/json
 
 	{ "emailTo": "foo@bar.com",
 	"details": {
@@ -100,7 +112,7 @@ Request Structure
 		"peakBPSEstimate": "less-than-5-Gbps",
 		"peakTPSEstimate": "less-than-1000-TPS",
 		"maxLibrarySizeEstimate": "less-than-200-GB",
-		"originURL": "http://myorigin.com",
+		"originURL": "http://origin.infra.ciab.test",
 		"hasOriginDynamicRemap": false,
 		"originTestFile": "http://origin.infra.ciab.test",
 		"hasOriginACLWhitelist": false,
@@ -123,8 +135,20 @@ Request Structure
 
 Response Structure
 ------------------
-.. code-block:: json
+.. code-block:: http
 	:caption: Response Example
+
+	HTTP/1.1 200 OK
+	Access-Control-Allow-Credentials: true
+	Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Set-Cookie, Cookie
+	Access-Control-Allow-Methods: POST,GET,OPTIONS,PUT,DELETE
+	Access-Control-Allow-Origin: *
+	Set-Cookie: mojolicious=...; Path=/; HttpOnly
+	Whole-Content-Sha512: z4PhNX7vuL3xVChQ1m2AB9Yg5AULVxXcg/SpIdNs6c5H0NE8XYXysP+DGNKHfuwvY7kxvUdBeoGlODJ6+SfaPg==
+	X-Server-Name: traffic_ops_golang/
+	Date: Tue, 18 Dec 2018 20:07:21 GMT
+	Content-Length: 52
+	Content-Type: text/plain; charset=utf-8
 
 	{ "alerts": [{
 		"level": "success",

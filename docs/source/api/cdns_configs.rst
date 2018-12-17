@@ -41,4 +41,30 @@ Response Properties
 :name:        The CDN's name
 :value:       Presumably the content of some configuration file\ [1]_
 
+.. code-block:: http
+	:caption: Response Example
+
+	HTTP/1.1 200 OK
+	Access-Control-Allow-Credentials: true
+	Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Set-Cookie, Cookie
+	Access-Control-Allow-Methods: POST,GET,OPTIONS,PUT,DELETE
+	Access-Control-Allow-Origin: *
+	Content-Type: application/json
+	Set-Cookie: mojolicious=...; Path=/; HttpOnly
+	Whole-Content-Sha512: Y5O9VI+BrRwCXLHCkqMjwJVeqnePkeQro9ggwwxGApEebMUDDCMePmB26lH3UcquDJ4vTfxgZQKZEMZg1CBQ0Q==
+	X-Server-Name: traffic_ops_golang/
+	Date: Mon, 17 Dec 2018 20:07:20 GMT
+	Content-Length: 67
+
+	{ "response": [
+		{
+			"name": "ALL",
+			"id": 1
+		},
+		{
+			"name": "CDN-in-a-Box",
+			"id": 2
+		}
+	]}
+
 .. [1] These values are currently missing from this endpoint's output. **DO NOT count on this endpoint to provide this information**.

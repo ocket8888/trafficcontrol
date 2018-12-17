@@ -18,6 +18,8 @@
 *************************************
 ``servers/hostname/{{name}}/details``
 *************************************
+.. versionadded:: 1.2
+
 .. deprecated:: 1.1
 	Use the ``hostName`` query parameter of the :ref:`to-api-servers` endpoint instead.
 
@@ -38,6 +40,15 @@ Request Structure
 	+======+====================================================+
 	| name | The (short) hostname of the server being inspected |
 	+------+----------------------------------------------------+
+
+.. code-block:: http
+	:caption: Request Example
+
+	GET /api/1.1/servers/hostname/edge/details HTTP/1.1
+	Host: trafficops.infra.ciab.test
+	User-Agent: curl/7.47.0
+	Accept: */*
+	Cookie: mojolicious=...
 
 Response Structure
 ------------------

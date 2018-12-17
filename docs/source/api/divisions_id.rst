@@ -103,7 +103,7 @@ Updates a specific Division
 
 :Auth. Required: Yes
 :Roles Required: "admin" or "operations"
-
+:Response Type:  Object
 
 Request Structure
 -----------------
@@ -163,3 +163,54 @@ Response Structure
 		"lastUpdated": "2018-11-29 20:10:36+00",
 		"name": "quest"
 	}}
+
+``DELETE``
+==========
+Deletes a specific Division.
+
+:Auth. Required: Yes
+:Roles Required: "admin" or "operations"
+:Response Type:  ``undefined``
+
+Request Structure
+-----------------
+.. table:: Request Path Parameters
+
+	+------+-----------------------------------------------------------+
+	| Name | Description                                               |
+	+======+===========================================================+
+	|  ID  | The integral, unique identifier of Division to be deleted |
+	+------+-----------------------------------------------------------+
+
+.. code-block:: http
+	:caption: Request Example
+
+	DELETE /api/1.1/divisions/3 HTTP/1.1
+	Host: trafficops.infra.ciab.test
+	User-Agent: curl/7.47.0
+	Accept: */*
+	Cookie: mojolicious=...
+
+Response Structure
+------------------
+.. code-block:: http
+	:caption: Response Example
+
+	HTTP/1.1 200 OK
+	Access-Control-Allow-Credentials: true
+	Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Set-Cookie, Cookie
+	Access-Control-Allow-Methods: POST,GET,OPTIONS,PUT,DELETE
+	Access-Control-Allow-Origin: *
+	Content-Type: application/json
+	Set-Cookie: mojolicious=...; Path=/; HttpOnly
+	Whole-Content-Sha512: n8aiMrGF6zAiY1rx2Dw15PK/UUzUgDFC5MfkV7i+DjnYMKvXdW/d54mOyVp/P1uPSZUnDVEZAhCDcN5scR2pEg==
+	X-Server-Name: traffic_ops_golang/
+	Date: Mon, 17 Dec 2018 21:30:59 GMT
+	Content-Length: 63
+
+	{ "alerts": [
+		{
+			"text": "division was deleted.",
+			"level": "success"
+		}
+	]}

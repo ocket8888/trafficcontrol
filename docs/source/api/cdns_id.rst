@@ -23,6 +23,9 @@
 =======
 Extract information about a specific CDN.
 
+.. deprecated:: 1.1
+	Use the ``id`` query parameter (or better yet the ``name`` query parameter) of a ``GET`` request to :ref:`to-api-cdns` instead.
+
 :Auth. Required: Yes
 :Roles Required: None
 :Response Type:  Array

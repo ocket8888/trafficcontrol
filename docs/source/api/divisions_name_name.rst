@@ -13,34 +13,37 @@
 .. limitations under the License.
 ..
 
-.. _to-api-cdns-name-name-dnsseckeys-delete:
+.. _to-api-divisions-name-name:
 
-****************************************
-``cdns/name/{{name}}/dnsseckeys/delete``
-****************************************
+***************************
+``divisions/name/{{name}}``
+***************************
 
 ``GET``
 =======
-Delete :abbr:`DNSSEC (DNS Security Extensions)` keys for a CDN and all associated :term:`Delivery Services`.
+.. deprecated:: 1.1
+	Use the ``name`` query parameter of a ``GET`` request to :ref:`to-api-divisions` instead.
+
+Get information about a specific Division.
 
 :Auth. Required: Yes
-:Roles Required: "admin"
-:Response Type:  Object (string)
+:Roles Required: None
+:Response Type:  Array
 
 Request Structure
 -----------------
 .. table:: Request Path Parameters
 
-	+------+-----------------------------------------------------------+
-	| Name |                       Description                         |
-	+======+===========================================================+
-	| name | The name of the CDN for which DNSSEC keys will be deleted |
-	+------+-----------------------------------------------------------+
+	+------+------------------------------------------+
+	| Name | Description                              |
+	+======+==========================================+
+	| name | The name of the Division to be inspected |
+	+------+------------------------------------------+
 
 .. code-block:: http
 	:caption: Request Example
 
-	GET /api/1.1/cdns/name/CDN-in-a-Box/dnsseckeys/delete HTTP/1.1
+	GET /api/1.1/divisions/name/USA HTTP/1.1
 	Host: trafficops.infra.ciab.test
 	User-Agent: curl/7.47.0
 	Accept: */*
@@ -48,6 +51,10 @@ Request Structure
 
 Response Structure
 ------------------
+:id:          An integral, unique identifier for this Division
+:lastUpdated: The date and time at which this Division was last modified, in ISO format
+:name:        The Division name
+
 .. code-block:: http
 	:caption: Response Example
 
@@ -58,11 +65,15 @@ Response Structure
 	Access-Control-Allow-Origin: *
 	Content-Type: application/json
 	Set-Cookie: mojolicious=...; Path=/; HttpOnly
-	Whole-Content-Sha512: lTtmzI90Gg4CN9MQIicW8uVoUeTjTb8/2/+yvjyV1Gq9ifRaZ8RXi+7sD9Wy+UusBd/t8u8f6+A9ZGrEj1sNbQ==
+	Whole-Content-Sha512: RmIoHRrkiUNiVew2/G5A5ZA+1x0lB+JGH3VPHD8nBFfjZOIsYtAImsU+JFggBIotVM1qeciStuLgV1DFKJiQDw==
 	X-Server-Name: traffic_ops_golang/
-	Date: Mon, 17 Dec 2018 21:21:33 GMT
-	Content-Length: 59
+	Date: Mon, 17 Dec 2018 21:33:03 GMT
+	Content-Length: 75
 
-	{
-		"response": "Successfully deleted dnssec for CDN-in-a-Box"
-	}
+	{ "response": [
+		{
+			"id": 2,
+			"lastUpdated": "2018-12-17 19:26:03+00",
+			"name": "USA"
+		}
+	]}

@@ -13,18 +13,15 @@
 .. limitations under the License.
 ..
 
+.. _to-api-deliveryservice_matches:
 
-.. _to-api-deliveryservices_regexes:
-
-****************************
-``deliveryservices_regexes``
-****************************
-.. deprecated:: 1.1
-	Use :ref:`to-api-deliveryservice_matches` instead.
+***************************
+``deliveryservice_matches``
+***************************
 
 ``GET``
 =======
-Retrieves routing regular expressions for all :term:`Delivery Services`.
+Retrieves a list of regular expressions that are used for routing :term:`Delivery Service`\ s.
 
 :Auth. Required: Yes
 :Roles Required: None\ [1]_
@@ -32,16 +29,17 @@ Retrieves routing regular expressions for all :term:`Delivery Services`.
 
 Request Structure
 -----------------
-No parameters available
+No parameters available.
 
 Response Structure
 ------------------
-:dsName:  The name of the :term:`Delivery Service` represented by this object
-:regexes: An array of objects that represent various routing regular expressions used by ``dsName``
+:dsName: The 'xml_id' that uniquely identifies the :term:`Delivery Service` that uses ``patterns``
 
-	:pattern:   The actual regular expression - ``\``\ s are escaped
-	:setNumber: The order in which the regular expression is evaluated against requests
-	:type:      The type of regular expression - determines that against which it will be evaluated
+	.. warning:: This is **not** - as the name implies - the :term:`Delivery Service`'s display name (although the two are often - and should be - the same).
+
+:patterns: An array of regular expressions used for routing the :term:`Delivery Service` identified by ``dsName``
+
+.. note:: The response will only contain entries for :term:`Delivery Service`\ s that are active.
 
 .. code-block:: http
 	:caption: Response Example
@@ -53,22 +51,19 @@ Response Structure
 	Access-Control-Allow-Origin: *
 	Content-Type: application/json
 	Set-Cookie: mojolicious=...; Path=/; HttpOnly
-	Whole-Content-Sha512: +2MI+Q/NJqTizlMR/MhPAL+yu6/z/Yqvo5fDO8F593RMOmK6dX/Al4wARbEG+HQaJNgSCRPsiLVATusrmnnCMA==
+	Whole-Content-Sha512: TgzZrqpvxdm2Hz40nzvrfCZkKqRZTvRvvGacaEZYYKG4UgWZ+6qDDvnA6lGpu68Wz1tEqjC/p8HPa6oe6NiR8w==
 	X-Server-Name: traffic_ops_golang/
-	Date: Tue, 27 Nov 2018 19:22:59 GMT
-	Content-Length: 110
+	Date: Tue, 18 Dec 2018 17:23:54 GMT
+	Content-Length: 56
 
 	{ "response": [
 		{
-			"regexes": [
-				{
-					"type": "HOST_REGEXP",
-					"setNumber": 0,
-					"pattern": ".*\\.demo1\\..*"
-				}
+			"patterns": [
+				".demo1."
 			],
 			"dsName": "demo1"
 		}
 	]}
 
-.. [1] If tenancy is used, then users (regardless of role) will only be able to see the routing regular expressions used by :term:`Delivery Services` their tenant has permissions to see.
+
+.. [1] Users will only be able to query for the patterns associated with :term:`Delivery Service`\ s their tenant has permission to see.

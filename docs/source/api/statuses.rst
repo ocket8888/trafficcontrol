@@ -94,3 +94,67 @@ Response Structure
 			"name": "REPORTED"
 		}
 	]}
+
+``POST``
+========
+Creates a new status.
+
+:Auth. Required: Yes
+:Roles Required: "admin" or "operations"
+:Response Type:  ``undefined``
+
+Request Structure
+-----------------
+:description: An optional string containing miscellaneous information describing the new status
+:name:        The name of the new status
+
+.. code-block:: http
+	:caption: Request Example
+
+	POST /api/1.4/statuses HTTP/1.1
+	Host: trafficops.infra.ciab.test
+	User-Agent: curl/7.47.0
+	Accept: */*
+	Cookie: mojolicious=...
+	Content-Length: 65
+	Content-Type: application/json
+
+	{
+		"name": "test",
+		"description": "A test status for API examples"
+	}
+
+Response Structure
+------------------
+:description: A short description of the status
+:id:          The integral, unique identifier of this status
+:lastUpdated: The date and time at which this status was last modified, in ISO format
+:name:        The name of the status
+
+.. code-block:: http
+	:caption: Response Example
+
+	HTTP/1.1 200 OK
+	Access-Control-Allow-Credentials: true
+	Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Set-Cookie, Cookie
+	Access-Control-Allow-Methods: POST,GET,OPTIONS,PUT,DELETE
+	Access-Control-Allow-Origin: *
+	Content-Type: application/json
+	Set-Cookie: mojolicious=...; Path=/; HttpOnly
+	Whole-Content-Sha512: Hw59Lt+5Mx9+eaIKCNfg1iWx2rLhmALnUqwJ53JsoMiGuk/G0BJn16jVBZXWmHRt5ju79e0fsMXtdb2CSKTMqw==
+	X-Server-Name: traffic_ops_golang/
+	Date: Wed, 19 Dec 2018 16:32:19 GMT
+	Content-Length: 181
+
+	{ "alerts": [
+		{
+			"text": "status was created.",
+			"level": "success"
+		}
+	],
+	"response": {
+		"description": "A test status for API examples",
+		"id": 7,
+		"lastUpdated": "2018-12-19 16:32:19+00",
+		"name": "test"
+	}}

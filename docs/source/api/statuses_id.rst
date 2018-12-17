@@ -97,3 +97,16 @@ Response Structure
 			"name": "REPORTED"
 		}
 	]}
+
+``PUT``
+=======
+Updates a status.
+
+:Auth. Required: Yes
+:Roles Required: "admin" or "operations"
+:Response Type:  ``undefined``
+
+Request Structure
+-----------------
+:description: An optional string containing miscellaneous information describing the new status
+:name:        The name of the new status

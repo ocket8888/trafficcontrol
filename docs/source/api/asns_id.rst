@@ -17,13 +17,17 @@
 .. _to-api-asns-id:
 
 ***************
-``asns/{{id}}``
+``asns/{{ID}}``
 ***************
 .. seealso:: `The Autonomous System Wikipedia page <https://en.wikipedia.org/wiki/Autonomous_system_%28Internet%29>` for an explanation of what an ASN actually is.
 
 ``GET``
 =======
+.. deprecated:: 1.1
+	Use the ``id`` query parameter of a ``GET`` request to :ref:`to-api-asns` instead.
+
 Deal with a specific Autonomous System Number (ASN).
+
 :Auth. Required: Yes
 :Roles Required: None
 :Response Type: Array
@@ -32,11 +36,11 @@ Request Structure
 -----------------
 .. table:: Request Path Parameters
 
-	+-------------------+----------+----------------------------------------------------+
-	| Name              | Required |                 Description                        |
-	+===================+==========+====================================================+
-	| id                | yes      | The integral, unique identifier of the desired ASN |
-	+-------------------+----------+----------------------------------------------------+
+	+------+----------------------------------------------------+
+	| Name |                 Description                        |
+	+======+====================================================+
+	|  ID  | The integral, unique identifier of the desired ASN |
+	+------+----------------------------------------------------+
 
 Response Structure
 ------------------
@@ -73,6 +77,9 @@ Response Structure
 
 ``PUT``
 =======
+.. deprecated:: 1.3
+	Use the ``PUT`` method of :ref:`to-api-asns` instead
+
 Allows user to edit an existing Autonomous System Number (ASN).
 
 :Auth. Required: Yes
@@ -89,11 +96,11 @@ Request Structure
 
 .. table:: Request Path Parameters
 
-	+-------------------+----------+----------------------------------------------------+
-	| Name              | Required |                 Description                        |
-	+===================+==========+====================================================+
-	| id                | yes      | The integral, unique identifier of the desired ASN |
-	+-------------------+----------+----------------------------------------------------+
+	+------+----------------------------------------------------+
+	| Name |                 Description                        |
+	+======+====================================================+
+	|  ID  | The integral, unique identifier of the desired ASN |
+	+------+----------------------------------------------------+
 
 .. code-block:: http
 	:caption: Request Example
@@ -147,6 +154,9 @@ Response Structure
 
 ``DELETE``
 ==========
+.. deprecated:: 1.3
+	Use the ``DELETE`` method of :ref:`to-api-asns`
+
 Deletes an Autonomous System Number (ASN).
 
 :Auth. Required: Yes
@@ -157,11 +167,11 @@ Request Structure
 -----------------
 .. table:: Request Path Parameters
 
-	+------+----------+----------------------------------------------------+
-	| Name | Required |                 Description                        |
-	+======+==========+====================================================+
-	| id   | yes      | The integral, unique identifier of the desired ASN |
-	+------+----------+----------------------------------------------------+
+	+------+----------------------------------------------------+
+	| Name |                 Description                        |
+	+======+====================================================+
+	|  ID  | The integral, unique identifier of the desired ASN |
+	+------+----------------------------------------------------+
 
 Response Structure
 ------------------

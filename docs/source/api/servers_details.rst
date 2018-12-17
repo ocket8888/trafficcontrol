@@ -13,47 +13,62 @@
 .. limitations under the License.
 ..
 
-.. _to-api-deliveryservices-id-unassigned_servers:
+.. _to-api-servers-details:
 
-**********************************************
-``deliveryservices/{{ID}}/unassigned_servers``
-**********************************************
+*******************
+``servers/details``
+*******************
+.. versionadded:: 1.2
 
 ``GET``
 =======
-Retrieves properties of Edge-tier servers not assigned to a :term:`Delivery Service`.
+Gets details about servers.
+
+.. seealso:: The only reason to use this endpoint over :ref:`to-api-servers` is because this one supports pagination. If pagination is not required, :ref:`to-api-servers` should be used instead.
 
 :Auth. Required: Yes
-:Roles Required: "admin" or "operations"\ [1]_
+:Roles Required: None
 :Response Type:  Array
 
 Request Structure
 -----------------
-.. table:: Request Path Parameters
+.. table:: Request Query Parameters
 
-	+------+---------------------------------------------------+
-	| Name | Description                                       |
-	+======+===================================================+
-	| ID   | Delivery service ID.                              |
-	+------+---------------------------------------------------+
+	+----------------+-----------+----------------------------------------------------------------------------------------------------------+
+	| Name           | Required  | Description                                                                                              |
+	+================+===========+==========================================================================================================+
+	| hostName       | yes\ [1]_ | Return only the server that has this (short) hostname                                                    |
+	+----------------+-----------+----------------------------------------------------------------------------------------------------------+
+	| limit          | no        | Limit the number of returned servers to this maximum (default: 1000)                                     |
+	+----------------+-----------+----------------------------------------------------------------------------------------------------------+
+	| orderBy        | no        | Order the ``response`` array by this key (default: ``hostName``)                                         |
+	+----------------+-----------+----------------------------------------------------------------------------------------------------------+
+	| physLocationID | yes\ [1]_ | Return only servers that reside in the physical location  identified by this integral, unique identifier |
+	+----------------+-----------+----------------------------------------------------------------------------------------------------------+
 
 .. code-block:: http
 	:caption: Request Example
 
-	GET /api/1.4/deliveryservices/1/unassigned_servers HTTP/1.1
+	GET /api/1.2/servers/details?hostName=edge HTTP/1.1
 	Host: trafficops.infra.ciab.test
 	User-Agent: curl/7.47.0
 	Accept: */*
 	Cookie: mojolicious=...
 
+.. [1] Exactly one of "hostName" or "physLocationID" is required. Both is also acceptable.
+
 Response Structure
 ------------------
-:cachegroup:     The name of the Cache Group to which this server belongs
-:cachegroupId:   The integral, unique identifier of the Cache Group to which this server belongs
-:cdnId:          The integral, unique identifier of the CDN to which the server belongs
-:cdnName:        Name of the CDN to which the server belongs
-:domainName:     The domain part of the server's Fully Qualified Domain Name (FQDN)
-:guid:           An identifier used to uniquely identify the server
+:cachegroup:       The name of the Cache Group to which this server belongs
+:cdnName:          Name of the CDN to which the server belongs
+:deliveryservices: An array of integral, unique identifiers to which this server has been assigned
+:domainName:       The domain part of the server's Fully Qualified Domain Name (FQDN)
+:guid:             An identifier used to uniquely identify the server
+
+	.. deprecated:: 1.1
+		This is a legacy key which only still exists for compatibility reasons - it should always be ``null``
+
+:hardwareInfo: An object containing information about a server's hardware
 
 	.. deprecated:: 1.1
 		This is a legacy key which only still exists for compatibility reasons - it should always be ``null``
@@ -73,25 +88,17 @@ Response Structure
 :ipAddress:      The IPv4 address of ``interfaceName``
 :ipGateway:      The IPv4 address of the gateway used by ``interfaceName``
 :ipNetmask:      The IPv4 subnet mask used by ``interfaceName``
-:lastUpdated:    The date and time at which this server description was last modified, in ISO format
 :mgmtIpAddress:  The IPv4 address of some network interface on the server used for 'management'
 :mgmtIpGateway:  The IPv4 address of a gateway used by some network interface on the server used for 'management'
 :mgmtIpNetmask:  The IPv4 subnet mask used by some network interface on the server used for 'management'
 :offlineReason:  A user-entered reason why the server is in ADMIN_DOWN or OFFLINE status
 :physLocation:   The name of the physical location where the server resides
-:physLocationId: An integral, unique identifier for the physical location where the server resides
 :profile:        The name of the profile this server uses
 :profileDesc:    A description of the profile this server uses
-:profileId:      An integral, unique identifier for the profile used by this server
-:revalPending:   A boolean value which, if ``true`` indicates that this server has pending content invalidation/revalidation
 :rack:           A string indicating "server rack" location
 :routerHostName: The human-readable name of the router responsible for reaching this server
 :routerPortName: The human-readable name of the port used by the router responsible for reaching this server
 :status:         The status of the server
-
-	.. seealso:: :ref:`health-proto`
-
-:statusId: The integral, unique identifier of the status of this server
 
 	.. seealso:: :ref:`health-proto`
 
@@ -100,8 +107,14 @@ Response Structure
 	.. note:: This is typically thought of as synonymous with "HTTP port", as the port specified by ``httpsPort`` may also be used for incoming TCP connections.
 
 :type:       The name of the 'type' of this server
-:typeId:     The integral, unique identifier of the 'type' of this server
-:updPending: A boolean value which, if ``true``, indicates that the server has updates of some kind pending, typically to be acted upon by Traffic Ops ORT
+:xmppId:     An identifier to be used in XMPP communications with the server - in nearly all cases this will be the same as ``hostName``
+:xmppPasswd: The password used in XMPP communications with the server
+
+The response JSON payload also contains three non-standard, top-level keys (i.e. not "alerts" or "response")
+
+:limit:   The maximum number of servers to which the ``response`` array was limited
+:orderby: The key by which the elements of ``response`` were ordered
+:size:    The actual number of elements in the ``response`` array - not to exceed ``limit``
 
 .. code-block:: http
 	:caption: Response Example
@@ -113,22 +126,26 @@ Response Structure
 	Access-Control-Allow-Origin: *
 	Content-Type: application/json
 	Set-Cookie: mojolicious=...; Path=/; HttpOnly
-	Whole-Content-Sha512: aVva3TUiV+fH6DneNlu/dd/GMlid9J5cW5fxFXYF81Vh65HEiB8wfQyWRYi99347htcguDOAU4cTTbAPasQL3Q==
+	Whole-Content-Sha512: SEGdGB4Ogpgp5GUJ0PHNaCf7vjBT8Zne8wnA3psJHg7gtAfI2bV/V0Gg/DG0lae0IWgghUoXsOVA6xHNIhHuEA==
 	X-Server-Name: traffic_ops_golang/
-	Date: Wed, 19 Dec 2018 15:46:46 GMT
-	Transfer-Encoding: chunked
+	Date: Wed, 19 Dec 2018 15:57:08 GMT
+	Content-Length: 865
 
-	{ "response": [
-		{
+	{
+		"limit": 1000,
+		"orderby": "hostName",
+		"response": [{
 			"cachegroup": "CDN_in_a_Box_Edge",
-			"cachegroupId": 7,
-			"cdnId": 2,
 			"cdnName": "CDN-in-a-Box",
+			"deliveryservices": [
+				1
+			],
 			"domainName": "infra.ciab.test",
 			"guid": null,
-			"hostName": "trafficrouter",
+			"hardwareInfo": null,
+			"hostName": "edge",
 			"httpsPort": 443,
-			"id": 10,
+			"id": 9,
 			"iloIpAddress": "",
 			"iloIpGateway": "",
 			"iloIpNetmask": "",
@@ -136,31 +153,26 @@ Response Structure
 			"iloUsername": "",
 			"interfaceMtu": 1500,
 			"interfaceName": "eth0",
-			"ip6Address": "fc01:9400:1000:8::60",
+			"ip6Address": "fc01:9400:1000:8::100",
 			"ip6Gateway": "fc01:9400:1000:8::1",
-			"ipAddress": "172.16.239.60",
+			"ipAddress": "172.16.239.100",
 			"ipGateway": "172.16.239.1",
 			"ipNetmask": "255.255.255.0",
-			"lastUpdated": "2018-12-17 19:26:14+00",
 			"mgmtIpAddress": "",
 			"mgmtIpGateway": "",
 			"mgmtIpNetmask": "",
 			"offlineReason": "",
 			"physLocation": "Apachecon North America 2018",
-			"physLocationId": 1,
-			"profile": "CCR_CIAB",
-			"profileDesc": "Traffic Router for CDN-In-A-Box",
-			"profileId": 12,
+			"profile": "ATS_EDGE_TIER_CACHE",
+			"profileDesc": "Edge Cache - Apache Traffic Server",
 			"rack": "",
 			"routerHostName": "",
 			"routerPortName": "",
-			"status": "ONLINE",
-			"statusId": 2,
+			"status": "REPORTED",
 			"tcpPort": 80,
-			"type": "CCR",
-			"typeId": 14,
-			"updPending": false
-		}
-	]}
-
-.. [1] Users with the roles "admin" and/or "operations" will be able to see servers not assigned to *any* given :term:`Delivery Service`, whereas any other user will only be able to see the servers not assigned to :term:`Delivery Services` their Tenant is allowed to see.
+			"type": "EDGE",
+			"xmppId": "edge",
+			"xmppPasswd": ""
+		}],
+		"size": 1
+	}

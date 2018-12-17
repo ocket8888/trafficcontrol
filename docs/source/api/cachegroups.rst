@@ -34,7 +34,13 @@ Request Structure
 	+-----------+----------+---------------------------------------------------------------------------------------------------------------+
 	| Name      | Required | Description                                                                                                   |
 	+===========+==========+===============================================================================================================+
-	| type      | no       | Return only :term:`Cache Groups` that are of the :term:`type` identified by this integral, unique identifier  |
+	| id        | no       | Return only the :term:`Cache Group` identified by this integral, unique identifier                            |
+	+-----------+----------+---------------------------------------------------------------------------------------------------------------+
+	| name      | no       | Return only the :term:`Cache Group` with this name                                                            |
+	+-----------+----------+---------------------------------------------------------------------------------------------------------------+
+	| shortName | no       | Return only :term:`Cache Groups` that have this "short name"                                                  |
+	+-----------+----------+---------------------------------------------------------------------------------------------------------------+
+	| type      | no       | Return only :term:`Cache Groups` that are of the :term:`Type` identified by this integral, unique identifier  |
 	+-----------+----------+---------------------------------------------------------------------------------------------------------------+
 	| orderby   | no       | Choose the ordering of the results - must be the name of one of the fields of the objects in the ``response`` |
 	|           |          | array                                                                                                         |
@@ -49,6 +55,8 @@ Request Structure
 	|           |          | and the first page is 1. If ``offset`` was defined, this query parameter has no effect. ``limit`` must be     |
 	|           |          | defined to make use of ``page``.                                                                              |
 	+-----------+----------+---------------------------------------------------------------------------------------------------------------+
+
+.. caution:: At the time of this writing, there is a bug in the handling of this method of this endpoint such that the ``shortName`` query parameter is not actually usable. The bug is tracked by `GitHub Issue #3135 <https://github.com/apache/trafficcontrol/issues/3135>`_.
 
 .. code-block:: http
 	:caption: Request Example
