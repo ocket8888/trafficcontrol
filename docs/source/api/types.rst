@@ -82,3 +82,75 @@ Response Structure
 			"useInTable": "cachegroup"
 		}
 	]}
+
+``POST``
+========
+Creates a new type
+
+:Auth. Required: Yes
+:Roles Required: "admin" or "operations"
+:Response Type:  Object
+
+Request Structure
+-----------------
+:description: A string of miscellaneous information describing the new type
+:name:        The name of the new type
+:useInTable:  The name of the Traffic Ops database table that contains objects which are grouped, identified, or described by this type
+
+	.. note:: This table need not actually exist - ``useInTable`` can be any string.
+
+	.. note:: If ``useInTable`` is not present in the request payload, then an HTTP ``400 Bad Request`` response will be returned with an ``alerts`` object that erroneously reports: ``'use_in_table' cannot be blank``. The correct field name is ``useInTable``, do not be fooled by the error message. This bug is tracked by `GitHub Issue #3147 <https://github.com/apache/trafficcontrol/issues/3147>`_.
+
+.. code-block:: http
+	:caption: Request Example
+
+	POST /api/1.1/types HTTP/1.1
+	Host: trafficops.infra.ciab.test
+	User-Agent: curl/7.47.0
+	Accept: */*
+	Cookie: mojolicious=...
+	Content-Length: 86
+	Content-Type: application/json
+
+	{
+		"name": "test",
+		"description": "A test type for API examples",
+		"useInTable": "test"
+	}
+
+Response Structure
+------------------
+:description: A short description of this type
+:id:          An integral, unique identifier for this type
+:lastUpdated: The date and time at which this type was last updated, in ISO format
+:name:        The name of this type
+:useInTable:  The name of the Traffic Ops database table that contains objects which are grouped, identified, or described by this type
+
+.. code-block:: http
+	:caption: Response Example
+
+	HTTP/1.1 200 OK
+	Access-Control-Allow-Credentials: true
+	Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Set-Cookie, Cookie
+	Access-Control-Allow-Methods: POST,GET,OPTIONS,PUT,DELETE
+	Access-Control-Allow-Origin: *
+	Content-Type: application/json
+	Set-Cookie: mojolicious=...; Path=/; HttpOnly
+	Whole-Content-Sha512: emF1D5RjeDhb8dylrs1oJh3MhWhIAF3t+eHzAXKQmSgMYXud5Cg9M8F7uaWZwczi0GQrbV7YUj4isQQg76VGVg==
+	X-Server-Name: traffic_ops_golang/
+	Date: Wed, 19 Dec 2018 17:50:45 GMT
+	Content-Length: 198
+
+	{ "alerts": [
+		{
+			"text": "type was created.",
+			"level": "success"
+		}
+	],
+	"response": {
+		"id": 50,
+		"lastUpdated": "2018-12-19 17:50:45+00",
+		"name": "test",
+		"description": "A test type for API examples",
+		"useInTable": "test"
+	}}

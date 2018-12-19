@@ -106,7 +106,10 @@ Creates a new status.
 Request Structure
 -----------------
 :description: An optional string containing miscellaneous information describing the new status
-:name:        The name of the new status
+
+	.. danger:: The endpoint will technically accept requests without this field, but such requests **will** *break the :ref:`to-api-statuses` and :ref:`to-api-statuses-id` endpoints*. For this reason it is **strongly advised** that this field always be present, even if it will only be an empty string. This bug is tracked by `GitHub Issue #3146 <https://github.com/apache/trafficcontrol/issues/3146>`_. Note that if this occurs, the bug can be fixed by deleting the status, but only if the integral, unique identifier of the status causing the problem is known - as it obviously can no longer be retrieved. Because Traffic Portal uses the now-broken endpoints in this scenario, Traffic Portal cannot be used to delete the problem status - it **must** be done by using the API directly.
+
+:name: The name of the new status
 
 .. code-block:: http
 	:caption: Request Example

@@ -53,6 +53,15 @@ Request Structure
 	|           |          | defined to make use of ``page``.                                                                              |
 	+-----------+----------+---------------------------------------------------------------------------------------------------------------+
 
+.. code-block:: http
+	:caption: Request Example
+
+	GET /api/1.3/coordinates?name=from_cachegroup_CDN_in_a_Box_Edge HTTP/1.1
+	Host: trafficops.infra.ciab.test
+	User-Agent: curl/7.47.0
+	Accept: */*
+	Cookie: mojolicious=...
+
 Response Structure
 ------------------
 :id:          Integral, unique, identifier for this coordinate pair
@@ -71,60 +80,18 @@ Response Structure
 	Access-Control-Allow-Origin: *
 	Content-Type: application/json
 	Set-Cookie: mojolicious=...; Path=/; HttpOnly
-	Whole-Content-Sha512: Y2vxC3hpxIg6aRNBBT7i2hbAViIJp+dJoqHIzu3acFM+vGay/I5E+eZYOC9RY8hcJPrKNXysZOD8DOb9KsFgaw==
+	Whole-Content-Sha512: UnIXqg53UbRzh7CP24koWgQ7WN/9OBFH0pTiFVA2QxOs6t2Vf2l+FhpyJkSVrCzdOfQNYxvVsusXgcxhHtYhCw==
 	X-Server-Name: traffic_ops_golang/
-	Date: Wed, 14 Nov 2018 21:32:28 GMT
-	Content-Length: 942
+	Date: Wed, 19 Dec 2018 18:34:11 GMT
+	Content-Length: 149
 
 	{ "response": [
-		{
-			"id": 1,
-			"name": "from_cachegroup_TRAFFIC_ANALYTICS",
-			"latitude": 38.897663,
-			"longitude": -77.036574,
-			"lastUpdated": "2018-10-24 16:07:04+00"
-		},
-		{
-			"id": 2,
-			"name": "from_cachegroup_TRAFFIC_OPS",
-			"latitude": 38.897663,
-			"longitude": -77.036574,
-			"lastUpdated": "2018-10-24 16:07:04+00"
-		},
-		{
-			"id": 3,
-			"name": "from_cachegroup_TRAFFIC_OPS_DB",
-			"latitude": 38.897663,
-			"longitude": -77.036574,
-			"lastUpdated": "2018-10-24 16:07:04+00"
-		},
-		{
-			"id": 4,
-			"name": "from_cachegroup_TRAFFIC_PORTAL",
-			"latitude": 38.897663,
-			"longitude": -77.036574,
-			"lastUpdated": "2018-10-24 16:07:04+00"
-		},
-		{
-			"id": 5,
-			"name": "from_cachegroup_TRAFFIC_STATS",
-			"latitude": 38.897663,
-			"longitude": -77.036574,
-			"lastUpdated": "2018-10-24 16:07:04+00"
-		},
-		{
-			"id": 6,
-			"name": "from_cachegroup_CDN_in_a_Box_Mid",
-			"latitude": 38.897663,
-			"longitude": -77.036574,
-			"lastUpdated": "2018-10-24 16:07:04+00"
-		},
 		{
 			"id": 7,
 			"name": "from_cachegroup_CDN_in_a_Box_Edge",
 			"latitude": 38.897663,
 			"longitude": -77.036574,
-			"lastUpdated": "2018-10-24 16:07:05+00"
+			"lastUpdated": "2018-12-19 17:20:27+00"
 		}
 	]}
 

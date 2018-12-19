@@ -18,8 +18,6 @@
 *******************
 ``statuses/{{ID}}``
 *******************
-.. deprecated:: 1.1
-	Use the ``id`` query parameter of :ref:`to-api-statuses-id` instead
 
 ``GET``
 =======
@@ -104,9 +102,122 @@ Updates a status.
 
 :Auth. Required: Yes
 :Roles Required: "admin" or "operations"
+:Response Type:  Object
+
+Request Structure
+-----------------
+.. table:: Request Path Parameters
+
+	+------+--------------------------------------------------------------+
+	| Name |                Description                                   |
+	+======+==============================================================+
+	|  ID  | The integral, unique identifier of the status being modified |
+	+------+--------------------------------------------------------------+
+
+:description: An optional string containing miscellaneous information describing the status
+
+	.. danger:: The endpoint will technically accept requests without this field, but such requests **will** *break the :ref:`to-api-statuses` and :ref:`to-api-statuses-id` endpoints*. For this reason it is **strongly advised** that this field always be present, even if it will only be an empty string. This bug is tracked by `GitHub Issue #3146 <https://github.com/apache/trafficcontrol/issues/3146>`_. Note that if this occurs, the bug can be fixed by deleting the status, but only if the integral, unique identifier of the status causing the problem is known - as it obviously can no longer be retrieved. Because Traffic Portal uses the now-broken endpoints in this scenario, Traffic Portal cannot be used to delete the problem status - it **must** be done by using the API directly.
+
+:name: The new name of the status
+
+.. code-block:: http
+	:caption: Request Example
+
+	PUT /api/1.4/statuses/7 HTTP/1.1
+	Host: trafficops.infra.ciab.test
+	User-Agent: curl/7.47.0
+	Accept: */*
+	Cookie: mojolicious=...
+	Content-Length: 66
+	Content-Type: application/json
+
+	{
+		"name": "quest",
+		"description": "A test status for API examples"
+	}
+
+Response Structure
+------------------
+:description: A short description of the status
+:id:          The integral, unique identifier of this status
+:lastUpdated: The date and time at which this status was last modified, in ISO format
+:name:        The name of the status
+
+.. code-block:: http
+	:caption: Response Structure
+
+	HTTP/1.1 200 OK
+	Access-Control-Allow-Credentials: true
+	Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Set-Cookie, Cookie
+	Access-Control-Allow-Methods: POST,GET,OPTIONS,PUT,DELETE
+	Access-Control-Allow-Origin: *
+	Content-Type: application/json
+	Set-Cookie: mojolicious=...; Path=/; HttpOnly
+	Whole-Content-Sha512: dhlo8qW6Tw7dvjXK6RU8OhAPb3Z4TcSZW7ccZxvbNZMUfGDB9Yh5d4iV0GsmOMTMWxG/JSejFu0mg1mrABjHoQ==
+	X-Server-Name: traffic_ops_golang/
+	Date: Wed, 19 Dec 2018 17:31:44 GMT
+	Content-Length: 182
+
+	{ "alerts": [
+		{
+			"text": "status was updated.",
+			"level": "success"
+		}
+	],
+	"response": {
+		"description": "A test status for API examples",
+		"id": 7,
+		"lastUpdated": "2018-12-19 17:31:44+00",
+		"name": "quest"
+	}}
+
+``DELETE``
+==========
+Deletes a status
+
+:Auth. Required: Yes
+:Roles Required: "admin" or "operations"
 :Response Type:  ``undefined``
 
 Request Structure
 -----------------
-:description: An optional string containing miscellaneous information describing the new status
-:name:        The name of the new status
+.. table:: Request Path Parameters
+
+	+------+-------------------------------------------------------------+
+	| Name |                Description                                  |
+	+======+=============================================================+
+	|  ID  | The integral, unique identifier of the status being deleted |
+	+------+-------------------------------------------------------------+
+
+.. code-block:: http
+	:caption: Request Example
+
+	DELETE /api/1.4/statuses/7 HTTP/1.1
+	Host: trafficops.infra.ciab.test
+	User-Agent: curl/7.47.0
+	Accept: */*
+	Cookie: mojolicious=...
+
+Response Structure
+------------------
+.. code-block:: http
+	:caption: Response Example
+
+	HTTP/1.1 200 OK
+	Access-Control-Allow-Credentials: true
+	Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Set-Cookie, Cookie
+	Access-Control-Allow-Methods: POST,GET,OPTIONS,PUT,DELETE
+	Access-Control-Allow-Origin: *
+	Content-Type: application/json
+	Set-Cookie: mojolicious=...; Path=/; HttpOnly
+	Whole-Content-Sha512: jyxrjaiCgmzWO1TGhNj1wdxIfkMd7WjaqOdsfH1FC1SnsbbnHGfefGQSM+k63vVldYOGjalhbr+4Vs44AV/dTw==
+	X-Server-Name: traffic_ops_golang/
+	Date: Wed, 19 Dec 2018 17:41:23 GMT
+	Content-Length: 61
+
+	{ "alerts": [
+		{
+			"text": "status was deleted.",
+			"level": "success"
+		}
+	]}

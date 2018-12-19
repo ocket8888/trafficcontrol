@@ -22,9 +22,6 @@
 
 .. seealso:: :ref:`ds_requests`
 
-``GET``
-=======
-
 ``POST``
 ========
 Allows a user to submit Delivery Service Requests.
