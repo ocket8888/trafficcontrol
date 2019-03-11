@@ -7,7 +7,7 @@
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+	  http://www.apache.org/licenses/LICENSE-2.0
 
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,6 +40,7 @@
 #define FREE_TMOUT           (300000)
 #define SYSTEM_RECORD_TYPE   (0x100)
 #define DEFAULT_RECORD_TYPES (SYSTEM_RECORD_TYPE | TS_RECORDTYPE_PROCESS | TS_RECORDTYPE_PLUGIN)
+#define DEFAULT_PATH         "_astats"
 #define PLUGIN_TAG           "astats_over_http"
 #define DEFAULT_CONFIG_NAME  "astats.config"
 #define DEFAULT_IP           "127.0.0.1"
@@ -59,15 +60,21 @@ typedef struct {
 	uint8_t netmask;
 } ipv4;
 
+// Represents an IPv6 CIDR - e.g. ::1/128
+typedef struct {
+	in6_addr addr;
+	uint16_t netmask;
+} ipv6;
+
 // Stores the information from a configuration file
 typedef struct {
 	uint8_t recordTypes;
 	char* stats_path;
 	size_t stats_path_len;
 	ipv4* allowIps;
-	int ipCount;
-	char* allowIps6;
-	int ip6Count;
+	size_t ipCount;
+	ipv6* allowIps6;
+	size_t ip6Count;
 } config_t;
 
 // Contains a configuration structure as well as metadata pertaining to it
@@ -100,14 +107,15 @@ static int free_handler(TSCont cont, TSEvent event, void *edata);
 static int config_handler(TSCont cont, TSEvent event, void *edata);
 static config_t* get_config(TSCont cont);
 static config_holder_t* new_config_holder(const char* path);
-static const char RESP_HEADER[] = "HTTP/1.1 200 OK\r
-"                                 "Content-Type: application/json\r
-"                                 "Cache-Control: no-cache\r\n\r\n";
+static const char RESP_HEADER[] = "HTTP/1.1 200 OK\r\n"
+                                  "Content-Type: application/json\r\n"
+                                  "Cache-Control: no-cache\r\n\r\n";
 
-static const size_t PATH_FIELD_LEN = strlen(PATH_FIELD);
-static const size_t RECORD_FIELD_LEN = strlen(RECORD_FIELD);
-static const size_t IP_FIELD_LEN = strlen(IP_FIELD);
-static const size_t IP6_FIELD_LEN = strlen(IP6_FIELD);
+static size_t PATH_FIELD_LEN = strlen(PATH_FIELD);
+static size_t RECORD_FIELD_LEN = strlen(RECORD_FIELD);
+static size_t IP_FIELD_LEN = strlen(IP_FIELD);
+static size_t IP6_FIELD_LEN = strlen(IP6_FIELD);
+static size_t DEFAULT_PATH_LEN = strlen(DEFAULT_PATH);
 
 
 
@@ -244,17 +252,16 @@ static void stats_process_read(TSCont contp, TSEvent event, stats_state* my_stat
 #define APPEND(a) my_state->output_bytes += stats_add_data_to_resp_buffer(a, my_state)
 #define APPEND_STAT(a, fmt, v) do { \
 		char b[3048]; \
-		int nbytes = snprintf(b, sizeof(b), "   \"%s\": " fmt ",\n", a, v); \
-		if (0 < nbytes && nbytes < (int)sizeof(b)) \
-			APPEND(b); \
-} while(0)
+		if (snprintf(b, sizeof(b), "   \"%s\": " fmt ",\n", a, v) < sizeof(b)) \
+		APPEND(b); \
+} while(0);
 
 static void json_out_stat(TSRecordType rec_type,
-                          void* edata,
-                          int registered,
-                          const char* name,
-                          TSRecordDataType data_type,
-                          TSRecordData* datum) {
+						  void* edata,
+						  int registered,
+						  const char* name,
+						  TSRecordDataType data_type,
+						  TSRecordData* datum) {
 	stats_state* my_state = edata;
 
 	if (my_state->globals_cnt) {
@@ -437,13 +444,12 @@ static int stats_dostuff(TSCont contp, TSEvent event, void* edata) {
 static int astats_origin(TSCont cont, TSEvent event, void* edata) {
 	TSCont icontp;
 	stats_state *my_state;
-	config_t* config;
-	TSHttpTxn txnp = (TSHttpTxn) edata;
 	TSMBuffer reqp;
 	TSMLoc hdr_loc = NULL, url_loc = NULL;
 	TSEvent reenable = TS_EVENT_HTTP_CONTINUE;
-	config = get_config(cont);
+	config_t* config = get_config(cont);
 
+	TSHttpTxn txnp = (TSHttpTxn) edata;
 	TSDebug(PLUGIN_TAG, "in the read stuff");
 
 	if (TSHttpTxnClientReqGet(txnp, &reqp, &hdr_loc) != TS_SUCCESS)
@@ -552,7 +558,7 @@ void TSPluginInit(int argc, const char* argv[]) {
 	TSContDataSet(config_cont, (void*) config_holder);
 	TSMgmtUpdateRegister(config_cont, PLUGIN_TAG);
 	/* Create a continuation with a mutex as there is a shared global structure
-       containing the headers to add */
+	   containing the headers to add */
 	TSDebug(PLUGIN_TAG, "astats module registered, path: '%s'", config_holder->config->stats_path);
 }
 
@@ -618,6 +624,118 @@ static bool is_ip_allowed(const config_t* config, const struct sockaddr* addr) {
 }
 
 /*
+ * Copies `n` ipv4 structures from `buf` into the 'allowIps' field of `config`.
+ * This does NOT de-allocate `buf`'s memory, but WILL expand/allocate the memory pointed to by the
+ * 'allowIps' field of `config`.
+ * Will also update the 'ipCount' field of `config` to accurately represent the number of stored IPs
+*/
+static void copyIPv4InPlace(config_t* config, ipv4* buf, size_t n) {
+	ipv4* dest = config->allowIps;
+	const size_t totalSize = n * sizeof(ipv4);
+	if (config->allowIps == NULL) {
+		config->allowIps = TSmalloc(totalSize);
+		dest = config->allowIps;
+	} else {
+		TSrealloc(config->allowIps, totalSize + config->ipCount*sizeof(ipv4));
+		dest += config->ipCount * sizeof(ipv4);
+	}
+	memcpy(dest, buf, totalSize);
+	config->ipCount += n;
+}
+
+/*
+ * Copies `n` ipv6 structures from `buf` into the 'allowIps6' field of `config`.
+ * This does NOT de-allocate `buf`'s memory, but WILL expand/allocate the memory pointed to by the
+ * 'allowIps' field of `config`.
+ * Will also update the 'ipCount' field of `config` to accurately represent the number of stored IPs
+*/
+static void copyIPv6InPlace(config_t* config, ipv4* buf, size_t n) {
+	ipv6* dest = config->allowIps6;
+	const size_t totalSize = n*sizeof(ipv6);
+	if (config->allowIps6 == NULL) {
+		config->allowIps6 = TSmalloc(totalSize);
+		dest = config->allowIps6;
+	} else {
+		TSrealloc(config->allowIps6, totalSize + config->ip6Count*sizeof(ipv6));
+		dest += config->ip6Count * sizeof(ipv6);
+	}
+	memcpy(dest, buf, totalSize);
+	config->ip6Count += n;
+}
+
+/*
+ * Parses the passed string as an IPv4 address, optionally with a CIDR mask. The constructed ipv4
+ * structure is stored into `dest`.
+ * Returns `true` on success, `false` on parse error. The state of the structure stored at `dest` is
+ * undefined on error (but likely is left untouched) as it depends on the implementation of
+ * inet_pton(3) as well as strtoul(3).
+*/
+static bool parseIPv4(const char* ipStr, ipv4* dest) {
+	char* p = NULL;
+	if (p=strstr(ipStr, "/")) {
+		*p = '\0';
+		p += 1;
+	}
+
+	if (inet_pton(AF_INET, ipStr, &(dest->addr)) != 1) {
+		return false;
+	}
+
+	if (p != NULL) {
+		*(p-1) = '/';
+		char* error_position = p;
+		dest->netmask = (uint8_t)strtoul(p, error_position, 10);
+		if (*error_position != '\0') {
+			TSError("[%s] '%s' could not be parsed as a valid CIDR netmask!\n", PLUGIN_TAG, p);
+			TSDebug(PLUGIN_TAG, "error encountered starting here: '%s'", error_position);
+			return false;
+		} else if (dest->netmask > 32) {
+			TSError("[%s] Netmask found to be %u, should be at most 32!\n", PLUGIN_TAG, dest->netmask);
+			return false;
+		}
+	} else {
+		dest->netmask = 32;
+	}
+	return true;
+}
+
+/*
+ * Parses the passed string as an IPv6 address, optionally with a CIDR mask. The constructed ipv6
+ * structure is stored into `dest`.
+ * Returns `true` on success, `false` on parse error. The state of the structure stored at `dest` is
+ * undefined on error (but likely is left untouched) as it depends on the implementation of
+ * inet_pton(3) as well as strtoul(3).
+*/
+static bool parseIPv6(const char* ipStr, ipv6* dest) {
+	char* p = NULL;
+	if (p=strstr(ipStr, "/")) {
+		*p = '\0';
+		p += 1;
+	}
+
+	if (inet_pton(AF_INET6, ipStr, &(dest->addr)) != 1) {
+		return false;
+	}
+
+	if (p != NULL) {
+		*(p-1) = '/';
+		char* error_position = p;
+		dest->netmask = (uint16_t)strtoul(p, error_position, 10);
+		if (*error_position != '\0') {
+			TSError("[%s] '%s' could not be parsed as a valid CIDR netmask!\n", PLUGIN_TAG, p);
+			TSDebug(PLUGIN_TAG, "error encountered starting here: '%s'", error_position);
+			return false;
+		} else if (dest->netmask > 128) {
+			TSError("[%s] Netmask found to be %u, should be at most 32!\n", PLUGIN_TAG, dest->netmask);
+			return false;
+		}
+	} else {
+		dest->netmask = 128;
+	}
+	return true;
+}
+
+/*
  * Parses part of a configuration file for IPv4 addresses, appending them to the configuration
  * structures as they are parsed. `ipStr` is expected to point into the configuration file contents
  * to the point where a list of IP addresses begins. If `ipStr` is NULL (or points to NULL), this
@@ -629,11 +747,8 @@ static bool is_ip_allowed(const config_t* config, const struct sockaddr* addr) {
  * Returns the number of succesfully parsed IP addresses, or `-1` on error.
 */
 static int parseIps(config_t* config, char** ipStr) {
-	char buffer[STR_BUFFER_SIZE];
+
 	char* pos = ipStr == NULL ? NULL : *ipStr;
-	char *p, *tok1, *tok2, *ip;
-	int i, mask;
-	char ip_port_text_buffer[INET_ADDRSTRLEN];
 
 	if (pos == NULL) {
 		if (config->allowIps != NULL) {
@@ -641,95 +756,188 @@ static int parseIps(config_t* config, char** ipStr) {
 			TSfree(config->allowIps);
 		}
 		config->ipCount = 1;
-		ip = config->allowIps = TSmalloc(sizeof(struct in_addr) + 1);
-		inet_pton(AF_INET, DEFAULT_IP, ip);
-		ip[4] = 32;
+		config->allowIps = TSmalloc(sizeof(ipv4));
+		inet_pton(AF_INET, DEFAULT_IP, config->allowIps);
+		config->allowIps[0].netmask = 32;
 		return 1;
 	}
 
-	strcpy(buffer, ipStr);
-	p = buffer;
-	while(strtok_r(p, ", \n", &p)) {
-		config->ipCount++;
-	}
-	if(!config->ipCount) {
-		return;
-	}
-	config->allowIps = TSmalloc(5*config->ipCount); // 4 bytes for ip + 1 for bit mask
-	strcpy(buffer, ipStr);
-	p = buffer;
-	i = 0;
-	while((tok1 = strtok_r(p, ", \n", &p))) {
-		TSDebug(PLUGIN_TAG, "%d) parsing: %s", i+1,tok1);
-		tok2 = strtok_r(tok1, "/", &tok1);
-		ip = config->allowIps+((sizeof(struct in_addr) + 1)*i);
-		if(!inet_pton(AF_INET, tok2, ip)) {
-			TSDebug(PLUGIN_TAG, "%d) skipping: %s", i+1,tok1);
-			continue;
-		}
-		tok2 = strtok_r(tok1, "/", &tok1);
-		if(!tok2) {
-			mask = 32;
-		} else {
-			mask = atoi(tok2);
-		}
-		ip[4] = mask;
-		TSDebug(PLUGIN_TAG, "%d) adding netmask: %s/%d", i+1,
-				inet_ntop(AF_INET,ip,ip_port_text_buffer,INET_ADDRSTRLEN),ip[4]);
-		i++;
-	}
-}
+	// This is my best guess at a sensible buffer size; if every address in the string is minimum
+	// possible length this is the maximum number of them that can fit in the passed string.
+	const size_t buffsize = strlen(pos) / 8 + 1;
+	ipv4* ipBuffer = (ipv4*)TSmalloc(sizeof(ipv4)*buffsize);
 
-static void parseIps6(config_t* config, char* ipStr) {
-	char buffer[STR_BUFFER_SIZE];
-	char *p, *tok1, *tok2, *ip;
-	int i, mask;
-	char ip_port_text_buffer[INET6_ADDRSTRLEN];
-
-	if(!ipStr) {
-		config->ip6Count = 1;
-		ip = config->allowIps6 = TSmalloc(sizeof(struct in6_addr) + 1);
-		inet_pton(AF_INET6, DEFAULT_IP6, ip);
-		ip[sizeof(struct in6_addr)] = 128;
-		return;
-	}
-
-	strcpy(buffer, ipStr);
-	p = buffer;
-	while(strtok_r(p, ", \n", &p)) {
-		config->ip6Count++;
-	}
-	if(!config->ip6Count) {
-		return;
-	}
-
-	config->allowIps6 = TSmalloc((sizeof(struct in6_addr) + 1)*config->ip6Count); // 16 bytes for ip + 1 for bit mask
-	strcpy(buffer, ipStr);
-	p = buffer;
-	i = 0;
-	while((tok1 = strtok_r(p, ", \n", &p))) {
-		TSDebug(PLUGIN_TAG, "%d) parsing: %s", i+1,tok1);
-		tok2 = strtok_r(tok1, "/", &tok1);
-		ip = config->allowIps6+((sizeof(struct in6_addr)+1)*i);
-		if(!inet_pton(AF_INET6, tok2, ip)) {
-			TSDebug(PLUGIN_TAG, "%d) skipping: %s", i+1,tok1);
-			continue;
+	char* anIP = strtok(pos, ", \n");
+	size_t totalIPs = 0;
+	do {
+		size_t ipnum;
+		for (ipnum=0; anIP != NULL && ipnum < buffsize; ++ipnum) {
+			if (!parseIPv4(anIP, ipBuffer + ipnum*sizeof(ipv4))) {
+				TSfree(ipBuffer);
+				TSError("[%s] Couldn't parse '%s' as a valid IP address!\n", PLUGIN_TAG, anIP);
+				return -1;
+			}
+			*ipStr = anIP;
+			anIP = strtok(NULL, ", \n");
 		}
-		tok2 = strtok_r(tok1, "/", &tok1);
-		if(!tok2) {
-			mask = 128;
-		} else {
-			mask = atoi(tok2);
-		}
-		ip[sizeof(struct in6_addr)] = mask;
-		TSDebug(PLUGIN_TAG, "%d) adding netmask: %s/%d", i+1,
-				inet_ntop(AF_INET6,ip,ip_port_text_buffer,INET6_ADDRSTRLEN),ip[sizeof(struct in6_addr)]);
-		i++;
-	}
+
+		copyIPv4InPlace(config, ipBuffer, ipnum);
+		totalIPs += ipnum;
+	} while (anIP != NULL);
+
+	TSfree(ipBuffer);
+	return (int)totalIPs;
+
+	// char buffer[STR_BUFFER_SIZE];
+	// char *p, *tok1, *tok2, *ip;
+	// int i, mask;
+	// char ip_port_text_buffer[INET6_ADDRSTRLEN];
+
+	// if(!ipStr) {
+	// 	config->ip6Count = 1;
+	// 	ip = config->allowIps6 = TSmalloc(sizeof(struct in6_addr) + 1);
+	// 	inet_pton(AF_INET6, DEFAULT_IP6, ip);
+	// 	ip[sizeof(struct in6_addr)] = 128;
+	// 	return;
+	// }
+
+	// strcpy(buffer, ipStr);
+	// p = buffer;
+	// while(strtok_r(p, ", \n", &p)) {
+	// 	config->ipCount++;
+	// }
+	// if(!config->ipCount) {
+	// 	return;
+	// }
+	// config->allowIps = TSmalloc(5*config->ipCount); // 4 bytes for ip + 1 for bit mask
+	// strcpy(buffer, ipStr);
+	// p = buffer;
+	// i = 0;
+	// while((tok1 = strtok_r(p, ", \n", &p))) {
+	// 	TSDebug(PLUGIN_TAG, "%d) parsing: %s", i+1,tok1);
+	// 	tok2 = strtok_r(tok1, "/", &tok1);
+	// 	ip = config->allowIps+((sizeof(struct in_addr) + 1)*i);
+	// 	if(!inet_pton(AF_INET, tok2, ip)) {
+	// 		TSDebug(PLUGIN_TAG, "%d) skipping: %s", i+1,tok1);
+	// 		continue;
+	// 	}
+	// 	tok2 = strtok_r(tok1, "/", &tok1);
+	// 	if(!tok2) {
+	// 		mask = 32;
+	// 	} else {
+	// 		mask = atoi(tok2);
+	// 	}
+	// 	ip[4] = mask;
+	// 	TSDebug(PLUGIN_TAG, "%d) adding netmask: %s/%d", i+1,
+	// 			inet_ntop(AF_INET,ip,ip_port_text_buffer,INET_ADDRSTRLEN),ip[4]);
+	// 	i++;
+	// }
 }
 
 /*
- * Constructs a configuration structure from the contents of the file identified by `fh`
+ * Parses part of a configuration file for IPv6 addresses, appending them to the configuration
+ * structures as they are parsed. `ipStr` is expected to point into the configuration file contents
+ * to the point where a list of IP addresses begins. If `ipStr` is NULL (or points to NULL), this
+ * will instead set it to use DEFAULT_IP. NOTE: this behavior overwrites existing stored IP
+ * addresses!
+ * Sets `ipStr` to point to to whatever was remaining when parsing finished (the idea being that the
+ * rest of the data should be appended to a new string and then this function called again to
+ * complete parsing all IP addresses). If `ipStr` was NULL, it will be unchanged.
+ * Returns the number of succesfully parsed IP addresses, or `-1` on error.
+*/
+static void parseIps6(config_t* config, char** ipStr) {
+
+	char* pos = ipStr == NULL ? NULL : *ipStr;
+
+	if (pos == NULL) {
+		if (config->allowIps6 != NULL) {
+			TSDebug(PLUGIN_TAG, "Overwriting existing IPv6 addresses");
+			TSfree(config->allowIps6);
+		}
+		config->ip6Count = 1;
+		config->allowIps6 = TSmalloc(sizeof(ipv6));
+		inet_pton(AF_INET, DEFAULT_IP, config->allowIps6);
+		config->allowIps6[0].netmask = 128;
+		return 1;
+	}
+
+	// This is my best guess at a sensible buffer size; IPv6 addresses support a lot of short-hand
+	// notation, so I aimed for the average case by allocating enough memory for a number of IP
+	// addresses that will fit in the input string assuming they're all half the maximum size.
+	const size_t buffsize = strlen(pos) / 20 + 1;
+	ipv6* ipBuffer = (ipv6*)TSmalloc(sizeof(ipv6)*buffsize);
+
+	char* anIP = strtok(pos, ", \n");
+	size_t totalIPs = 0;
+	do {
+		size_t ipnum;
+		for (ipnum=0; anIP != NULL && ipnum < buffsize; ++ipnum) {
+			if (!parseIPv6(anIP, ipBuffer + ipnum*sizeof(ipv6))) {
+				TSfree(ipBuffer);
+				TSError("[%s] Couldn't parse '%s' as a valid IP address!\n", PLUGIN_TAG, anIP);
+				return -1;
+			}
+			*ipStr = anIP;
+			anIP = strtok(NULL, ", \n");
+		}
+
+		copyIPv6InPlace(config, ipBuffer, ipnum);
+		totalIPs += ipnum;
+	} while (anIP != NULL);
+
+	TSfree(ipBuffer);
+	return (int)totalIPs;
+
+	// char buffer[STR_BUFFER_SIZE];
+	// char *p, *tok1, *tok2, *ip;
+	// int i, mask;
+	// char ip_port_text_buffer[INET6_ADDRSTRLEN];
+
+	// if(!ipStr) {
+	// 	config->ip6Count = 1;
+	// 	ip = config->allowIps6 = TSmalloc(sizeof(struct in6_addr) + 1);
+	// 	inet_pton(AF_INET6, DEFAULT_IP6, ip);
+	// 	ip[sizeof(struct in6_addr)] = 128;
+	// 	return;
+	// }
+
+	// strcpy(buffer, ipStr);
+	// p = buffer;
+	// while(strtok_r(p, ", \n", &p)) {
+	// 	config->ip6Count++;
+	// }
+	// if(!config->ip6Count) {
+	// 	return;
+	// }
+
+	// config->allowIps6 = TSmalloc((sizeof(struct in6_addr) + 1)*config->ip6Count); // 16 bytes for ip + 1 for bit mask
+	// strcpy(buffer, ipStr);
+	// p = buffer;
+	// i = 0;
+	// while((tok1 = strtok_r(p, ", \n", &p))) {
+	// 	TSDebug(PLUGIN_TAG, "%d) parsing: %s", i+1,tok1);
+	// 	tok2 = strtok_r(tok1, "/", &tok1);
+	// 	ip = config->allowIps6+((sizeof(struct in6_addr)+1)*i);
+	// 	if(!inet_pton(AF_INET6, tok2, ip)) {
+	// 		TSDebug(PLUGIN_TAG, "%d) skipping: %s", i+1,tok1);
+	// 		continue;
+	// 	}
+	// 	tok2 = strtok_r(tok1, "/", &tok1);
+	// 	if(!tok2) {
+	// 		mask = 128;
+	// 	} else {
+	// 		mask = atoi(tok2);
+	// 	}
+	// 	ip[sizeof(struct in6_addr)] = mask;
+	// 	TSDebug(PLUGIN_TAG, "%d) adding netmask: %s/%d", i+1,
+	// 			inet_ntop(AF_INET6,ip,ip_port_text_buffer,INET6_ADDRSTRLEN),ip[sizeof(struct in6_addr)]);
+	// 	i++;
+	// }
+}
+
+/*
+ * Constructs a configuration structure from the contents of the file identified by `fh`.
+ * If `fh` is NULL, constructs a configuration structure with the default options.
  * Returns NULL if the file could not be read/parsed or an error occured doing either.
 */
 static config_t* new_config(TSFile fh) {
@@ -743,16 +951,12 @@ static config_t* new_config(TSFile fh) {
 	config->recordTypes = DEFAULT_RECORD_TYPES;
 
 	if (fh == NULL) {
-		const char* stats_path = "_astats";
-		const size_t patlen = strlen(stats_path);
-		config->stats_path = (char*) TSmalloc(sizeof(char) * (patlen + 1));
-		if (strcpy(config->stats_path, stats_path) == NULL) {
-			TSError("[%s] Failed to initialize default config HTTP pathspec\n", PLUGIN_TAG);
-			TSfree(config->stats_path);
-			TSfree(config);
-			return NULL;
-		}
-		config->stats_path_len = patlen;
+		config->stats_path = (char*) TSmalloc(sizeof(char)*(DEFAULT_PATH_LEN+1));
+		strcpy(config->stats_path, DEFAULT_PATH)
+		config->stats_path_len = DEFAULT_PATH_LEN;
+
+		parseIps(config, NULL);
+		parseIps6(config, NULL);
 
 		TSDebug(PLUGIN_TAG, "No config, using defaults");
 		return config;
@@ -821,16 +1025,54 @@ static config_t* new_config(TSFile fh) {
 
 		} else if (p = strstr(buffer, IP_FIELD)) {
 			p += IP_FIELD_LEN;
-			parseIps(config, p);
+
+			// To deal with extremely long lines we get more input in a loop until EOL/EOF
+			do {
+				if (parseIps(config, p) < 0) {
+					TSError("[%s] Failed to parse '%s' value!\n", PLUGIN_TAG, IP_FIELD);
+					delete_config(config);
+					return NULL;
+				}
+				if (*p=='\n' || *p=='\0' || !TSfgets(fh, buffer, STR_BUFFER_SIZE - 1)) {
+					break;
+				}
+				p = buffer;
+			} while(true);
 
 		} else if (p = strstr(buffer, IP6_FIELD)) {
 			p += IP6_FIELD_LEN;
-			parseIps6(config, p);
+
+			// To deal with extremely long lines we get more input in a loop until EOL/EOF
+			do {
+				if (parseIps6(config, p) < 0) {
+					TSError("[%s] Failed to parse '%s' value!\n", PLUGIN_TAG, IP6_FIELD);
+					delete_config(config);
+					return NULL;
+				}
+				if (*p=='\n' || *p=='\0' || !TSfgets(fh, buffer, STR_BUFFER_SIZE - 1)) {
+					break;
+				}
+				p = buffer;
+			} while(true);
 		}
 	}
-	if(!config->ipCount || !config->ip6Count) {
-		parseIps6(config, NULL);
+
+	if (config->ipCount == 0 && parseIps(config, NULL) != 1) {
+		delete_config(config);
+		return NULL;
 	}
+
+	if (config->ip6Count == 0 && parseIps6(config, NULL) != 1) {
+		delete_config(config);
+		return NULL;
+	}
+
+	if (config->stats_path == NULL) {
+		config->stats_path = (char*) TSmalloc(sizeof(char)*(DEFAULT_PATH_LEN+1));
+		strcpy(config->stats_path, DEFAULT_PATH)
+		config->stats_path_len = DEFAULT_PATH_LEN;
+	}
+
 	TSDebug(PLUGIN_TAG, "config path=%s", config->stats_path);
 
 	return config;
@@ -861,11 +1103,14 @@ static void delete_config(config_t* config) {
 
 // standard api below...
 
-
+/*
+ * Extracts a configuration structure from a Continuation. Returns NULL if no configuration holder
+ * is found within the continuation data.
+*/
 static config_t* get_config(TSCont cont) {
 	config_holder_t* configh = (config_holder_t *) TSContDataGet(cont);
-	if(!configh) {
-		return 0;
+	if (configh == NULL) {
+		return NULL;
 	}
 	return configh->config;
 }
@@ -915,7 +1160,7 @@ static bool load_config_file(config_holder_t* config_holder) {
 	configReloads++;
 	lastReload = lastReloadRequest;
 	config_holder->last_load = lastReloadRequest;
-	config_t ** confp = &(config_holder->config);
+	config_t** confp = &(config_holder->config);
 	oldconfig = __sync_lock_test_and_set(confp, newconfig);
 	if (oldconfig) {
 		TSDebug(PLUGIN_TAG, "scheduling free: %p (%p)", oldconfig, newconfig);
@@ -924,7 +1169,7 @@ static bool load_config_file(config_holder_t* config_holder) {
 		TSContSchedule(free_cont, FREE_TMOUT, TS_THREAD_POOL_TASK);
 	}
 
-	if(fh) {
+	if (fh != NULL) {
 		TSfclose(fh);
 	}
 	return true;
@@ -969,11 +1214,13 @@ static config_holder_t* new_config_holder(const char* path) {
 	return NULL;
 }
 
+/*
+ * An asynchronous handler for deleting a configuration structure when it is no longer needed.
+ * Always returns 0.
+*/
 static int free_handler(TSCont cont, TSEvent event, void* edata) {
-	config_t *config;
-
 	TSDebug(PLUGIN_TAG, "Freeing old config");
-	config = (config_t *) TSContDataGet(cont);
+	config_t* config = (config_t*) TSContDataGet(cont);
 	delete_config(config);
 	TSContDestroy(cont);
 	return 0;
