@@ -83,7 +83,7 @@ var TableServerDeliveryServicesController = function(server, deliveryServices, f
 			}
 		});
 		modalInstance.result.then(function(selectedServer) {
-			var dsIds = _.pluck(deliveryServices, 'id');
+			const dsIds = deliveryServices.map(d => d.id);
 			serverService.assignDeliveryServices(selectedServer, dsIds, true, true)
 				.then(
 					function() {
