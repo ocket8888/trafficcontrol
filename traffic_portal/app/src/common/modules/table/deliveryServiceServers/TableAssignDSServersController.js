@@ -35,7 +35,7 @@ var TableAssignDSServersController = function(deliveryService, servers, assigned
 				return parseInt($(this).attr('id'));
 			}).get();
 		$scope.servers = servers.map(
-			(server) => {
+			function(server)  {
 				if (visibleServerIds.includes(server.id)) {
 					server['selected'] = selected;
 				}
@@ -46,15 +46,15 @@ var TableAssignDSServersController = function(deliveryService, servers, assigned
 	};
 
 	var updateSelectedCount = function() {
-		selectedServers = $scope.servers.filter((server) => { return server['selected'] === true; } );
+		selectedServers = $scope.servers.filter(function(server)  { return server['selected'] === true; } );
 		$('div.selected-count').html('<b>' + selectedServers.length + ' servers selected</b>');
 	};
 
 	$scope.deliveryService = deliveryService;
 
 	$scope.servers = servers.map(
-		(server) => {
-			const isAssigned = assignedServers.find((assignedServer) => { return assignedServer.id === server.id });
+		function(server)  {
+			const isAssigned = assignedServers.find(function(assignedServer)  { return assignedServer.id === server.id });
 			if (isAssigned) {
 				server['selected'] = true;
 			}
@@ -76,7 +76,7 @@ var TableAssignDSServersController = function(deliveryService, servers, assigned
 	};
 
 	$scope.submit = function() {
-		var selectedServerIds = selectedServers.map(s => s.id);
+		var selectedServerIds = selectedServers.map(function(s) {return s.id;});
 		$uibModalInstance.close(selectedServerIds);
 	};
 

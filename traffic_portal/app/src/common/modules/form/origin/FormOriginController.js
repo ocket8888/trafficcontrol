@@ -22,7 +22,7 @@ var FormOriginController = function(origin, $scope, $window, $location, formUtil
     var getProfiles = function() {
         profileService.getProfiles({ orderby: 'name' })
             .then(function(result) {
-                $scope.profiles = result.filter( (profile) => {
+                $scope.profiles = result.filter( function(profile)  {
                     return profile.type === 'ORG_PROFILE';
                 });
             });
@@ -42,7 +42,7 @@ var FormOriginController = function(origin, $scope, $window, $location, formUtil
     var getCacheGroups = function() {
         cacheGroupService.getCacheGroups({ orderby: 'name' })
             .then(function(result) {
-                $scope.cacheGroups = result.filter( (cachegroup) => {
+                $scope.cacheGroups = result.filter( function(cachegroup)  {
                     return cachegroup.typeName === 'ORG_LOC';
                 });
             });
@@ -59,7 +59,7 @@ var FormOriginController = function(origin, $scope, $window, $location, formUtil
         deliveryServiceService.getDeliveryServices()
             .then(function(result) {
                 $scope.deliveryServices = result.sort(
-                    (d1, d2) => {
+                    function(d1, d2)  {
                         if (d1.xmlId < d2.xmlId) {
                             return -1;
                         } else if (d1.xmlId > d2.xmlId) {
@@ -91,7 +91,7 @@ var FormOriginController = function(origin, $scope, $window, $location, formUtil
     $scope.navigateToPath = locationUtils.navigateToPath;
 
     $scope.editDeliveryService = function(deliveryServiceId) {
-        ds = $scope.deliveryServices.find( (d) => {return d.hasOwnProperty("id") && d.id === deliveryServiceId;});
+        ds = $scope.deliveryServices.find( function(d)  {return d.hasOwnProperty("id") && d.id === deliveryServiceId;});
         $window.open('/#!/delivery-services/' + ds.id + '?type=' + ds.type, '_blank');
     };
 

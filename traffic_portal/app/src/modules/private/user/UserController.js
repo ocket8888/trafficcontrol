@@ -32,7 +32,7 @@ var UserController = function($scope, $state, $location, $uibModal, formUtils, l
         roleService.getRoles()
             .then(function(result) {
                 $scope.roles = result.sort(
-                    (r1, r2) => {
+                    function(r1, r2)  {
                         if (r1.privLevel < r2.privLevel) {
                             return 1;
                         } else if (r1.privLevel > r2.privLevel) {

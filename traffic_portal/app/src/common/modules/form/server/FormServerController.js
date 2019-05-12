@@ -55,7 +55,7 @@ var FormServerController = function(server, $scope, $location, $state, $uibModal
         profileService.getProfiles({ orderby: 'name', cdn: cdnId })
             .then(function(result) {
                 $scope.profiles = result.filter(
-                    (profile) => {
+                    function(profile)  {
                         return profile.type !== 'DS_PROFILE'; // DS profiles are not intended for servers
                     }
                 );
