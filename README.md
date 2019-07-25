@@ -21,8 +21,8 @@
 
 Apache Traffic Control is an Open Source implementation of a Content Delivery Network.
 
-#### Documentation
-* [Intro](http://traffic-control-cdn.readthedocs.io/en/latest/index.html)
+## Documentation
+* [Intro](./docs/overview/introduction.html)
 * [CDN Basics](http://traffic-control-cdn.readthedocs.io/en/latest/basics/index.html)
 * [Traffic Control Overview](http://traffic-control-cdn.readthedocs.io/en/latest/overview/index.html)
 * [Administrator's Guide](http://traffic-control-cdn.readthedocs.io/en/latest/admin/index.html)
