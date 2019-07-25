@@ -1,0 +1,1621 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Delivery Services &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction" href="introduction.html" />
+    <link rel="prev" title="Traffic Control Overview" href="index.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Traffic Control Overview</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Delivery Services</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#active">Active</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#anonymous-blocking">Anonymous Blocking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cache-url-expression">Cache URL Expression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cdn">CDN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#check-path">Check Path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#consistent-hashing-regular-expression">Consistent Hashing Regular Expression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#consistent-hashing-query-parameters">Consistent Hashing Query Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deep-caching">Deep Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#display-name">Display Name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dns-bypass-cname">DNS Bypass CNAME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dns-bypass-ip">DNS Bypass IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dns-bypass-ipv6">DNS Bypass IPv6</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dns-bypass-ttl">DNS Bypass TTL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dns-ttl">DNS TTL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dscp">DSCP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#edge-header-rewrite-rules">Edge Header Rewrite Rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-urls">Example URLs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fair-queuing-pacing-rate-bps">Fair-Queuing Pacing Rate Bps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#geo-limit">Geo Limit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#geo-limit-countries">Geo Limit Countries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#geo-limit-redirect-url">Geo Limit Redirect URL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#geolocation-provider">Geolocation Provider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#geo-miss-default-latitude">Geo Miss Default Latitude</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#geo-miss-default-longitude">Geo Miss Default Longitude</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#global-max-mbps">Global Max Mbps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#global-max-tps">Global Max TPS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#http-bypass-fqdn">HTTP Bypass FQDN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ipv6-routing-enabled">IPv6 Routing Enabled</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#info-url">Info URL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initial-dispersion">Initial Dispersion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logs-enabled">Logs Enabled</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#long-description">Long Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#long-description-2">Long Description 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#long-description-3">Long Description 3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#match-list">Match List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-dns-answers">Max DNS Answers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-origin-connections">Max Origin Connections</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mid-header-rewrite-rules">Mid Header Rewrite Rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#origin-server-base-url">Origin Server Base URL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#origin-shield">Origin Shield</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#profile">Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#protocol">Protocol</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#query-string-handling">Query String Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#range-request-handling">Range Request Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#raw-remap-text">Raw Remap Text</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regex-remap-expression">Regex Remap Expression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regional-geoblocking">Regional Geoblocking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#routing-name">Routing Name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#servers">Servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#signing-algorithm">Signing Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ssl-key-version">SSL Key Version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#static-dns-entries">Static DNS Entries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tenant">Tenant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#traffic-router-additional-response-headers">Traffic Router Additional Response Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#traffic-router-log-request-headers">Traffic Router Log Request Headers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#type">Type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#use-multi-site-origin-feature">Use Multi-Site Origin Feature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xml-id">xml_id</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiles_and_parameters.html">Profiles and Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_monitor.html">Traffic Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops.html">Traffic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal.html">Traffic Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router.html">Traffic Router</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_stats.html">Traffic Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_vault.html">Traffic Vault</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Traffic Control Overview</a> &raquo;</li>
+        
+      <li>Delivery Services</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/overview/delivery_services.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="delivery-services">
+<span id="id1"></span><h1>Delivery Services<a class="headerlink" href="#delivery-services" title="Permalink to this headline">¶</a></h1>
+<p>“Delivery Services” are a very important construct in <abbr title="Apache Traffic Control">ATC</abbr>. At their most basic, they are a source of content and a set of <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s and configuration options used to distribute that content.</p>
+<p>Delivery Services are modeled several times over, in the Traffic Ops database, in Traffic Portal forms and tables, in the legacy Perl Traffic Ops codebase, and several times for various <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> versions in the new Go Traffic Ops codebase. Go-specific data structures can be found in <a class="reference external" href="https://godoc.org/github.com/apache/trafficcontrol/lib/go-tc#DeliveryServiceNullableV11">the project’s GoDoc documentation</a>. Rather than application-specific definitions, what follows is an attempt at consolidating all of the different properties and names of properties of Delivery Service objects throughout the <abbr title="Apache Traffic Control">ATC</abbr> suite. The names of these fields are typically chosen as the most human-readable and/or most commonly-used names for the fields, and when reading please note that in many cases these names will appear camelCased or snake_cased to be machine-readable. Any aliases of these fields that are not merely case transformations of the indicated, canonical names will be noted in a table of aliases.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The API reference for Delivery Service-related endpoints such as <a class="reference internal" href="../api/deliveryservices.html#to-api-deliveryservices"><span class="std std-ref">deliveryservices</span></a> contains definitions of the Delivery Service object(s) returned and/or accepted by those endpoints.</p>
+</div>
+<div class="section" id="active">
+<span id="ds-active"></span><h2>Active<a class="headerlink" href="#active" title="Permalink to this headline">¶</a></h2>
+<p>Whether or not this Delivery Service is active on the CDN and can be served. When a Delivery Service is not “active”, Traffic Router will not be made aware of its existence - i.e. it will not appear in CDN <a class="reference internal" href="../glossary.html#term-snapshots"><span class="xref std std-term">Snapshots</span></a>. Setting a Delivery Service to be “active” (or “inactive”) will require that a new <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> be taken.</p>
+</div>
+<div class="section" id="anonymous-blocking">
+<span id="ds-anonymous-blocking"></span><h2>Anonymous Blocking<a class="headerlink" href="#anonymous-blocking" title="Permalink to this headline">¶</a></h2>
+<p>Enables/Disables blocking of anonymized IP address - proxies, <abbr title="The Onion Ring">TOR</abbr> exit nodes, etc - for this Delivery Service. Set to true to enable blocking of anonymous IPs for this Delivery Service.</p>
+<table class="docutils align-default" id="id14">
+<caption><span class="caption-number">Table 1 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id14" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 40%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>anonymousBlockingEnabled</p></td>
+<td><p>Traffic Ops client and server Go code, <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> requests and responses</p></td>
+<td><p>usually unchanged (boolean), but sometimes as a string containing a boolean e.g. in the
+response of a <code class="docutils literal notranslate"><span class="pre">GET</span></code> request to <a class="reference internal" href="../api/cdns_name_snapshot.html#to-api-cdns-name-snapshot"><span class="std std-ref">cdns/{{name}}/snapshot</span></a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Anonymous Blocking requires an anonymous IP address database from the Delivery Service’s Geolocation Provider. E.g. <a class="reference external" href="https://www.maxmind.com/en/solutions/geoip2-enterprise-product-suite/anonymous-ip-database">MaxMind’s Anonymous IP Database</a> when MaxMind is used as the Geolocation Provider.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The <a class="reference internal" href="../admin/quick_howto/anonymous_blocking.html#anonymous-blocking-qht"><span class="std std-ref">Configure Anonymous Blocking</span></a> “Quick-How-To” guide.</p>
+</div>
+</div>
+<div class="section" id="cache-url-expression">
+<span id="ds-cacheurl"></span><h2>Cache URL Expression<a class="headerlink" href="#cache-url-expression" title="Permalink to this headline">¶</a></h2>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 3.0: </span>This feature is no longer supported by <abbr title="Apache Traffic Server">ATS</abbr> and consequently it will be removed from Traffic Control in the future.</p>
+</div>
+<p>Manipulates the cache key of the incoming requests. Normally, the cache key is the <a class="reference internal" href="../glossary.html#term-origin"><span class="xref std std-term">origin</span></a> domain. This can be changed so that multiple services can share a cache key, can also be used to preserve cached content if service origin is changed.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This field provides access to a feature that was only present in <abbr title="Apache Traffic Server">ATS</abbr> 6.X and earlier. As <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s must now use <abbr title="Apache Traffic Server">ATS</abbr> 7.1.X, this field <strong>must</strong> be blank unless all <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> can be guaranteed to use that older <abbr title="Apache Traffic Server">ATS</abbr> version (<strong>NOT</strong> recommended).</p>
+</div>
+</div>
+<div class="section" id="cdn">
+<span id="ds-cdn"></span><h2>CDN<a class="headerlink" href="#cdn" title="Permalink to this headline">¶</a></h2>
+<p>A CDN to which this Delivery Service belongs. Only <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> within this CDN are available to route content for this Delivery Service. Additionally, only Traffic Routers assigned to this CDN will perform said routing. Most often <code class="docutils literal notranslate"><span class="pre">cdn</span></code>/<code class="docutils literal notranslate"><span class="pre">CDN</span></code> refers to the <em>name</em> of the CDN to which the Delivery Service belongs, but occasionally (most notably in the payloads and/or query parameters of certain <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> endpoints) it actually refers to the <em>integral, unique identifier</em> of said CDN.</p>
+</div>
+<div class="section" id="check-path">
+<span id="ds-check-path"></span><h2>Check Path<a class="headerlink" href="#check-path" title="Permalink to this headline">¶</a></h2>
+<p>A request path on the <a class="reference internal" href="../glossary.html#term-origin-server"><span class="xref std std-term">origin server</span></a> which is used to by certain <a class="reference internal" href="../admin/traffic_ops/extensions.html#admin-to-ext-script"><span class="std std-ref">Traffic Ops Extensions</span></a> to indicate the “health” of the <a class="reference internal" href="../glossary.html#term-origin"><span class="xref std std-term">origin</span></a>.</p>
+</div>
+<div class="section" id="consistent-hashing-regular-expression">
+<span id="ds-consistent-hashing-regex"></span><h2>Consistent Hashing Regular Expression<a class="headerlink" href="#consistent-hashing-regular-expression" title="Permalink to this headline">¶</a></h2>
+<p>When Traffic Router performs <a class="reference internal" href="../admin/traffic_router.html#consistent-hashing"><span class="std std-ref">Consistent Hashing</span></a> on a client request to find an <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a> to which to redirect them, it can optionally first modify the request path by extracting the pieces that match this regular expression.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../admin/traffic_router.html#pattern-based-consistenthash"><span class="std std-ref">Consistent Hashing Patterns</span></a></p>
+</div>
+<table class="docutils align-default" id="id15">
+<caption><span class="caption-number">Table 2 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id15" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 30%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>consistentHashRegex</p></td>
+<td><p>In source code and <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> requests and responses</p></td>
+<td><p>unchanged (regular expression)</p></td>
+</tr>
+<tr class="row-odd"><td><p>pattern-based consistent hashing</p></td>
+<td><p>documentation and the Traffic Portal UI</p></td>
+<td><p>unchanged (regular expression), but usually used when discussing the concept rather than the field</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="consistent-hashing-query-parameters">
+<span id="ds-consistent-hashing-qparams"></span><h2>Consistent Hashing Query Parameters<a class="headerlink" href="#consistent-hashing-query-parameters" title="Permalink to this headline">¶</a></h2>
+<p>When Traffic Router performs <a class="reference internal" href="../admin/traffic_router.html#consistent-hashing"><span class="std std-ref">Consistent Hashing</span></a> on a client request to find an <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a> to which to redirect them, it can optionally take into account any number of query parameters. This field defines them, formally as a Set but often represented as an Array/List due to encoding limitations. That is, if the Consistent Hashing Query Parameters on a Delivery Service are <code class="docutils literal notranslate"><span class="pre">{test}</span></code> and a client makes a request for <code class="docutils literal notranslate"><span class="pre">/?test=something</span></code> they will be directed to a different <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> than a different client that requests <code class="docutils literal notranslate"><span class="pre">/?test=somethingElse</span></code>, but the <em>same</em> <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> as a client that requests <code class="docutils literal notranslate"><span class="pre">/?test=something&amp;quest=somethingToo</span></code>.</p>
+<table class="docutils align-default" id="id16">
+<caption><span class="caption-number">Table 3 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id16" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 38%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>consistentHashQueryParams</p></td>
+<td><p>In source code, Traffic Portal, and <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> requests and responses</p></td>
+<td><p>unchanged (Array of strings - should ALWAYS be unique, thus treated as a Set in most contexts)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="deep-caching">
+<span id="ds-deep-caching"></span><h2>Deep Caching<a class="headerlink" href="#deep-caching" title="Permalink to this headline">¶</a></h2>
+<p>Controls the <a class="reference internal" href="../admin/traffic_router.html#deep-cache"><span class="std std-ref">Deep Caching</span></a> feature of Traffic Router when serving content for this Delivery Service. This should always be represented by one of two values:</p>
+<dl class="simple">
+<dt>ALWAYS</dt><dd><p>This Delivery Service will always use <a class="reference internal" href="../admin/traffic_router.html#deep-cache"><span class="std std-ref">Deep Caching</span></a></p>
+</dd>
+<dt>NEVER</dt><dd><p>This Delivery Service will never use <a class="reference internal" href="../admin/traffic_router.html#deep-cache"><span class="std std-ref">Deep Caching</span></a></p>
+</dd>
+</dl>
+<div class="admonition">
+<p class="admonition-title">Implementation Detail</p>
+<p>Traffic Ops and Traffic Ops client Go code use an empty string as the name of the enumeration member that represents “NEVER”.</p>
+</div>
+</div>
+<div class="section" id="display-name">
+<span id="ds-display-name"></span><h2>Display Name<a class="headerlink" href="#display-name" title="Permalink to this headline">¶</a></h2>
+<p>The “name” of the Delivery Service. Since nearly any use of a string-based identification method for Delivery Services (e.g. in Traffic Portal tables) uses <a class="reference internal" href="#xml-id">xml_id</a>, this is of limited use. For that reason and for consistency’s sake it is suggested that this be the same as the <a class="reference internal" href="#xml-id">xml_id</a>. However, unlike the <a class="reference internal" href="#xml-id">xml_id</a>, this can contain any UTF-8 characters without restriction.</p>
+</div>
+<div class="section" id="dns-bypass-cname">
+<span id="ds-dns-bypass-cname"></span><h2>DNS Bypass CNAME<a class="headerlink" href="#dns-bypass-cname" title="Permalink to this headline">¶</a></h2>
+<p>When the limits placed on this Delivery Service by the <a class="reference internal" href="#global-max-mbps">Global Max Mbps</a> and/or <a class="reference internal" href="#global-max-tps">Global Max Tps</a> are exceeded, a DNS-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Service will direct excess traffic to the host referred to by this <abbr title="Canonical Name">CNAME</abbr> record.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>IPv6 traffic will be redirected if and only if <a class="reference internal" href="#ipv6-routing-enabled">IPv6 Routing Enabled</a> is “true” for this Delivery Service.</p>
+</div>
+</div>
+<div class="section" id="dns-bypass-ip">
+<span id="ds-dns-bypass-ip"></span><h2>DNS Bypass IP<a class="headerlink" href="#dns-bypass-ip" title="Permalink to this headline">¶</a></h2>
+<p>When the limits placed on this Delivery Service by the <a class="reference internal" href="#global-max-mbps">Global Max Mbps</a> and/or <a class="reference internal" href="#global-max-tps">Global Max Tps</a> are exceeded, a DNS-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Service will direct excess IPv4 traffic to this IPv4 address.</p>
+</div>
+<div class="section" id="dns-bypass-ipv6">
+<span id="ds-dns-bypass-ipv6"></span><h2>DNS Bypass IPv6<a class="headerlink" href="#dns-bypass-ipv6" title="Permalink to this headline">¶</a></h2>
+<p>When the limits placed on this Delivery Service by the <a class="reference internal" href="#global-max-mbps">Global Max Mbps</a> and/or <a class="reference internal" href="#global-max-tps">Global Max Tps</a> are exceeded, a DNS-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Service will direct excess IPv6 traffic to this IPv6 address.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This requires an accompanying configuration of <a class="reference internal" href="#ipv6-routing-enabled">IPv6 Routing Enabled</a> such that IPv6 traffic is allowed at all.</p>
+</div>
+</div>
+<div class="section" id="dns-bypass-ttl">
+<span id="ds-dns-bypass-ttl"></span><h2>DNS Bypass TTL<a class="headerlink" href="#dns-bypass-ttl" title="Permalink to this headline">¶</a></h2>
+<p>When the limits placed on this Delivery Service by the <a class="reference internal" href="#global-max-mbps">Global Max Mbps</a> and/or <a class="reference internal" href="#global-max-tps">Global Max Tps</a> are exceeded, a DNS-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Service will direct excess traffic to their <a class="reference internal" href="#dns-bypass-ip">DNS Bypass IP</a>, <a class="reference internal" href="#dns-bypass-ipv6">DNS Bypass IPv6</a>, or <a class="reference internal" href="#dns-bypass-cname">DNS Bypass CNAME</a>.</p>
+</div>
+<div class="section" id="dns-ttl">
+<span id="ds-dns-ttl"></span><h2>DNS TTL<a class="headerlink" href="#dns-ttl" title="Permalink to this headline">¶</a></h2>
+<p>The <abbr title="Time To Live">TTL</abbr> on the DNS record for the Traffic Router A and AAAA records. DNS-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Services will send this <abbr title="Time To Live">TTL</abbr> along with their record responses to clients requesting access to this Delivery Service. Setting too high or too low will result in poor caching performance.</p>
+<table class="docutils align-default" id="id17">
+<caption><span class="caption-number">Table 4 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id17" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 60%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CCR DNS TTL</p></td>
+<td><p>In Delivery Service objects returned by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a></p></td>
+<td><p>unchanged (<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">integer</span></code> etc.)</p></td>
+</tr>
+<tr class="row-odd"><td><p>CCR TTL</p></td>
+<td><p>Legacy Traffic Ops UI, documentation for older Traffic Control versions</p></td>
+<td><p>unchanged (<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">integer</span></code> etc.)</p></td>
+</tr>
+<tr class="row-even"><td><p>ttl</p></td>
+<td><p>In CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> structures, where it is displayed on a per-record-type-basis</p></td>
+<td><p>map of record type names to integral values</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="dscp">
+<span id="ds-dscp"></span><h2>DSCP<a class="headerlink" href="#dscp" title="Permalink to this headline">¶</a></h2>
+<p>The <abbr title="Differentiated Services Code Point">DSCP</abbr> which will be used to mark IP packets as they are sent out of the CDN to the client.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Differentiated_services">The Differentiated Services Wikipedia article</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <abbr title="Differentiated Services Code Point">DSCP</abbr> setting in Traffic Portal is <em>only</em> for setting traffic towards the client, and gets applied <em>after</em> the initial TCP handshake is complete and the HTTP request has been received. Before that the cache can’t determine what Delivery Service is being requested, and consequently can’t know what <abbr title="Differentiated Services Code Point">DSCP</abbr> to apply. Therefore, the <abbr title="Differentiated Services Code Point">DSCP</abbr> feature can not be used for security settings; the IP packets that form the TCP handshake are not going to be <abbr title="Differentiated Services Code Point">DSCP</abbr>-marked.</p>
+</div>
+<div class="admonition">
+<p class="admonition-title">Implementation Detail</p>
+<p>DSCP settings only apply on <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> that run <abbr title="Differentiated Services Code Point">Apache Traffic Server</abbr>. The implementation uses the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/plugins/header_rewrite.en.html">ATS Header Rewrite Plugin</a> to create a rule that will mark traffic bound outward from the CDN to the client.</p>
+</div>
+</div>
+<div class="section" id="edge-header-rewrite-rules">
+<span id="ds-edge-header-rw-rules"></span><h2>Edge Header Rewrite Rules<a class="headerlink" href="#edge-header-rewrite-rules" title="Permalink to this headline">¶</a></h2>
+<p>This field in general contains the contents of the a configuration file used by the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/plugins/header_rewrite.en.html">ATS Header Rewrite Plugin</a> when serving content for this Delivery Service - on <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a>s.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Because this ultimately is the contents of an <abbr title="Apache Traffic Server">ATS</abbr> configuration file, it can make use of the <a class="reference internal" href="../development/ort/traffic_ops_ort.html#ort-special-strings"><span class="std std-ref">Strings with Special Meaning to ORT</span></a>.</p>
+</div>
+</div>
+<div class="section" id="example-urls">
+<span id="ds-example-urls"></span><h2>Example URLs<a class="headerlink" href="#example-urls" title="Permalink to this headline">¶</a></h2>
+<p>The Example URLs of a Delivery Service are the scheme/host specifications that clients can use to request content through it. These are determined by Traffic Ops from the Delivery Service’s configuration, and are read-only in virtually every context. The only reason a Delivery Service should ever have no Example URLs is if it is an ANY_MAP-<a class="reference internal" href="#type">Type</a> Delivery Service (since they are not routed). For example, a Delivery Service that can deliver HTTP and HTTPS content, has a <a class="reference internal" href="#routing-name">Routing Name</a> of “cdn”, an <a class="reference internal" href="#xml-id">xml_id</a> of “demo1”, and belonging to a <a class="reference internal" href="#cdn">CDN</a> that is authoritative for the <cite>mycdn.ciab.test</cite> domain would have two Example URLs:</p>
+<ul class="simple">
+<li><p><cite>https://cdn.demo1.mycdn.ciab.test</cite></p></li>
+<li><p><cite>http://cdn.demo1.mycdn.ciab.test</cite></p></li>
+</ul>
+<p>Note that these are irrespective of request path; meaning a client can request e.g. <cite>https://cdn.demo1.mycdn.ciab.test/index.html</cite> through this Delivery Service.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This list does not consider any <a class="reference internal" href="#static-dns-entries">Static DNS Entries</a> configured on the Delivery Service, those are</p>
+</div>
+<table class="docutils align-default" id="id18">
+<caption><span class="caption-number">Table 5 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id18" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 30%" />
+<col style="width: 39%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Delivery Service URLs</p></td>
+<td><p>Traffic Portal forms</p></td>
+<td><p>unchanged (list of strings)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="fair-queuing-pacing-rate-bps">
+<span id="ds-fqpr"></span><h2>Fair-Queuing Pacing Rate Bps<a class="headerlink" href="#fair-queuing-pacing-rate-bps" title="Permalink to this headline">¶</a></h2>
+<p>The maximum bytes per second a <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> will deliver on any single TCP connection. This uses the Linux kernel’s Fair-Queuing <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/setsockopt(2)">setsockopt(2)</a></em> (<code class="docutils literal notranslate"><span class="pre">SO_MAX_PACING_RATE</span></code>) to limit the rate of delivery. Traffic exceeding this speed will only be rate-limited and not diverted. This option requires extra configuration on all <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> assigned to this Delivery Service - specifically, the line <code class="docutils literal notranslate"><span class="pre">net.core.default_qdisc</span> <span class="pre">=</span> <span class="pre">fq</span></code> must exist in <code class="file docutils literal notranslate"><span class="pre">/etc/sysctl.conf</span></code>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/tc-fq_codel(8)">tc-fq_codel(8)</a></em></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>This is implemented using the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/plugins/fq_pacing.en.html">ATS fq_pacing plign</a>.</p>
+</div>
+<table class="docutils align-default" id="id19">
+<caption><span class="caption-number">Table 6 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id19" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 60%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>FQPacingRate</p></td>
+<td><p>Traffic Ops source code, Delivery Service objects returned by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a></p></td>
+<td><p>unchanged (<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">integer</span></code> etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="geo-limit">
+<span id="ds-geo-limit"></span><h2>Geo Limit<a class="headerlink" href="#geo-limit" title="Permalink to this headline">¶</a></h2>
+<p>Limits access to a Delivery Service by geographic location. The only practical difference between this and <a class="reference internal" href="#regional-geoblocking">Regional Geoblocking</a> is the configuration method; as opposed to <a class="reference internal" href="#regional-geoblocking">Regional Geoblocking</a>, GeoLimit configuration is handled by country-wide codes and the <a class="reference internal" href="../glossary.html#term-coverage-zone-file"><span class="xref std std-term">Coverage Zone File</span></a>. When a client is denied access to a requested resource on an HTTP-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Service, they will receive a <code class="docutils literal notranslate"><span class="pre">503</span> <span class="pre">Service</span> <span class="pre">Unavailable</span></code> instead of the usual <code class="docutils literal notranslate"><span class="pre">302</span> <span class="pre">Found</span></code> response - unless <a class="reference internal" href="#geo-limit-redirect-url">Geo Limit Redirect URL</a> is defined, in which case a <code class="docutils literal notranslate"><span class="pre">302</span> <span class="pre">Found</span></code> response pointing to that URL will be returned by Traffic Router. If the Delivery Service is a DNS-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Service, the IP address of the <em>resolver</em> for the client DNS request is what is checked. If the IP address of this resolver is found to be in a restricted location, the Traffic Router will respond with an <code class="docutils literal notranslate"><span class="pre">NXDOMAIN</span></code> response, causing the name resolution to fail. This is nearly always an integral, unique identifier for a behavior set to be followed by Traffic Router. The defined values are:</p>
+<dl class="simple">
+<dt>0</dt><dd><p>Geographic access limiting is not enabled, and content served by this Delivery Service will be accessible regardless of the clients geographic location. (Aliased as “0 - None” in Traffic Portal forms)</p>
+</dd>
+<dt>1</dt><dd><p>A client will be allowed to request content if and only if their IP address is found by Traffic Router within the <a class="reference internal" href="../glossary.html#term-coverage-zone-file"><span class="xref std std-term">Coverage Zone File</span></a>. Otherwise, access will be denied. (Aliased as “1 - CZF Only” in Traffic Portal forms)</p>
+</dd>
+<dt>2</dt><dd><p>A client will be allowed to request content if their IP address is found by Traffic Router within the <a class="reference internal" href="../glossary.html#term-coverage-zone-file"><span class="xref std std-term">Coverage Zone File</span></a>, or if looking up the client’s IP address in the Geographic IP mapping database provided by <a class="reference internal" href="#geolocation-provider">Geolocation Provider</a> indicates the client resides in a country that is found in the <a class="reference internal" href="#geo-limit-countries">Geo Limit Countries</a> array. (Aliased as “2 - CZF + Country Code(s)” in Traffic Portal forms - formerly was known as “CZF + US” when only the US country code was supported)</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The definitions of each integral, unique identifier are hidden in implementations in each <abbr title="Apache Traffic Control">ATC</abbr> component. Different components will handle invalid values differently, and there’s no actual enforcement that the stored integral, unique identifier actually be within the representable range.</p>
+</div>
+<table class="docutils align-default" id="id20">
+<caption><span class="caption-number">Table 7 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id20" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 40%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>coverageZoneOnly</p></td>
+<td><p>In CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> structures, especially in <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> responses</p></td>
+<td><p>A boolean which, if <code class="docutils literal notranslate"><span class="pre">true</span></code>, tells Traffic Router to only service requests when the client IP
+address is found in the <a class="reference internal" href="../glossary.html#term-coverage-zone-file"><span class="xref std std-term">Coverage Zone File</span></a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p>Geographic access limiting is <strong>not</strong> sufficient to guarantee access is properly restricted. The limiting is implemented by Traffic Router, which means that direct requests to <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a>s will bypass it entirely.</p>
+</div>
+</div>
+<div class="section" id="geo-limit-countries">
+<span id="ds-geo-limit-countries"></span><h2>Geo Limit Countries<a class="headerlink" href="#geo-limit-countries" title="Permalink to this headline">¶</a></h2>
+<p>When <a class="reference internal" href="#geo-limit">Geo Limit</a> is being used with this Delivery Service (and is set to exactly <code class="docutils literal notranslate"><span class="pre">2</span></code>), this is optionally a list of country codes to which access to content provided by the Delivery Service will be restricted. Normally, this is a comma-delimited string of said country codes. When creating a Delivery Service with this field or modifying the Geo Limit Countries field on an existing Delivery Service, any amount of whitespace between country codes is permissible, as it will be removed on submission, but responses from the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> should never include such whitespace.</p>
+<table class="docutils align-default" id="id21">
+<caption><span class="caption-number">Table 8 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id21" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 40%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>geoEnabled</p></td>
+<td><p>In CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> structures, especially in <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> responses</p></td>
+<td><p>An array of objects each having the key “countryCode” that is a string containing an allowed
+country code - one should exist for each allowed country code</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="geo-limit-redirect-url">
+<span id="ds-geo-limit-redirect-url"></span><h2>Geo Limit Redirect URL<a class="headerlink" href="#geo-limit-redirect-url" title="Permalink to this headline">¶</a></h2>
+<p>If <a class="reference internal" href="#geo-limit">Geo Limit</a> is being used with this Delivery Service, this is optionally a URL to which clients will be redirected when Traffic Router determines that they are not in a geographic zone that permits their access to the Delivery Service content. This changes the response from Traffic Router from <code class="docutils literal notranslate"><span class="pre">503</span> <span class="pre">Service</span> <span class="pre">Unavailable</span></code> to <code class="docutils literal notranslate"><span class="pre">302</span> <span class="pre">Found</span></code> with a provided location that will be this URL. There is no restriction on the provided URL; it may even be the path to a resource served by this Delivery Service. In fact, this field need not even be a full URL, it can be a relative path. Both of these cases are handled specially by Traffic Router.</p>
+<ul class="simple">
+<li><p>If the provided URL is a resource served by the Delivery Service (e.g. if the client requests <code class="docutils literal notranslate"><span class="pre">http://cdn.dsXMLID.somedomain.example.com/index.html</span></code> but are denied access by <a class="reference internal" href="#geo-limit">Geo Limit</a> and the Geo Limit Redirect URL is something like <code class="docutils literal notranslate"><span class="pre">http://cdn.dsXMLID.somedomain.example.com/help.php</span></code>), Traffic Router will find an appropriate <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a> and redirect the client, ignoring Geo Limit restrictions <em>for this request only</em>.</p></li>
+<li><p>If the provided “URL” is actually a relative path, it will be considered <em>relative to the requested Delivery Service :abbr:`FQDN (Fully Qualified Domain Name)`</em>. This means that e.g. if the client requests <code class="docutils literal notranslate"><span class="pre">http://cdn.dsXMLID.somedomain.example.com/index.html</span></code> but are denied access by <a class="reference internal" href="#geo-limit">Geo Limit</a> and the Geo Limit Redirect URL is something like <code class="docutils literal notranslate"><span class="pre">/help.php</span></code>, Traffic Router will find an appropriate <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a> and redirect the client to it as though they had requested <code class="docutils literal notranslate"><span class="pre">http://cdn.dsXMLID.somedomain.example.com/help.php</span></code>, ignoring <a class="reference internal" href="#geo-limit">Geo Limit</a> restrictions <em>for this request only</em>.</p></li>
+</ul>
+<table class="docutils align-default" id="id22">
+<caption><span class="caption-number">Table 9 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id22" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 33%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><abbr title="National GeoBlock">NGB</abbr></p></td>
+<td><p>Older documentation, in Traffic Router comments and error logs</p></td>
+<td><p>unchanged (<code class="docutils literal notranslate"><span class="pre">string</span></code>, <code class="docutils literal notranslate"><span class="pre">String</span></code> etc.)</p></td>
+</tr>
+<tr class="row-odd"><td><p>geoRedirectURLType</p></td>
+<td><p>Internally in Traffic Router</p></td>
+<td><p>A <code class="docutils literal notranslate"><span class="pre">String</span></code> that describes whether or not the actual Geo Limit Redirect URL is relative to the
+Delivery Service base <abbr title="Fully Qualified Domain Name">FQDN</abbr>. Should be one of:</p>
+<dl class="simple">
+<dt>INVALID_URL</dt><dd><p>The Geo Limit Redirect URL has not yet been parsed, or an error occurred during parsing</p>
+</dd>
+<dt>DS_URL</dt><dd><p>The Geo Limit Redirect URL is served by this Delivery Service</p>
+</dd>
+<dt>NOT_DS_URL</dt><dd><p>The Geo Limit Redirect URL is external to this Delivery Service</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The use of a redirect URL relies on the ability of Traffic Router to redirect the client using HTTP <code class="docutils literal notranslate"><span class="pre">302</span> <span class="pre">Found</span></code> responses. As such, this field has no effect on DNS-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Services.</p>
+</div>
+</div>
+<div class="section" id="geolocation-provider">
+<span id="ds-geo-provider"></span><h2>Geolocation Provider<a class="headerlink" href="#geolocation-provider" title="Permalink to this headline">¶</a></h2>
+<p>This is nearly always the integral, unique identifier of a provider for a database that maps IP addresses to geographic locations. Less frequently, this may be accompanied by the actual name of the provider. Only two values are possible at the time of this writing:</p>
+<dl>
+<dt>0: MaxMind</dt><dd><p>IP address to geographic location mapping will be provided by a <a class="reference external" href="https://www.maxmind.com/en/geoip2-databases">MaxMind GeoIP2 database</a>.</p>
+</dd>
+<dt>1: Neustar</dt><dd><p>IP address to geographic location mapping will be provided by a <a class="reference external" href="https://www.security.neustar/digital-performance/ip-intelligence/ip-address-data">Neustar GeoPoint IP address database</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It’s not clear whether Neustar databases are actually supported; this is an old option and compatibility may have been broken over time.</p>
+</div>
+</dd>
+</dl>
+<table class="docutils align-default" id="id23">
+<caption><span class="caption-number">Table 10 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id23" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 59%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>geoProvider</p></td>
+<td><p>Traffic Ops and Traffic Ops client code, <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> requests and responses</p></td>
+<td><p>unchanged (integral, unique identifier)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="geo-miss-default-latitude">
+<span id="ds-geo-miss-default-latitude"></span><h2>Geo Miss Default Latitude<a class="headerlink" href="#geo-miss-default-latitude" title="Permalink to this headline">¶</a></h2>
+<p>Default Latitude for this Delivery Service. When the geographic location of the client cannot be determined, they will be routed as if they were at this latitude.</p>
+<table class="docutils align-default" id="id24">
+<caption><span class="caption-number">Table 11 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id24" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 65%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>missLat</p></td>
+<td><p>In <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> responses and Traffic Ops source code</p></td>
+<td><p>unchanged (numeric)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="geo-miss-default-longitude">
+<span id="ds-geo-miss-default-longitude"></span><h2>Geo Miss Default Longitude<a class="headerlink" href="#geo-miss-default-longitude" title="Permalink to this headline">¶</a></h2>
+<p>Default Longitude for this Delivery Service. When the geographic location of the client cannot be determined, they will be routed as if they were at this longitude.</p>
+<table class="docutils align-default" id="id25">
+<caption><span class="caption-number">Table 12 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id25" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 64%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>missLong</p></td>
+<td><p>In <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> responses and Traffic Ops source code</p></td>
+<td><p>unchanged (numeric)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="global-max-mbps">
+<span id="ds-global-max-mbps"></span><h2>Global Max Mbps<a class="headerlink" href="#global-max-mbps" title="Permalink to this headline">¶</a></h2>
+<p>The maximum <abbr title="Megabits per second">Mbps</abbr> this Delivery Service can serve across all <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a>s before traffic will be diverted to the bypass destination. For a DNS-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Service, the <a class="reference internal" href="#dns-bypass-ip">DNS Bypass IP</a> or <a class="reference internal" href="#dns-bypass-ipv6">DNS Bypass IPv6</a> will be used (depending on whether this was a A or AAAA request), and for HTTP-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Services the <a class="reference internal" href="#http-bypass-fqdn">HTTP Bypass FQDN</a> will be used.</p>
+<table class="docutils align-default" id="id26">
+<caption><span class="caption-number">Table 13 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id26" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 39%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>totalKbpsThreshold</p></td>
+<td><p>In <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> responses - most notably <a class="reference internal" href="../api/cdns_name_configs_monitoring.html#to-api-cdns-name-configs-monitoring"><span class="std std-ref">cdns/{{name}}/configs/monitoring</span></a></p></td>
+<td><p>unchanged (numeric), but converted from <abbr title="Megabits per second">Mbps</abbr> to <abbr title="kilobits per second">Kbps</abbr></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="global-max-tps">
+<span id="ds-global-max-tps"></span><h2>Global Max TPS<a class="headerlink" href="#global-max-tps" title="Permalink to this headline">¶</a></h2>
+<p>The maximum <abbr title="Transactions per Second">TPS</abbr> this Delivery Service can serve across all <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a>s before traffic will be diverted to the bypass destination. For a DNS-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Service, the <a class="reference internal" href="#dns-bypass-ip">DNS Bypass IP</a> or <a class="reference internal" href="#dns-bypass-ipv6">DNS Bypass IPv6</a> will be used (depending on whether this was a A or AAAA request), and for HTTP-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Services the <a class="reference internal" href="#http-bypass-fqdn">HTTP Bypass FQDN</a> will be used.</p>
+<table class="docutils align-default" id="id27">
+<caption><span class="caption-number">Table 14 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id27" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 68%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>totalTpsThreshold</p></td>
+<td><p>In <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> responses - most notably <a class="reference internal" href="../api/cdns_name_configs_monitoring.html#to-api-cdns-name-configs-monitoring"><span class="std std-ref">cdns/{{name}}/configs/monitoring</span></a></p></td>
+<td><p>unchanged (numeric)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="http-bypass-fqdn">
+<span id="ds-http-bypass-fqdn"></span><h2>HTTP Bypass FQDN<a class="headerlink" href="#http-bypass-fqdn" title="Permalink to this headline">¶</a></h2>
+<p>When the limits placed on this Delivery Service by the <a class="reference internal" href="#global-max-mbps">Global Max Mbps</a> and/or <a class="reference internal" href="#global-max-tps">Global Max Tps</a> are exceeded, an HTTP-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Service will direct excess traffic to this <abbr title="Transactions per Second">Fully Qualified Domain Name</abbr>.</p>
+</div>
+<div class="section" id="ipv6-routing-enabled">
+<span id="ds-ipv6-routing"></span><h2>IPv6 Routing Enabled<a class="headerlink" href="#ipv6-routing-enabled" title="Permalink to this headline">¶</a></h2>
+<p>A boolean value that controls whether or not clients using IPv6 can be routed to this Delivery Service by Traffic Router. When creating a Delivery Service in Traffic Portal, this will default to “true”.</p>
+</div>
+<div class="section" id="info-url">
+<span id="ds-info-url"></span><h2>Info URL<a class="headerlink" href="#info-url" title="Permalink to this headline">¶</a></h2>
+<p>This should be a URL (though neither the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> nor the Traffic Ops Database in any way enforce the validity of said URL) to which administrators or others may refer for further information regarding a Delivery Service - e.g. a related JIRA ticket.</p>
+</div>
+<div class="section" id="initial-dispersion">
+<span id="ds-initial-dispersion"></span><h2>Initial Dispersion<a class="headerlink" href="#initial-dispersion" title="Permalink to this headline">¶</a></h2>
+<p>The number of <a class="reference internal" href="../glossary.html#term-edge-tier-cache-servers"><span class="xref std std-term">Edge-tier cache servers</span></a> across which a particular asset will be distributed within each <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>. For most use-cases, this should be 1, meaning that all clients requesting a particular asset will be directed to 1 <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> per <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>. Depending on the popularity and size of assets, consider increasing this number in order to spread the request load across more than 1 <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>. The larger this number, the more copies of a particular asset are stored in a <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>, which can “pollute” caches (if load distribution is unnecessary) and decreases caching efficiency (due to cache misses if the asset is not requested enough to stay “fresh” in all the caches).</p>
+</div>
+<div class="section" id="logs-enabled">
+<span id="ds-logs-enabled"></span><h2>Logs Enabled<a class="headerlink" href="#logs-enabled" title="Permalink to this headline">¶</a></h2>
+<p>A boolean switch that can be toggled to enable/disable logging for a Delivery Service.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This doesn’t actually do anything. It was part of the functionality for a planned Traffic Control component named “Traffic Logs” - which was never created.</p>
+</div>
+</div>
+<div class="section" id="long-description">
+<span id="ds-longdesc"></span><h2>Long Description<a class="headerlink" href="#long-description" title="Permalink to this headline">¶</a></h2>
+<p>Free text field that has no strictly defined purpose, but it is suggested that it contain a short description of the Delivery Service and its purpose.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 53%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>longDesc</p></td>
+<td><p>Traffic Control source code and <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> responses</p></td>
+<td><p>unchanged (<code class="docutils literal notranslate"><span class="pre">string</span></code>, <code class="docutils literal notranslate"><span class="pre">String</span></code> etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="long-description-2">
+<span id="ds-longdesc2"></span><h2>Long Description 2<a class="headerlink" href="#long-description-2" title="Permalink to this headline">¶</a></h2>
+<p>Free text field that has no strictly defined purpose.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 45%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>longDesc1<a class="footnote-reference brackets" href="#cardinality" id="id3">2</a></p></td>
+<td><p>Traffic Control source code and <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> responses</p></td>
+<td><p>unchanged (<code class="docutils literal notranslate"><span class="pre">string</span></code>, <code class="docutils literal notranslate"><span class="pre">String</span></code> etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="long-description-3">
+<span id="ds-longdesc3"></span><h2>Long Description 3<a class="headerlink" href="#long-description-3" title="Permalink to this headline">¶</a></h2>
+<p>Free text field that has no strictly defined purpose.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 45%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>longDesc2<a class="footnote-reference brackets" href="#cardinality" id="id4">2</a></p></td>
+<td><p>Traffic Control source code and <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> responses</p></td>
+<td><p>unchanged (<code class="docutils literal notranslate"><span class="pre">string</span></code>, <code class="docutils literal notranslate"><span class="pre">String</span></code> etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="match-list">
+<span id="ds-matchlist"></span><h2>Match List<a class="headerlink" href="#match-list" title="Permalink to this headline">¶</a></h2>
+<p>A Match List is a set of regular expressions used by Traffic Router to determine whether a given request from a client should be served by this Delivery Service. Under normal circumstances this field should only ever be read-only as its contents should be generated by Traffic Ops based on the Delivery Service’s configuration. These regular expressions can each be one of the following types:</p>
+<dl>
+<dt>HEADER_REGEXP</dt><dd><p>This Delivery Service will be used if an HTTP Header/Value pair can be found in the clients request matching this regular expression.<a class="footnote-reference brackets" href="#httponlyregex" id="id5">4</a></p>
+</dd>
+<dt>HOST_REGEXP</dt><dd><p>This Delivery Service will be used if the requested host matches this regular expression. The host can be found using the <code class="docutils literal notranslate"><span class="pre">Host</span></code> HTTP Header, or as the requested name in a DNS request, depending on the <a class="reference internal" href="#type">Type</a> of the Delivery Service.</p>
+</dd>
+<dt>PATH_REGEXP</dt><dd><p>This Delivery Service will be used if the request path matches this regular expression.<a class="footnote-reference brackets" href="#httponlyregex" id="id6">4</a></p>
+</dd>
+<dt>STEERING_REGEXP</dt><dd><p>This Delivery Service will be used if this regular expression matches the <a class="reference internal" href="#xml-id">xml_id</a> of one of this Delivery Service’s “targets”</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This regular expression type can only exist in the Match List of STEERING-<a class="reference internal" href="#type">Type</a> Delivery Services - and <strong>not</strong> CLIENT_STEERING.</p>
+</div>
+</div></blockquote>
+</dd>
+</dl>
+<table class="docutils align-default" id="id28">
+<caption><span class="caption-number">Table 15 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id28" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 22%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>deliveryservice_regex</p></td>
+<td><p>Traffic Ops database</p></td>
+<td><p>unique, integral identifier for a regular expression</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="max-dns-answers">
+<span id="ds-max-dns-answers"></span><h2>Max DNS Answers<a class="headerlink" href="#max-dns-answers" title="Permalink to this headline">¶</a></h2>
+<p>The maximum number of <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a> IP addresses that the Traffic Router will include in responses to DNS requests for DNS-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Services. The <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> restricts this value to the range [1, 15], but no matching restraints are placed on the actual data as stored in the Traffic Ops Database. When provided, the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> IP addresses included are rotated in each response to spread traffic evenly. This number should scale according to the amount of traffic the Delivery Service is expected to serve.</p>
+</div>
+<div class="section" id="max-origin-connections">
+<span id="ds-max-origin-connections"></span><h2>Max Origin Connections<a class="headerlink" href="#max-origin-connections" title="Permalink to this headline">¶</a></h2>
+<p>The maximum number of TCP connections individual <a class="reference internal" href="../glossary.html#term-mid-tier-cache-servers"><span class="xref std std-term">Mid-tier cache servers</span></a> are allowed to make to the <cite>Origin Server Base URL</cite>. A value of <code class="docutils literal notranslate"><span class="pre">0</span></code> in this field indicates that there is no maximum.</p>
+</div>
+<div class="section" id="mid-header-rewrite-rules">
+<span id="ds-mid-header-rw-rules"></span><h2>Mid Header Rewrite Rules<a class="headerlink" href="#mid-header-rewrite-rules" title="Permalink to this headline">¶</a></h2>
+<p>This field in general contains the contents of the a configuration file used by the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/plugins/header_rewrite.en.html">ATS Header Rewrite Plugin</a> when serving content for this Delivery Service - on <a class="reference internal" href="../glossary.html#term-mid-tier-cache-servers"><span class="xref std std-term">Mid-tier cache servers</span></a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Because this ultimately is the contents of an <abbr title="Apache Traffic Server">ATS</abbr> configuration file, it can make use of the <a class="reference internal" href="../development/ort/traffic_ops_ort.html#ort-special-strings"><span class="std std-ref">Strings with Special Meaning to ORT</span></a>.</p>
+</div>
+</div>
+<div class="section" id="origin-server-base-url">
+<span id="ds-origin-url"></span><h2>Origin Server Base URL<a class="headerlink" href="#origin-server-base-url" title="Permalink to this headline">¶</a></h2>
+<p>The Origin Server’s base URL which includes the protocol (http or https). Example: <code class="docutils literal notranslate"><span class="pre">http://movies.origin.com</span></code>. Must not include paths, query parameters, document fragment identifiers, or username/password URL fields.</p>
+<table class="docutils align-default" id="id29">
+<caption><span class="caption-number">Table 16 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id29" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 50%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>orgServerFqdn</p></td>
+<td><p><a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> responses and in Traffic Control source code</p></td>
+<td><p>unchanged (usually <code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">string</span></code> etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="origin-shield">
+<span id="ds-origin-shield"></span><h2>Origin Shield<a class="headerlink" href="#origin-shield" title="Permalink to this headline">¶</a></h2>
+<p>An experimental feature that allows administrators to list additional forward proxies that sit between the <a class="reference internal" href="../glossary.html#term-mid-tier"><span class="xref std std-term">Mid-tier</span></a> and the <a class="reference internal" href="../glossary.html#term-origin"><span class="xref std std-term">origin</span></a>. In most scenarios, this is represented (and required to be input) as a pipe (<code class="docutils literal notranslate"><span class="pre">|</span></code>)-delimited string.</p>
+</div>
+<div class="section" id="profile">
+<span id="ds-profile"></span><h2>Profile<a class="headerlink" href="#profile" title="Permalink to this headline">¶</a></h2>
+<p>Either the <a class="reference internal" href="profiles_and_parameters.html#profile-name"><span class="std std-ref">Name</span></a> of a <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a> used by this Delivery Service, or the <a class="reference internal" href="profiles_and_parameters.html#profile-id"><span class="std std-ref">ID</span></a> of said <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a>.</p>
+<table class="docutils align-default" id="id30">
+<caption><span class="caption-number">Table 17 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id30" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 49%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>profileId</p></td>
+<td><p>In Traffic Control source code and some <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> responses dealing with Delivery Services</p></td>
+<td><p>Unlike the more general “Profile”, this is <em>always</em> an integral, unique identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>profileName</p></td>
+<td><p>In Traffic Control source code and some <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> responses dealing with Delivery Services</p></td>
+<td><p>Unlike the more general “Profile”, this is <em>always</em> a name (<code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">string</span></code>, etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="protocol">
+<span id="ds-protocol"></span><h2>Protocol<a class="headerlink" href="#protocol" title="Permalink to this headline">¶</a></h2>
+<p>The protocol with which to serve content from this Delivery Service. This defines the way the Delivery Service will handle client requests that are either HTTP or HTTPS, which is distinct from what protocols are used to direct traffic. For example, this can be used to direct clients to only request content using HTTP, or to allow clients to use either HTTP or HTTPS, etc. Normally, this will be the name of the protocol handling, but occasionally this will appear as the integral, unique identifier of the protocol handling instead. The integral, unique identifiers and their associated names and meanings are:</p>
+<dl>
+<dt>0: HTTP</dt><dd><p>This Delivery Service will only accept unsecured HTTP requests. Requests made with HTTPS will fail.</p>
+</dd>
+<dt>1: HTTPS</dt><dd><p>This Delivery Service will only accept secured HTTPS requests. Requests made with HTTP will fail.</p>
+</dd>
+<dt>2: HTTP AND HTTPS</dt><dd><p>This Delivery Service will accept both unsecured HTTP requests and secured HTTPS requests.</p>
+</dd>
+<dt>3: HTTP TO HTTPS</dt><dd><p>When this Delivery Service is using HTTP <a class="reference internal" href="#ds-types"><span class="std std-ref">Content Routing</span></a> unsecured HTTP requests will be met with a response that indicates to the client that further requests must use HTTPS.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If any other type of <a class="reference internal" href="#ds-types"><span class="std std-ref">Content Routing</span></a> is used, this functionality cannot be used. In those cases, a protocol setting of <code class="docutils literal notranslate"><span class="pre">3</span></code>/”HTTP TO HTTPS” will result in the same behavior as <code class="docutils literal notranslate"><span class="pre">1</span></code>/”HTTPS”. This behavior is tracked by <a class="reference external" href="https://github.com/apache/trafficcontrol/issues/3221">GitHub Issue #3221</a></p>
+</div>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The definitions of each integral, unique identifier are hidden in implementations in each <abbr title="Apache Traffic Control">ATC</abbr> component. Different components will handle invalid values differently, and there’s no actual enforcement that the stored integral, unique identifier actually be within the representable range.</p>
+</div>
+<table class="docutils align-default" id="id31">
+<caption><span class="caption-number">Table 18 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id31" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 13%" />
+<col style="width: 83%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Protocol</p></td>
+<td><p>CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a>s</p></td>
+<td><p>An object containing the key <code class="docutils literal notranslate"><span class="pre">&quot;acceptHttps&quot;</span></code> that is a string containing a boolean that expresses whether Traffic Router should accept HTTPS requests for this
+Delivery Service, and the key <code class="docutils literal notranslate"><span class="pre">&quot;redirectToHttps&quot;</span></code> that is also a string containing a boolean which expresses whether or not Traffic Router should redirect HTTP
+requests to HTTPS URLs. Optionally, the key <code class="docutils literal notranslate"><span class="pre">&quot;acceptHttp&quot;</span></code> may also appear, once again a string containing a boolean that expresses whether or not Traffic Router
+should accept unsecured HTTP requests - this is implicitly treated as <code class="docutils literal notranslate"><span class="pre">&quot;true&quot;</span></code> by Traffic Router when it is not present.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="query-string-handling">
+<span id="ds-qstring-handling"></span><h2>Query String Handling<a class="headerlink" href="#query-string-handling" title="Permalink to this headline">¶</a></h2>
+<p>Describes how query strings should be handled by the <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a>s when serving content for this Delivery Service. This is nearly always expressed as an integral, unique identifier for each behavior, though in Traffic Portal a more descriptive value is typically used, or at least provided in addition to the integral, unique identifier. The allowed values and their meanings are:</p>
+<dl>
+<dt>0</dt><dd><p>For the purposes of caching, <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a>s will consider URLs unique if and only if they are unique up to and including any and all query parameters. They will also pass the query parameters in their own requests to <a class="reference internal" href="../glossary.html#term-mid-tier-cache-server"><span class="xref std std-term">Mid-tier cache server</span></a>s (which in turn will exhibit the same caching behavior and pass the query parameters in requests to the <a class="reference internal" href="../glossary.html#term-origin"><span class="xref std std-term">origin</span></a>). (Aliased as “USE” in Traffic Portal tables, and “0 - use qstring in cache key, and pass up” in Traffic Portal forms)</p>
+</dd>
+<dt>1</dt><dd><p>For the purposes of caching, neither <a class="reference internal" href="../glossary.html#term-edge-tier"><span class="xref std std-term">Edge-tier</span></a> nor <a class="reference internal" href="../glossary.html#term-mid-tier-cache-server"><span class="xref std std-term">Mid-tier cache server</span></a>s will consider the query parameter string when determining if a URL is stored in cache. However, the query string will still be passed in upstream requests to <a class="reference internal" href="../glossary.html#term-mid-tier-cache-server"><span class="xref std std-term">Mid-tier cache server</span></a>s and in turn the <a class="reference internal" href="../glossary.html#term-origin"><span class="xref std std-term">origin</span></a>. (Aliased as “IGNORE” in Traffic Portal tables and “1 - ignore in cache key, and pass up” in Traffic Portal forms)</p>
+</dd>
+<dt>2</dt><dd><p>The query parameter string will be stripped from URLs immediately when the request is received by an <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a>. This means it is never considered for the purposes of caching unique URLs and will not be passed in upstream requests. (Aliased as “DROP” in Traffic Portal tables and “2 - drop at edge” in Traffic Portal forms)</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The implementation of dropping query parameter strings at the <a class="reference internal" href="../glossary.html#term-edge-tier"><span class="xref std std-term">Edge-tier</span></a> uses a <a class="reference internal" href="#regex-remap-expression">Regex Remap Expression</a> and thus Delivery Services with this type of query string handling cannot make use of <a class="reference internal" href="#regex-remap-expression">Regex Remap Expression</a>s.</p>
+</div>
+</dd>
+</dl>
+<table class="docutils align-default" id="id32">
+<caption><span class="caption-number">Table 19 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id32" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 36%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Qstring Handling</p></td>
+<td><p>Traffic Portal tables</p></td>
+<td><p>One of the Traffic Portal value aliases “USE” (<code class="docutils literal notranslate"><span class="pre">0</span></code>), “IGNORE” (<code class="docutils literal notranslate"><span class="pre">1</span></code>), “DROP” (<code class="docutils literal notranslate"><span class="pre">2</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>qstringIgnore</p></td>
+<td><p>Traffic Ops Go/Perl code, <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> requests/responses</p></td>
+<td><p>unchanged (integral, unique identifier)</p></td>
+</tr>
+</tbody>
+</table>
+<p>The Delivery Service’s Query String Handling can be set directly as a field on the Delivery Service object itself, or it can be overridden by a <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> on a <a class="reference internal" href="#profile">Profile</a> used by this Delivery Service. The special <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> named <code class="docutils literal notranslate"><span class="pre">psel.qstring_handling</span></code> and configuration file <code class="docutils literal notranslate"><span class="pre">parent.config</span></code> will have it’s contents directly inserted into the <code class="docutils literal notranslate"><span class="pre">parent.config</span></code> file on all <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> assigned to this Delivery Service.</p>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">psel.qstring_handling</span></code> <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> is <strong>strongly</strong> discouraged for several reasons. Firstly, at a Delivery Service level it will <strong>NOT</strong> change the configuration of that Delivery Service’s own Query String Handling - which will cause it to appear in Traffic Portal and in <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> responses as though it were configured one way while actually behaving a different way altogether. Also, no validation is performed on the value given to it. Because it’s inserted verbatim into the <code class="docutils literal notranslate"><span class="pre">qstring</span></code> field of a line in <abbr title="Apache Traffic Server">ATS</abbr> <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/parent.config.en.html">parent.config configuration file</a>, a typo or an ignorant user can easily cause <abbr title="Apache Traffic Server">ATS</abbr> instances on all <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> assigned to that Delivery Service to fail to reload their configuration, possibly grinding entire CDNs to a halt.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>When implemented as a <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> (<code class="docutils literal notranslate"><span class="pre">psel.qstring_handling</span></code>), its value must be a valid value for the <code class="docutils literal notranslate"><span class="pre">qstring</span></code> field of a line in the <abbr title="Apache Traffic Server">ATS</abbr> <code class="docutils literal notranslate"><span class="pre">parent.config</span></code> configuration file. For a description of valid values, see the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/parent.config.en.html">documentation for parent.config</a></p>
+</div>
+</div>
+<div class="section" id="range-request-handling">
+<span id="ds-range-request-handling"></span><h2>Range Request Handling<a class="headerlink" href="#range-request-handling" title="Permalink to this headline">¶</a></h2>
+<p>Describes how HTTP “Range Requests” should be handled by the Delivery Service at the <a class="reference internal" href="../glossary.html#term-edge-tier"><span class="xref std std-term">Edge-tier</span></a>. This is nearly always an integral, unique identifier for the behavior set required of the <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a>s. The valid values and their respective meanings are:</p>
+<dl>
+<dt>0</dt><dd><p>Do not cache Range Requests at all. (Aliased as “0 - Don’t cache” in Traffic Portal forms)</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is not retroactive - when modifying an existing Delivery Services to have this value for “Range Request Handling”, ranges requested from files that are already cached due to a non-range request will be served out of cache for as long as the Cache-Control headers allow.</p>
+</div>
+</div></blockquote>
+</dd>
+<dt>1</dt><dd><p>Use the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/plugins/background_fetch.en.html">background_fetch</a> plugin to service the range request while caching the whole object. (Aliased as “1 - Use background_fetch plugin” in Traffic Portal forms)</p>
+</dd>
+<dt>2</dt><dd><p>Use the <a class="reference external" href="https://github.com/apache/trafficserver/tree/7.1.x/plugins/experimental/cache_range_requests">cache_range_requests</a> plugin to cache ranges as unique objects. (Aliased as “2 - Use cache_range_requests plugin” in Traffic Portal forms)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Range Request Handling can only be implemented on <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s using <abbr title="Apache Traffic Server">ATS</abbr> because of its dependence on <abbr title="Apache Traffic Server">ATS</abbr> plugins. The value may be set on any Delivery Service, but will have no effect when the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s that ultimately end up serving the content are e.g. Grove, Nginx, etc.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The definitions of each integral, unique identifier are hidden in implementations in each <abbr title="Apache Traffic Control">ATC</abbr> component. Different components will handle invalid values differently, and there’s no actual enforcement that the stored integral, unique identifier actually be within the representable range.</p>
+</div>
+</div>
+<div class="section" id="raw-remap-text">
+<span id="ds-raw-remap"></span><h2>Raw Remap Text<a class="headerlink" href="#raw-remap-text" title="Permalink to this headline">¶</a></h2>
+<p>For HTTP and DNS-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Services, this will be added to the end of a line in the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/remap.config.en.html">remap.config ATS configuration file</a> line on the cache verbatim. For ANY_MAP-<a class="reference internal" href="#ds-types"><span class="std std-ref">Type</span></a> Delivery Services this must be defined.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Because this ultimately is a raw line of content in a configuration file, it can make use of the <a class="reference internal" href="../development/ort/traffic_ops_ort.html#ort-special-strings"><span class="std std-ref">Strings with Special Meaning to ORT</span></a>. Of particular note is the <a class="reference internal" href="../development/ort/traffic_ops_ort.html#ort-remap-override"><span class="std std-ref">Remap Override</span></a> template string.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This field <strong>must</strong> be defined on ANY_MAP-<a class="reference internal" href="#type">Type</a> Delivery Services, but is otherwise optional.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.trafficserver.apache.org/en/latest/admin-guide/plugins/regex_remap.en.html">The Apache Trafficserver documentation for the Regex Remap plugin</a></p>
+</div>
+<table class="docutils align-default" id="id33">
+<caption><span class="caption-number">Table 20 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id33" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 57%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>remapText</p></td>
+<td><p>In Traffic Ops source code and <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> requests/responses</p></td>
+<td><p>unchanged (<code class="docutils literal notranslate"><span class="pre">text</span></code>, <code class="docutils literal notranslate"><span class="pre">string</span></code> etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="regex-remap-expression">
+<span id="ds-regex-remap"></span><h2>Regex Remap Expression<a class="headerlink" href="#regex-remap-expression" title="Permalink to this headline">¶</a></h2>
+<p>Allows remapping of incoming requests URL using regular expressions to search and replace text. In a more literal sense, this is the raw contents of a configuration file used by the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/plugins/regex_remap.en.html">ATS regex_remap plugin</a>. At its most basic, the contents of this field should consist of <code class="docutils literal notranslate"><span class="pre">map</span></code> followed by a regular expression and then a “template URL” - all space-separated. The regular expression matches a client’s request <em>path</em> (i.e. not a full URL - <code class="docutils literal notranslate"><span class="pre">/path/to/content</span></code> <strong>not</strong> <code class="docutils literal notranslate"><span class="pre">https://origin.example.com/path/to/content</span></code>) and when such a match occurs, the request is transformed into a request for the template URL. The most basic usage of the template URL is to use <code class="docutils literal notranslate"><span class="pre">$1</span></code>-<code class="docutils literal notranslate"><span class="pre">$9</span></code> to insert the corresponding regular expression capture group. For example, a regular expression of <code class="regexp docutils literal notranslate"><span class="pre">^/a/(.*)</span></code> and a template URL of <code class="docutils literal notranslate"><span class="pre">https://origin.example.com/b/$1</span></code> maps requests for <a class="reference internal" href="../glossary.html#term-origin"><span class="xref std std-term">origin</span></a> content under path <code class="docutils literal notranslate"><span class="pre">/a/</span></code> to the same sub-paths under path <code class="docutils literal notranslate"><span class="pre">b</span></code>. Note that since it’s a full URL, this mapping can be made to another server entirely.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/plugins/regex_remap.en.html">documentation for the regex_remap plugin</a> for <abbr title="Apache Traffic Server">ATS</abbr></p>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>This field is not validated by Traffic Ops to be correct syntactically, and can cause Traffic Server to not start if invalid. Please use with caution.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Regex remap expressions are incompatible with <a class="reference internal" href="#query-string-handling">Query String Handling</a> being set to <code class="docutils literal notranslate"><span class="pre">2</span></code>. The behavior of a <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> under that configuration is undefined.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>It is, of course, entirely possible to write a Regex Remap Expression that reproduces the desired <a class="reference internal" href="#query-string-handling">Query String Handling</a> as well as any other desired behavior.</p>
+</div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.trafficserver.apache.org/en/latest/admin-guide/plugins/regex_remap.en.html">The Apache Trafficserver documentation for the Regex Remap plugin</a></p>
+</div>
+<table class="docutils align-default" id="id34">
+<caption><span class="caption-number">Table 21 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id34" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 65%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>regexRemap</p></td>
+<td><p>Traffic Ops source code and database, and <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> requests/responses</p></td>
+<td><p>unchanged (<code class="docutils literal notranslate"><span class="pre">string</span></code> etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="regional-geoblocking">
+<span id="ds-regionalgeo"></span><h2>Regional Geoblocking<a class="headerlink" href="#regional-geoblocking" title="Permalink to this headline">¶</a></h2>
+<p>A boolean value that defines whether or not <a class="reference internal" href="../admin/quick_howto/regionalgeo.html#regionalgeo-qht"><span class="std std-ref">Regional Geoblocking</span></a> is active on this Delivery Service. The actual configuration of <a class="reference internal" href="../admin/quick_howto/regionalgeo.html#regionalgeo-qht"><span class="std std-ref">Regional Geoblocking</span></a> is done in the <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a> used by the Traffic Router serving the Delivery Service. Rules for this Delivery Service may exist, but they will not actually be used unless this field is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><a class="reference internal" href="../admin/quick_howto/regionalgeo.html#regionalgeo-qht"><span class="std std-ref">Regional Geoblocking</span></a> is configured primarily with respect to Canadian postal codes, so unless specifically Canadian regions should be allowed/disallowed to access content, <a class="reference internal" href="#geo-limit">Geo Limit</a> is probably a better setting for controlling access to content according to geographic location.</p>
+</div>
+</div>
+<div class="section" id="routing-name">
+<span id="ds-routing-name"></span><h2>Routing Name<a class="headerlink" href="#routing-name" title="Permalink to this headline">¶</a></h2>
+<p>A DNS label in the Delivery Service’s domain that forms the <abbr title="Fully Qualified Domain Name">FQDN</abbr> that is used by clients to request content. All together, the constructed <abbr title="Fully Qualified Domain Name">FQDN</abbr> looks like: <code class="file docutils literal notranslate"><em><span class="pre">Delivery</span> <span class="pre">Service</span> <span class="pre">Routing</span> <span class="pre">Name</span></em><span class="pre">.</span><em><span class="pre">Delivery</span> <span class="pre">Service</span> <span class="pre">xml_id</span></em><span class="pre">.</span><em><span class="pre">CDN</span> <span class="pre">Subdomain</span></em><span class="pre">.</span><em><span class="pre">CDN</span> <span class="pre">Domain</span></em><span class="pre">.</span><em><span class="pre">Top-Level</span> <span class="pre">Domain</span></em></code><a class="footnote-reference brackets" href="#xmlvalid" id="id9">1</a>.</p>
+</div>
+<div class="section" id="servers">
+<span id="ds-servers"></span><h2>Servers<a class="headerlink" href="#servers" title="Permalink to this headline">¶</a></h2>
+<p>Servers can be assigned to Delivery Services using the <a class="reference internal" href="../admin/traffic_portal/usingtrafficportal.html#tp-configure-servers"><span class="std std-ref">Servers</span></a> and <a class="reference internal" href="../admin/traffic_portal/usingtrafficportal.html#tp-services-delivery-service"><span class="std std-ref">Delivery Service</span></a> Traffic Portal sections, or by directly using the <a class="reference internal" href="../api/deliveryserviceserver.html#to-api-deliveryserviceserver"><span class="std std-ref">deliveryserviceserver</span></a> endpoint. Only <a class="reference internal" href="../glossary.html#term-edge-tier-cache-servers"><span class="xref std std-term">Edge-tier cache servers</span></a> can be assigned to a Delivery Service, and once they are so assigned they will begin to serve content for the Delivery Service (after updates are queued and then applied). Any servers assigned to a Delivery Service must also belong to the same <a class="reference internal" href="#cdn">CDN</a> as the Delivery Service itself. At least one server must be assigned to a Delivery Service in order for it to serve any content.</p>
+</div>
+<div class="section" id="signing-algorithm">
+<span id="ds-signing-algorithm"></span><h2>Signing Algorithm<a class="headerlink" href="#signing-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>URLs/URIs may be signed using one of two algorithms before a request for the content to which they refer is sent to the <a class="reference internal" href="../glossary.html#term-origin"><span class="xref std std-term">origin</span></a> (which in practice can be any upstream network). At the time of this writing, this field is restricted within the Traffic Ops Database to one of two values (or <code class="docutils literal notranslate"><span class="pre">NULL</span></code>/”None”, to indicate no signing should be done).</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The url_sig <a class="reference external" href="https://github.com/apache/trafficserver/blob/master/plugins/experimental/url_sig/README">README</a>.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://tools.ietf.org/html/draft-ietf-cdni-uri-signing-16">The draft RFC for uri_signing</a> - note, however that the current implementation of uri_signing uses Draft 12 of that RFC document, <strong>NOT</strong> the latest.</p>
+</div>
+<dl class="simple">
+<dt>url_sig</dt><dd><p>URL signing will be implemented in this Delivery Service using the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/plugins/url_sig.en.html">url_sig Apache Traffic Server plugin</a>. (Aliased as “URL Signature Keys” in Traffic Portal forms)</p>
+</dd>
+<dt>uri_signing</dt><dd><p>URL signing will be implemented in this Delivery Service using an algorithm based on a work-in-progress RFC specification draft. (Aliased as “URI Signing Keys” in Traffic Portal forms)</p>
+</dd>
+</dl>
+<table class="docutils align-default" id="id35">
+<caption><span class="caption-number">Table 22 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id35" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 47%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Signed</p></td>
+<td><p>In all components prior to Traffic Control v2.2. Some endpoints in early versions of the
+<a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> will still return this field instead of “signingAlgorithm”.</p></td>
+<td><p>A boolean value where <code class="docutils literal notranslate"><span class="pre">true</span></code> was the same as “url_sig” in current versions, and <code class="docutils literal notranslate"><span class="pre">false</span></code>
+indicated URL signing would not be done for the Delivery Service.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Keys for either algorithm can be generated within <a class="reference internal" href="../admin/traffic_portal/usingtrafficportal.html#tp-services-delivery-service"><span class="std std-ref">Traffic Portal</span></a>.</p>
+</div>
+<div class="section" id="ssl-key-version">
+<span id="ds-ssl-key-version"></span><h2>SSL Key Version<a class="headerlink" href="#ssl-key-version" title="Permalink to this headline">¶</a></h2>
+<p>An integer that describes the version of the SSL key(s) - if any - used by this Delivery Service. This is incremented whenever Traffic Portal generates new SSL keys for the Delivery Service.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This number will not be correct if keys are manually replaced using the API, as the key generation API does not increment it!</p>
+</div>
+</div>
+<div class="section" id="static-dns-entries">
+<span id="ds-static-dns-entries"></span><h2>Static DNS Entries<a class="headerlink" href="#static-dns-entries" title="Permalink to this headline">¶</a></h2>
+<p>Static DNS Entries can be added <em>under</em> a Delivery Service’s domain. These DNS records can be configured in the <a class="reference internal" href="../admin/traffic_portal/usingtrafficportal.html#tp-services-delivery-service"><span class="std std-ref">Delivery Service</span></a> section of Traffic Portal, and can be any valid CNAME, A or AAAA DNS record - provided the associated hostname falls within the DNS domain for the Delivery Service. For example, a Delivery Service with <a class="reference internal" href="#xml-id">xml_id</a> “demo1” and belonging to a <a class="reference internal" href="#cdn">CDN</a> with domain “mycdn.ciab.test” could have Static DNS Entries for hostnames “foo.demo1.mycdn.ciab.test” or “foo.bar.demo1.mycdn.ciab.test” but not “foo.bar.mycdn.ciab.test” or “foo.bar.test”.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#routing-name">Routing Name</a> of a Delivery Service is not part of the <abbr title="Start of Authority">SOA</abbr> record for the Delivery Service’s domain, and so there is no need to place Static DNS Entries below a domain containing it.</p>
+</div>
+</div>
+<div class="section" id="tenant">
+<span id="ds-tenant"></span><h2>Tenant<a class="headerlink" href="#tenant" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../glossary.html#term-tenant"><span class="xref std std-term">Tenant</span></a> who owns this Delivery Service. They (and their parents, if any) are the only ones allowed to make changes to this Delivery Service. Typically, <code class="docutils literal notranslate"><span class="pre">tenant</span></code>/<code class="docutils literal notranslate"><span class="pre">Tenant</span></code> refers to the <em>name</em> of the owning <a class="reference internal" href="../glossary.html#term-tenant"><span class="xref std std-term">Tenant</span></a>, but occasionally (most notably in the payloads and/or query parameters of certain <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> requests) it actually refers to the <em>integral, unique identifier</em> of said <a class="reference internal" href="../glossary.html#term-tenant"><span class="xref std std-term">Tenant</span></a>.</p>
+<table class="docutils align-default" id="id36">
+<caption><span class="caption-number">Table 23 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id36" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 41%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>TenantID</p></td>
+<td><p>Go code and <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> requests/responses</p></td>
+<td><p>Integral, unique identifier (<code class="docutils literal notranslate"><span class="pre">bigint</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code> etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="traffic-router-additional-response-headers">
+<span id="ds-tr-resp-headers"></span><h2>Traffic Router Additional Response Headers<a class="headerlink" href="#traffic-router-additional-response-headers" title="Permalink to this headline">¶</a></h2>
+<p>List of HTTP header <code class="docutils literal notranslate"><span class="pre">{{name}}:{{value}}</span></code> pairs separated by <code class="docutils literal notranslate"><span class="pre">__RETURN__</span></code> or simply on separate lines. Listed pairs will be included in all HTTP responses from Traffic Router for HTTP-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Services.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.0: </span>The use of <code class="docutils literal notranslate"><span class="pre">__RETURN__</span></code> as a substitute for a real newline is unnecessary and the ability to do so will be removed in the future.</p>
+</div>
+<table class="docutils align-default" id="id37">
+<caption><span class="caption-number">Table 24 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id37" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 65%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>trResponseHeaders</p></td>
+<td><p>Traffic Control source code and Delivery Service objects returned by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a></p></td>
+<td><p>unchanged (<code class="docutils literal notranslate"><span class="pre">string</span></code> etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="traffic-router-log-request-headers">
+<span id="ds-tr-req-headers"></span><h2>Traffic Router Log Request Headers<a class="headerlink" href="#traffic-router-log-request-headers" title="Permalink to this headline">¶</a></h2>
+<p>List of HTTP header names separated by <code class="docutils literal notranslate"><span class="pre">__RETURN__</span></code> or simply on separate lines. Listed pairs will be logged for all HTTP requests to Traffic Router for HTTP-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Services.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.0: </span>The use of <code class="docutils literal notranslate"><span class="pre">__RETURN__</span></code> as a substitute for a real newline is unnecessary and the ability to do so will be removed in the future.</p>
+</div>
+<table class="docutils align-default" id="id38">
+<caption><span class="caption-number">Table 25 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id38" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 65%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>trRequestHeaders</p></td>
+<td><p>Traffic Control source code and Delivery Service objects returned by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a></p></td>
+<td><p>unchanged (<code class="docutils literal notranslate"><span class="pre">string</span></code> etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="type">
+<span id="ds-types"></span><h2>Type<a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h2>
+<p>Defines the content routing method used by the Delivery Service. In most cases this is an integral, unique identifier that corresponds to an enumeration of the Delivery Service Types. In other cases, this the actual name of said type.</p>
+<p>The “Type” of a Delivery Service can mean several things. First, it can be used to refer to the “routing type” of Delivery Service. This is one of:</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The only way to get the integral, unique identifier of a <a class="reference internal" href="../glossary.html#term-type"><span class="xref std std-term">Type</span></a> of Delivery Service is to look at the database after it has been generated; these are non-deterministic and cannot be guaranteed to have any particular value, or even consistent values. This can be done directly or, preferably, using the <a class="reference internal" href="../api/types.html#to-api-types"><span class="std std-ref">types</span></a> endpoint. Unfortunately, knowing the name of the <a class="reference internal" href="../glossary.html#term-type"><span class="xref std std-term">Type</span></a> is rarely enough for many applications. The <code class="docutils literal notranslate"><span class="pre">useInColumn</span></code> values of these <a class="reference internal" href="../glossary.html#term-types"><span class="xref std std-term">Types</span></a> will be <code class="docutils literal notranslate"><span class="pre">deliveryservice</span></code>.</p>
+</div>
+<dl class="simple">
+<dt>DNS</dt><dd><p>Delivery Services of this routing type are routed by Traffic Router by providing DNS records that provide the IP addresses of <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> when clients look up the full Delivery Service <abbr title="Fully Qualified Domain Name">FQDN</abbr>.</p>
+</dd>
+<dt>HTTP</dt><dd><p>The Traffic Router(s) responsible for routing this Delivery Service will still answer DNS requests for the Delivery Service <abbr title="Fully Qualified Domain Name">FQDN</abbr>, but will provide its own IP address. The client then directs its HTTP request to the Traffic Router, which will use an <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#Redirection_messages">HTTP redirection response</a> to direct the client to a <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>.</p>
+</dd>
+</dl>
+<p>More generally, though, Delivery Services have a Type that defines not only how traffic is routed, but also how content is cached and semantically defines what “content” means in the context of a given Delivery Service.</p>
+<dl>
+<dt>ANY_MAP</dt><dd><p>This is a special kind of Delivery Service that should only be used when control over the clients is guaranteed, and very fine control over the <abbr title="Apache Traffic Server">ATS</abbr> <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/remap.config.en.html">remap.config</a> line for this Delivery Service is required. ANY_MAP is not known to Traffic Router. It is not routed in any way. For Delivery Services of this type, the “Raw Remap Text” field <strong>must</strong> be defined, as it is the only configuration generated by Traffic Control. The only way for a client to utilize delivery through an ANY_MAP service is by knowing in advance the IP address of one or more <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a>s and make the appropriate request(s).</p>
+</dd>
+<dt>DNS</dt><dd><p>Uses DNS content routing. Delivers content normally. This is the recommended Type for delivering smaller objects like web page images.</p>
+</dd>
+<dt>DNS_LIVE<a class="footnote-reference brackets" href="#duporigin" id="id10">3</a></dt><dd><p>Uses DNS Content routing, but optimizes caching for live video streaming. Specifically, the configuration generated for <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> responsible for serving content for this Delivery Service will not cache that content on storage disks. Instead, they will make use of RAM block devices dedicated to ATS - as specified by the special <code class="docutils literal notranslate"><span class="pre">RAM_Drive_Prefix</span></code> and <code class="docutils literal notranslate"><span class="pre">RAM_Drive_Letters</span></code> <a class="reference internal" href="../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a>. Also, any <a class="reference internal" href="../glossary.html#term-mid-tier"><span class="xref std std-term">Mid-tier</span></a> of caching is bypassed.</p>
+</dd>
+<dt>DNS_LIVE_NATNL</dt><dd><p>Works exactly the same as DNS_LIVE, but is optimized for delivery of live video content across a wide physical area. What this means is that the <a class="reference internal" href="../glossary.html#term-mid-tier"><span class="xref std std-term">Mid-tier</span></a> of caching is <strong>not</strong> bypassed, unlike DNS_LIVE. The <a class="reference internal" href="../glossary.html#term-mid-tier"><span class="xref std std-term">Mid-tier</span></a> will also use block RAM devices.</p>
+</dd>
+<dt>HTTP</dt><dd><p>Uses HTTP content routing, delivers content normally. This is the recommended Type for delivering larger objects like video streams.</p>
+</dd>
+<dt>HTTP_LIVE<a class="footnote-reference brackets" href="#duporigin" id="id11">3</a></dt><dd><p>Uses HTTP Content routing, but optimizes caching for live video streaming. Specifically, the configuration generated for <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> responsible for serving content for this Delivery Service will not cache that content on storage disks. Instead, they will make use of RAM block devices dedicated to ATS - as specified by the special <code class="docutils literal notranslate"><span class="pre">RAM_Drive_Prefix</span></code> and <code class="docutils literal notranslate"><span class="pre">RAM_Drive_Letters</span></code> <a class="reference internal" href="../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a>. Also, any <a class="reference internal" href="../glossary.html#term-mid-tier"><span class="xref std std-term">Mid-tier</span></a> of caching is bypassed.</p>
+</dd>
+<dt>HTTP_LIVE_NATNL</dt><dd><p>Works exactly the same as HTTP_LIVE, but is optimized for delivery of live video content across a wide physical area. What this means is that the <a class="reference internal" href="../glossary.html#term-mid-tier"><span class="xref std std-term">Mid-tier</span></a> of caching is <strong>not</strong> bypassed, unlike HTTP_LIVE. The <a class="reference internal" href="../glossary.html#term-mid-tier"><span class="xref std std-term">Mid-tier</span></a> will also use block RAM devices.</p>
+</dd>
+<dt>HTTP_NO_CACHE<a class="footnote-reference brackets" href="#duporigin" id="id12">3</a></dt><dd><p>Uses HTTP Content Routing, but <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> will not actually cache the delivered content - they act as just proxies. This will bypass any existing <a class="reference internal" href="../glossary.html#term-mid-tier"><span class="xref std std-term">Mid-tier</span></a> entirely (as it’s totally useless when content is not being cached).</p>
+</dd>
+<dt>STEERING</dt><dd><p>This is a sort of “meta” Delivery Service. It is used for directing clients to one of a set of Delivery Services, rather than delivering content directly itself. The Delivery Services to which a STEERING Delivery Service routes clients are referred to as “targets”. Targets in general have an associated “value” and can be of several <a class="reference internal" href="../glossary.html#term-types"><span class="xref std std-term">Types</span></a> that define the meaning of the value - these being:</p>
+<dl class="simple">
+<dt>STEERING_ORDER</dt><dd><p>The value of a STEERING_ORDER target sets a strict order of preference. In cases where a response to a client contains multiple Delivery Services, those targets with a lower “value” appear earlier than those with a higher “value”. In cases where two or more targets share the same value, they each have an equal chance of being presented to the client - effectively spreading traffic evenly across them.</p>
+</dd>
+<dt>STEERING_WEIGHT</dt><dd><p>The values of STEERING_WEIGHT targets are interpreted as “weights”, which define how likely it is that any given client will be routed to a specific Delivery Service - effectively this determines the spread of traffic across each target.</p>
+</dd>
+</dl>
+<p>The targets of a Delivery Service may be set using <a class="reference internal" href="../admin/traffic_portal/usingtrafficportal.html#tp-services-delivery-service"><span class="std std-ref">the appropriate section of Traffic Portal</span></a> or via the <a class="reference internal" href="../api/steering_id_targets.html#to-api-steering-id-targets"><span class="std std-ref">steering/{{ID}}/targets</span></a> and <a class="reference internal" href="../api/steering_id_targets_targetID.html#to-api-steering-id-targets-targetid"><span class="std std-ref">steering/{{ID}}/targets/{{targetID}}</span></a> <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> endpoints.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For more information on setting up a STEERING (or CLIENT_STEERING) Delivery Service, see <a class="reference internal" href="../admin/quick_howto/steering.html#steering-qht"><span class="std std-ref">Configure Delivery Service Steering</span></a>.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For implementation details about how Traffic Router routes STEERING (and CLIENT_STEERING) Delivery Services, see <a class="reference internal" href="../admin/traffic_router.html#tr-steering"><span class="std std-ref">Steering Feature</span></a>.</p>
+</div>
+</dd>
+<dt>CLIENT_STEERING</dt><dd><p>A CLIENT_STEERING Delivery Service is exactly like STEERING except that it provides clients with methods of bypassing the weights, orders, and localizations of targets in order to choose any arbitrary target at will. When utilizing these methods, the client will either directly choose a target immediately or request a list of all available targets from Traffic Router and then choose one to which to send a subsequent request for actual content. CLIENT_STEERING also supports two additional target types:</p>
+<dl class="simple">
+<dt>STEERING_GEO_ORDER</dt><dd><p>These targets behave exactly like STEERING_ORDER targets, but Delivery Services are grouped according to the “locations” of their <a class="reference internal" href="../glossary.html#term-origins"><span class="xref std std-term">origins</span></a>. Before choosing a Delivery Service to which to direct the client, Traffic Router will first create subsets of choices according to these groupings, and order them by physical distance from the client (closest to farthest). Within these subsets, the values of the targets establish a strict precedence ordering, just like STEERING_ORDER targets.</p>
+</dd>
+<dt>STEERING_GEO_WEIGHT</dt><dd><p>These targets behave exactly like STEERING_WEIGHT targets, but Delivery Services are grouped according to the “locations” of their <a class="reference internal" href="../glossary.html#term-origins"><span class="xref std std-term">origins</span></a>. Before choosing a Delivery Service to which to direct the client, Traffic Router will first create subsets of choices according to these groupings, and order them by physical distance from the client (closest to farthest). Within these subsets, the values of the targets establish the likelihood that any given target within the subset will be chosen for the client - effectively determining the spread of traffic across targets within that subset.</p>
+</dd>
+</dl>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>To make use of the STEERING_GEO_ORDER and/or STEERING_GEO_WEIGHT target types, it is first necessary to ensure that at least the “primary” <a class="reference internal" href="../glossary.html#term-origin"><span class="xref std std-term">origin</span></a> of the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> has an associated geographic coordinate pair. This can be done either from the <a class="reference internal" href="../admin/traffic_portal/usingtrafficportal.html#tp-configure-origins"><span class="std std-ref">Origins</span></a> page in Traffic Portal, or using the <a class="reference internal" href="../api/origins.html#to-api-origins"><span class="std std-ref">origins</span></a> <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> endpoint.</p>
+</div>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>“Steering” is also commonly used to collectively refer to either of the kinds of Delivery Services that can participate in steering behavior (STEERING and CLIENT_STEERING).</p>
+</div>
+<table class="docutils align-default" id="id39">
+<caption><span class="caption-number">Table 26 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id39" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 36%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Content Routing Type</p></td>
+<td><p>Traffic Portal forms</p></td>
+<td><p>The name of any of the Delivery Service <a class="reference internal" href="#type">Type</a>s (<code class="docutils literal notranslate"><span class="pre">string</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>TypeID</p></td>
+<td><p>In Go code and <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> requests/responses</p></td>
+<td><p>Integral, unique identifier (<code class="docutils literal notranslate"><span class="pre">bigint</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code> etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="use-multi-site-origin-feature">
+<span id="ds-multi-site-origin"></span><h2>Use Multi-Site Origin Feature<a class="headerlink" href="#use-multi-site-origin-feature" title="Permalink to this headline">¶</a></h2>
+<p>A boolean value that indicates whether or not this Delivery Service serves content for an <a class="reference internal" href="../glossary.html#term-origin"><span class="xref std std-term">origin</span></a> that provides content from two or more redundant servers. There are very few good reasons for this to not be <code class="docutils literal notranslate"><span class="pre">false</span></code>. When <code class="docutils literal notranslate"><span class="pre">true</span></code>, Traffic Ops will configure <a class="reference internal" href="../glossary.html#term-mid-tier-cache-servers"><span class="xref std std-term">Mid-tier cache servers</span></a> to perform load-balancing and other optimizations for redundant <a class="reference internal" href="../glossary.html#term-origin-servers"><span class="xref std std-term">origin servers</span></a>.</p>
+<p>Naturally, this assumes that each redundant server is exactly identical, from request paths to actual content. If Multi-Site Origin is configured for servers that are <em>not</em> identical, the client’s experience is undefined. Furthermore, the <a class="reference internal" href="../glossary.html#term-origin-servers"><span class="xref std std-term">origin servers</span></a> may have differing IP addresses, but <strong>must</strong> serve content for a single <abbr title="Fully Qualified Domain Name">FQDN</abbr> - as defined by the Delivery Service’s <a class="reference internal" href="#origin-server-base-url">Origin Server Base URL</a>. These redundant servers <strong>must</strong> be configured as servers (server <a class="reference internal" href="../glossary.html#term-type"><span class="xref std std-term">Type</span></a> <code class="docutils literal notranslate"><span class="pre">ORG</span></code>) in Traffic Ops - either using the <a class="reference internal" href="../admin/traffic_portal/usingtrafficportal.html#tp-configure-servers"><span class="std std-ref">appropriate section of Traffic Portal</span></a> or the <a class="reference internal" href="../api/servers.html#to-api-servers"><span class="std std-ref">servers</span></a> endpoint.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>In order for a given <a class="reference internal" href="../glossary.html#term-mid-tier-cache-server"><span class="xref std std-term">Mid-tier cache server</span></a> to support Multi-Site Origins, the value of a <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> named <code class="docutils literal notranslate"><span class="pre">http.parent_proxy_routing_enable</span></code> in configuration file <code class="docutils literal notranslate"><span class="pre">records.config</span></code> must be set to <code class="docutils literal notranslate"><span class="pre">1</span></code> on that server’s <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a>. If using an optional secondary grouping of Multi-Site Origins, the <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> named <code class="docutils literal notranslate"><span class="pre">url_remap.remap_required</span></code> in configuration file <code class="docutils literal notranslate"><span class="pre">records.config</span></code> must also be set to <code class="docutils literal notranslate"><span class="pre">1</span></code> on that <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a>. These settings must be applied to all <a class="reference internal" href="../glossary.html#term-mid-tier-cache-servers"><span class="xref std std-term">Mid-tier cache servers</span></a>’ that are the <a class="reference internal" href="../glossary.html#term-parents"><span class="xref std std-term">parents</span></a> of any <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-tier cache server</span></a> assigned to this Delivery Service.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>These parameters are described in the <abbr title="Apache Traffic Server">ATS</abbr> documentation sections for <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/records.config.en.html#proxy-config-http-parent-proxy-routing-enable">Parent Proxy Configuration</a> and <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/records.config.en.html#proxy-config-url-remap-remap-required">URL Remap Rules</a>, respectively.</p>
+</div>
+</div>
+<table class="docutils align-default" id="id40">
+<caption><span class="caption-number">Table 27 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id40" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 46%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>multiSiteOrigin</p></td>
+<td><p>In Go code and <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> requests/responses</p></td>
+<td><p>unchanged (<code class="docutils literal notranslate"><span class="pre">bool</span></code>, <code class="docutils literal notranslate"><span class="pre">boolean</span></code> etc.)</p></td>
+</tr>
+<tr class="row-odd"><td><p><abbr title="Multi-Site Origin">MSO</abbr></p></td>
+<td><p>In documentation and used heavily in discussion in Slack, mailing list etc.</p></td>
+<td><p>unchanged (usually only used where implicitly <code class="docutils literal notranslate"><span class="pre">true</span></code>)</p></td>
+</tr>
+</tbody>
+</table>
+<p>A Delivery Service <a class="reference internal" href="#profile">Profile</a> can have <a class="reference internal" href="../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a> that affect Multi-Site Origin configuration. These are detailed in the <a class="reference internal" href="#ds-mso-parameters"><span class="std std-ref">Parameters of a Delivery Service Profile that Affect MSO Configuration</span></a> table. All of these <a class="reference internal" href="../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a> should have their Configuration File set to <code class="docutils literal notranslate"><span class="pre">parent.config</span></code>. Each <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> directly corresponds to a field in a line of the <abbr title="Apache Traffic Server">ATS</abbr> <cite>parent.config file &lt;https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/parent.config.en.html&gt;</cite> (usually by almost the same name), and documentation for these fields is provided in the form of links to their entries in the <abbr title="Apache Traffic Server">ATS</abbr> documentation.</p>
+<span id="ds-mso-parameters"></span><table class="docutils align-default" id="id41">
+<caption><span class="caption-number">Table 28 </span><span class="caption-text"><a class="reference internal" href="../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a> of a Delivery Service <a class="reference internal" href="#profile">Profile</a> that Affect <abbr title="Multi-Site-Origin">MSO</abbr> Configuration</span><a class="headerlink" href="#id41" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 37%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p><abbr title="Apache Traffic Server">ATS</abbr> <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/parent.config.en.html">parent.config</a> field</p></th>
+<th class="head"><p>Effect</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mso.algorithm</p></td>
+<td><p><a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/parent.config.en.html#parent-config-format-round-robin">round_robin</a></p></td>
+<td><p>Sets the algorithm used to determine from which <a class="reference internal" href="../glossary.html#term-origin-server"><span class="xref std std-term">origin server</span></a> content will
+be requested.</p></td>
+</tr>
+<tr class="row-odd"><td><p>mso.max_simple_retries</p></td>
+<td><p><a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/parent.config.en.html#parent-config-format-max-simple-retries">max_simple_retries</a></p></td>
+<td><p>Sets a strict limit on the number of “simple retries” allowed before giving up</p></td>
+</tr>
+<tr class="row-even"><td><p>mso.max_unavailable_server_retries</p></td>
+<td><p><a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/parent.config.en.html#parent-config-format-max-unavailable-server-retries">max_unavailable_server_retries</a></p></td>
+<td><p>Sets a strict limit on the number of times the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> will attempt to
+request content from an <a class="reference internal" href="../glossary.html#term-origin-server"><span class="xref std std-term">origin server</span></a> that has previously been considered
+“unavailable”.</p></td>
+</tr>
+<tr class="row-odd"><td><p>mso.parent_retry</p></td>
+<td><p><a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/parent.config.en.html#parent-config-format-parent-retry">parent_retry</a></p></td>
+<td><p>Sets whether the <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> will use “simple retries”,
+“unavailable server retries”, or both.</p></td>
+</tr>
+<tr class="row-even"><td><p>mso.simple_retry_response_codes</p></td>
+<td><p><strong>UNKNOWN</strong></p></td>
+<td><p><strong>UNKOWN</strong> - supposedly defines HTTP response codes from an <a class="reference internal" href="../glossary.html#term-origin-server"><span class="xref std std-term">origin server</span></a>
+that necessitate a “simple retry”.</p></td>
+</tr>
+<tr class="row-odd"><td><p>mso.unavailable_server_retry_response_codes</p></td>
+<td><p><a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/parent.config.en.html#parent-config-format-unavailable-server-retry-responses">unavailable_server_retry_responses</a></p></td>
+<td><p>Defines HTTP response codes from an <a class="reference internal" href="../glossary.html#term-origin-server"><span class="xref std std-term">origin server</span></a> that indicate it is
+currently “unavailable”.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">mso.simple_retry_response_codes</span></code> <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> has no apparent, possible use according to the <abbr title="Apache Traffic Server">ATS</abbr> <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/parent.config.en.html">parent.config documentation</a>. Whether or not it has any effect - let alone the <em>intended</em> effect - is not known, and its use is therefore strongly discouraged.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>A quick guide on setting up Multi-Site Origins is given in <a class="reference internal" href="../admin/quick_howto/multi_site.html#multi-site-origin-qht"><span class="std std-ref">Configure Multi-Site Origin</span></a>.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>See the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/parent.config.en.html">Apache Traffic Server documentation</a> for more information on its implementation of Multi-Site Origins.</p>
+</div>
+</div>
+<div class="section" id="xml-id">
+<span id="ds-xmlid"></span><h2>xml_id<a class="headerlink" href="#xml-id" title="Permalink to this headline">¶</a></h2>
+<p>A text-based unique identifier for a Delivery Service. Many <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> endpoints and internal <abbr title="Apache Traffic Control">ATC</abbr> functions use this to uniquely identify a Delivery Service as opposed to the historically favored “ID”. This string will become a part of the CDN service domain, which all together looks like: <code class="file docutils literal notranslate"><em><span class="pre">Delivery</span> <span class="pre">Service</span> <span class="pre">Routing</span> <span class="pre">Name</span></em><span class="pre">.</span><em><span class="pre">Delivery</span> <span class="pre">Service</span> <span class="pre">xml_id</span></em><span class="pre">.</span><em><span class="pre">CDN</span> <span class="pre">Subdomain</span></em><span class="pre">.</span><em><span class="pre">CDN</span> <span class="pre">Domain</span></em><span class="pre">.</span><em><span class="pre">Top-Level</span> <span class="pre">Domain</span></em></code>. Must be all lowercase, no spaces or special characters, but may contain dashes/hyphens<a class="footnote-reference brackets" href="#xmlvalid" id="id13">1</a>.</p>
+<table class="docutils align-default" id="id42">
+<caption><span class="caption-number">Table 29 </span><span class="caption-text">Aliases</span><a class="headerlink" href="#id42" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 52%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Use(s)</p></th>
+<th class="head"><p>Type(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Key</p></td>
+<td><p>Traffic Portal tables and forms</p></td>
+<td><p>unchanged (<code class="docutils literal notranslate"><span class="pre">string</span></code>)</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="footnote brackets">
+<dt class="label" id="xmlvalid"><span class="brackets">1</span><span class="fn-backref">(<a href="#id9">1</a>,<a href="#id13">2</a>)</span></dt>
+<dd><p>Some things to consider when choosing an xml_id and routing name: the name should be descriptive and unique, but as brief as possible to avoid creating a monstrous <abbr title="Fully Qualified Domain Name">FQDN</abbr>. Also, because these are combined to form an <abbr title="Fully Qualified Domain Name">FQDN</abbr>, they should not contain any characters that are illegal for a DNS subdomain, e.g. <code class="docutils literal notranslate"><span class="pre">.</span></code> (period/dot). Finally, the restrictions on what characters are allowable (especially in xml_id) are, in general, <strong>NOT</strong> enforced by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a>, so take care that the name is appropriate. See <span class="target" id="index-0"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc1035.html"><strong>RFC 1035</strong></a> for exact guidelines.</p>
+</dd>
+<dt class="label" id="cardinality"><span class="brackets">2</span><span class="fn-backref">(<a href="#id3">1</a>,<a href="#id4">2</a>)</span></dt>
+<dd><p>In source code and <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> responses, the “Long Description” fields of a Delivery Service are “0-indexed” - hence the names differing slightly from the ones displayed in user-friendly UIs.</p>
+</dd>
+<dt class="label" id="duporigin"><span class="brackets">3</span><span class="fn-backref">(<a href="#id10">1</a>,<a href="#id11">2</a>,<a href="#id12">3</a>)</span></dt>
+<dd><p>These Delivery Services Types are vulnerable to what this writer likes to call the “Duplicate Origin Problem”. This problem is tracked by <a class="reference external" href="https://github.com/apache/trafficcontrol/issues/3537">Issue #3537</a>.</p>
+</dd>
+<dt class="label" id="httponlyregex"><span class="brackets">4</span><span class="fn-backref">(<a href="#id5">1</a>,<a href="#id6">2</a>)</span></dt>
+<dd><p>These regular expression types can only appear in the Match List of HTTP-<a class="reference internal" href="#ds-types"><span class="std std-ref">Routed</span></a> Delivery Services.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Traffic Control Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

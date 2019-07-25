@@ -1,0 +1,364 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Building Traffic Control &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Traffic Ops" href="traffic_ops.html" />
+    <link rel="prev" title="Developer’s Guide" href="index.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer’s Guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Building Traffic Control</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#downloading-traffic-control">Downloading Traffic Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-using-pkg">Build Using <code class="docutils literal notranslate"><span class="pre">pkg</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#build-using-docker-compose">Build Using <code class="docutils literal notranslate"><span class="pre">docker-compose</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-individual-components">Building Individual Components</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#building-this-documentation">Building This Documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops.html">Traffic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops_golang.html">Traffic Ops - Go</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ort/traffic_ops_ort.html">traffic_ops_ort package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal.html">Traffic Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router.html">Traffic Router</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_monitor.html">Traffic Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_stats.html">Traffic Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation_guidelines.html">Documentation Guidelines</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Developer’s Guide</a> &raquo;</li>
+        
+      <li>Building Traffic Control</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/development/building.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-traffic-control">
+<span id="dev-building"></span><h1>Building Traffic Control<a class="headerlink" href="#building-traffic-control" title="Permalink to this headline">¶</a></h1>
+<p>The build steps for Traffic Control components are all pretty much the same, despite that they are written in a variety of different languages and frameworks. This is accomplished by using Docker.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, both listed methods of building Traffic Control components will produce <code class="docutils literal notranslate"><span class="pre">*.rpm</span></code> files, meaning that the support of these components is limited to RedHat-based distributions - and none of them are currently tested (or guaranteed to work) outside of CentOS7, specifically.</p>
+</div>
+<div class="section" id="downloading-traffic-control">
+<h2>Downloading Traffic Control<a class="headerlink" href="#downloading-traffic-control" title="Permalink to this headline">¶</a></h2>
+<p>If any local work on Traffic Monitor, Traffic Router Golang, Grove or Traffic Ops is to be done, it is <strong>highly</strong> recommended that <a class="reference external" href="https://github.com/apache/trafficcontrol">the Traffic Control repository</a> be downloaded inside the <code class="docutils literal notranslate"><span class="pre">$GOPATH</span></code> directory. Specifically, the best location is <code class="docutils literal notranslate"><span class="pre">$GOPATH/src/github.com/apache/trafficcontrol</span></code>. Cloning the repository outside of this location will require either linking the actual directory to that point, or moving/copying it there.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The Golang project’s <code class="docutils literal notranslate"><span class="pre">GOPATH</span></code> <a class="reference external" href="https://github.com/golang/go/wiki/GOPATH">wiki page</a></p>
+</div>
+</div>
+<div class="section" id="build-using-pkg">
+<span id="pkg"></span><h2>Build Using <code class="docutils literal notranslate"><span class="pre">pkg</span></code><a class="headerlink" href="#build-using-pkg" title="Permalink to this headline">¶</a></h2>
+<p>This is the easiest way to build all the components of Traffic Control; all requirements are automatically loaded into the image used to build each component.</p>
+<div class="section" id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.docker.com/engine/installation/">Docker</a></p></li>
+<li><p><a class="reference external" href="https://docs.docker.com/compose/install/">Docker Compose</a><a class="footnote-reference brackets" href="#id9" id="id1">1</a></p></li>
+</ul>
+</div>
+<div class="section" id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">./pkg</span> <span class="pre">[options]</span> <span class="pre">[projects]</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">pkg</span></code> script often needs to be run as <code class="docutils literal notranslate"><span class="pre">sudo</span></code>, as certain privileges are required to run Docker containers</p>
+</div>
+<p>Options</p>
+<dl class="option-list">
+<dt><kbd><span class="option">-q</span></kbd></dt>
+<dd><p>Quiet mode. Supresses output.</p>
+</dd>
+<dt><kbd><span class="option">-v</span></kbd></dt>
+<dd><p>Verbose mode. Lists all build output.</p>
+</dd>
+<dt><kbd><span class="option">-l</span></kbd></dt>
+<dd><p>List available projects.</p>
+</dd>
+</dl>
+<p>If present, <code class="docutils literal notranslate"><span class="pre">projects</span></code> should be one or more project names. When no specific project or project list is given the default projects will be built. Valid projects:</p>
+<ul class="simple">
+<li><p>docs</p></li>
+<li><p>grove_build<a class="footnote-reference brackets" href="#id10" id="id2">2</a></p></li>
+<li><p>grovetccfg_build</p></li>
+<li><p>source<a class="footnote-reference brackets" href="#id10" id="id3">2</a></p></li>
+<li><p>traffic_monitor_build<a class="footnote-reference brackets" href="#id10" id="id4">2</a></p></li>
+<li><p>traffic_ops_build<a class="footnote-reference brackets" href="#id10" id="id5">2</a></p></li>
+<li><p>traffic_portal_build<a class="footnote-reference brackets" href="#id10" id="id6">2</a></p></li>
+<li><p>traffic_router_build<a class="footnote-reference brackets" href="#id10" id="id7">2</a></p></li>
+<li><p>traffic_stats_build<a class="footnote-reference brackets" href="#id10" id="id8">2</a></p></li>
+<li><p>weasel</p></li>
+</ul>
+<p>Output <code class="file docutils literal notranslate"><em><span class="pre">component</span></em><span class="pre">-</span><em><span class="pre">version</span></em><span class="pre">.rpm</span></code> files, build logs and source tarballs will be output to the <code class="docutils literal notranslate"><span class="pre">dist/</span></code> directory at the root of the Traffic Control repository directory.</p>
+<dl class="footnote brackets">
+<dt class="label" id="id9"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>This is optional, but recommended. If a <code class="docutils literal notranslate"><span class="pre">docker-compose</span></code> executable is not available the <code class="docutils literal notranslate"><span class="pre">pkg</span></code> script will automatically download and run it using a container. This is noticeably slower than running it natively.</p>
+</dd>
+<dt class="label" id="id10"><span class="brackets">2</span><span class="fn-backref">(<a href="#id2">1</a>,<a href="#id3">2</a>,<a href="#id4">3</a>,<a href="#id5">4</a>,<a href="#id6">5</a>,<a href="#id7">6</a>,<a href="#id8">7</a>)</span></dt>
+<dd><p>This is a default project, which will be built if <code class="docutils literal notranslate"><span class="pre">pkg</span></code> is run with no <code class="docutils literal notranslate"><span class="pre">projects</span></code> argument</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="build-using-docker-compose">
+<span id="build-with-dc"></span><h2>Build Using <code class="docutils literal notranslate"><span class="pre">docker-compose</span></code><a class="headerlink" href="#build-using-docker-compose" title="Permalink to this headline">¶</a></h2>
+<p>If the <code class="docutils literal notranslate"><span class="pre">pkg</span></code> script fails, <code class="docutils literal notranslate"><span class="pre">docker-compose</span></code> can still be used to build the projects directly. The compose file can be found at <code class="docutils literal notranslate"><span class="pre">infrastructure/docker/build/docker-compose.yml</span></code> under the repository’s root directory. It can be passed directly to <code class="docutils literal notranslate"><span class="pre">docker-compose</span></code>, either from the <code class="docutils literal notranslate"><span class="pre">infrastructure/docker/build/</span></code> directory or by explicitly passing a path to the <code class="docutils literal notranslate"><span class="pre">infrastructure/docker/build/docker-compose.yml</span></code> file via <code class="docutils literal notranslate"><span class="pre">-f</span></code>. It is recommended that between builds <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">down</span> <span class="pre">-v</span></code> is run to prevent caching of old build steps. The service names are the same as the project names described above in <a class="reference internal" href="#usage">Usage</a>, and similar to the <code class="docutils literal notranslate"><span class="pre">pkg</span></code> script, the build results, logs and source tarballs may all be found in the <code class="docutils literal notranslate"><span class="pre">dist</span></code> directory after completion.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Calling <code class="docutils literal notranslate"><span class="pre">docker-compose</span></code> in the way described above will build _all_ projects, not just the default projects.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.docker.com/compose/reference/overview/">The Docker Compose command line reference</a></p>
+</div>
+</div>
+<div class="section" id="building-individual-components">
+<h2>Building Individual Components<a class="headerlink" href="#building-individual-components" title="Permalink to this headline">¶</a></h2>
+<p>Each Traffic Control component can be individually built, and the instructions for doing so may be found in their respective component’s development documentation.</p>
+<div class="section" id="building-this-documentation">
+<span id="docs-build"></span><h3>Building This Documentation<a class="headerlink" href="#building-this-documentation" title="Permalink to this headline">¶</a></h3>
+<p>This documentation uses the <a class="reference external" href="http://www.sphinx-doc.org/en/master/">Sphinx documentation build system</a>, and as such requires a Python3 version that is at least 3.4.1. It also has dependency on Sphinx, and Sphinx extensions and themes. All of these can be easily installed using <cite>pip</cite> by referencing the requirements file like so:</p>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-number">#78 </span><span class="caption-text">Run from the Repository’s Root Directory</span><a class="headerlink" href="#id11" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3 -m pip install --user -r docs/source/requirements.txt
+</pre></div>
+</div>
+</div>
+<p>Once all dependencies have been satisfied, build using the Makefile at <code class="docutils literal notranslate"><span class="pre">docs/Makefile</span></code>.</p>
+<p>Alternatively, it is also possible to <a class="reference internal" href="#pkg"><span class="std std-ref">Build Using pkg</span></a> or to <a class="reference internal" href="#build-with-dc"><span class="std std-ref">Build Using docker-compose</span></a>, both of which will output a documentation “tarball” to <code class="docutils literal notranslate"><span class="pre">dist/</span></code>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="traffic_ops.html" class="btn btn-neutral float-right" title="Traffic Ops" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Developer’s Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

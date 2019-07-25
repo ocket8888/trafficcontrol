@@ -1,0 +1,352 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configure DNSSEC &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Delivery Service Requests" href="ds_requests.html" />
+    <link rel="prev" title="CDN in a Box" href="ciab.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Quick How To Guides</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="anonymous_blocking.html">Configure Anonymous Blocking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroup_fallback.html">Configure Cache Group Fallbacks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html">CDN in a Box</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Configure DNSSEC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_requests.html">Delivery Service Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="federations.html">Configure Federations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multi_site.html">Configure Multi-Site Origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="regionalgeo.html">Configure Regional Geo-blocking (RGB)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static_dns.html">Configuring Static DNS Entries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="steering.html">Configure Delivery Service Steering</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Administrator’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">Quick How To Guides</a> &raquo;</li>
+        
+      <li>Configure DNSSEC</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/admin/quick_howto/dnssec.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configure-dnssec">
+<span id="dnssec-qht"></span><h1>Configure DNSSEC<a class="headerlink" href="#configure-dnssec" title="Permalink to this headline">¶</a></h1>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../traffic_router.html#tr-dnssec"><span class="std std-ref">DNSSEC</span></a></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In order for Traffic Ops to successfully store keys in Traffic Vault, at least one Riak Server needs to be configured in Traffic Ops. See the <a class="reference external" href="../traffic_vault.html">Traffic Vault admin page</a> for more information.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently <abbr title="DNS Security Extensions">DNSSEC</abbr> is only supported for DNS <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s.</p>
+</div>
+<ol class="arabic">
+<li><p>Go to <span class="guilabel">CDNs</span> and click on the desired CDN.</p>
+<blockquote>
+<div><div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="../../_images/001.png"><img alt="Screenshot of the Traffic Portal UI depicting the CDNs page" src="../../_images/001.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 17 </span><span class="caption-text">CDNs Page</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Click on <span class="menuselection">More ‣ Manage DNSSEC Keys</span>.</p>
+<blockquote>
+<div><div class="figure align-center" id="id2">
+<a class="reference internal image-reference" href="../../_images/012.png"><img alt="Screenshot of the Traffic Portal UI depicting the CDN details page" src="../../_images/012.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 18 </span><span class="caption-text">CDN Details Page</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Click on the <span class="guilabel">Generate DNSSEC Keys</span> button.</p>
+<blockquote>
+<div><div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="../../_images/022.png"><img alt="Screenshot of the Traffic Portal UI depicting the CDN DNSSEC Key Management page" src="../../_images/022.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 19 </span><span class="caption-text">DNSSEC Key Management Page</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>A modal will pop up asking you to confirm that you want to proceed.</p>
+<blockquote>
+<div><div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="../../_images/032.png"><img alt="Screenshot of the Traffic Portal UI depicting the CDN DNSSEC Key Generation confirmation modal" src="../../_images/032.png" style="width: 30%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 20 </span><span class="caption-text">Confirmation Modal</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Input the required information (reasonable defaults should be generated for you). When done, click on the green <span class="guilabel">Generate</span> button.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Depending upon the number of <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s in the CDN, generating DNSSEC keys may take several seconds.</p>
+</div>
+<div class="figure align-center" id="id5">
+<a class="reference internal image-reference" href="../../_images/041.png"><img alt="Screenshot of the Traffic Portal UI depicting the CDN DNSSEC Key Generation page" src="../../_images/041.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 21 </span><span class="caption-text">DNSSEC Key Generation Page</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>You will be prompted to confirm the changes by typing the name of the CDN into a text box. After doing so, click on the red <span class="guilabel">Confirm</span> button.</p>
+<blockquote>
+<div><div class="figure align-center" id="id6">
+<a class="reference internal image-reference" href="../../_images/051.png"><img alt="Screenshot of the Traffic Portal UI depicting the confirmation modal for committing changes to DNSSEC Keys." src="../../_images/051.png" style="width: 30%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 22 </span><span class="caption-text">DNSSEC Key Change Confirmation</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>In order for <abbr title="DNS Security Extensions">DNSSEC</abbr> to work properly, the <abbr title="Delegation of Signing">DS</abbr> Record information needs to be added to the parent zone of the CDN’s domain (e.g. If the CDN’s domain is ‘ciab.cdn.local’ the parent zone is ‘cdn.local’). If you control your parent zone you can enter this information yourself, otherwise you will need to work with your DNS team to get the <abbr title="Delegation of Signing">DS</abbr> Record added to the parent zone.</p></li>
+<li><p>Once <abbr title="Delegation of Signing">DS</abbr> Record information has been added to the parent zone, DNSSEC needs to be activated for the CDN so that Traffic Router will sign responses. Go back to the CDN details page for this CDN, and set the ‘DNSSEC Enabled’ field to ‘true’, then click the green <span class="guilabel">Update</span> button.</p>
+<blockquote>
+<div><div class="figure align-center" id="id7">
+<a class="reference internal image-reference" href="../../_images/06.png"><img alt="Screenshot of the Traffic Portal UI depicting the details page for a CDN when changing its 'DNSSEC Enabled' field" src="../../_images/06.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 23 </span><span class="caption-text">Change ‘DNSSEC Enabled’ to ‘true’</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p><abbr title="DNS Security Extensions">DNSSEC</abbr> should now be active on your CDN and Traffic Router should be signing responses. This should be tested e.g. with this <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/dig(1)">dig(1)</a></em> command: <code class="docutils literal notranslate"><span class="pre">dig</span> <span class="pre">edge.cdn.local.</span> <span class="pre">+dnssec</span></code>.</p></li>
+<li><p>When <abbr title="Key-Signing Key">KSK</abbr> expiration is approaching (default 365 days), it is necessary to manually generate a new <abbr title="Key Signing Key">KSK</abbr> for the <abbr title="Top Level Domain">TLD</abbr> and add the <abbr title="Delegation of Signing">DS</abbr> Record to the parent zone. In order to avoid signing errors, it is suggested that an effective date is chosen which allows time for the <abbr title="Delegation of Signing">DS</abbr> Record to be added to the parent zone before the new <abbr title="Key-Signing Key">KSK</abbr> becomes active.</p></li>
+</ol>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ds_requests.html" class="btn btn-neutral float-right" title="Delivery Service Requests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ciab.html" class="btn btn-neutral" title="CDN in a Box" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

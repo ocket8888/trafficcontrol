@@ -1,0 +1,333 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Monitor Administration &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Traffic Router Administration" href="traffic_router.html" />
+    <link rel="prev" title="Traffic Portal - Using" href="traffic_portal/usingtrafficportal.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Monitor Administration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-traffic-monitor">Installing Traffic Monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-traffic-monitor">Configuring Traffic Monitor</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#configuration-overview">Configuration Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cache-polling-url">Cache Polling URL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stat-and-health-flush-configuration">Stat and Health Flush Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting-and-log-files">Troubleshooting and Log Files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick_howto/index.html">Quick How To Guides</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Administrator’s Guide</a> &raquo;</li>
+        
+      <li>Traffic Monitor Administration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/admin/traffic_monitor.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-monitor-administration">
+<h1>Traffic Monitor Administration<a class="headerlink" href="#traffic-monitor-administration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installing-traffic-monitor">
+<span id="tm-golang"></span><h2>Installing Traffic Monitor<a class="headerlink" href="#installing-traffic-monitor" title="Permalink to this headline">¶</a></h2>
+<p>The following are hard requirements requirements for Traffic Monitor to operate:</p>
+<ul class="simple">
+<li><p>CentOS 7+</p></li>
+<li><p>Successful install of Traffic Ops (usually on a separate machine)</p></li>
+<li><p>Administrative access to the Traffic Ops (usually on a separate machine)</p></li>
+</ul>
+<p>These are the recommended hardware specifications for a production deployment of Traffic Monitor:</p>
+<ul class="simple">
+<li><p>8 CPUs</p></li>
+<li><p>16GB of RAM</p></li>
+<li><p>It is also recommended that you know the geographic coordinates and/or mailing address of the site where the Traffic Monitor machine lives for optimal performance</p></li>
+</ul>
+<ol class="arabic">
+<li><p>Enter the Traffic Monitor server into Traffic Portal</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For legacy compatibility reasons, the ‘Type’ field of a new Traffic Monitor server must be ‘RASCAL’.</p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Make sure the <abbr title="Fully Qualified Domain Name">FQDN</abbr> of the Traffic Monitor is resolvable in DNS.</p></li>
+<li><p>Install Traffic Monitor, either from source or by installing a <code class="file docutils literal notranslate"><span class="pre">traffic_monitor-</span><em><span class="pre">version</span> <span class="pre">string</span></em><span class="pre">.rpm</span></code> package generated by the instructions in <a class="reference internal" href="../development/building.html#dev-building"><span class="std std-ref">Building Traffic Control</span></a> with <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> or <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/rpm(8)">rpm(8)</a></em></p></li>
+<li><p>Configure Traffic Monitor according to <a class="reference internal" href="#configuring-traffic-monitor">Configuring Traffic Monitor</a></p></li>
+<li><p>Start Traffic Monitor, usually by starting its <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemd(1)">systemd(1)</a></em> service</p></li>
+<li><p>Verify Traffic Monitor is running by e.g. opening your preferred web browser to port 80 on the Traffic Monitor host.</p></li>
+</ol>
+</div>
+<div class="section" id="configuring-traffic-monitor">
+<span id="tm-configure"></span><h2>Configuring Traffic Monitor<a class="headerlink" href="#configuring-traffic-monitor" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="configuration-overview">
+<h3>Configuration Overview<a class="headerlink" href="#configuration-overview" title="Permalink to this headline">¶</a></h3>
+<p>Traffic Monitor is configured via two JSON configuration files, <code class="file docutils literal notranslate"><span class="pre">traffic_ops.cfg</span></code> and <code class="file docutils literal notranslate"><span class="pre">traffic_monitor.cfg</span></code>, by default located in the <code class="docutils literal notranslate"><span class="pre">conf</span></code> directory in the install location. <code class="file docutils literal notranslate"><span class="pre">traffic_ops.cfg</span></code> contains Traffic Ops connection information. Specify the URL, username, and password for the instance of Traffic Ops of which this Traffic Monitor is a member. <code class="file docutils literal notranslate"><span class="pre">traffic_monitor.cfg</span></code> contains log file locations, as well as detailed application configuration variables such as processing flush times and initial poll intervals. Once started with the correct configuration, Traffic Monitor downloads its configuration from Traffic Ops and begins polling <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> s. Once every <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> has been polled, <a class="reference internal" href="../overview/traffic_monitor.html#health-proto"><span class="std std-ref">Health Protocol</span></a> state is available via RESTful JSON endpoints and a web browser UI.</p>
+</div>
+<div class="section" id="cache-polling-url">
+<h3>Cache Polling URL<a class="headerlink" href="#cache-polling-url" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> are polled at the URL specified in the <code class="docutils literal notranslate"><span class="pre">health.polling.url</span></code> <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">parameter</span></a>, on the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">profile</span></a>.</p>
+<p>This <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">parameter</span></a> must have the config file <code class="docutils literal notranslate"><span class="pre">rascal.properties</span></code>.</p>
+<p>The value is a template with the text <code class="docutils literal notranslate"><span class="pre">${hostname}</span></code> being replaced with the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s Network IP (IPv4), and <code class="docutils literal notranslate"><span class="pre">${interface_name}</span></code> being replaced with the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s network Interface Name. For example, <code class="docutils literal notranslate"><span class="pre">http://${hostname}/_astats?application=&amp;inf.name=${interface_name}</span></code>.</p>
+<p>If the template contains a port, that port will be used, and the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s HTTPS and TCP Ports will not be added.</p>
+<p>If the template does not contain a port, then if the template starts with <code class="docutils literal notranslate"><span class="pre">https</span></code> the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s HTTPS Port will be added, and if the template doesn’t start with <code class="docutils literal notranslate"><span class="pre">https</span></code> the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s TCP Port will be added.</p>
+<p>Examples:</p>
+<p>Template <code class="docutils literal notranslate"><span class="pre">http://${hostname}/_astats?application=&amp;inf.name=${interface_name}</span></code> Server IP <code class="docutils literal notranslate"><span class="pre">192.0.2.42</span></code> Server TCP Port <code class="docutils literal notranslate"><span class="pre">8080</span></code> HTTPS Port <code class="docutils literal notranslate"><span class="pre">8443</span></code> becomes <code class="docutils literal notranslate"><span class="pre">http://192.0.2.42:8080/_astats?application=&amp;inf.name=${interface_name}</span></code>.
+Template <code class="docutils literal notranslate"><span class="pre">https://${hostname}/_astats?application=&amp;inf.name=${interface_name}</span></code> Server IP <code class="docutils literal notranslate"><span class="pre">192.0.2.42</span></code> Server TCP Port <code class="docutils literal notranslate"><span class="pre">8080</span></code> HTTPS Port <code class="docutils literal notranslate"><span class="pre">8443</span></code> becomes <code class="docutils literal notranslate"><span class="pre">https://192.0.2.42:8443/_astats?application=&amp;inf.name=${interface_name}</span></code>.
+Template <code class="docutils literal notranslate"><span class="pre">http://${hostname}:1234/_astats?application=&amp;inf.name=${interface_name}</span></code> Server IP <code class="docutils literal notranslate"><span class="pre">192.0.2.42</span></code> Server TCP Port <code class="docutils literal notranslate"><span class="pre">8080</span></code> HTTPS Port <code class="docutils literal notranslate"><span class="pre">8443</span></code> becomes <code class="docutils literal notranslate"><span class="pre">http://192.0.2.42:1234/_astats?application=&amp;inf.name=${interface_name}</span></code>.
+Template <code class="docutils literal notranslate"><span class="pre">https://${hostname}:1234/_astats?application=&amp;inf.name=${interface_name}</span></code> Server IP <code class="docutils literal notranslate"><span class="pre">192.0.2.42</span></code> Server TCP Port <code class="docutils literal notranslate"><span class="pre">8080</span></code> HTTPS Port <code class="docutils literal notranslate"><span class="pre">8443</span></code> becomes <code class="docutils literal notranslate"><span class="pre">https://192.0.2.42:1234/_astats?application=&amp;inf.name=${interface_name}</span></code>.</p>
+</div>
+<div class="section" id="stat-and-health-flush-configuration">
+<h3>Stat and Health Flush Configuration<a class="headerlink" href="#stat-and-health-flush-configuration" title="Permalink to this headline">¶</a></h3>
+<p>The Monitor has a health flush interval, a stat flush interval, and a stat buffer interval. Recall that the monitor polls both stats and health. The health poll is so small and fast, a buffer is largely unnecessary. However, in a large CDN, the stat poll may involve thousands of <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> s with thousands of stats each, or more, and CPU may be a bottleneck.</p>
+<p>The flush intervals, <code class="docutils literal notranslate"><span class="pre">health_flush_interval_ms</span></code> and <code class="docutils literal notranslate"><span class="pre">stat_flush_interval_ms</span></code>, indicate how often to flush stats or health, if results are continuously coming in with no break. This prevents starvation. Ideally, if there is enough CPU, the flushes should never occur. The default flush times are 200 milliseconds, which is suggested as a reasonable starting point; operators may adjust them higher or lower depending on the need to get health data and stop directing client traffic to unhealthy <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> s as quickly as possible, balanced by the need to reduce CPU usage.</p>
+<p>The stat buffer interval, <code class="docutils literal notranslate"><span class="pre">stat_buffer_interval_ms</span></code>, also provides a temporal buffer for stat processing. Stats will not be processed except after this interval, whereupon all pending stats will be processed, unless the flush interval occurs as a starvation safety. The stat buffer and flush intervals may be thought of as a state machine with two states: the “buffer state” accepts results until the buffer interval has elapsed, whereupon the “flush state” is entered, and results are accepted while outstanding, and processed either when no results are outstanding or the flush interval has elapsed.</p>
+<p>Note that this means the stat buffer interval acts as “bufferbloat,” increasing the average and maximum time a <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> may be down before it is processed and marked as unhealthy. If the stat buffer interval is non-zero, the average time a <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> may be down before being marked unavailable is half the poll time plus half the stat buffer interval, and the maximum time is the poll time plus the stat buffer interval. For example, if the stat poll time is 6 seconds, and the stat buffer interval is 4 seconds, the average time a <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> may be unhealthy before being marked is <span class="math notranslate nohighlight">\(\frac{6}{2} + \frac{4}{2} = 6\)</span> seconds, and the maximum time is <span class="math notranslate nohighlight">\(6+4=10\)</span> seconds. For this reason, if operators feel the need to add a stat buffer interval, it is recommended to start with a very low duration, such as 5 milliseconds, and increase as necessary.</p>
+<p>It is not recommended to set either flush interval to 0, regardless of the stat buffer interval. This will cause new results to be immediately processed, with little to no processing of multiple results concurrently. Result processing does not scale linearly. For example, processing 100 results at once does not cost significantly more CPU usage or time than processing 10 results at once. Thus, a flush interval which is too low will cause increased CPU usage, and potentially increased overall poll times, with little or no benefit. The default value of 200 milliseconds is recommended as a starting point for configuration tuning.</p>
+</div>
+</div>
+<div class="section" id="troubleshooting-and-log-files">
+<h2>Troubleshooting and Log Files<a class="headerlink" href="#troubleshooting-and-log-files" title="Permalink to this headline">¶</a></h2>
+<p>Traffic Monitor log files are in <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_monitor/var/log/</span></code>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="traffic_router.html" class="btn btn-neutral float-right" title="Traffic Router Administration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="traffic_portal/usingtrafficportal.html" class="btn btn-neutral" title="Traffic Portal - Using" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

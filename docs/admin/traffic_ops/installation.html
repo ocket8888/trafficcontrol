@@ -1,0 +1,525 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Ops - Installing &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Traffic Ops - Using" href="using.html" />
+    <link rel="prev" title="Managing Traffic Ops Extensions" href="extensions.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Ops - Installing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#system-requirements">System Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#upgrading-traffic-ops">Upgrading Traffic Ops</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quick_howto/index.html">Quick How To Guides</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Administrator’s Guide</a> &raquo;</li>
+        
+      <li>Traffic Ops - Installing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/admin/traffic_ops/installation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-ops-installing">
+<span id="to-install"></span><h1>Traffic Ops - Installing<a class="headerlink" href="#traffic-ops-installing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="system-requirements">
+<h2>System Requirements<a class="headerlink" href="#system-requirements" title="Permalink to this headline">¶</a></h2>
+<p>The user must have the following for a successful minimal install:</p>
+<ul class="simple">
+<li><p>CentOS 7+</p></li>
+<li><p>Two machines - physical or virtual -, each with at least two (v)CPUs, 4GB of RAM, and 20 GB of disk space.</p></li>
+<li><p>Access to CentOS Base and EPEL repositories</p></li>
+<li><p>Access to <a class="reference external" href="http://www.cpan.org/">The Comprehensive Perl Archive Network (CPAN)</a></p></li>
+</ul>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Install PostgreSQL Database. For a production install it is best to install PostgreSQL on its own server/VM.</p>
+<blockquote>
+<div><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For more information on installing PostgreSQL, see <a class="reference external" href="https://www.postgresql.org/docs/">their documentation</a>.</p>
+</div>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">#26 </span><span class="caption-text">Example PostgreSQL Install Procedure</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>yum update -y
+yum install -y https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm
+yum install -y postgresql96-server
+su - postgres -c <span class="s1">&#39;/usr/pgsql-9.6/bin/initdb -A md5 -W&#39;</span> <span class="c1">#-W forces the user to provide a superuser (postgres) password</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Edit <code class="docutils literal notranslate"><span class="pre">/var/lib/pgsql/9.6/data/pg_hba.conf</span></code> to allow the Traffic Ops instance to access the PostgreSQL server. For example, if the IP address of the machine to be used as the Traffic Ops host is <code class="docutils literal notranslate"><span class="pre">192.0.2.1</span></code> add the line <code class="docutils literal notranslate"><span class="pre">host</span>&#160; <span class="pre">all</span>&#160;&#160; <span class="pre">all</span>&#160;&#160;&#160;&#160; <span class="pre">192.0.2.1/32</span> <span class="pre">md5</span></code> to the appropriate section of this file.</p></li>
+<li><p>Edit the <code class="docutils literal notranslate"><span class="pre">/var/lib/pgsql/9.6/data/postgresql.conf</span></code> file to add the appropriate listen_addresses or <code class="docutils literal notranslate"><span class="pre">listen_addresses</span> <span class="pre">=</span> <span class="pre">'*'</span></code>, set <code class="docutils literal notranslate"><span class="pre">timezone</span> <span class="pre">=</span> <span class="pre">'UTC'</span></code>, and start the database</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">#27 </span><span class="caption-text">Starting PostgreSQL with <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemd(1)">systemd(1)</a></em></span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>systemctl <span class="nb">enable</span> postgresql-9.6
+systemctl start postgresql-9.6
+systemctl status postgresql-9.6 <span class="c1"># Prints the status of the PostgreSQL service, to prove it&#39;s running</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Build a <code class="file docutils literal notranslate"><span class="pre">traffic_ops-</span><em><span class="pre">version</span> <span class="pre">string</span></em><span class="pre">.rpm</span></code> file using the instructions under the <a class="reference internal" href="../../development/building.html#dev-building"><span class="std std-ref">Building Traffic Control</span></a> page.</p></li>
+<li><p>Install a PostgreSQL client on the Traffic Ops host</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">#28 </span><span class="caption-text">Installing PostgreSQL Client from a Hosted Source</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>yum install -y https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Install the Traffic Ops RPM. The Traffic Ops RPM file should have been built in an earlier step.</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">#29 </span><span class="caption-text">Installing a Generated Traffic Ops RPM</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>yum install -y ./dist/traffic_ops-3.0.0-xxxx.yyyyyyy.el7.x86_64.rpm
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This will install the PostgreSQL client, <code class="docutils literal notranslate"><span class="pre">psql</span></code> as a dependency.</p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Login to the Database from the Traffic Ops machine. At this point you should be able to login from the Traffic Ops (hostname <code class="docutils literal notranslate"><span class="pre">to</span></code> in the example) host to the PostgreSQL (hostname <code class="docutils literal notranslate"><span class="pre">pg</span></code> in the example) host</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-number">#30 </span><span class="caption-text">Example Login to Traffic Ops Database from Traffic Ops Server</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-psql notranslate"><div class="highlight"><pre><span></span><span class="gp">to-#</span> <span class="n">psql</span> <span class="o">-</span><span class="n">h</span> <span class="n">pg</span> <span class="o">-</span><span class="n">U</span> <span class="n">postgres</span>
+<span class="k">Password</span> <span class="k">for</span> <span class="k">user</span> <span class="n">postgres</span><span class="p">:</span>
+<span class="n">psql</span> <span class="p">(</span><span class="mf">9.6.3</span><span class="p">)</span>
+<span class="k">Type</span> <span class="s s-Name">&quot;help&quot;</span> <span class="k">for</span> <span class="n">help</span><span class="mf">.</span>
+
+<span class="gp">postgres=#</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Create the user and database. By default, Traffic Ops will expect to connect as the <code class="docutils literal notranslate"><span class="pre">traffic_ops</span></code> user to the <code class="docutils literal notranslate"><span class="pre">traffic_ops</span></code> database.</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-number">#31 </span><span class="caption-text">Creating the Traffic Ops User and Database</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">to-# psql -U postgres -h pg -c &quot;CREATE USER traffic_ops WITH ENCRYPTED PASSWORD &#39;tcr0cks&#39;;&quot;</span>
+<span class="go">Password for user postgres:</span>
+<span class="go">CREATE ROLE</span>
+<span class="go">to-# createdb traffic_ops --owner traffic_ops -U postgres -h pg</span>
+<span class="go">Password:</span>
+<span class="go">to-#</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Now, run the following command as the root user (or with <code class="docutils literal notranslate"><span class="pre">sudo</span></code>): <code class="docutils literal notranslate"><span class="pre">/opt/traffic_ops/install/bin/postinstall</span></code>. The <code class="docutils literal notranslate"><span class="pre">postinstall</span></code> script will first get all required Perl packages from <abbr title="The Comprehensive Perl Archive Network">CPAN</abbr>. This may take a while, expect up to 30 minutes on the first install. If there are any prompts in this phase, please just answer with the defaults (some <abbr title="The Comprehensive Perl Archive Network">CPAN</abbr> installs can prompt for install questions). When this phase is complete, you will see <code class="docutils literal notranslate"><span class="pre">Complete!</span> <span class="pre">Modules</span> <span class="pre">were</span> <span class="pre">installed</span> <span class="pre">into</span> <span class="pre">/opt/traffic_ops/app/local</span></code>. Some additional files will be installed, and then it will proceed with the next phase of the install, where it will ask you about the local environment for your CDN. Please make sure you remember all your answers and verify that the database answers match the information previously used to create the database.</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-number">#32 </span><span class="caption-text">Example Output</span><a class="headerlink" href="#id7" title="Permalink to this code">¶</a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">to-# /opt/traffic_ops/install/bin/postinstall</span>
+<span class="go">...</span>
+
+<span class="go">===========/opt/traffic_ops/app/conf/production/database.conf===========</span>
+<span class="go">Database type [Pg]:</span>
+<span class="go">Database type: Pg</span>
+<span class="go">Database name [traffic_ops]:</span>
+<span class="go">Database name: traffic_ops</span>
+<span class="go">Database server hostname IP or FQDN [localhost]: pg</span>
+<span class="go">Database server hostname IP or FQDN: pg</span>
+<span class="go">Database port number [5432]:</span>
+<span class="go">Database port number: 5432</span>
+<span class="go">Traffic Ops database user [traffic_ops]:</span>
+<span class="go">Traffic Ops database user: traffic_ops</span>
+<span class="go">Password for Traffic Ops database user:</span>
+<span class="go">Re-Enter Password for Traffic Ops database user:</span>
+<span class="go">Writing json to /opt/traffic_ops/app/conf/production/database.conf</span>
+<span class="go">Database configuration has been saved</span>
+<span class="go">===========/opt/traffic_ops/app/db/dbconf.yml===========</span>
+<span class="go">Database server root (admin) user [postgres]:</span>
+<span class="go">Database server root (admin) user: postgres</span>
+<span class="go">Password for database server admin:</span>
+<span class="go">Re-Enter Password for database server admin:</span>
+<span class="go">Download Maxmind Database? [yes]:</span>
+<span class="go">Download Maxmind Database?: yes</span>
+<span class="go">===========/opt/traffic_ops/app/conf/cdn.conf===========</span>
+<span class="go">Generate a new secret? [yes]:</span>
+<span class="go">Generate a new secret?: yes</span>
+<span class="go">Number of secrets to keep? [10]:</span>
+<span class="go">Number of secrets to keep?: 10</span>
+<span class="go">Not setting up ldap</span>
+<span class="go">===========/opt/traffic_ops/install/data/json/users.json===========</span>
+<span class="go">Administration username for Traffic Ops [admin]:</span>
+<span class="go">Administration username for Traffic Ops: admin</span>
+<span class="go">Password for the admin user:</span>
+<span class="go">Re-Enter Password for the admin user:</span>
+<span class="go">Writing json to /opt/traffic_ops/install/data/json/users.json</span>
+<span class="go">===========/opt/traffic_ops/install/data/json/openssl_configuration.json===========</span>
+<span class="go">Do you want to generate a certificate? [yes]:</span>
+<span class="go">Country Name (2 letter code): US</span>
+<span class="go">State or Province Name (full name): CO</span>
+<span class="go">Locality Name (eg, city): Denver</span>
+<span class="go">Organization Name (eg, company): Super CDN, Inc</span>
+<span class="go">Organizational Unit Name (eg, section):</span>
+<span class="go">Common Name (eg, your name or your server&#39;s hostname):</span>
+<span class="go">RSA Passphrase:</span>
+<span class="go">Re-Enter RSA Passphrase:</span>
+<span class="go">===========/opt/traffic_ops/install/data/json/profiles.json===========</span>
+<span class="go">Traffic Ops url [https://localhost]:</span>
+<span class="go">Traffic Ops url: https://localhost</span>
+<span class="go">Human-readable CDN Name.  (No whitespace, please) [kabletown_cdn]: blue_cdn</span>
+<span class="go">Human-readable CDN Name.  (No whitespace, please): blue_cdn</span>
+<span class="go">DNS sub-domain for which your CDN is authoritative [cdn1.kabletown.net]: blue-cdn.supercdn.net</span>
+<span class="go">DNS sub-domain for which your CDN is authoritative: blue-cdn.supercdn.net</span>
+<span class="go">Writing json to /opt/traffic_ops/install/data/json/profiles.json</span>
+<span class="go">Downloading Maxmind data</span>
+<span class="go">--2017-06-11 15:32:41--  http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz</span>
+<span class="go">Resolving geolite.maxmind.com (geolite.maxmind.com)... 2400:cb00:2048:1::6810:262f, 2400:cb00:2048:1::6810:252f, 104.16.38.47, ...</span>
+<span class="go">Connecting to geolite.maxmind.com (geolite.maxmind.com)|2400:cb00:2048:1::6810:262f|:80... connected.</span>
+
+<span class="go">... much SQL output skipped</span>
+
+<span class="go">Starting Traffic Ops</span>
+<span class="go">Restarting traffic_ops (via systemctl):                    [  OK  ]</span>
+<span class="go">Waiting for Traffic Ops to restart</span>
+<span class="go">Success! Postinstall complete.</span>
+</pre></div>
+</div>
+</div>
+<table class="docutils align-default" id="id8">
+<caption><span class="caption-number">Table 31 </span><span class="caption-text">Explanation of the information that needs to be provided:</span><a class="headerlink" href="#id8" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Database type</p></td>
+<td><p>This requests the type of database to be used. Answer with the default - ‘Pg’ to indicate a
+PostgreSQL database.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Database name</p></td>
+<td><p>The name of the database Traffic Ops uses to store the configuration information.</p></td>
+</tr>
+<tr class="row-even"><td><p>Database server hostname IP or FQDN</p></td>
+<td><p>The hostname of the database server (<code class="docutils literal notranslate"><span class="pre">pg</span></code> in the example).</p></td>
+</tr>
+<tr class="row-odd"><td><p>Database port number</p></td>
+<td><p>The database port number. The default value, 5432, should be correct unless you changed it
+during the setup.</p></td>
+</tr>
+<tr class="row-even"><td><p>Traffic Ops database user</p></td>
+<td><p>The username Traffic Ops will use to read/write from the database.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Password for Traffic Ops</p></td>
+<td><p>The password for the database user that Traffic Ops uses.</p></td>
+</tr>
+<tr class="row-even"><td><p>Database server root (admin) user name</p></td>
+<td><p>Privileged database user that has permission to create the database and user for Traffic Ops.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Database server root (admin) user password</p></td>
+<td><p>The password for the privileged database user.</p></td>
+</tr>
+<tr class="row-even"><td><p>Traffic Ops URL</p></td>
+<td><p>The URL to connect to this instance of Traffic Ops, usually <a class="reference external" href="https:/">https:/</a>/&lt;Traffic Ops host&gt;/</p></td>
+</tr>
+<tr class="row-odd"><td><p>Human-readable CDN Name</p></td>
+<td><p>The name of the first CDN which Traffic Ops will be manage.</p></td>
+</tr>
+<tr class="row-even"><td><p>DNS sub-domain for which your CDN is authoritative</p></td>
+<td><p>The DNS domain that will be delegated to this Traffic Control CDN.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Administration username for Traffic Ops</p></td>
+<td><p>The Administration (highest privilege) Traffic Ops user to create. Use this user to login
+for the first time and create other users.</p></td>
+</tr>
+<tr class="row-even"><td><p>Password for the admin user</p></td>
+<td><p>The password for the administrative Traffic Ops user.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+<p>Traffic Ops is now installed!</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../../overview/profiles_and_parameters.html#default-profiles"><span class="std std-ref">Default Profiles</span></a> for initial configuration of the Traffic Ops instance.</p>
+</div>
+</div>
+<div class="section" id="upgrading-traffic-ops">
+<h2>Upgrading Traffic Ops<a class="headerlink" href="#upgrading-traffic-ops" title="Permalink to this headline">¶</a></h2>
+<p>To upgrade from older Traffic Ops versions, stop the service, use <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> to upgrade to the latest available Traffic Ops package, and use the <code class="docutils literal notranslate"><span class="pre">admin</span></code> tool to perform the database upgrade.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In order to upgrade to the latest version of Traffic Ops, please be sure that you have first upgraded to the latest available minor or patch version of your current release. For example, if your current Traffic Ops version is 3.0.0 and version 3.1.0 is available, you must first upgrade to 3.1.0 before proceeding to upgrade to 4.0.0. (Specifically, this means running all migrations, <code class="file docutils literal notranslate"><span class="pre">traffic_ops/app/db/seeds.sql</span></code>, and <code class="file docutils literal notranslate"><span class="pre">traffic_ops/app/db/patches.sql</span></code> for the latest of your current major version - which should be handled by the <strong class="program">app/db/admin</strong> tool). The latest migration available before the release of 4.0.0 (pending at the time of this writing) was <code class="file docutils literal notranslate"><span class="pre">traffic_ops/app/db/migrations/20180814000625_remove_capabilities_for_reseed.sql</span></code>, so be sure that migrations up to this point have been run before attempting to upgrade Traffic Ops.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../../development/traffic_ops.html#database-management"><span class="std std-ref">app/db/admin</span></a> for more details about <cite>admin</cite>.</p>
+</div>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-number">#33 </span><span class="caption-text">Sample Script for Upgrading Traffic Ops</span><a class="headerlink" href="#id9" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>systemctl stop traffic_ops
+yum upgrade traffic_ops
+<span class="nb">pushd</span> /opt/traffic_ops/app/
+./db/admin --env production upgrade
+<span class="nb">popd</span>
+</pre></div>
+</div>
+</div>
+<p>After this completes, see <a class="reference internal" href="#installation">Installation</a> for instructions on running the <code class="docutils literal notranslate"><span class="pre">postinstall</span></code> script. Once the <code class="docutils literal notranslate"><span class="pre">postinstall</span></code> script, has finished, run the following command as the root user (or with <code class="docutils literal notranslate"><span class="pre">sudo</span></code>): <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">start</span> <span class="pre">traffic_ops</span></code> to start the service.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="using.html" class="btn btn-neutral float-right" title="Traffic Ops - Using" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="extensions.html" class="btn btn-neutral" title="Managing Traffic Ops Extensions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

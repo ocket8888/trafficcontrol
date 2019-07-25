@@ -1,0 +1,283 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Stats &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Traffic Vault" href="traffic_vault.html" />
+    <link rel="prev" title="Traffic Router" href="traffic_router.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Traffic Control Overview</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="delivery_services.html">Delivery Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiles_and_parameters.html">Profiles and Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_monitor.html">Traffic Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops.html">Traffic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal.html">Traffic Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router.html">Traffic Router</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_vault.html">Traffic Vault</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Traffic Control Overview</a> &raquo;</li>
+        
+      <li>Traffic Stats</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/overview/traffic_stats.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-stats">
+<span id="ts-overview"></span><h1>Traffic Stats<a class="headerlink" href="#traffic-stats" title="Permalink to this headline">¶</a></h1>
+<p><em class="dfn">Traffic Stats</em> is a program written in <a class="reference external" href="http://golang.org">Go</a> that is used to acquire and store statistics about CDNs controlled by Traffic Control. Traffic Stats mines metrics from the <a class="reference internal" href="../development/traffic_monitor/traffic_monitor_api.html#tm-api"><span class="std std-ref">Traffic Monitor APIs</span></a> and stores the data in <a class="reference external" href="http://influxdb.com">InfluxDB</a>. Data is typically stored in InfluxDB on a short-term basis (30 days or less). The data from InfluxDB is then used to drive graphs created by <a class="reference external" href="http://grafana.org">Grafana</a> - which are linked to from <a class="reference internal" href="traffic_portal.html#tp-overview"><span class="std std-ref">Traffic Portal</span></a> - as well as provide data exposed through the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a>. Traffic Stats performs two functions:</p>
+<ul class="simple">
+<li><p>Gathers statistics for Edge-tier <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s and <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s at a configurable interval (10 second default) from the <a class="reference internal" href="../development/traffic_monitor/traffic_monitor_api.html#tm-api"><span class="std std-ref">Traffic Monitor APIs</span></a> and stores the data in InfluxDB</p></li>
+<li><p>Summarizes all of the statistics once a day (around midnight UTC) and creates a daily report containing the Max <abbr title="Gigabits per second">Gbps</abbr> Served and the Total Bytes Served.</p></li>
+</ul>
+<p>Statistics are stored in three different databases:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">cache_stats</span></code>: Stores data gathered from edge-tier <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s. The <a class="reference external" href="https://influxdb.com/docs/v0.9/concepts/glossary.html#measurement">measurements</a> stored by <code class="docutils literal notranslate"><span class="pre">cache_stats</span></code> are: bandwidth, maxKbps, and <code class="docutils literal notranslate"><span class="pre">client_connections</span></code> (<code class="docutils literal notranslate"><span class="pre">ats.proxy.process.http.current_client_connections</span></code>). Cache Data is stored with <a class="reference external" href="https://influxdb.com/docs/v0.9/concepts/glossary.html#tag">tags</a> for hostname, <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>, and CDN. Data can be queried using tags.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deliveryservice_stats</span></code>: Stores data for <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s. The measurements stored by <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">kbps</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status_4xx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status_5xx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tps_2xx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tps_3xx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tps_4xx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tps_5xx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tps_total</span></code></p></li>
+</ul>
+<p><a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>statistics are stored with tags for <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>, CDN, and <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> <code class="docutils literal notranslate"><span class="pre">xml_id</span></code>.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">daily_stats</span></code>: Stores summary data for daily activities. The statistics that are currently summarized are Max Bandwidth and Bytes Served and they are stored by CDN.</p></li>
+</ul>
+<p>Traffic Stats does not influence overall CDN operation, but is required in order to display charts in <a class="reference internal" href="traffic_portal.html#tp-overview"><span class="std std-ref">Traffic Portal</span></a>.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="traffic_vault.html" class="btn btn-neutral float-right" title="Traffic Vault" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="traffic_router.html" class="btn btn-neutral" title="Traffic Router" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

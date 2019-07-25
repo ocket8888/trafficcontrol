@@ -1,0 +1,275 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Ops &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Traffic Portal" href="traffic_portal.html" />
+    <link rel="prev" title="Traffic Monitor" href="traffic_monitor.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Traffic Control Overview</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="delivery_services.html">Delivery Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiles_and_parameters.html">Profiles and Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_monitor.html">Traffic Monitor</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Ops</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#traffic-ops-extension">Traffic Ops Extension</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal.html">Traffic Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router.html">Traffic Router</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_stats.html">Traffic Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_vault.html">Traffic Vault</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Traffic Control Overview</a> &raquo;</li>
+        
+      <li>Traffic Ops</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/overview/traffic_ops.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-ops">
+<span id="to-overview"></span><h1>Traffic Ops<a class="headerlink" href="#traffic-ops" title="Permalink to this headline">¶</a></h1>
+<p>Traffic Ops is the tool for administration (configuration and monitoring) of all components in a Traffic Control CDN. <a class="reference internal" href="traffic_portal.html#tp-overview"><span class="std std-ref">Traffic Portal</span></a> uses the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> to manage servers, <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>s, <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s, etc. In many cases, a configuration change requires propagation to several, or even all, <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s and only explicitly after or before the same change propagates to <a class="reference internal" href="traffic_router.html#tr-overview"><span class="std std-ref">Traffic Router</span></a>. Traffic Ops takes care of this required consistency between the different components and their configuration.</p>
+<p>Traffic Ops uses a <a class="reference external" href="https://www.postgresql.org/">PostgreSQL</a> database to store the configuration information, and a combination of the <a class="reference external" href="http://mojolicio.us/">Mojolicious framework</a> and <a class="reference external" href="https://golang.org/">Go</a> to provide the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a>. Not all configuration data is in this database however; for sensitive data like private SSL keys or token-based authentication shared secrets, <a class="reference internal" href="traffic_stats.html#ts-overview"><span class="std std-ref">Traffic Stats</span></a> is used as a separate, key/value store, allowing administrators to harden the <a class="reference internal" href="traffic_stats.html#ts-overview"><span class="std std-ref">Traffic Stats</span></a> server better from a security perspective (i.e only allow Traffic Ops to access it, verifying authenticity with a certificate). The Traffic Ops server, by design, needs to be accessible from all the other servers in the Traffic Control CDN.</p>
+<p>Traffic Ops generates all the application-specific configuration files for the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s and other servers. The <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s and other servers check in with Traffic Ops at a regular interval to see if updated configuration files require application. On <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s this is done by the <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> script.</p>
+<p>Traffic Ops also runs a collection of periodic checks to determine the operating state of the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s. These periodic checks are customizable by the Traffic Ops administrative user using <a class="reference internal" href="#traffic-ops-extension">Traffic Ops Extension</a>s.</p>
+<p>Traffic Ops is in the process of migrating from Perl to Go, and currently runs as two separate applications. The Go application serves all endpoints which have been rewritten in the Go language, and transparently proxies all other requests to the old Perl application. For this reason, users and administrators should direct all requests solely at the Go-based implementation. Both applications are installed by the RPM, and both run as a single service. When the project has fully migrated to Go, the Perl application will be removed, and the RPM and service will consist solely of the Go application.</p>
+<div class="section" id="traffic-ops-extension">
+<span id="trops-ext"></span><h2>Traffic Ops Extension<a class="headerlink" href="#traffic-ops-extension" title="Permalink to this headline">¶</a></h2>
+<p>Traffic Ops Extensions are a way to enhance the basic functionality of Traffic Ops in a custom manner. There are two types of extensions:</p>
+<dl class="simple">
+<dt><a class="reference internal" href="../admin/traffic_ops/extensions.html#to-check-ext"><span class="std std-ref">Check Extensions</span></a></dt><dd><p>Allow you to add custom checks to the <span class="menuselection">Monitor ‣ Cache Checks</span> view in <a class="reference internal" href="traffic_portal.html#tp-overview"><span class="std std-ref">Traffic Portal</span></a>.</p>
+</dd>
+<dt><a class="reference internal" href="../admin/traffic_ops/extensions.html#to-datasource-ext"><span class="std std-ref">Data Source Extensions</span></a></dt><dd><p>Allow you to add data sources for the graph views and usage APIs.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="traffic_portal.html" class="btn btn-neutral float-right" title="Traffic Portal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="traffic_monitor.html" class="btn btn-neutral" title="Traffic Monitor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,350 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configuring Static DNS Entries &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Configure Delivery Service Steering" href="steering.html" />
+    <link rel="prev" title="Configure Regional Geo-blocking (RGB)" href="regionalgeo.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Quick How To Guides</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="anonymous_blocking.html">Configure Anonymous Blocking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroup_fallback.html">Configure Cache Group Fallbacks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html">CDN in a Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dnssec.html">Configure DNSSEC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_requests.html">Delivery Service Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="federations.html">Configure Federations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multi_site.html">Configure Multi-Site Origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="regionalgeo.html">Configure Regional Geo-blocking (RGB)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Configuring Static DNS Entries</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="steering.html">Configure Delivery Service Steering</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Administrator’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">Quick How To Guides</a> &raquo;</li>
+        
+      <li>Configuring Static DNS Entries</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/admin/quick_howto/static_dns.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configuring-static-dns-entries">
+<span id="static-dns-qht"></span><h1>Configuring Static DNS Entries<a class="headerlink" href="#configuring-static-dns-entries" title="Permalink to this headline">¶</a></h1>
+<p>Static DNS records (historically “entries”) can be configured within the DNS subdomain of a given <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>. In a typical scenario, the <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> will have DNS records automatically generated based on its “xml_id” and “routing name”, and the name and subdomain of the CDN to which it belongs. For example, in the <a class="reference internal" href="ciab.html#ciab"><span class="std std-ref">CDN in a Box</span></a> default environment, the “demo1” <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> has an automatically generated DNS record for <code class="docutils literal notranslate"><span class="pre">video.demo1.mycdn.ciab.test</span></code>. Configuring a static DNS record allows for further extension of this, for example, one could create an <code class="docutils literal notranslate"><span class="pre">A</span></code> record that enforces lookups of the name <code class="docutils literal notranslate"><span class="pre">foo.demo1.mycdn.ciab.test</span></code> resolve to the IPv4 address <code class="docutils literal notranslate"><span class="pre">192.0.2.1</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It’s only possible to create static DNS records within a <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>’s subdomain. That is, one could not create an <code class="docutils literal notranslate"><span class="pre">A</span></code> record for <code class="docutils literal notranslate"><span class="pre">foo.bar.mycdn.ciab.test</span></code> on the <a class="reference internal" href="ciab.html#ciab"><span class="std std-ref">CDN in a Box</span></a> <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> “demo1”, since “demo1“‘s subdomain is <code class="docutils literal notranslate"><span class="pre">demo1.mycdn.ciab.test</span></code>.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>This guide covers how to set up static DNS records using Traffic Portal. It’s also possible to do so directly using the <a class="reference internal" href="../../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> endpoint <a class="reference internal" href="../../api/staticdnsentries.html#to-api-staticdnsentries"><span class="std std-ref">staticdnsentries</span></a>.</p>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>To set up the aforementioned rule, follow these steps.</p>
+<ol class="arabic">
+<li><p>In Traffic Portal, expand the <a class="reference internal" href="../traffic_portal/usingtrafficportal.html#tp-services"><span class="std std-ref">Services</span></a> sidebar menu and select <span class="guilabel">Delivery Services</span>.</p></li>
+<li><p>From the now-displayed table of <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s, select the desired one for static DNS record configuration.</p></li>
+<li><p>From the <span class="guilabel">More</span> drop-down menu, select <span class="guilabel">Static DNS Entries</span>. The displayed table will probably be empty.</p>
+<blockquote>
+<div><div class="figure align-center" id="id1">
+<img alt="The static DNS entries table page" src="../../_images/003.png" />
+<p class="caption"><span class="caption-number">Fig. 25 </span><span class="caption-text">The Static DNS Entries Table Page</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Click on the blue <span class="guilabel">+</span> button to add a new static DNS Entry</p></li>
+<li><p>Fill in all of the fields.</p>
+<blockquote>
+<div><dl>
+<dt>Host</dt><dd><p>This is the lowest-level DNS label that will be used in the DNS record. In the <a class="reference internal" href="ciab.html#ciab"><span class="std std-ref">CDN in a Box</span></a> scenario, for example, entering <code class="docutils literal notranslate"><span class="pre">foo</span></code> here will result in a full DNS name of <code class="docutils literal notranslate"><span class="pre">foo.demo1.mycdn.ciab.test</span></code>.</p>
+</dd>
+<dt>Type</dt><dd><p>Indicates the type of DNS record that will be created. The available types are</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A</p></li>
+<li><p>AAAA</p></li>
+<li><p>CNAME</p></li>
+<li><p>TXT</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt>TTL</dt><dd><p>The <abbr title="Time To Live">TTL</abbr> of the DNS record, after which clients will be expected to re-request name resolution.</p>
+</dd>
+<dt>Address</dt><dd><p>The meaning of this field depends on the value of the “Type” field.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>If the “Type” is <code class="docutils literal notranslate"><span class="pre">A</span></code>, this must be a valid IPv4 address</p></li>
+<li><p>If the “Type” is <code class="docutils literal notranslate"><span class="pre">AAAA</span></code>, this must be a valid IPv6 address</p></li>
+<li><p>If the “Type” is <code class="docutils literal notranslate"><span class="pre">CNAME</span></code>, this must be a valid DNS name - <strong>not</strong> an IP address at all</p></li>
+<li><p>If the “Type” is <code class="docutils literal notranslate"><span class="pre">TXT</span></code>, no restrictions are placed on the content whatsoever</p></li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+<div class="figure align-center" id="id2">
+<img alt="An example static DNS entry form" src="../../_images/016.png" />
+<p class="caption"><span class="caption-number">Fig. 26 </span><span class="caption-text">An Example Static DNS Entry Form</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Click on the green <span class="guilabel">Create</span> button to finalize the changes.</p></li>
+<li><p>At this point, although the static DNS record has been created, it will have no effect until a new CDN <a class="reference internal" href="../../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> is taken. Once that is done (and enough time has passed for Traffic Router to poll for the changes), the new DNS record should be usable through the CDN’s designated Traffic Router.</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">#77 </span><span class="caption-text">Example DNS Query to Test a New Static DNS Entry within <a class="reference internal" href="ciab.html#ciab"><span class="std std-ref">CDN in a Box</span></a></span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> docker <span class="nb">exec</span> cdninabox_enroller_1 dig +noall +answer foo.demo1.mycdn.ciab.test
+<span class="go">foo.demo1.mycdn.ciab.test. 42   IN  A   192.0.2.1</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="steering.html" class="btn btn-neutral float-right" title="Configure Delivery Service Steering" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="regionalgeo.html" class="btn btn-neutral" title="Configure Regional Geo-blocking (RGB)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

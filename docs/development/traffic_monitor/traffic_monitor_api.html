@@ -1,0 +1,817 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Monitor APIs &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Traffic Stats" href="../traffic_stats.html" />
+    <link rel="prev" title="Traffic Monitor" href="../traffic_monitor.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../building.html">Building Traffic Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops.html">Traffic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops_golang.html">Traffic Ops - Go</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ort/traffic_ops_ort.html">traffic_ops_ort package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal.html">Traffic Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../traffic_monitor.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../traffic_monitor.html#software-requirements">Software Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../traffic_monitor.html#project-tree-overview">Project Tree Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../traffic_monitor.html#architecture">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../traffic_monitor.html#formatting-conventions">Formatting Conventions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../traffic_monitor.html#installing-the-developer-environment">Installing The Developer Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../traffic_monitor.html#test-cases">Test Cases</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../traffic_monitor.html#api">API</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Traffic Monitor APIs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation_guidelines.html">Documentation Guidelines</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Developer’s Guide</a> &raquo;</li>
+        
+          <li><a href="../traffic_monitor.html">Traffic Monitor</a> &raquo;</li>
+        
+      <li>Traffic Monitor APIs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/development/traffic_monitor/traffic_monitor_api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-monitor-apis">
+<span id="tm-api"></span><h1>Traffic Monitor APIs<a class="headerlink" href="#traffic-monitor-apis" title="Permalink to this headline">¶</a></h1>
+<p>The Traffic Monitor URLs below allow certain query parameters for use in controlling the data returned.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unlike <a class="reference internal" href="../../api/index.html#to-api"><span class="std std-ref">Traffic Ops API endpoints</span></a>, no authentication is required for any of these, and as such there can be no special role requirements for a user.</p>
+</div>
+<div class="section" id="publish-eventlog">
+<h2><code class="docutils literal notranslate"><span class="pre">/publish/EventLog</span></code><a class="headerlink" href="#publish-eventlog" title="Permalink to this headline">¶</a></h2>
+<p>Gets a log of recent changes in the availability of polled caches.</p>
+<div class="section" id="get">
+<h3><code class="docutils literal notranslate"><span class="pre">GET</span></code><a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Response Type</dt>
+<dd class="field-odd"><p>Array (key ‘events’ contains an array of all data)</p>
+</dd>
+</dl>
+<div class="section" id="response-structure">
+<h4>Response Structure<a class="headerlink" href="#response-structure" title="Permalink to this headline">¶</a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">event</dt>
+<dd class="field-odd"><p>an entry in the top-level <code class="docutils literal notranslate"><span class="pre">events</span></code> array</p>
+<dl class="field-list simple">
+<dt class="field-odd">description</dt>
+<dd class="field-odd"><p>A string containing short description of the event</p>
+</dd>
+<dt class="field-even">hostname</dt>
+<dd class="field-even"><p>A string containing the server’s full hostname</p>
+</dd>
+<dt class="field-odd">index</dt>
+<dd class="field-odd"><p>A serial integer that is incremented for each sequential  event</p>
+</dd>
+<dt class="field-even">isAvailable</dt>
+<dd class="field-even"><p>A boolean value indicating whether the server is available following this event</p>
+</dd>
+<dt class="field-odd">name</dt>
+<dd class="field-odd"><p>The server’s short hostname as a string</p>
+</dd>
+<dt class="field-even">time</dt>
+<dd class="field-even"><p>A UNIX timestamp as an integer</p>
+</dd>
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>The type of the server as a string</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id26">
+<div class="code-block-caption"><span class="caption-number">#104 </span><span class="caption-text">Example Response</span><a class="headerlink" href="#id26" title="Permalink to this code">¶</a></div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;events&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="nt">&quot;time&quot;</span><span class="p">:</span> <span class="mi">1538417713</span><span class="p">,</span>
+        <span class="nt">&quot;index&quot;</span><span class="p">:</span> <span class="mi">67848</span><span class="p">,</span>
+        <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;REPORTED - loadavg too high (36.37 \u003e 25.00) (health)&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;edge&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;hostname&quot;</span><span class="p">:</span> <span class="s2">&quot;edge&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;EDGE&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;isAvailable&quot;</span><span class="p">:</span><span class="kc">false</span>
+    <span class="p">}</span>
+<span class="p">]}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="publish-cachestats">
+<h2><code class="docutils literal notranslate"><span class="pre">/publish/CacheStats</span></code><a class="headerlink" href="#publish-cachestats" title="Permalink to this headline">¶</a></h2>
+<p>Statistics gathered for each cache.</p>
+<div class="section" id="id1">
+<h3><code class="docutils literal notranslate"><span class="pre">GET</span></code><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Response Type</dt>
+<dd class="field-odd"><p>Object</p>
+</dd>
+</dl>
+<div class="section" id="request-structure">
+<h4>Request Structure<a class="headerlink" href="#request-structure" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id27">
+<caption><span class="caption-number">Table 58 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id27" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 13%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hc</span></code></p></td>
+<td><p>integer</p></td>
+<td><p>The history count, number of items to display.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stats</span></code></p></td>
+<td><p>string</p></td>
+<td><p>A comma separated list of stats to display.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">wildcard</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>Controls whether specified stats should be
+treated as partial strings.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id2">
+<h4>Response Structure<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">pp</dt>
+<dd class="field-odd"><p>Stores any provided request parameters provided as a string</p>
+</dd>
+<dt class="field-even">date</dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">ctime</span></code>-like string representation of the time at which the response was served</p>
+</dd>
+<dt class="field-odd">caches</dt>
+<dd class="field-odd"><p>An object with keys that are the names of monitored <a class="reference internal" href="../../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s</p>
+<dl class="field-list simple">
+<dt class="field-odd">&lt;server name&gt;</dt>
+<dd class="field-odd"><p>Each server’s object is a collection of keys that are the names of statistics</p>
+<dl class="field-list simple">
+<dt class="field-odd">&lt;statistic name&gt;</dt>
+<dd class="field-odd"><p>The name of the statistic which this array represents. Each value in the array is one (and usually only one) object with the following structure:</p>
+<dl class="field-list simple">
+<dt class="field-odd">value</dt>
+<dd class="field-odd"><p>The statistic’s value. This is <em>always</em> a string, even if that string only contains a number.</p>
+</dd>
+<dt class="field-even">time</dt>
+<dd class="field-even"><p>An integer UNIX timestamp indicating the start time for this value of this statistic</p>
+</dd>
+<dt class="field-odd">span</dt>
+<dd class="field-odd"><p>The span of time - in milliseconds - for which this value is valid. This is determined by the polling interval for the statistic</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id28">
+<div class="code-block-caption"><span class="caption-number">#105 </span><span class="caption-text">Example Response</span><a class="headerlink" href="#id28" title="Permalink to this code">¶</a></div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="publish-cachestats-cache">
+<h2><code class="docutils literal notranslate"><span class="pre">publish/CacheStats/{{cache}}</span></code><a class="headerlink" href="#publish-cachestats-cache" title="Permalink to this headline">¶</a></h2>
+<p>Statistics gathered for only a single cache.</p>
+<div class="section" id="id3">
+<h3><code class="docutils literal notranslate"><span class="pre">GET</span></code><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Response Type</dt>
+<dd class="field-odd"><p>Object</p>
+</dd>
+</dl>
+<div class="section" id="id4">
+<h4>Request Structure<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id29">
+<caption><span class="caption-number">Table 59 </span><span class="caption-text">Request Path Parameters</span><a class="headerlink" href="#id29" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 15%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cache</span></code></p></td>
+<td><p>string</p></td>
+<td><p>The name of the cache to inspect</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id30">
+<caption><span class="caption-number">Table 60 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id30" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 13%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hc</span></code></p></td>
+<td><p>integer</p></td>
+<td><p>The history count, number of items to display.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stats</span></code></p></td>
+<td><p>string</p></td>
+<td><p>A comma separated list of stats to display.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">wildcard</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>Controls whether specified stats should be
+treated as partial strings.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id5">
+<h4>Response Structure<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<dl class="field-list simple">
+<dt class="field-odd">pp</dt>
+<dd class="field-odd"><p>Stores any provided request parameters provided as a string</p>
+</dd>
+<dt class="field-even">date</dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">ctime</span></code>-like string representation of the time at which the response was served</p>
+</dd>
+<dt class="field-odd">caches</dt>
+<dd class="field-odd"><p>An object with keys that are the names of monitored <a class="reference internal" href="../../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s - only the cache named by the <code class="docutils literal notranslate"><span class="pre">cache</span></code> request path parameter will be shown</p>
+<dl class="field-list simple">
+<dt class="field-odd">&lt;server name&gt;</dt>
+<dd class="field-odd"><p>The requested server’s object is a collection of keys that are the names of statistics</p>
+<dl class="field-list simple">
+<dt class="field-odd">&lt;statistic name&gt;</dt>
+<dd class="field-odd"><p>The name of the statistic which this array represents. Each value in the array is one (and usually only one) object with the following structure:</p>
+<dl class="field-list simple">
+<dt class="field-odd">value</dt>
+<dd class="field-odd"><p>The statistic’s value. This is <em>always</em> a string, even if that string only contains a number.</p>
+</dd>
+<dt class="field-even">time</dt>
+<dd class="field-even"><p>An integer UNIX timestamp indicating the start time for this value of this statistic</p>
+</dd>
+<dt class="field-odd">span</dt>
+<dd class="field-odd"><p>The span of time - in milliseconds - for which this value is valid. This is determined by the polling interval for the statistic</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id31">
+<div class="code-block-caption"><span class="caption-number">#106 </span><span class="caption-text">Example Response</span><a class="headerlink" href="#id31" title="Permalink to this code">¶</a></div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="publish-dsstats">
+<h2><code class="docutils literal notranslate"><span class="pre">/publish/DsStats</span></code><a class="headerlink" href="#publish-dsstats" title="Permalink to this headline">¶</a></h2>
+<p>Statistics gathered for <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s</p>
+<div class="section" id="id6">
+<h3><code class="docutils literal notranslate"><span class="pre">GET</span></code><a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Response Type</dt>
+<dd class="field-odd"><p>Object</p>
+</dd>
+</dl>
+<div class="section" id="id7">
+<h4>Request Structure<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id32">
+<caption><span class="caption-number">Table 61 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id32" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 13%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hc</span></code></p></td>
+<td><p>int</p></td>
+<td><p>The history count, number of items to display.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stats</span></code></p></td>
+<td><p>string</p></td>
+<td><p>A comma separated list of stats to display.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">wildcard</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>Controls whether specified stats should be
+treated as partial strings.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id8">
+<h4>Response Structure<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<p>TODO</p>
+</div>
+</div>
+</div>
+<div class="section" id="publish-dsstats-deliveryservice">
+<h2><code class="docutils literal notranslate"><span class="pre">/publish/DsStats/{{deliveryService}}</span></code><a class="headerlink" href="#publish-dsstats-deliveryservice" title="Permalink to this headline">¶</a></h2>
+<p>Statistics gathered for this <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> only.</p>
+<div class="section" id="id9">
+<h3><code class="docutils literal notranslate"><span class="pre">GET</span></code><a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Response Type</dt>
+<dd class="field-odd"><p>?</p>
+</dd>
+</dl>
+<div class="section" id="id10">
+<h4>Request Structure<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id33">
+<caption><span class="caption-number">Table 62 </span><span class="caption-text">Request Path Parameters</span><a class="headerlink" href="#id33" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 10%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">deliveryService</span></code></p></td>
+<td><p>string</p></td>
+<td><p>The name of the <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> to inspect</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id34">
+<caption><span class="caption-number">Table 63 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id34" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 13%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hc</span></code></p></td>
+<td><p>integer</p></td>
+<td><p>The history count, number of items to display.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stats</span></code></p></td>
+<td><p>string</p></td>
+<td><p>A comma separated list of stats to display.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">wildcard</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>Controls whether specified stats should be
+treated as partial strings.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id11">
+<h4>Response Structure<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<p>TODO</p>
+</div>
+</div>
+</div>
+<div class="section" id="publish-crstates">
+<h2><code class="docutils literal notranslate"><span class="pre">/publish/CrStates</span></code><a class="headerlink" href="#publish-crstates" title="Permalink to this headline">¶</a></h2>
+<p>The current state of this CDN per the ref:<cite>health-proto</cite>.</p>
+<div class="section" id="id12">
+<h3><code class="docutils literal notranslate"><span class="pre">GET</span></code><a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Response Type</dt>
+<dd class="field-odd"><p>?</p>
+</dd>
+</dl>
+<div class="section" id="id13">
+<h4>Response Structure<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h4>
+<p>TODO</p>
+<p>..????
+<strong>raw</strong></p>
+<p>The current state of this CDN per this Traffic Monitor only.</p>
+</div>
+</div>
+</div>
+<div class="section" id="publish-crconfig">
+<h2><code class="docutils literal notranslate"><span class="pre">/publish/CrConfig</span></code><a class="headerlink" href="#publish-crconfig" title="Permalink to this headline">¶</a></h2>
+<p>The CDN <a class="reference internal" href="../../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> (historically named a “CRConfig”) served to and consumed by Traffic Router.</p>
+<div class="section" id="id14">
+<h3><code class="docutils literal notranslate"><span class="pre">GET</span></code><a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Response Type</dt>
+<dd class="field-odd"><p>?</p>
+</dd>
+</dl>
+<div class="section" id="id15">
+<h4>Response Structure<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h4>
+<p>TODO</p>
+</div>
+</div>
+</div>
+<div class="section" id="publish-peerstates">
+<h2><code class="docutils literal notranslate"><span class="pre">/publish/PeerStates</span></code><a class="headerlink" href="#publish-peerstates" title="Permalink to this headline">¶</a></h2>
+<p>The health state information from all peer Traffic Monitors.</p>
+<div class="section" id="id16">
+<h3><code class="docutils literal notranslate"><span class="pre">GET</span></code><a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Response Type</dt>
+<dd class="field-odd"><p>?</p>
+</dd>
+</dl>
+<div class="section" id="id17">
+<h4>Request Structure<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id35">
+<caption><span class="caption-number">Table 64 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id35" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 13%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hc</span></code></p></td>
+<td><p>integer</p></td>
+<td><p>The history count, number of items to display.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stats</span></code></p></td>
+<td><p>string</p></td>
+<td><p>A comma separated list of stats to display.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">wildcard</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>Controls whether specified stats should be
+treated as partial strings.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id18">
+<h4>Response Structure<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h4>
+<p>TODO</p>
+</div>
+</div>
+</div>
+<div class="section" id="publish-stats">
+<h2><code class="docutils literal notranslate"><span class="pre">/publish/Stats</span></code><a class="headerlink" href="#publish-stats" title="Permalink to this headline">¶</a></h2>
+<p>The general statistics about Traffic Monitor.</p>
+<div class="section" id="id19">
+<h3><code class="docutils literal notranslate"><span class="pre">GET</span></code><a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Response Type</dt>
+<dd class="field-odd"><p>?</p>
+</dd>
+</dl>
+<div class="section" id="id20">
+<h4>Response Structure<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h4>
+<p>TODO</p>
+</div>
+</div>
+</div>
+<div class="section" id="publish-statsummary">
+<h2><code class="docutils literal notranslate"><span class="pre">/publish/StatSummary</span></code><a class="headerlink" href="#publish-statsummary" title="Permalink to this headline">¶</a></h2>
+<p>The summary of <a class="reference internal" href="../../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> statistics.</p>
+<div class="section" id="id21">
+<h3><code class="docutils literal notranslate"><span class="pre">GET</span></code><a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Response Type</dt>
+<dd class="field-odd"><p>?</p>
+</dd>
+</dl>
+<div class="section" id="id22">
+<h4>Request Structure<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id36">
+<caption><span class="caption-number">Table 65 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id36" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 11%" />
+<col style="width: 71%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">startTime</span></code></p></td>
+<td><p>number</p></td>
+<td><p>Window start. The number of milliseconds since the epoch.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">endTime</span></code></p></td>
+<td><p>number</p></td>
+<td><p>Window end. The number of milliseconds since the epoch.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hc</span></code></p></td>
+<td><p>integer</p></td>
+<td><p>The history count, number of items to display.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stats</span></code></p></td>
+<td><p>string</p></td>
+<td><p>A comma separated list of stats to display.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">wildcard</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>Controls whether specified stats should be
+treated as partial strings.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cache</span></code></p></td>
+<td><p>string</p></td>
+<td><p>Summary statistics for just this cache.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id23">
+<h4>Response Structure<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h4>
+<p>TODO</p>
+</div>
+</div>
+</div>
+<div class="section" id="publish-configdoc">
+<h2><code class="docutils literal notranslate"><span class="pre">/publish/ConfigDoc</span></code><a class="headerlink" href="#publish-configdoc" title="Permalink to this headline">¶</a></h2>
+<p>The overview of configuration options.</p>
+<div class="section" id="id24">
+<h3><code class="docutils literal notranslate"><span class="pre">GET</span></code><a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Response Type</dt>
+<dd class="field-odd"><p>?</p>
+</dd>
+</dl>
+<div class="section" id="id25">
+<h4>Response Structure<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h4>
+<p>TODO</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../traffic_stats.html" class="btn btn-neutral float-right" title="Traffic Stats" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../traffic_monitor.html" class="btn btn-neutral" title="Traffic Monitor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

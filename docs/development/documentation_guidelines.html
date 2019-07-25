@@ -1,0 +1,493 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Documentation Guidelines &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Traffic Ops API" href="../api/index.html" />
+    <link rel="prev" title="Traffic Stats" href="traffic_stats.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="building.html">Building Traffic Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops.html">Traffic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops_golang.html">Traffic Ops - Go</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ort/traffic_ops_ort.html">traffic_ops_ort package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal.html">Traffic Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router.html">Traffic Router</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_monitor.html">Traffic Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_stats.html">Traffic Stats</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Documentation Guidelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#building">Building</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#writing">Writing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#formatting">Formatting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#documenting-api-routes">Documenting API Routes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#extension">Extension</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Developer’s Guide</a> &raquo;</li>
+        
+      <li>Documentation Guidelines</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/development/documentation_guidelines.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="documentation-guidelines">
+<span id="docs-guide"></span><h1>Documentation Guidelines<a class="headerlink" href="#documentation-guidelines" title="Permalink to this headline">¶</a></h1>
+<p>The Apache Traffic Control documentation is written in <abbr title="reStructuredText">RST</abbr> and uses the <a class="reference external" href="http://www.sphinx-doc.org/en/master/">Sphinx documentation build system</a> to convert these into the desired output document format. This collection of guidelines does <strong>not</strong> aim to be a primer in <abbr title="reStructuredText">RST</abbr>, but merely a style guide regarding how the components of the document ought to be formatted and structured. It may also point out some features of the markup language of which a writer may not be aware.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="http://docutils.sourceforge.net/rst.html">The docutils RST reference</a>.</p>
+</div>
+<div class="section" id="building">
+<h2>Building<a class="headerlink" href="#building" title="Permalink to this headline">¶</a></h2>
+<p>To build the documentation, see <a class="reference internal" href="building.html#docs-build"><span class="std std-ref">Building This Documentation</span></a>.</p>
+</div>
+<div class="section" id="writing">
+<h2>Writing<a class="headerlink" href="#writing" title="Permalink to this headline">¶</a></h2>
+<p>When writing documentation, the most important things to remember are:</p>
+<ul class="simple">
+<li><p>Spell Check. Most text editors have this built in (e.g. <kbd class="kbd docutils literal notranslate">F6</kbd> in Sublime Text) or have plugins that will do this for you.</p></li>
+<li><p>Proof-Read. Spell-checkers won’t catch grammatical errors or poor wording, so it’s very important to actually proof-read all documentation <em>before</em> submitting it in a Pull Request.</p></li>
+<li><p>Make Sure the Documentation Actually Builds. Please actually verify the documentation not only builds, but builds <em>correctly</em>. That means there probably shouldn’t be any warnings, no malformed tables etc. and it also means that new documentation is actually accessible once built. It’s not enough to create a new <code class="file docutils literal notranslate"><em><span class="pre">something</span></em><span class="pre">.rst</span></code> file, that file must actually be linked to from some other, already included document. Some warnings may be considered acceptable, but do be prepared to defend them.</p></li>
+<li><p>Traffic Ops UI is Dead. Do not ever create documentation that references or includes images of the Traffic Ops UI. That is officially dead now, and if the documentation being created is best made with references to a user-friendly UI, such references, examples and/or images should all be to/of Traffic Portal.</p></li>
+</ul>
+<div class="section" id="formatting">
+<h3>Formatting<a class="headerlink" href="#formatting" title="Permalink to this headline">¶</a></h3>
+<p>Whenever possible, avoid specifying manual line breaks, except as required by <abbr title="reStructuredText">RST</abbr> syntax. Extremely long lines will be wrapped by the user-agent, compiler, or output format as necessary. A single blank line may be used to separate paragraphs. This means that the ‘flow break’ character should never need to be used, i.e. no line in the documentation should ever match the regular expression <code class="regexp docutils literal notranslate"><span class="pre">^\|$</span></code>.</p>
+<div class="section" id="abbreviations">
+<h4>Abbreviations<a class="headerlink" href="#abbreviations" title="Permalink to this headline">¶</a></h4>
+<p>When using an abbreviation, acronym or initialism for the first time on a page, it <strong>must</strong> be named fully and followed by the abbreviation in parentheses e.g. “Fully Qualified Domain Name (FQDN)”. Strictly speaking, the <em>best</em> way to create an abbreviation is to always fully name it in parentheses immediately following the abbreviation using the <code class="docutils literal notranslate"><span class="pre">:abbr:</span></code> <abbr title="reStructuredText">RST</abbr> text role e.g. <code class="docutils literal notranslate"><span class="pre">:abbr:`FQDN</span> <span class="pre">(Fully</span> <span class="pre">Qualified</span> <span class="pre">Domain</span> <span class="pre">Name)`</span></code>, but it’s not reasonable to expect that of everyone. Some abbreviations can be assumed to be understood by the documentation’s target audience, and do not need full naming; they are general, basic networking and computing terms including (though not strictly limited to):</p>
+<ul class="simple">
+<li><p>API</p></li>
+<li><p>CSS</p></li>
+<li><p>DNS</p></li>
+<li><p>HTML</p></li>
+<li><p>HTTP</p></li>
+<li><p>HTTPS</p></li>
+<li><p>IP/IPv4/IPv6</p></li>
+<li><p>ISO</p></li>
+<li><p>JPG</p></li>
+<li><p>JSON</p></li>
+<li><p>PDF</p></li>
+<li><p>PNG</p></li>
+<li><p>RPM</p></li>
+<li><p>SQL</p></li>
+<li><p>SSL</p></li>
+<li><p>SVG</p></li>
+<li><p>TCP</p></li>
+<li><p>TLS</p></li>
+<li><p>UDP</p></li>
+<li><p>URL</p></li>
+<li><p>URI</p></li>
+<li><p>XML</p></li>
+<li><p>YAML</p></li>
+</ul>
+<p>Please do <strong>not</strong> abbreviate Traffic Control terms e.g. <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>, <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>. See <a class="reference internal" href="#terms">Terms</a> for the proper way to use these terms.</p>
+</div>
+<div class="section" id="floating-objects">
+<h4>Floating Objects<a class="headerlink" href="#floating-objects" title="Permalink to this headline">¶</a></h4>
+<p>“Floating objects” are images, tables, source code listings, and equations. These may not be placed relative to other content exactly as shown in the source <abbr title="reStructuredText">RST</abbr> document, as it may be necessary to move them for e.g. page breaks in PDF documents so they are not split across pages.</p>
+<div class="section" id="figures">
+<h5>Figures<a class="headerlink" href="#figures" title="Permalink to this headline">¶</a></h5>
+<p>Images should <em>always</em> be included inside of a <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">figure</span></code> directive. <strong>Always</strong> caption figures to make their purpose clear, as well as to make them directly link-able inside of the document and include them in figure listings. Though not syntactically required, figures should, in general be sized explicitly. The size should not be <em>absolute</em>, however; i.e. use <code class="docutils literal notranslate"><span class="pre">70%</span></code> not <code class="docutils literal notranslate"><span class="pre">540px</span></code>. Figures should, in general, be centered on the page. When drawings, graphs, or diagrams are included they should ideally be provided in both SVG and PNG formats, and included using globbing as <code class="docutils literal notranslate"><span class="pre">filename.*</span></code>. This will use the appropriate format for the output type.</p>
+</div>
+<div class="section" id="source-code-listings">
+<h5>Source Code Listings<a class="headerlink" href="#source-code-listings" title="Permalink to this headline">¶</a></h5>
+<p>Do not ever use the double-colon (<code class="docutils literal notranslate"><span class="pre">::</span></code> ) directive to mark a section of text as a source code listing. This not only doesn’t support direct linking or provide a caption, but also uses the default “domain” - which is Python - for syntax highlighting. Instead, use <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">code-block</span></code> to include source code in the documentation. Source code must always be left-aligned, so do not provide any configuration options that would alter the default.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">#107 </span><span class="caption-text">Example Usage of the code-block Directive</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">code-block</span><span class="p">::</span> syntax
+    <span class="nc">:caption:</span> <span class="nf">A short, meaningful caption</span>
+    <span class="nc">:linenos:</span>
+
+    <span class="s">``:linenos:``</span> is an optional field which will include line numbers in the listing. &#39;syntax&#39;
+    should be the name of a valid Pygments syntax.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="tables">
+<h5>Tables<a class="headerlink" href="#tables" title="Permalink to this headline">¶</a></h5>
+<p>Tables should be included in <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">table</span></code> directive bodies, <strong>never</strong> as a floating, block-quoted tabular environment. This ensures that all tables will be captioned, which makes their purpose clear and makes them directly link-able in the output as well as includes them in table listings. Tables should avoid wrapping lines until they reach 215 characters in width in the source <abbr title="reStructuredText">reStructuredText</abbr> document (including indention which should be counted as 4 characters per TAB). No table may ever exceed 215 characters in width. Tables should, in general be left-aligned (which is the default configuration). For the usage or command-line flags or options of a utility, use an “option list” or the <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">program</span></code> and <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">option</span></code> directives instead of a table.</p>
+</div>
+</div>
+<div class="section" id="indentation">
+<h4>Indentation<a class="headerlink" href="#indentation" title="Permalink to this headline">¶</a></h4>
+<p>Firstly, indentation of a text paragraph is rarely required. Doing so does not “link” the text with a heading in any way, text falls beneath a section or sub-section purely by being literally <em>beneath</em> that heading. When placing source code into a source code listing, any indentation may be used for the source code (typically should represent the actual preferred indentation of the code’s respective project were it included in the repository), but to avoid ambiguity in indentation used in the documentation versus indentation used in the source code, all documentation indentation should be done using <em>one (1) TAB character</em> and <strong>never spaces</strong>.</p>
+</div>
+<div class="section" id="lists">
+<h4>Lists<a class="headerlink" href="#lists" title="Permalink to this headline">¶</a></h4>
+<p>When making a list, consider first what <em>kind</em> of list it is. A list only needs to be enumerated if the enumeration has meaning e.g. a list of hierarchically ordered data or a sequential list of steps to accomplish a task or desired state. When enumerating list items, use <code class="docutils literal notranslate"><span class="pre">#.</span></code> instead of literal numbers, as this will enumerate automatically which makes modification of the list much easier at a later date. Unordered lists may use <code class="docutils literal notranslate"><span class="pre">-</span></code> or <code class="docutils literal notranslate"><span class="pre">*</span></code> for each item. Lists do not need to be indented beyond the current paragraph level. If a list is an unordered list of terms and their definitions, use a “definition list” instead of any other kind of list. If a list is a list of fields in a document or object, use a “field list” instead of any other kind of list. If a list is a list of parameters, arguments, or flags used by a command-line utility, use an “option list” instead of any other kind of list.</p>
+</div>
+<div class="section" id="notes-and-footnotes">
+<h4>Notes and Footnotes<a class="headerlink" href="#notes-and-footnotes" title="Permalink to this headline">¶</a></h4>
+<p>Instead of <code class="docutils literal notranslate"><span class="pre">**NOTE**</span></code> or similar, consider using the <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">note</span></code> directive, or one of the appropriate admonitions supported by <abbr title="reStructuredText">RST</abbr>:</p>
+<dl>
+<dt>attention</dt><dd><p>The default admonition that calls attention to something without any specific semantics or attached context. Use when none of the others seem appropriate.</p>
+</dd>
+<dt>caution</dt><dd><p>Includes cautionary information. Should be used when advising the reader that the containing section includes instructions or information that frequently confuse people/trip people up, and how to avoid these pitfalls.</p>
+</dd>
+<dt>danger</dt><dd><p>Advises the reader of potential security risks or system damage that could occur as a result of following instructions in the containing section, or as a result of making assumptions about and/or improperly utilizing information in the containing section.</p>
+</dd>
+<dt>error</dt><dd><p>Denotes an error. This has limited uses in the <abbr title="Apache Traffic Control">ATC</abbr> documentation.</p>
+</dd>
+<dt>hint</dt><dd><p>Offers a hint to nudge readers in the direction of a solution. This has limited uses in the <abbr title="Apache Traffic Control">ATC</abbr> documentation.</p>
+</dd>
+<dt>impl-detail</dt><dd><p>Contains information describing the details of an implementation of a feature described in the containing section. For an example, see <a class="reference internal" href="../overview/delivery_services.html#ds-dscp"><span class="std std-ref">the DSCP section of the Delivery Services page</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is an <a class="reference internal" href="#extension">extension</a> provided by the <abbr title="Apache Traffic Control">ATC</abbr> documentation build system, and will not appear in the Sphinx project documentation nor the reStructuredText standard.</p>
+</div>
+</dd>
+<dt>important</dt><dd><p>Contains information that is important to consider while reading the containing section. Typically content that is related to a section’s content in an important way should appear as content of that section, but if a section is in danger of readers “skimming” it for information this can be useful to catch their eye.</p>
+</dd>
+<dt>note</dt><dd><p>Used to segregate content that is only tangentially related to the containing section, but is noteworthy nonetheless. Historically the most used admonition, containing caveats, exceptions etc.</p>
+</dd>
+<dt>tip</dt><dd><p>Provides the reader with information that can be helpful - particularly to users/administrators/developers new to <abbr title="Apache Traffic Control">ATC</abbr> - but not strictly necessary to understand the containing section.</p>
+</dd>
+<dt>warning</dt><dd><p>Warns the reader about possible unintended consequences of following instructions/utilizing information in the containing section. If the behavior warned about constitutes a security risk and/or serious damage to one or more systems - including clients and origins - please use <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">danger</span></code> instead.</p>
+</dd>
+</dl>
+<p>In a similar vein, instead of e.g. “(See also: some-link-or-reference)” please use the special <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">seealso</span></code> admonition. If the same admonition is required more than twice on the same page, it most likely ought to be a footnote instead. Footnotes should ideally use human-readable labels or, failing that, be labeled sequentially in the order of appearance. Footnotes should appear at the end of the major section in which they first or last appear. In practice, however, placement of the footnote is left to the writer’s discretion.</p>
+</div>
+<div class="section" id="section-headings">
+<h4>Section Headings<a class="headerlink" href="#section-headings" title="Permalink to this headline">¶</a></h4>
+<p>When deciding on the name of a section heading, it is important to select a name that both accurately reflects the content it contains and is suitable for reference later e.g. “Health Protocol” is good, but “Configuring Multi-Site Origin” as the title of a page which not only explains MSO configuration but also the concept is not good. Section headings follow a hierarchy, and for consistency’s sake should follow this particular hierarchy:</p>
+<ol class="arabic">
+<li><p>Document title. There should only be one of these per page, and it should be the first heading on the page. This will also make the contained text the “Page Title” in HTML output (i.e. <code class="docutils literal notranslate"><span class="pre">&lt;title&gt;Page</span> <span class="pre">Title&lt;/title&gt;</span></code> in the <code class="docutils literal notranslate"><span class="pre">&lt;head&gt;</span></code>).</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">#108 </span><span class="caption-text">Document Title</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">**************</span>
+<span class="gh">Document Title</span>
+<span class="gh">**************</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Section header. This should represent a main topic of the page</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">#109 </span><span class="caption-text">Section Header</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Section Header</span>
+<span class="gh">==============</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Subsection header. This should represent a key piece of a main topic on the page</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">#110 </span><span class="caption-text">Subsection Header</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Subsection Header</span>
+<span class="gh">-----------------</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Sub-Subsection header. This represents a group of content logically separate from the rest of the subsection but still related to the content thereof. It is also acceptable to use this as an “aside” containing information only tangentially related to the subsection content.</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-number">#111 </span><span class="caption-text">Sub-Subsection Header</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Sub-Subsection Header</span>
+<span class="gh">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Aside or Sub-Sub-Subsection header. This is the lowest denomination of header, and should almost always be used exclusively for “asides” which contain information only tangentially related to the sub-subsection content.</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-number">#112 </span><span class="caption-text">Aside</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Aside</span>
+<span class="gh">&#39;&#39;&#39;&#39;&#39;</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+<p>Section headings should <em>always</em> follow this order exactly, and <strong>never</strong> skip levels (which will generally cause a failure to compile properly). These can be thought of as the equivalents of the HTML tags <code class="docutils literal notranslate"><span class="pre">&lt;h1&gt;</span></code> through <code class="docutils literal notranslate"><span class="pre">&lt;h5&gt;</span></code>, respectively. Sectioning should never require more specificity than can be provided by an “Aside”. Please do not use <strong>bold text</strong> in lieu of a proper section heading. When referencing information in another section on the same page, please do not refer to the current placement of the referenced content relative to the referencing content. For example, instead of “as discussed below”, use “as discussed in <a class="reference internal" href="#terms">Terms</a>”.</p>
+</div>
+<div class="section" id="terms">
+<h4>Terms<a class="headerlink" href="#terms" title="Permalink to this headline">¶</a></h4>
+<p>Please always spell out the entire name of any Traffic Control terms used in the definition. For example, a collection of <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s associated with a certain physical location is called a “Cache Group”, not a “CG”, “cachegroup”, “cache location” etc. A subdomain and collection of <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s responsible collectively for routing traffic to a specific origin is called a <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>”, not a “DS”, “deliveryservice” etc. Similarly, always use <em>full</em> permissions role names e.g. “operations” not “oper”. This will ensure the <a class="reference internal" href="../glossary.html#glossary"><span class="std std-ref">Glossary</span></a> is actually helpful. To link a term to the glossary, use the <code class="docutils literal notranslate"><span class="pre">:term:</span></code> role. This should be done for virtually every use of a Traffic Control term, e.g. <code class="docutils literal notranslate"><span class="pre">:term:`Cache</span> <span class="pre">Group`</span></code> will render as: <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>.
+Generally speaking, be wary of using the word “cache”. To most people that means the <em>actual</em> cache on a hard disk somewhere. This word is frequently confused with ” <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>”, which - when accurate - is always preferred over “cache”.</p>
+</div>
+</div>
+<div class="section" id="documenting-api-routes">
+<h3>Documenting API Routes<a class="headerlink" href="#documenting-api-routes" title="Permalink to this headline">¶</a></h3>
+<p>Follow all of the formatting conventions in <a class="reference internal" href="#formatting">Formatting</a>. Maintain the structural format of the API documentation as outlined in the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> section. API routes that have variable paths e.g. <a class="reference internal" href="../api/profiles_id.html#to-api-profiles-id"><span class="std std-ref">profiles/{{ID}}</span></a> should use <a class="reference external" href="https://mustache.github.io/mustache.5.html">mustache templates</a> <strong>not</strong> the Mojolicious-specific <code class="docutils literal notranslate"><span class="pre">:param</span></code> syntax. This keeps the templates generic, familiar, and reflects the inability of a request path to contain procedural instructions or program logic. Please do not include the <code class="docutils literal notranslate"><span class="pre">/api/1.x/</span></code> part of the request path for Traffic Ops API endpoints. If an endpoint is unavailable prior to a specific version, use the <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">versionadded</span></code> directive to indicate that version. Likewise, do not make a new page for an endpoint when it changes across versions, instead call out the changes using the <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">versionchanged</span></code> directive. If an endpoint should not be used because newer endpoints provide the same functionality in a better way, use the <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">deprecated</span></code> directive to link to them and explain why they are better.</p>
+<p>When documenting an API route, be sure to include <em>all</em> methods, request/response JSON payload fields, path parameters, and query parameters, whether they are optional or not. When describing a field in a JSON payload, remember that JSON does not have “hashes” it has “objects” or even “maps”. When documenting path parameters such as <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a> <a class="reference internal" href="../overview/profiles_and_parameters.html#profile-id"><span class="std std-ref">ID</span></a> in <a class="reference internal" href="../api/profiles_id.html#to-api-profiles-id"><span class="std std-ref">profiles/{{ID}}</span></a>, consider that the endpoint path cannot be formed without defining <strong>all</strong> path parameters, and so to label them as “required” is superfluous.</p>
+<p>The “Response Example” must <strong>always</strong> exist. “TODO” is <strong>not</strong> an acceptable Response Example for new endpoints. The “Request Example” must only exist if the request requires data in the body (most commonly this will be for <code class="docutils literal notranslate"><span class="pre">PATCH</span></code>, <code class="docutils literal notranslate"><span class="pre">POST</span></code> and <code class="docutils literal notranslate"><span class="pre">PUT</span></code> methods). It is, however, strongly advised that a request example be given if the endpoint takes Query Parameters or Path Parameters, and it is required if the Response Example is a response to a request that used a query or path parameter. If the Request Example <em>is</em> present, then the Response Example <strong>must</strong> be the appropriate response <strong>to that request</strong>. When generating Request/Response Examples, attempt to use the <a class="reference internal" href="../admin/quick_howto/ciab.html#ciab"><span class="std std-ref">CDN in a Box</span></a> environment whenever possible to provide a common basis and familiarity to new users who likely set up “CDN in a Box” as a primer for understanding CDNs/Traffic Control. Responses are sometimes hundreds of lines long, and in those cases only as much as is required for an understanding of the structure needs to be included in the example - along with a note mentioning that the output was trimmed. Also always attempt to place structure explanations before any example so that the content of the example can be understood by the reader (though in general the placement of a floating environment like a code listing is not known at compile-time). Whenever possible, the Request and Response examples should include the <em>complete HTTP stack</em>, which captures behavior like Query Parameters, Path Parameters and HTTP cookie operations like those used by e.g. <a class="reference internal" href="../api/logs.html#to-api-logs"><span class="std std-ref">logs</span></a>. A few caveats to the “include all headers” rule:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Host</span></code> header ought to reflect the actual hostname of the Traffic Ops server - which should be “trafficops.infra.ciab.test” for the CDN in a Box environment. This can be polluted when requests are made to a remotely running CDN in a Box on a different server.</p></li>
+<li><p>The “mojolicious” cookie is extremely long and potentially insecure to publicly show. As such, a placeholder should be used for its value, preferably “…”.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Content-Type</span></code> header sent by <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/curl(1)">curl(1)</a></em> (and possibly others) is always <code class="docutils literal notranslate"><span class="pre">application/x-www-form-urlencoded</span></code> regardless of the actual content (unless overridden). Virtually all payloads accepted by the API must be JSON, so this should be modified to reflect that when appropriate e.g. <code class="docutils literal notranslate"><span class="pre">application/json</span></code>.</p></li>
+<li><p>API output is often beautified by inserting line breaks and indentation, which will make the <code class="docutils literal notranslate"><span class="pre">Content-Length</span></code> header (if any) incorrect. Don’t worry about fixing that - just try to leave the output as close as possible to what will actually be returned by leaving it the way it is.</p></li>
+</ul>
+<p>File names should reflect the request path of the endpoint, e.g. a file for an endpoint of the Traffic Ops API <code class="docutils literal notranslate"><span class="pre">/api/1.7/foo/{{fooID}}/bar/{{barID}}</span></code> should be named <code class="docutils literal notranslate"><span class="pre">foo_fooID_bar_barID.rst</span></code>. Similarly, reference labels linking to the document title for API route pages should follow the convention: <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;-api-&lt;path&gt;</span></code> in all lowercase where <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;</span></code> is an abbreviated Traffic Control component name e.g. <code class="docutils literal notranslate"><span class="pre">to</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;path&gt;</span></code> is the request path e.g. <code class="docutils literal notranslate"><span class="pre">foo_bar</span></code>. So a label for an endpoint of the Traffic Ops API at <code class="docutils literal notranslate"><span class="pre">/api/1.7/foo_bar/{{ID}}</span></code> should be <code class="docutils literal notranslate"><span class="pre">to-api-foo_bar-id</span></code>.</p>
+</div>
+<div class="section" id="extension">
+<h3>Extension<a class="headerlink" href="#extension" title="Permalink to this headline">¶</a></h3>
+<p>The <abbr title="Apache Traffic Control">ATC</abbr> documentation provides an extension to the standard roles and directives offered by Sphinx, located at <code class="file docutils literal notranslate"><span class="pre">docs/source/_ext/atc.py</span></code>. It provides the following roles and directives:</p>
+<dl>
+<dt>impl-detail</dt><dd><p>An admonition directive used to contain implementation-specific notes on a subject.</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-number">#113 </span><span class="caption-text">Example impl-detail usage</span><a class="headerlink" href="#id7" title="Permalink to this code">¶</a></div>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">impl-detail</span><span class="p">::</span> Implementation-specific information here.
+</pre></div>
+</div>
+</div>
+<p>This example usage renders like so:</p>
+<div class="admonition">
+<p class="admonition-title">Implementation Detail</p>
+<p>Implementation-specific information here.</p>
+</div>
+</dd>
+<dt>atc-file</dt><dd><p>Creates a link to the specified file on the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch of the <abbr title="Apache Traffic Control">ATC</abbr> repository. For example, “<code class="docutils literal notranslate"><span class="pre">:atc-file:`docs/source/development/documentation_guidelines`</span></code>” renders as a link to the source of this documenting section like so: <a class="reference external" href="https://github.com/apache/trafficcontrol/tree/master/docs/source/development/documentation_guidelines"><code class="docutils literal notranslate"><span class="pre">docs/source/development/documentation_guidelines</span></code></a>. You can also link to directories as well as files.</p>
+</dd>
+<dt>issue</dt><dd><p>A text role that can be used to easily link to GitHub Issues for the <abbr title="Apache Traffic Control">ATC</abbr> repository. For example, “<code class="docutils literal notranslate"><span class="pre">:issue:`1`</span></code>” renders as: <a class="reference external" href="https://github.com/apache/trafficcontrol/issues/1">Issue #1</a>.</p>
+</dd>
+<dt>pr</dt><dd><p>A text role that can be used to easily link to GitHub Pull Requests for the <abbr title="Apache Traffic Control">ATC</abbr> repository. For example, “<code class="docutils literal notranslate"><span class="pre">:pr:`1`</span></code>” renders as <a class="reference external" href="https://github.com/apache/trafficcontrol/pull/1">Pull Request 1</a>.</p>
+</dd>
+<dt>pull-request</dt><dd><p>A synonym for <code class="docutils literal notranslate"><span class="pre">pr</span></code></p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../api/index.html" class="btn btn-neutral float-right" title="Traffic Ops API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="traffic_stats.html" class="btn btn-neutral" title="Traffic Stats" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,1368 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Router Administration &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Traffic Router - Migrating to 3.0" href="traffic_router/migrationto2-3.html" />
+    <link rel="prev" title="Traffic Monitor Administration" href="traffic_monitor.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Router Administration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-traffic-router">Installing Traffic Router</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-traffic-router">Configuring Traffic Router</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-traffic-router-profile">The Traffic Router Profile</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#consistent-hashing">Consistent Hashing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#consistent-hashing-patterns">Consistent Hashing Patterns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#consistent-hash-query-parameters">Consistent Hash Query Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dnssec">DNSSEC</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#operation">Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rolling-zone-signing-keys">Rolling Zone Signing Keys</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting-and-log-files">Troubleshooting and Log Files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#event-log-file-format">Event Log File Format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#http-specifics">HTTP Specifics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dns-specifics">DNS Specifics</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#deep-caching">Deep Caching</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#what-you-need">What You Need</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">How it Works</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#steering-feature">Steering Feature</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id5">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-difference-between-steering-and-client-steering">The Difference Between STEERING and CLIENT_STEERING</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuration">Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#https-for-http-delivery-services">HTTPS for HTTP Delivery Services</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#protocol-options">Protocol Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#certificate-retrieval">Certificate Retrieval</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#certificate-chain-ordering">Certificate Chain Ordering</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#suggested-way-of-setting-up-an-https-delivery-service">Suggested Way of Setting up an HTTPS Delivery Service</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#router-load-testing">Router Load Testing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#running-the-load-tests">Running the Load Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#tuning-recommendations">Tuning Recommendations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick_howto/index.html">Quick How To Guides</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Administrator’s Guide</a> &raquo;</li>
+        
+      <li>Traffic Router Administration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/admin/traffic_router.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-router-administration">
+<span id="tr-admin"></span><h1>Traffic Router Administration<a class="headerlink" href="#traffic-router-administration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>CentOS 7</p></li>
+<li><p>4 CPUs</p></li>
+<li><p>8GB of RAM</p></li>
+<li><p>Successful install of Traffic Ops (usually on another machine)</p></li>
+<li><p>Successful install of Traffic Monitor (usually on another machine)</p></li>
+<li><p>Administrative access to Traffic Ops</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Hardware requirements are generally doubled if <a class="reference internal" href="#tr-dnssec"><span class="std std-ref">DNSSEC</span></a> is enabled</p>
+</div>
+</div>
+<div class="section" id="installing-traffic-router">
+<h2>Installing Traffic Router<a class="headerlink" href="#installing-traffic-router" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>If no suitable <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a> exists, create a new <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a> for Traffic Router via the <span class="guilabel">+</span> button on the <a class="reference internal" href="traffic_portal/usingtrafficportal.html#tp-configure-profiles"><span class="std std-ref">Profiles</span></a> page in Traffic Portal</p>
+<blockquote>
+<div><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Traffic Ops will <em>only</em> recognize a <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a> as assignable to a Traffic Router if its <a class="reference internal" href="../overview/profiles_and_parameters.html#profile-name"><span class="std std-ref">Name</span></a> starts with the prefix <code class="docutils literal notranslate"><span class="pre">ccr-</span></code>. The reason for this is a legacy limitation related to the old name for Traffic Router (Comcast Cloud Router), and will (hopefully) be rectified in the future as the old Perl parts of Traffic Ops are re-written in Go.</p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Enter the Traffic Router server into Traffic Portal on the <a class="reference internal" href="traffic_portal/usingtrafficportal.html#tp-configure-servers"><span class="std std-ref">Servers</span></a> page (or via the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a>), assign to it a Traffic Router <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a>, and ensure that its status is set to <code class="docutils literal notranslate"><span class="pre">ONLINE</span></code>.</p></li>
+<li><p>Ensure the <abbr title="Fully Qualified Domain Name">FQDN</abbr> of the Traffic Router is resolvable in DNS. This <abbr title="Fully Qualified Domain Name">FQDN</abbr> must be resolvable by the clients expected to use this CDN.</p></li>
+<li><p>Install a Traffic Router server package, either from source or using a <code class="file docutils literal notranslate"><span class="pre">traffic_router-</span><em><span class="pre">version</span> <span class="pre">string</span></em><span class="pre">.rpm</span></code> package generated using the instructions in <a class="reference internal" href="../development/building.html#dev-building"><span class="std std-ref">Building Traffic Control</span></a>.</p>
+<blockquote>
+<div><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.0: </span>As of version 3.0, Traffic Router depends upon a package called <code class="docutils literal notranslate"><span class="pre">tomcat</span></code>. This package should have been created when Traffic Router was built. If installing the <code class="docutils literal notranslate"><span class="pre">traffic_router</span></code> produces a depenedency error, make sure that the <code class="docutils literal notranslate"><span class="pre">tomcat</span></code> package is available in an accessible <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> repository.</p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Edit <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_router/conf/traffic_monitor.properties</span></code> and specify the correct online Traffic Monitor(s) for your CDN.</p>
+<blockquote>
+<div><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#tr-config-files"><span class="std std-ref">Traffic Router Configuration File Parameters</span></a></p>
+</div>
+<dl class="simple">
+<dt><code class="file docutils literal notranslate"><span class="pre">traffic_monitor.properties</span></code></dt><dd><p>URL that should normally point to this file, e.g. <code class="docutils literal notranslate"><span class="pre">traffic_monitor.properties=file:/opt/traffic_router/conf/traffic_monitor.properties</span></code></p>
+</dd>
+<dt><code class="file docutils literal notranslate"><span class="pre">traffic_monitor.properties.reload.period</span></code></dt><dd><p>Period to wait (in milliseconds) between reloading this file, e.g. <code class="docutils literal notranslate"><span class="pre">traffic_monitor.properties.reload.period=60000</span></code></p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>Start Traffic Router. This is normally done by starting its <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemd(1)">systemd(1)</a></em> service. <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">start</span> <span class="pre">traffic_router</span></code> , and test DNS lookups against that server to be sure it’s resolving properly. with e.g. <code class="docutils literal notranslate"><span class="pre">dig</span></code> or <code class="docutils literal notranslate"><span class="pre">curl</span></code>. Also, because previously taken CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a>s will be cached, they need to be removed manually to actually be reloaded. This file should be located at <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_router/db/cr-config.json</span></code>. This should be done before starting or restarting Traffic Router.</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-number">#37 </span><span class="caption-text">Starting and Testing Traffic Router</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[root@trafficrouter /]#</span> systemctl start traffic_router
+<span class="gp">[root@trafficrouter /]#</span> dig @localhost mycdn.ciab.test
+
+<span class="go">; &lt;&lt;&gt;&gt; DiG 9.9.4-RedHat-9.9.4-72.el7 &lt;&lt;&gt;&gt; @localhost mycdn.ciab.test</span>
+<span class="go">; (2 servers found)</span>
+<span class="go">;; global options: +cmd</span>
+<span class="go">;; Got answer:</span>
+<span class="go">;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 27109</span>
+<span class="go">;; flags: qr aa rd; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 0</span>
+<span class="go">;; WARNING: recursion requested but not available</span>
+
+<span class="go">;; QUESTION SECTION:</span>
+<span class="go">;mycdn.ciab.test.       IN  A</span>
+
+<span class="go">;; AUTHORITY SECTION:</span>
+<span class="go">mycdn.ciab.test.    30  IN  SOA trafficrouter.infra.ciab.test. twelve_monkeys.mycdn.ciab.test. 2019010918 28800 7200 604800 30</span>
+
+<span class="go">;; Query time: 28 msec</span>
+<span class="go">;; SERVER: ::1#53(::1)</span>
+<span class="go">;; WHEN: Wed Jan 09 21:27:57 UTC 2019</span>
+<span class="go">;; MSG SIZE  rcvd: 104</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Perform a CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a>.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Once the <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> is taken, live traffic will be sent to the new Traffic Routers provided that their status has been set to <code class="docutils literal notranslate"><span class="pre">ONLINE</span></code>.</p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Ensure that the parent domain (e.g.: <code class="docutils literal notranslate"><span class="pre">cdn.local</span></code>) for the CDN’s top level domain (e.g.: <code class="docutils literal notranslate"><span class="pre">ciab.cdn.local</span></code>) contains a delegation (Name Server records) for the new Traffic Router, and that the value specified matches the <abbr title="Fully Qualified Domain Name">FQDN</abbr> of the Traffic Router.</p></li>
+</ol>
+</div>
+<div class="section" id="configuring-traffic-router">
+<h2>Configuring Traffic Router<a class="headerlink" href="#configuring-traffic-router" title="Permalink to this headline">¶</a></h2>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.5: </span>Many of the configuration files under <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_router/conf</span></code> are now only needed to override the default configuration values for Traffic Router. Most of the given default values will work well for any CDN. Critical values that must be changed are hostnames and credentials for communicating with other Traffic Control components such as Traffic Ops and Traffic Monitor. Pre-existing installations that store configuration files under <code class="docutils literal notranslate"><span class="pre">/opt/traffic_router/conf</span></code> will still be used and honored for Traffic Router 1.5 onward.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.0: </span>Traffic Router 3.0 has been converted to a formal Tomcat instance, meaning that is now installed separately from the Tomcat servlet engine. The Traffic Router installation package contains all of the Traffic Router-specific software, configuration and startup scripts including some additional configuration files needed for Tomcat. These new configuration files can all be found in the <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_router/conf</span></code> directory and generally serve to override Tomcat’s default settings.</p>
+</div>
+<p>For the most part, the configuration files and <a class="reference internal" href="../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a> used by Traffic Router are used to bring it online and start communicating with various Traffic Control components. Once Traffic Router is successfully communicating with Traffic Control, configuration should mostly be performed in Traffic Portal, and will be distributed throughout Traffic Control via CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> process.</p>
+<span id="tr-config-files"></span><table class="docutils align-default" id="id7">
+<caption><span class="caption-number">Table 32 </span><span class="caption-text">Traffic Router Configuration File Parameters</span><a class="headerlink" href="#id7" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 21%" />
+<col style="width: 40%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Configuration File</p></th>
+<th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="4"><p>traffic_monitor.properties</p></td>
+<td><p>traffic_monitor.bootstrap.hosts</p></td>
+<td><p>Semicolon-delimited Traffic Monitor
+<abbr title="Fully Qualified Domain Name">FQDN</abbr>s with port numbers as necessary</p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-odd"><td><p>traffic_monitor.bootstrap.local</p></td>
+<td><p>Use only the Traffic Monitors specified in local configuration files</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>traffic_monitor.properties</p></td>
+<td><p>Path to file:<cite>traffic_monitor.properties</cite>; used internally to monitor the file
+for changes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/opt/traffic_router/traffic_monitor.properties</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>traffic_monitor.properties.reload.period</p></td>
+<td><p>The interval in milliseconds for Traffic Router to wait between reloading this
+configuration file</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">60000</span></code></p></td>
+</tr>
+<tr class="row-even"><td rowspan="5"><p>dns.properties</p></td>
+<td><p>dns.tcp.port</p></td>
+<td><p>TCP port that Traffic Router will use for incoming DNS requests</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">53</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>dns.tcp.backlog</p></td>
+<td><p>Maximum length of the queue for incoming TCP connection requests</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>dns.udp.port</p></td>
+<td><p>UDP port that Traffic Router will use for incoming DNS requests</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">53</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>dns.max-threads</p></td>
+<td><p>Maximum number of threads used to process incoming DNS requests</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1000</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>dns.zones.dir</p></td>
+<td><p>Path to automatically generated zone files for reference</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/opt/traffic_router/var/auto-zones</span></code></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p>traffic_ops.properties</p></td>
+<td><p>traffic_ops.username</p></td>
+<td><p>Username with which to access the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a>
+(must have the <code class="docutils literal notranslate"><span class="pre">admin</span></code> <a class="reference internal" href="../glossary.html#term-role"><span class="xref std std-term">Role</span></a>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">admin</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>traffic_ops.password</p></td>
+<td><p>Password for the user specified in <code class="docutils literal notranslate"><span class="pre">traffic_ops.username</span></code></p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="10"><p>cache.properties</p></td>
+<td><p>cache.geolocation.database</p></td>
+<td><p>Full path to the local copy of a geographic IP mapping database
+(usually MaxMind’s GeoIP2)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/opt/traffic_router/db/GeoIP2-City.mmdb</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>cache.geolocation.database.refresh.period</p></td>
+<td><p>The interval in milliseconds for Traffic Router to wait between polling for
+changes to the GeoIP2 database</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">604800000</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>cache.czmap.database</p></td>
+<td><p>Full path to the local copy of the coverage zone file</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/opt/traffic_router/db/czmap.json</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>cache.czmap.database.refresh.period</p></td>
+<td><p>The interval in milliseconds for Traffic Router to wait between polling for a
+new coverage zone file</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10800000</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>cache.dczmap.database</p></td>
+<td><p>Full path to the local copy of the deep coverage zone file</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/opt/traffic_router/db/dczmap.json</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>cache.dczmap.database.refresh.period</p></td>
+<td><p>The interval in milliseconds for Traffic Router to wait between polling for a
+new deep coverage zone file</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10800000</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>cache.health.json</p></td>
+<td><p>Full path to the local copy of the health state</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/opt/traffic_router/db/health.json</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>cache.health.json.refresh.period</p></td>
+<td><p>The interval in milliseconds which Traffic Router will poll for a new health
+state file</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1000</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>cache.config.json</p></td>
+<td><p>Full path to the locally cached copy of the CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/opt/traffic_router/db/cr-config.json</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>cache.config.json.refresh.period</p></td>
+<td><p>The interval in milliseconds which Traffic Router will poll for a new
+<a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">60000</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>startup.properties</p></td>
+<td><p>various parameters</p></td>
+<td><p>This configuration is used by <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemd(1)">systemd(1)</a></em> to set environment variables
+when the <code class="docutils literal notranslate"><span class="pre">traffic_router</span></code> service is started. It primarily consists of command
+line settings for the Java process</p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-even"><td><p>log4j.properties</p></td>
+<td><p>various parameters</p></td>
+<td><p>Configuration of <code class="docutils literal notranslate"><span class="pre">log4j</span></code> is documented on
+<a class="reference external" href="http://logging.apache.org/log4j/2.x/index.html">their site</a>; adjust as needed</p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-odd"><td><p>server.xml</p></td>
+<td><p>various parameters</p></td>
+<td><p>Traffic Router specific configuration for Apache Tomcat. See the Apache Tomcat
+<a class="reference external" href="https://tomcat.apache.org/tomcat-8.5-doc/index.html">documentation</a></p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-even"><td><p>web.xml</p></td>
+<td><p>various parameters</p></td>
+<td><p>Default settings for all Web Applications running in the Traffic Router instance
+of Tomcat</p></td>
+<td><p>N/A</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="the-traffic-router-profile">
+<span id="tr-profile"></span><h3>The Traffic Router Profile<a class="headerlink" href="#the-traffic-router-profile" title="Permalink to this headline">¶</a></h3>
+<p>Much of a Traffic Router’s configuration can be obtained through the <a class="reference internal" href="../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a> on its <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a>. The <a class="reference internal" href="../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a> of a Traffic Router’s <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a> that have meaning (others are just ignored) are detailed in the <a class="reference internal" href="#tr-profile-parameters"><span class="std std-ref">The Parameters of a Traffic Router Profile</span></a>.</p>
+<span id="tr-profile-parameters"></span><table class="docutils align-default" id="id8">
+<caption><span class="caption-number">Table 33 </span><span class="caption-text">The Parameters of a Traffic Router Profile</span><a class="headerlink" href="#id8" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 15%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><a class="reference internal" href="../overview/profiles_and_parameters.html#parameter-name"><span class="std std-ref">Name</span></a></p></th>
+<th class="head"><p><a class="reference internal" href="../overview/profiles_and_parameters.html#parameter-config-file"><span class="std std-ref">Config File</span></a></p></th>
+<th class="head"><p><a class="reference internal" href="../overview/profiles_and_parameters.html#parameter-value"><span class="std std-ref">Value</span></a> Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>location</p></td>
+<td><p>dns.zone</p></td>
+<td><p>Location to store the DNS zone files in the local file system of Traffic Router.</p></td>
+</tr>
+<tr class="row-odd"><td><p>location</p></td>
+<td><p>http-log4j.properties</p></td>
+<td><p>Location to find the log4j.properties file for Traffic Router.</p></td>
+</tr>
+<tr class="row-even"><td><p>location</p></td>
+<td><p>dns-log4j.properties</p></td>
+<td><p>Location to find the dns-log4j.properties file for Traffic Router.</p></td>
+</tr>
+<tr class="row-odd"><td><p>location</p></td>
+<td><p>geolocation.properties</p></td>
+<td><p>Location to find the log4j.properties file for Traffic Router.</p></td>
+</tr>
+<tr class="row-even"><td><p>CDN_name</p></td>
+<td><p>rascal-config.txt</p></td>
+<td><p>The human readable name of the CDN for this <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>CoverageZoneJsonURL</p></td>
+<td><p>CRConfig.xml</p></td>
+<td><p>The location (URL) where a <a class="reference internal" href="../glossary.html#term-coverage-zone-map"><span class="xref std std-term">Coverage Zone Map</span></a> may be found.</p></td>
+</tr>
+<tr class="row-even"><td><p>ecsEnable</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>Boolean value to enable or disable ENDS0 client subnet extensions.</p></td>
+</tr>
+<tr class="row-odd"><td><p>geolocation.polling.url</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The location (URL) where a geographic IP mapping database may be found.</p></td>
+</tr>
+<tr class="row-even"><td><p>geolocation.polling.interval</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>How often - in milliseconds - Traffic Router should check for an updated geographic IP mapping database.</p></td>
+</tr>
+<tr class="row-odd"><td><p>coveragezone.polling.interval</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>How often - in milliseconds - Traffic Router should check for an updated <a class="reference internal" href="../glossary.html#term-coverage-zone-map"><span class="xref std std-term">Coverage Zone Map</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>coveragezone.polling.url</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The location (URL) where a <a class="reference internal" href="../glossary.html#term-coverage-zone-map"><span class="xref std std-term">Coverage Zone Map</span></a> may be found.</p></td>
+</tr>
+<tr class="row-odd"><td><p>deepcoveragezone.polling.interval</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>How often - in milliseconds - Traffic Router should check for an updated <a class="reference internal" href="../glossary.html#term-deep-coverage-zone-map"><span class="xref std std-term">Deep Coverage Zone Map</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>deepcoveragezone.polling.url</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The location (URL) where a <a class="reference internal" href="../glossary.html#term-deep-coverage-zone-map"><span class="xref std std-term">Deep Coverage Zone Map</span></a> may be found.</p></td>
+</tr>
+<tr class="row-odd"><td><p>client.steering.forced.diversity</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>When this <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> exists and is exactly “true”, it enables the “Client Steering Forced Diversity” feature to diversify
+CLIENT_STEERING results by including more unique <a class="reference internal" href="../glossary.html#term-edge-tier-cache-servers"><span class="xref std std-term">Edge-Tier Cache Servers</span></a> in the response to the client’s request.</p></td>
+</tr>
+<tr class="row-even"><td><p>tld.soa.expire</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The value for the “expire” field the Traffic Router DNS Server will respond with on <abbr title="Start of Authority">SOA</abbr> records.</p></td>
+</tr>
+<tr class="row-odd"><td><p>tld.soa.minimum</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The value for the minimum field the Traffic Router DNS Server will respond with on <abbr title="Start of Authority">SOA</abbr> records.</p></td>
+</tr>
+<tr class="row-even"><td><p>tld.soa.admin</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The DNS Start of Authority administration email address, which clients will be directed to contact for support if DNS is not working
+correctly.</p></td>
+</tr>
+<tr class="row-odd"><td><p>tld.soa.retry</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The value for the “retry” field the Traffic Router DNS Server will respond with on <abbr title="Start of Authority">SOA</abbr> records.</p></td>
+</tr>
+<tr class="row-even"><td><p>tld.soa.refresh</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The value for the “refresh” field the Traffic Router DNS Server will respond with on <abbr title="Start of Authority">SOA</abbr> records.</p></td>
+</tr>
+<tr class="row-odd"><td><p>tld.ttls.NS</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The <abbr title="Time To Live">TTL</abbr> the Traffic Router DNS Server will respond with on NS records.</p></td>
+</tr>
+<tr class="row-even"><td><p>tld.ttls.SOA</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The <abbr title="Time To Live">TTL</abbr> the Traffic Router DNS Server will respond with on <abbr title="Start of Authority">SOA</abbr> records.</p></td>
+</tr>
+<tr class="row-odd"><td><p>tld.ttls.AAAA</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The <abbr title="Time To Live">TTL</abbr> the Traffic Router DNS Server will respond with on AAAA records.</p></td>
+</tr>
+<tr class="row-even"><td><p>tld.ttls.A</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The <abbr title="Time To Live">TTL</abbr> the Traffic Router DNS Server will respond with on A records.</p></td>
+</tr>
+<tr class="row-odd"><td><p>tld.ttls.DNSKEY</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The <abbr title="Time To Live">TTL</abbr> the Traffic Router DNS Server will respond with on DNSKEY records.</p></td>
+</tr>
+<tr class="row-even"><td><p>tld.ttls.DS</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The <abbr title="Time To Live">TTL</abbr> the Traffic Router DNS Server will respond with on DS records.</p></td>
+</tr>
+<tr class="row-odd"><td><p>api.port</p></td>
+<td><p>server.xml</p></td>
+<td><p>The TCP port on which Traffic Router servers the <a class="reference internal" href="../development/traffic_router/traffic_router_api.html#tr-api"><span class="std std-ref">Traffic Router API</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>api.cache-control.max-age</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The value of the <code class="docutils literal notranslate"><span class="pre">Cache-Control:</span> <span class="pre">max-age=</span></code> HTTP header in the of the <a class="reference internal" href="../development/traffic_router/traffic_router_api.html#tr-api"><span class="std std-ref">Traffic Router API</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>api.auth.url</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The URL of the authentication endpoint of the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> (<a class="reference internal" href="../api/user_login.html#to-api-user-login"><span class="std std-ref">user/login</span></a>). The actual
+<abbr title="Fully Qualified Domain Name">FQDN</abbr> can be subsituted with <code class="docutils literal notranslate"><span class="pre">${tmHostname}</span></code> to have Traffic Router automatically fill it in,
+e.g. <code class="docutils literal notranslate"><span class="pre">https://${tmHostname}/api/1.1/user/login</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>consistent.dns.routing</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>Control whether <a class="reference internal" href="../overview/delivery_services.html#ds-types"><span class="std std-ref">DNS-routed</span></a> <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a> use <cite>Consistent Hashing</cite>. May improve performance if set to
+“true”; defaults to “false”.</p></td>
+</tr>
+<tr class="row-odd"><td><p>dnssec.enabled</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>Whether DNSSEC is enabled; this parameter is updated via the DNSSEC administration user interface in Traffic Portal.</p></td>
+</tr>
+<tr class="row-even"><td><p>dnssec.allow.expired.keys</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>Allow Traffic Router to use expired DNSSEC keys to sign zones; default is “true”. This helps prevent DNSSEC related outages due to
+failed Traffic Control components or connectivity issues.</p></td>
+</tr>
+<tr class="row-odd"><td><p>dynamic.cache.primer.enabled</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>Allow Traffic Router to attempt to prime the dynamic zone cache; defaults to “true”.</p></td>
+</tr>
+<tr class="row-even"><td><p>dynamic.cache.primer.limit</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>Limit the number of permutations to prime when dynamic zone cache priming is enabled; defaults to “500”.</p></td>
+</tr>
+<tr class="row-odd"><td><p>keystore.maintenance.interval</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The interval in seconds which Traffic Router will check the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> for new DNSSEC keys.</p></td>
+</tr>
+<tr class="row-even"><td><p>keystore.api.url</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The URL of the DNSSEC key management endpoint of the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> (<a class="reference internal" href="../api/cdns_name_name_dnsseckeys.html#to-api-cdns-name-name-dnsseckeys"><span class="std std-ref">cdns/name/{{name}}/dnsseckeys</span></a>). The actual
+<abbr title="Fully Qualified Domain Name">FQDN</abbr> may be substituted with <code class="docutils literal notranslate"><span class="pre">${tmHostname}</span></code> to and the name of a CDN may be substituted with
+<code class="docutils literal notranslate"><span class="pre">${cdnName}</span></code> to have Traffic Router automatically fill them in.</p></td>
+</tr>
+<tr class="row-odd"><td><p>keystore.fetch.timeout</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The timeout in milliseconds for requests to the DNSSEC Key management endpoint of the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a>
+(<a class="reference internal" href="../api/cdns_name_name_dnsseckeys.html#to-api-cdns-name-name-dnsseckeys"><span class="std std-ref">cdns/name/{{name}}/dnsseckeys</span></a>).</p></td>
+</tr>
+<tr class="row-even"><td><p>keystore.fetch.retries</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The number of times Traffic Router will attempt to load DNSSEC keys before giving up; defaults to “5”.</p></td>
+</tr>
+<tr class="row-odd"><td><p>keystore.fetch.wait</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The number of milliseconds Traffic Router will wait in between attempts to load DNSSEC keys</p></td>
+</tr>
+<tr class="row-even"><td><p>signaturemanager.expiration.multiplier</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>Multiplier used in conjunction with a zone’s maximum <abbr title="Time To Live">TTL</abbr> to calculate DNSSEC signature durations; defaults to
+“5”.</p></td>
+</tr>
+<tr class="row-odd"><td><p>zonemanager.threadpool.scale</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>Multiplier used to determine the number of CPU cores to use for zone signing operations; defaults to “0.75”.</p></td>
+</tr>
+<tr class="row-even"><td><p>zonemanager.cache.maintenance.interval</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The interval in seconds on which Traffic Router will check for zones that need to be re-signed or if dynamic zones need to be expired
+from its cache.</p></td>
+</tr>
+<tr class="row-odd"><td><p>zonemanager.dynamic.response.expiration</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>A duration (e.g.: “300s”) that defines how long a dynamic zone will remain valid before expiring.</p></td>
+</tr>
+<tr class="row-even"><td><p>DNSKEY.generation.multiplier</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>Used to determine when new DNSSEC keys need to be generated. Keys are re-generated if expiration is less than the generation
+multiplier multiplied by the <abbr title="Time To Live">TTL</abbr>. If this <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> does not exist, the default is “10”.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DNSKEY.effective.multiplier</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>Used when creating an effective date for a new key set. New keys are generated with an effective date of that is the effective
+multiplier multiplied by the <abbr title="Time To Live">TTL</abbr> less than the old key’s expiration date. Default is “2”.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version ATCv4.0: </span>The use of “CRConfig.xml” as a <a class="reference internal" href="../overview/profiles_and_parameters.html#parameter-config-file"><span class="std std-ref">Parameter “Config File” value</span></a> has no known meaning, and its use for configuring Traffic Router is deprecated. All configuration (?) that previously used that value should instead use the equivalent <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> with the <a class="reference internal" href="../overview/profiles_and_parameters.html#parameter-config-file"><span class="std std-ref">Config File</span></a> value “CRConfig.json”.</p>
+</div>
+</div>
+</div>
+<div class="section" id="consistent-hashing">
+<span id="id1"></span><h2>Consistent Hashing<a class="headerlink" href="#consistent-hashing" title="Permalink to this headline">¶</a></h2>
+<p>Traffic Router does special optimization for some requests to ensure that requests for specific content are consistently fetched from a small number (often exactly one, but dependent on <a class="reference internal" href="../overview/delivery_services.html#ds-initial-dispersion"><span class="std std-ref">Initial Dispersion</span></a>) of <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> - thus ensuring it stays “fresh” in the cache. This is done by performing “consistent hashing” on request paths (when HTTP routing) or names requested for resolution (when DNS routing). To an extent, this behavior is configurable by modifying fields on <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a>. Consistent hashing acts differently on a <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> based on how <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a> of its <a class="reference internal" href="../overview/delivery_services.html#ds-types"><span class="std std-ref">Type</span></a> route content.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>HTTP, HTTP_NO_CACHE, HTTP_LIVE, HTTP_LIVE_NATNL, DNS, DNS_LIVE, and DNS_NATNL</dt><dd><p>These <a class="reference internal" href="../overview/delivery_services.html#ds-types"><span class="std std-ref">Delivery Service Types</span></a> route directly to <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a>, so consistent hashing is used to choose a <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> to which the client will be redirected.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>STEERING and CLIENT_STEERING</dt><dd><p>These <a class="reference internal" href="../overview/delivery_services.html#ds-types"><span class="std std-ref">Delivery Service Types</span></a> route to “target” <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a>, so consistent hashing is used to choose a “target” which will service the client request.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>See <a class="reference external" href="http://en.wikipedia.org/wiki/Consistent_hashing">the Wikipedia article on consistent hashing</a>.</p>
+</div>
+<div class="section" id="consistent-hashing-patterns">
+<span id="pattern-based-consistenthash"></span><h3>Consistent Hashing Patterns<a class="headerlink" href="#consistent-hashing-patterns" title="Permalink to this headline">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 4.0.</span></p>
+</div>
+<p>Regular expressions (“patterns”) can be provided in the <a class="reference internal" href="../overview/delivery_services.html#ds-consistent-hashing-regex"><span class="std std-ref">Consistent Hashing Regular Expression</span></a> field of an HTTP-<a class="reference internal" href="../overview/delivery_services.html#ds-types"><span class="std std-ref">routed</span></a> Delivery Service to influence what parts of an HTTP request path are considered when performing consistent hashing. These patterns propagate to Traffic Router through <a class="reference internal" href="../glossary.html#term-snapshots"><span class="xref std std-term">Snapshots</span></a>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Consistent Hashing Patterns on STEERING-<a class="reference internal" href="../overview/delivery_services.html#ds-types"><span class="std std-ref">Type</span></a> <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a> will be used for Consistent Hashing - the Consistent Hashing Pattern(s) of said <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>’s target(s) will <strong>not</strong> be considered. If Consistent Hashing Patterns are important to the routing of content on a STEERING-<a class="reference internal" href="../overview/delivery_services.html#ds-types"><span class="std std-ref">Type</span></a> or CLIENT_STEERING-<a class="reference internal" href="../overview/delivery_services.html#ds-types"><span class="std std-ref">Type</span></a> <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>, they <strong>must</strong> be defined <em>on that</em> <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> <em>itself, and</em> <strong>not</strong> <em>on its target(s)</em>.</p>
+</div>
+<div class="section" id="how-it-works">
+<h4>How it Works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h4>
+<p>The supplied <a class="reference internal" href="../overview/delivery_services.html#ds-consistent-hashing-regex"><span class="std std-ref">Consistent Hashing Regular Expression</span></a> is applied to the request path to extract matching elements to build a new string <em>before</em> consistent hashing is done. For example, using the pattern <code class="regexp docutils literal notranslate"><span class="pre">/.*?(/.*?/).*?(m3u8)</span></code> and given the request paths <code class="docutils literal notranslate"><span class="pre">/test/path/asset.m3u8</span></code> and <code class="docutils literal notranslate"><span class="pre">/other/path/asset.m3u8</span></code> the resulting string used for consistent hashing will be <code class="docutils literal notranslate"><span class="pre">/path/m3u8</span></code></p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>See Oracle’s <a class="reference external" href="https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html">documentation for the java.util.regex.Pattern</a> implementation in Java.</p>
+</div>
+</div>
+<div class="section" id="testing-pattern-based-consistent-hashing">
+<h4>Testing Pattern-Based Consistent Hashing<a class="headerlink" href="#testing-pattern-based-consistent-hashing" title="Permalink to this headline">¶</a></h4>
+<p>In order to test this feature without affecting the delivery of traffic through a CDN, there are several test tools in place.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference internal" href="../development/traffic_router/traffic_router_api.html#tr-api"><span class="std std-ref">Traffic Router API</span></a></dt><dd><p>Several Traffic Router endpoints exist to test regular expression application against a request path, <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> selection, and <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> selection.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a></dt><dd><p>The <a class="reference internal" href="../api/consistenthash.html#to-api-consistenthash"><span class="std std-ref">consistenthash</span></a> endpoint will proxy request data through to one of the Traffic Router endpoints in order to test regular expression application against a request path, in the event that direct access to the <a class="reference internal" href="../development/traffic_router/traffic_router_api.html#tr-api"><span class="std std-ref">Traffic Router API</span></a> is not possible and/or desired.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Traffic Portal</dt><dd><p>On the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> creation/modification form in Traffic Portal (under <a class="reference internal" href="traffic_portal/usingtrafficportal.html#tp-services-delivery-service"><span class="std std-ref">Delivery Service</span></a>), there is a <span class="guilabel">Test Regex</span> section that the user can use to validate a regular expression before saving it to a <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="consistent-hash-query-parameters">
+<h3>Consistent Hash Query Parameters<a class="headerlink" href="#consistent-hash-query-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Normally, when performing consistent hashing for an HTTP-<a class="reference internal" href="../overview/delivery_services.html#ds-types"><span class="std std-ref">routed</span></a> <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>, any query parameters present in the request are ignored. That is, if a client requests <code class="docutils literal notranslate"><span class="pre">/some/path?key=value</span></code> consistent hashing is only performed on the string ‘<code class="docutils literal notranslate"><span class="pre">/some/path</span></code>’. However, query parameters that are part of uniquely identifying content can be specified by adding them to the set of <a class="reference internal" href="../overview/delivery_services.html#ds-consistent-hashing-qparams"><span class="std std-ref">Consistent Hashing Query Parameters</span></a> of a <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>. For example, suppose that the file <code class="docutils literal notranslate"><span class="pre">/video.mp4</span></code> is available on the <a class="reference internal" href="../glossary.html#term-origin-server"><span class="xref std std-term">origin server</span></a> in different resolutions, which are specified by the <code class="docutils literal notranslate"><span class="pre">resolution</span></code> query parameter. This means that <code class="docutils literal notranslate"><span class="pre">/video.mp4?resolution=480p</span></code> and <code class="docutils literal notranslate"><span class="pre">/video.mp4?resolution=720p</span></code> share a <em>request path</em>, but represent different <em>content</em>. In that case, adding <code class="docutils literal notranslate"><span class="pre">resolution</span></code> to the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>’s <a class="reference internal" href="../overview/delivery_services.html#ds-consistent-hashing-qparams"><span class="std std-ref">Consistent Hashing Query Parameters</span></a> will cause consistent hashing to be done on e.g. <code class="docutils literal notranslate"><span class="pre">/video.mp4?resolution=480p</span></code> instead of just <code class="docutils literal notranslate"><span class="pre">/video.mp4</span></code> - however if the client requests e.g. <code class="docutils literal notranslate"><span class="pre">/video.mp4?resolution=480p&amp;bitrate=120kbps</span></code> consistent hashing will <em>only</em> consider <code class="docutils literal notranslate"><span class="pre">/video.mp4?resolution=480p</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#consistent-hashing-patterns">Consistent Hashing Patterns</a> are applied <em>before</em> query parameters are considered - i.e. a pattern cannot match against query parameters, and need not worry about query parameters contaminating matches.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Consistent Hash Query Parameters on the <em>targets</em> of STEERING-<a class="reference internal" href="../overview/delivery_services.html#ds-types"><span class="std std-ref">Type</span></a> <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a> will be used for Consistent Hashing - the Consistent Hash Query Parameters of said <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a> themselves will <strong>not</strong> be considered. If Consistent Hash Query Parameters are important to the routing of content on a STEERING-<a class="reference internal" href="../overview/delivery_services.html#ds-types"><span class="std std-ref">Type</span></a> or CLIENT_STEERING-<a class="reference internal" href="../overview/delivery_services.html#ds-types"><span class="std std-ref">Type</span></a> <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>, they <strong>must</strong> be defined <em>on that</em> <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>’s‘ <em>target(s), and</em> <strong>not</strong> <em>on the</em> <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> <em>itself</em>.</p>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>Certain query parameters are reserved by Traffic Router for its own use, and thus cannot be present in any Consistent Hash Query Parameters. These reserved parameters are:</p>
+<ul class="simple">
+<li><p>trred</p></li>
+<li><p>format</p></li>
+<li><p>fakeClientIPAddress</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="dnssec">
+<span id="tr-dnssec"></span><h2>DNSSEC<a class="headerlink" href="#dnssec" title="Permalink to this headline">¶</a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">The Wikipedia page on Domain Name Security Extensions</a></p>
+</div>
+<div class="section" id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
+<p><abbr title="Domain Name System Security Extensions">DNSSEC</abbr> is a set of extensions to DNS that provides a cryptographic mechanism for resolvers to verify the authenticity of responses served by an authoritative DNS server. Several RFCs (<span class="target" id="index-0"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc4033.html"><strong>RFC 4033</strong></a>, <span class="target" id="index-1"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc4044.html"><strong>RFC 4044</strong></a>, <span class="target" id="index-2"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc4045.html"><strong>RFC 4045</strong></a>) describe the low level details and define the extensions, <span class="target" id="index-3"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc7129.html"><strong>RFC 7129</strong></a> provides clarification around authenticated denial of existence of records, and finally <span class="target" id="index-4"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc6781.html"><strong>RFC 6781</strong></a> describes operational best practices for administering an authoritative <abbr title="Domain Name System Security Extensions">DNSSEC</abbr>-enabled DNS server. The authenticated denial of existence <span class="target" id="index-5"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc7129.html"><strong>RFC 7129</strong></a> describes how an authoritative DNS server responds in NXDOMAIN and NODATA scenarios when <abbr title="Domain Name System Security Extensions">DNSSEC</abbr> is enabled. Traffic Router currently supports <abbr title="Domain Name System Security Extensions">DNSSEC</abbr> with <abbr title="Next Secure Record">NSEC</abbr>, however, <abbr title="Next Secure Record version 3">NSEC3</abbr> and more configurable options are planned for the future.</p>
+</div>
+<div class="section" id="operation">
+<h3>Operation<a class="headerlink" href="#operation" title="Permalink to this headline">¶</a></h3>
+<p>Upon startup or a configuration change, Traffic Router obtains keys from the ‘keystore’ API in Traffic Ops which returns <abbr title="Key Signing Key">KSK</abbr>s and <abbr title="Zone Signing Key">ZSK</abbr>s for each <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> that is a sub-domain of the CDN’s <abbr title="Top Level Domain">TLD</abbr> in addition to the keys for the CDN <abbr title="Top Level Domain">TLD</abbr> itself. Each key has timing information that allows Traffic Router to determine key validity (expiration, inception, and effective dates) in addition to the appropriate <abbr title="Time To Live">TTL</abbr> to use for the DNSKEY record(s). All <abbr title="Time To Live">TTL</abbr>s are configurable <a class="reference internal" href="../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a> in <a class="reference internal" href="#tr-profile"><span class="std std-ref">The Traffic Router Profile</span></a>.</p>
+<p>Once Traffic Router obtains the key data from the API, it converts each public key into the appropriate record types (DNSKEY, DS) to place in zones and uses the private key to sign zones. DNSKEY records are added to each <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>’s zone (e.g.: <code class="docutils literal notranslate"><span class="pre">demo1.mycdn.ciab.test</span></code>) for every valid key that exists, in addition to the CDN <abbr title="Top Level Domain">TLD</abbr>’s zone. A DS record is generated from each zone’s <abbr title="Key Signing Key">KSK</abbr> and is placed in the CDN <abbr title="Top Level Domain">TLD</abbr>’s zone (e.g.: <code class="docutils literal notranslate"><span class="pre">mycdn.ciab.test</span></code>); the DS record for the CDN <abbr title="Top Level Domain">TLD</abbr> must be placed in its parent zone, which is not managed by Traffic Control.</p>
+<p>The DNSKEY to DS record relationship allows resolvers to validate signatures across zone delegation points. With Traffic Control, we control all delegation points below the CDN’s <abbr title="Top Level Domain">TLD</abbr>, <strong>however, the DS record for the CDN</strong> <abbr title="Top Level Domain">TLD</abbr> <strong>must be placed in the parent zone</strong> (e.g.: <code class="docutils literal notranslate"><span class="pre">ciab.test</span></code>), <strong>which is not managed by Traffic Control</strong>. As such, the DS record must be placed in the parent zone prior to enabling <abbr title="Domain Name System Security Extensions">DNSSEC</abbr>, and prior to generating a new CDN KSK. Based on your deployment’s DNS configuration, this might be a manual process or it might be automated. Either way, extreme care and diligence must be taken and knowledge of the management of the upstream zone is imperative for a successful <abbr title="Domain Name System Security Extensions">DNSSEC</abbr> deployment.</p>
+<p>To enable <abbr title="Domain Name System Security Extensions">DNSSEC</abbr> for a CDN in Traffic Portal, Go to <span class="guilabel">CDNs</span> from the sidebar and click on the desired CDN, then toggle the ‘DNSSEC Enabled’ field to ‘true’, and click on the green <span class="guilabel">Update</span> button to save the changes.</p>
+</div>
+<div class="section" id="rolling-zone-signing-keys">
+<h3>Rolling Zone Signing Keys<a class="headerlink" href="#rolling-zone-signing-keys" title="Permalink to this headline">¶</a></h3>
+<p>Traffic Router currently follows the <abbr title="Zone Signing Key">ZSK</abbr> pre-publishing operational best practice described in <span class="target" id="index-6"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc6781.html#section-4.1.1.1"><strong>RFC 6781#section-4.1.1.1</strong></a>. Once <abbr title="Domain Name System Security Extensions">DNSSEC</abbr> is enabled for a CDN in Traffic Portal, key rolls are triggered by Traffic Ops via the automated key generation process, and Traffic Router selects the active <abbr title="Zone Signing Keys">ZSK</abbr>s based on the expiration information returned from the ‘keystore’ API of Traffic Ops.</p>
+</div>
+</div>
+<div class="section" id="troubleshooting-and-log-files">
+<span id="tr-logs"></span><h2>Troubleshooting and Log Files<a class="headerlink" href="#troubleshooting-and-log-files" title="Permalink to this headline">¶</a></h2>
+<p>Traffic Router log files can be found under <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_router/var/log</span></code> and <code class="file docutils literal notranslate"><span class="pre">/opt/tomcat/logs</span></code>. Initialization and shutdown logs are in <code class="file docutils literal notranslate"><span class="pre">/opt/tomcat/logs/catalina</span><em><span class="pre">date</span></em><span class="pre">.out</span></code>. Application related logging is in <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_router/var/log/traffic_router.log</span></code>, while access logs are written to <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_router/var/log/access.log</span></code>.</p>
+<div class="section" id="event-log-file-format">
+<h3>Event Log File Format<a class="headerlink" href="#event-log-file-format" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="summary">
+<h4>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h4>
+<p>All access events to Traffic Router are logged to the file <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_router/var/log/access.log</span></code>. This file grows up to 200MB and gets rolled into older log files, ten log files total are kept (total of up to 2GB of logged events per Traffic Router instance)</p>
+<p>Traffic Router logs access events in a format that largely follows <abbr title="Apache Traffic Service">ATS</abbr> <a class="reference external" href="https://docs.trafficserver.apache.org/en/6.0.x/admin/event-logging-formats.en.html">event logging format</a>.</p>
+</div>
+<div class="section" id="message-format">
+<h4>Message Format<a class="headerlink" href="#message-format" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Except for the first item, each event that is logged is a series of space-separated key/value pairs.</p></li>
+<li><p>The first item is always the Unix epoch in seconds with a decimal field precision of up to milliseconds.</p></li>
+<li><p>Each key/value pair is in the form of <code class="docutils literal notranslate"><span class="pre">unquoted_string=&quot;optionally</span> <span class="pre">quoted</span> <span class="pre">string&quot;</span></code></p></li>
+<li><p>Values that are quoted strings may contain whitespace characters.</p></li>
+<li><p>Values that are not quoted should not contains any whitespace characters.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Any value that is a single dash character or a dash character enclosed in quotes represents an empty value</p>
+</div>
+<table class="docutils align-default" id="id9">
+<caption><span class="caption-number">Table 34 </span><span class="caption-text">Fields Always Present</span><a class="headerlink" href="#id9" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 47%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Data</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>qtype</p></td>
+<td><p>Whether the request was for DNS or HTTP</p></td>
+<td><p>Always “DNS” or “HTTP”</p></td>
+</tr>
+<tr class="row-odd"><td><p>chi</p></td>
+<td><p>The IP address of the requester</p></td>
+<td><p>Depends on whether this was a DNS or HTTP request, see other sections</p></td>
+</tr>
+<tr class="row-even"><td><p>rhi</p></td>
+<td><p>The IP address of the request source address</p></td>
+<td><p>Depends on whether this was a DNS or HTTP request, see other sections</p></td>
+</tr>
+<tr class="row-odd"><td><p>ttms</p></td>
+<td><p>The amount of time in milliseconds it took Traffic Router to process the request</p></td>
+<td><p>A number greater than or equal to zero</p></td>
+</tr>
+<tr class="row-even"><td><p>rtype</p></td>
+<td><p>Routing result type</p></td>
+<td><p>One of ERROR, CZ, DEEP_CZ, GEO, MISS, STATIC_ROUTE, DS_REDIRECT, DS_MISS, INIT, FED</p></td>
+</tr>
+<tr class="row-odd"><td><p>rloc</p></td>
+<td><p>GeoLocation of result</p></td>
+<td><p>Latitude and longitude in degrees as floating point numbers</p></td>
+</tr>
+<tr class="row-even"><td><p>rdtl</p></td>
+<td><p>Result details Associated with unusual conditions</p></td>
+<td><p>One of DS_NOT_FOUND, DS_NO_BYPASS, DS_BYPASS, DS_CZ_ONLY, DS_CZ_BACKUP_CG</p></td>
+</tr>
+<tr class="row-odd"><td><p>rerr</p></td>
+<td><p>Message about an internal Traffic Router error</p></td>
+<td><p>String</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>If <a class="reference external" href="regionalgeo-qht">Regional Geo-Blocking</a> is enabled on the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>, an additional field (<code class="docutils literal notranslate"><span class="pre">rgb</span></code>) will appear.</p>
+</div>
+</div>
+<div class="section" id="sample-message">
+<h4>Sample Message<a class="headerlink" href="#sample-message" title="Permalink to this headline">¶</a></h4>
+<p>Items within brackets are detailed under the HTTP and DNS sections</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-number">#38 </span><span class="caption-text">Example Logfile Lines</span><a class="headerlink" href="#id10" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>144140678.000 qtype=DNS chi=192.168.10.11 rhi=- ttms=789 [Fields Specific to the DNS request] rtype=CZ rloc=&quot;40.252611,58.439389&quot; rdtl=- rerr=&quot;-&quot; [Fields Specific to the DNS result]
+144140678.000 qtype=HTTP chi=192.168.10.11 rhi=- ttms=789 [Fields Specific to the HTTP request] rtype=GEO rloc=&quot;40.252611,58.439389&quot; rdtl=- rerr=&quot;-&quot; [Fields Specific to the HTTP result]
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These samples contain fields that are always present for every single access event to Traffic Router</p>
+</div>
+</div>
+<div class="section" id="rtype-meanings">
+<h4><code class="docutils literal notranslate"><span class="pre">rtype</span></code> Meanings<a class="headerlink" href="#rtype-meanings" title="Permalink to this headline">¶</a></h4>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">-</span></code></dt><dd><p>The request was not redirected. This is usually a result of a DNS request to the Traffic Router or an explicit denial for that request</p>
+</dd>
+<dt>ANON_BLOCK</dt><dd><p>The client’s IP matched an <a class="reference external" href="anonymous_blocking-qht">Anonymous Blocking</a> rule and was blocked</p>
+</dd>
+<dt>CZ</dt><dd><p>The result was derived from Coverage Zone data based on the address in the <code class="docutils literal notranslate"><span class="pre">chi</span></code> field</p>
+</dd>
+<dt>DEEP_CZ</dt><dd><p>The result was derived from Deep Coverage Zone data based on the address in the <code class="docutils literal notranslate"><span class="pre">chi</span></code> field</p>
+</dd>
+<dt>DS_MISS</dt><dd><p>_*HTTP Only*_ No HTTP <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>supports either this request’s URL path or headers</p>
+</dd>
+<dt>DS_REDIRECT</dt><dd><p>The result is using the Bypass Destination configured for the matched <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> when that <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> is unavailable or does not have the requested resource</p>
+</dd>
+<dt>ERROR</dt><dd><p>An internal error occurred within Traffic Router, more details may be found in the <code class="docutils literal notranslate"><span class="pre">rerr</span></code> field</p>
+</dd>
+<dt>FED</dt><dd><p>_*DNS Only*_ The result was obtained through federated coverage zone data outside of any <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s</p>
+</dd>
+<dt>GEO</dt><dd><p>The result was derived from geolocation service based on the address in the <code class="docutils literal notranslate"><span class="pre">chi</span></code> field</p>
+</dd>
+<dt>GEO_REDIRECT</dt><dd><p>The request was redirected based on the National Geo blocking (Geo Limit Redirect URL) configured on the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a></p>
+</dd>
+<dt>MISS</dt><dd><p>Traffic Router was unable to resolve a DNS request or find a cache for the requested resource</p>
+</dd>
+<dt>RGALT</dt><dd><p>The request was redirected to the <a class="reference external" href="regionalgeo-qht">Regional Geo-Blocking</a> URL. Regional Geo blocking is enabled on the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> and is configured through the <code class="docutils literal notranslate"><span class="pre">regional_geoblock.polling.url</span></code> <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> on the Traffic Router <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a></p>
+</dd>
+<dt>RGDENY</dt><dd><p>_*DNS Only*_ The result was obtained through federated coverage zone data outside of any <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> - the request was regionally blocked because there was no rule for the request made</p>
+</dd>
+<dt>STATIC_ROUTE</dt><dd><p>_*DNS Only*_ No DNS <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>supports the hostname portion of the requested URL</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="rdtl-meanings">
+<h4><code class="docutils literal notranslate"><span class="pre">rdtl</span></code> Meanings<a class="headerlink" href="#rdtl-meanings" title="Permalink to this headline">¶</a></h4>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">-</span></code></dt><dd><p>The request was not redirected. This is usually a result of a DNS request to the Traffic Router or an explicit denial for that request</p>
+</dd>
+<dt>DS_BYPASS</dt><dd><p>Used a bypass destination for redirection of the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a></p>
+</dd>
+<dt>DS_CLIENT_GEO_UNSUPPORTED</dt><dd><p>Traffic Router did not find a resource supported by coverage zone data and was unable to determine the geographic location of the requesting client</p>
+</dd>
+<dt>DS_CZ_BACKUP_CG</dt><dd><p>Traffic Router found a backup cache via fall-back (through the <code class="docutils literal notranslate"><span class="pre">edgeLocation</span></code> field of a <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a>)  or via coordinates (<a class="reference internal" href="../glossary.html#term-coverage-zone-file"><span class="xref std std-term">Coverage Zone File</span></a>) configuration</p>
+</dd>
+<dt>DS_CZ_ONLY</dt><dd><p>The selected <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> only supports resource lookup based on coverage zone data</p>
+</dd>
+<dt>DS_NO_BYPASS</dt><dd><p>No valid bypass destination is configured for the matched <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> and the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> does not have the requested resource</p>
+</dd>
+<dt>DS_NOT_FOUND</dt><dd><p>Always goes with <code class="docutils literal notranslate"><span class="pre">rtypes</span></code> STATIC_ROUTE and DS_MISS</p>
+</dd>
+<dt>GEO_NO_CACHE_FOUND</dt><dd><p>Traffic Router could not find a resource via geographic location data based on the requesting client’s location</p>
+</dd>
+<dt>NO_DETAILS</dt><dd><p>This entry is for a standard request</p>
+</dd>
+<dt>REGIONAL_GEO_ALTERNATE_WITHOUT_CACHE</dt><dd><p>This goes with the <code class="docutils literal notranslate"><span class="pre">rtype</span></code> RGDENY. The URL is being regionally blocked</p>
+</dd>
+<dt>REGIONAL_GEO_NO_RULE</dt><dd><p>The request was blocked because there was no rule in the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> for the request</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="http-specifics">
+<h3>HTTP Specifics<a class="headerlink" href="#http-specifics" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-number">#39 </span><span class="caption-text">Sample Message</span><a class="headerlink" href="#id11" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>1452197640.936 qtype=HTTP chi=69.241.53.218 rhi=- url=&quot;http://foo.mm-test.jenkins.cdnlab.comcast.net/some/asset.m3u8&quot; cqhm=GET cqhv=HTTP/1.1 rtype=GEO rloc=&quot;40.252611,58.439389&quot; rdtl=- rerr=&quot;-&quot; pssc=302 ttms=0 rurl=&quot;http://odol-atsec-sim-114.mm-test.jenkins.cdnlab.comcast.net:8090/some/asset.m3u8&quot; rh=&quot;Accept: */*&quot; rh=&quot;myheader: asdasdasdasfasg&quot;
+</pre></div>
+</div>
+</div>
+<table class="docutils align-default" id="id12">
+<caption><span class="caption-number">Table 35 </span><span class="caption-text">Request Fields</span><a class="headerlink" href="#id12" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 74%" />
+<col style="width: 0%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head" colspan="2"><p>Data</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>url</p></td>
+<td><p>Requested URL with query string</p></td>
+<td colspan="2"><p>A URL String</p></td>
+</tr>
+<tr class="row-odd"><td><p>cqhm</p></td>
+<td><p>Http Method</p></td>
+<td colspan="2"><p>e.g <code class="docutils literal notranslate"><span class="pre">GET</span></code>, <code class="docutils literal notranslate"><span class="pre">POST</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>cqhv</p></td>
+<td><p>Http Protocol Version</p></td>
+<td colspan="2"><p>e.g. <code class="docutils literal notranslate"><span class="pre">HTTP/1.1</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>rh</p></td>
+<td colspan="3"><p>One or more of these key value pairs may exist in a logged event and are controlled by the configuration of the matched <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> | Key/value pair of the format <code class="docutils literal notranslate"><span class="pre">name:</span> <span class="pre">value</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id13">
+<caption><span class="caption-number">Table 36 </span><span class="caption-text">Response Fields</span><a class="headerlink" href="#id13" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 91%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>rurl</p></td>
+<td><p>The resulting URL of the resource requested by the client</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="dns-specifics">
+<h3>DNS Specifics<a class="headerlink" href="#dns-specifics" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-number">#40 </span><span class="caption-text">Sample Message</span><a class="headerlink" href="#id14" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>144140678.000 qtype=DNS chi=192.168.10.11 rhi=- ttms=123 xn=65535 fqdn=www.example.com. type=A class=IN ttl=12345 rcode=NOERROR rtype=CZ rloc=&quot;40.252611,58.439389&quot; rdtl=- rerr=&quot;-&quot; ans=&quot;192.168.1.2 192.168.3.4 0:0:0:0:0:ffff:c0a8:102 0:0:0:0:0:ffff:c0a8:304&quot;
+</pre></div>
+</div>
+</div>
+<table class="docutils align-default" id="id15">
+<caption><span class="caption-number">Table 37 </span><span class="caption-text">Request Fields</span><a class="headerlink" href="#id15" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 43%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Data</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>xn</p></td>
+<td><p>The ID from the client DNS request header</p></td>
+<td><p>a whole number between 0 and 65535 (inclusive)</p></td>
+</tr>
+<tr class="row-odd"><td><p>rhi</p></td>
+<td><p>The IP address of the resolver when ENDS0 client subnet extensions are enabled.</p></td>
+<td><p>An IPv4 or IPv6 string, or dash if request is for resolver only and no client subnet is present</p></td>
+</tr>
+<tr class="row-even"><td><p>fqdn</p></td>
+<td><p>The qname field from the client DNS request message (i.e. the
+<abbr title="Fully Qualified Domain Name">FQDN</abbr> the client is requesting be</p></td>
+<td><p>A series of DNS labels/domains separated by ‘.’ characters and ending with a ‘.’ character</p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td><p>The qtype field from the client DNS request message (i.e. the typeof resolution
+that’s requested such as IPv4, IPv6)</p></td>
+<td><p>Examples are A (IpV4), AAAA (IpV6), <abbr title="Name Service">NS</abbr>,  <abbr title="Start of Authority">SOA</abbr>,
+and <abbr title="Canonical Name">CNAME</abbr>, (see <a class="reference external" href="http://www.zytrax.com/books/dns/ch15/#qtype">qtype</a>)</p></td>
+</tr>
+<tr class="row-even"><td><p>class</p></td>
+<td><p>The qclass field from the client DNS request message (i.e. the class of
+resource being requested)</p></td>
+<td><p>Either <abbr title="Internet resource">IN</abbr> or ANY (Traffic Router rejects requests with any other
+value of class)</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id16">
+<caption><span class="caption-number">Table 38 </span><span class="caption-text">Response Fields</span><a class="headerlink" href="#id16" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 54%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Data</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ttl</p></td>
+<td><p>The ‘time to live’ in seconds for the answer provided by Traffic
+Router (clients can reliably use this answer for this long without
+re-querying traffic router)</p></td>
+<td><p>A whole number between 0 and 4294967295 (inclusive)</p></td>
+</tr>
+<tr class="row-odd"><td><p>rcode</p></td>
+<td><p>The result code for the DNS answer provided by Traffic Router</p></td>
+<td><p>One of NOERROR (success), NOTIMP (request is not
+NOTIMP (request is not  supported),
+REFUSED (request is refused to be answered), or
+NXDOMAIN (the domain/name requested does not exist)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="deep-caching">
+<span id="deep-cache"></span><h2>Deep Caching<a class="headerlink" href="#deep-caching" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h3>Overview<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>Deep Caching is a feature that enables clients to be routed to the closest possible “deep” Edge-tier <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> s on a per-<a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> basis. The term “deep” is used in the networking sense, meaning that the Edge-tier <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> s are located deep in the network where the number of network hops to a client is as minimal. This deep caching topology is desirable because storing content closer to the client gives better bandwidth savings, and sometimes the cost of bandwidth usage in the network outweighs the cost of adding storage. While it may not be feasible to cache an entire copy of the CDN’s contents in every deep location (for the best possible bandwidth savings), storing just a relatively small amount of the CDN’s most requested content can lead to very high bandwidth savings.</p>
+</div>
+<div class="section" id="what-you-need">
+<h3>What You Need<a class="headerlink" href="#what-you-need" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p>Edge cache deployed in “deep” locations and registered in Traffic Ops</p></li>
+<li><p>A <a class="reference internal" href="../glossary.html#term-deep-coverage-zone-file"><span class="xref std std-term">Deep Coverage Zone File</span></a> mapping these deep cache hostnames to specific network prefixes</p></li>
+<li><p>Deep caching <a class="reference internal" href="../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a> in the Traffic Router <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a></p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">deepcoveragezone.polling.interval</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deepcoveragezone.polling.url</span></code></p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>See <a class="reference internal" href="#tr-profile"><span class="std std-ref">The Traffic Router Profile</span></a> for details.</p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Deep Caching enabled on one or more HTTP <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s (i.e. ‘Deep Caching’ field on the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> details page (under <span class="guilabel">Advanced Options</span>) set to <code class="docutils literal notranslate"><span class="pre">ALWAYS</span></code>)</p></li>
+</ol>
+</div>
+<div class="section" id="id4">
+<h3>How it Works<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Deep Coverage Zone routing is very similar to that of regular Coverage Zone routing, except that the <abbr title="Deep Coverage Zone File">DCZF</abbr> is preferred over the regular <abbr title="Coverage Zone File">CZF</abbr> for <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s with Deep Caching enabled. If the client requests a Deep Caching-enabled <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> and their IP address gets a “hit” in the <abbr title="Deep Coverage Zone File">DCZF</abbr>, Traffic Router will attempt to route that client to one of the available “deep” <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> s in the client’s corresponding zone. If there are no “deep” <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> s available for a client’s request, Traffic Router will fall back to the regular <abbr title="Coverage Zone File">CZF</abbr> and continue regular <abbr title="Coverage Zone File">CZF</abbr> routing from there.</p>
+</div>
+</div>
+<div class="section" id="steering-feature">
+<span id="tr-steering"></span><h2>Steering Feature<a class="headerlink" href="#steering-feature" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h3>Overview<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>A Steering <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> is a <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> that is used to route a client to another <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>. The <a class="reference internal" href="../overview/delivery_services.html#ds-types"><span class="std std-ref">Type</span></a> of a Steering <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> is either STEERING or CLIENT_STEERING. A Steering <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> will have target <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s configured for it with weights assigned to them. Traffic Router uses the weights to make a consistent hash ring which it then uses to make sure that requests are routed to a target based on the configured weights. This consistent hash ring is separate from the consistent hash ring used in cache selection.</p>
+<p>Special regular expressions - referred to as ‘filters’ - can also be configured for target <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a> to pin traffic to a specific <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>. For example, if the filter <code class="regexp docutils literal notranslate"><span class="pre">.*/news/.*</span></code> for a target called <code class="docutils literal notranslate"><span class="pre">target-ds-1</span></code> is created, any requests to Traffic Router with “news” in them will be routed to <code class="docutils literal notranslate"><span class="pre">target-ds-1</span></code>. This will happen regardless of the configured weights.</p>
+<div class="section" id="some-other-points-of-interest">
+<h4>Some other points of interest<a class="headerlink" href="#some-other-points-of-interest" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Steering is currently only available for HTTP <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a> that are a part of the same CDN.</p></li>
+<li><p>A new role called STEERING has been added to the Traffic Ops database. Only users with the Steering <a class="reference internal" href="../glossary.html#term-role"><span class="xref std std-term">Role</span></a> or higher can modify steering assignments for a <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>.</p></li>
+<li><p>Traffic Router uses the steering endpoints of the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> to poll for steering assignments, the assignments are then used when routing traffic.</p></li>
+</ul>
+<p>A couple simple use-cases for Steering are:</p>
+<ul class="simple">
+<li><p>Migrating traffic from one <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> to another over time.</p></li>
+<li><p>Trying out new functionality for a subset of traffic with an experimental <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>.</p></li>
+<li><p>Load balancing between <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="the-difference-between-steering-and-client-steering">
+<h3>The Difference Between STEERING and CLIENT_STEERING<a class="headerlink" href="#the-difference-between-steering-and-client-steering" title="Permalink to this headline">¶</a></h3>
+<p>The only difference between the STEERING and CLIENT_STEERING <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> <a class="reference internal" href="../glossary.html#term-type"><span class="xref std std-term">Type</span></a>s is that CLIENT_STEERING explicitly allows a client to bypass Steering by choosing a destination <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>. A client can accomplish this by providing the <code class="docutils literal notranslate"><span class="pre">X-TC-Steering-Option</span></code> HTTP header with a value of the <code class="docutils literal notranslate"><span class="pre">xml_id</span></code> of the target <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> to which they desire to be routed. When Traffic Router receives this header it will route to the requested target <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> regardless of weight configuration. This header is ignored by STEERING <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a>.</p>
+</div>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>The following needs to be completed for Steering to work correctly:</p>
+<ol class="arabic simple">
+<li><p>Two target <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a> are created in Traffic Ops. They must both be HTTP <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a> part of the same CDN.</p></li>
+<li><p>A <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> with type STEERING or CLIENT_STEERING is created in Traffic Portal.</p></li>
+<li><p>Target <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a> are assigned to the Steering <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> using Traffic Portal.</p></li>
+<li><p>A user with the role of Steering is created.</p></li>
+<li><p>The Steering user assigns weights to the target <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a>.</p></li>
+<li><p>If desired, the Steering user can create filters for the target <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a>.</p></li>
+</ol>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For more information see <a class="reference internal" href="quick_howto/steering.html#steering-qht"><span class="std std-ref">Configure Delivery Service Steering</span></a>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="https-for-http-delivery-services">
+<h2>HTTPS for HTTP Delivery Services<a class="headerlink" href="#https-for-http-delivery-services" title="Permalink to this headline">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.7: </span>Traffic Router now has the ability to allow HTTPS traffic between itself and clients on a per-HTTP <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> basis.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As of version 3.0 Traffic Router has been integrated with native OpenSSL. This makes establishing HTTPS connections to Traffic Router much less expensive than previous versions. However establishing an HTTPS connection is more computationally demanding than an HTTP connection. Since each client will in turn get redirected to an <abbr title="Apache Traffic Server">ATS</abbr> instance, Traffic Router is most always creating a new HTTPS connection for all HTTPS traffic. It is likely to mean that an existing Traffic Router may have some decrease in performance if you wish to support a lot of HTTPS traffic. As noted for <abbr title="DNS Security Extensions">DNSSEC</abbr>, you may need to plan to scale Traffic Router vertically and/or horizontally to handle the new load.</p>
+</div>
+<p>The HTTPS set up process is:</p>
+<ol class="arabic simple">
+<li><p>Select one of ‘1 - HTTPS’, ‘2 - HTTP AND HTTPS’, or ‘3 - HTTP TO HTTPS’ for the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a></p></li>
+<li><p>Generate private keys for the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> using a wildcard domain such as <code class="docutils literal notranslate"><span class="pre">*.my-delivery-service.my-cdn.example.com</span></code></p></li>
+<li><p>Obtain and import signed certificate chain</p></li>
+<li><p>Perform a CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a></p></li>
+</ol>
+<p>Clients may make HTTPS requests to <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s only after the CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> propagates to Traffic Router and it receives the certificate chain from Traffic Ops.</p>
+<div class="section" id="protocol-options">
+<h3>Protocol Options<a class="headerlink" href="#protocol-options" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>HTTP</dt><dd><p>Any secure client will get an SSL handshake error. Non-secure clients will experience the same behavior as prior to 1.7</p>
+</dd>
+<dt>HTTPS</dt><dd><p>Traffic Router will only redirect (send a <code class="docutils literal notranslate"><span class="pre">302</span> <span class="pre">Found</span></code> response) to clients communicating with a secure connection, all other clients will receive a <code class="docutils literal notranslate"><span class="pre">503</span> <span class="pre">Service</span> <span class="pre">Unavailable</span></code> response</p>
+</dd>
+<dt>HTTP AND HTTPS</dt><dd><p>Traffic Router will redirect both secure and non-secure clients</p>
+</dd>
+<dt>HTTP TO HTTPS</dt><dd><p>Traffic Router will redirect non-secure clients with a <code class="docutils literal notranslate"><span class="pre">302</span> <span class="pre">Found</span></code> response and a location that is secure (i.e. an <code class="docutils literal notranslate"><span class="pre">https://</span></code> URL instead of an <code class="docutils literal notranslate"><span class="pre">http://</span></code> URL), while secure clients will be redirected immediately to an appropriate target or <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="certificate-retrieval">
+<h3>Certificate Retrieval<a class="headerlink" href="#certificate-retrieval" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you have HTTPS <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s in your CDN, Traffic Router will not accept <strong>any</strong> connections until it is able to fetch certificates from Traffic Ops and load them into memory. Traffic Router does not persist certificates to the Java Keystore or anywhere else.</p>
+</div>
+<p>Traffic Router fetches certificates into memory:</p>
+<ul class="simple">
+<li><p>At startup time</p></li>
+<li><p>When it receives a new CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a></p></li>
+<li><p>Once an hour starting whenever the most recent of the last of the above occurred</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To adjust the frequency at which Traffic Router fetches certificates add the <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> <code class="docutils literal notranslate"><span class="pre">certificates.polling.interval</span></code> with the ConfigFile “CRConfig.json” and set it to the desired duration in milliseconds.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Taking a CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> may be used at times to avoid waiting the entire polling cycle for a new set of certificates.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If a CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> is taken that involves a <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> missing its certificates, Traffic Router will ignore <strong>ALL</strong> changes in that CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> until one of the following occurs:</p>
+<ul class="simple">
+<li><p>It receives certificates for that <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a></p></li>
+<li><p>Another CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> is taken and the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> without certificates is changed such that its HTTP protocol is set to ‘http’</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="certificate-chain-ordering">
+<h3>Certificate Chain Ordering<a class="headerlink" href="#certificate-chain-ordering" title="Permalink to this headline">¶</a></h3>
+<p>The ordering of certificates within the certificate bundle matters. It must be:</p>
+<ol class="arabic simple">
+<li><p>Primary Certificate (e.g. the one created for <code class="docutils literal notranslate"><span class="pre">*.my-delivery-service.my-cdn.example.com</span></code>)</p></li>
+<li><p>Intermediate Certificate(s)</p></li>
+<li><p>Root Certificate from a <abbr title="Certificate Authority">CA</abbr> (optional)</p></li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If something is wrong with the certificate chain (e.g. the order of the certificates is backwards or for the wrong domain) the client will get an SSL handshake. Inspection of <code class="docutils literal notranslate"><span class="pre">/opt/tomcat/logs/catalina.log</span></code> is likely to yield information to reveal this.</p>
+</div>
+<p>To see the ordering of certificates you may have to manually split up your certificate chain and use <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/openssl(1ssl)">openssl(1ssl)</a></em> on each individual certificate</p>
+</div>
+<div class="section" id="suggested-way-of-setting-up-an-https-delivery-service">
+<h3>Suggested Way of Setting up an HTTPS Delivery Service<a class="headerlink" href="#suggested-way-of-setting-up-an-https-delivery-service" title="Permalink to this headline">¶</a></h3>
+<p>Assuming you have already created a <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> which you plan to modify to use HTTPS, do the following in Traffic Portal:</p>
+<ol class="arabic simple">
+<li><p>Select one of ‘1 - HTTPS’, ‘2 - HTTP AND HTTPS’, or ‘3 - HTTP TO HTTPS’ for the protocol field of a <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> and click the <span class="guilabel">Update</span> button</p></li>
+<li><p>Go to <span class="menuselection">More ‣ Manage SSL Keys</span></p></li>
+<li><p>Click on <span class="menuselection">More ‣ Generate SSL Keys</span></p></li>
+<li><p>Fill out the form and click on the green <span class="guilabel">Generate Keys</span> button, then confirm that you want to make these changes</p></li>
+<li><p>Copy the contents of the Certificate Signing Request field and save it locally</p></li>
+<li><p>Go back and select ‘HTTP’ for the protocol field of the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> and click <span class="guilabel">Save</span> (to avoid preventing other CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> updates from being blocked by Traffic Router)</p></li>
+<li><p>Follow your standard procedure for obtaining your signed certificate chain from a <abbr title="Certificate Authority">CA</abbr></p></li>
+<li><p>After receiving your certificate chain import it into Traffic Ops</p></li>
+<li><p>Edit the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a></p></li>
+<li><p>Restore your original choice for the protocol field and click <span class="guilabel">Save</span></p></li>
+<li><p>Click <span class="menuselection">More ‣ Manage SSL Keys</span></p></li>
+<li><p>Paste your key information into the appropriate fields</p></li>
+<li><p>Click the green <span class="guilabel">Update Keys</span> button</p></li>
+<li><p>Take a new CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a></p></li>
+</ol>
+<p>Once this is done you should be able to verify that you are being correctly redirected by Traffic Router using e.g. <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/curl(1)">curl(1)</a></em> commands to HTTPS destinations on your <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>.</p>
+</div>
+</div>
+<div class="section" id="router-load-testing">
+<h2>Router Load Testing<a class="headerlink" href="#router-load-testing" title="Permalink to this headline">¶</a></h2>
+<p>The Traffic Router load testing tool is located in the <a class="reference external" href="https://github.com/apache/trafficcontrol/tree/master/test/router">Traffic Control repository under test/router</a>. It can be used to simulate a mix of HTTP and HTTPS traffic for a CDN by choosing the number of HTTP <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s and the number HTTPS <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> the test will exercise.</p>
+<p>There are 2 parts to the load test:</p>
+<ul class="simple">
+<li><p>A web server that makes the actual requests and takes commands to fetch data from the CDN, start the test, and return current results.</p></li>
+<li><p>A web page that’s used to run the test and see the results.</p></li>
+</ul>
+<div class="section" id="running-the-load-tests">
+<h3>Running the Load Tests<a class="headerlink" href="#running-the-load-tests" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>First, clone the <a class="reference external" href="https://github.com/apache/trafficcontrol">Traffic Control repository</a>.</p></li>
+<li><p>You will need to make sure you have a <abbr title="Certificate Authority">CA</abbr> file on your machine</p></li>
+<li><p>The web server is a Go program, set your <code class="docutils literal notranslate"><span class="pre">GOPATH</span></code> environment variable appropriately (we suggest <code class="docutils literal notranslate"><span class="pre">$HOME/go</span></code> or <code class="docutils literal notranslate"><span class="pre">$HOME/src</span></code>)</p></li>
+<li><p>Open a terminal emulator and navigate to the <code class="docutils literal notranslate"><span class="pre">test/router/server</span></code> directory inside of the cloned repository</p></li>
+<li><p>Execute the server binary by running <code class="docutils literal notranslate"><span class="pre">go</span> <span class="pre">run</span> <span class="pre">server.go</span></code></p></li>
+<li><p>Using your web browser of choice, open the file <code class="docutils literal notranslate"><span class="pre">test/router/index.html</span></code></p></li>
+<li><p>Authenticate against a Traffic Ops host - this should be a nearly instantaneous operation - you can watch the output from <code class="docutils literal notranslate"><span class="pre">server.go</span></code> for feedback</p></li>
+<li><p>Enter the Traffic Ops host in the second form and click the button to get a list of CDN’s</p></li>
+<li><p>Wait for the web page to show a list of CDN’s under the above form, this may take several seconds</p></li>
+<li><p>The List of CDN’s will display the number of HTTP- and HTTPS-capable <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s that may be exercised</p></li>
+<li><p>Choose the CDN you want to exercise from the drop-down menu</p></li>
+<li><p>Fill out the rest of the form, enter appropriate numbers for each HTTP and HTTPS <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s</p></li>
+<li><p>Click <span class="guilabel">Run Test</span></p></li>
+<li><p>As the test runs the web page will occasionally report results including running time, latency, and throughput</p></li>
+</ol>
+</div>
+</div>
+<div class="section" id="tuning-recommendations">
+<h2>Tuning Recommendations<a class="headerlink" href="#tuning-recommendations" title="Permalink to this headline">¶</a></h2>
+<p>The following is an example of the command line parameters set in <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_router/conf/startup.properties</span></code> that has been tested on a multi-core server running under HTTPS load test requests. This is following the general recommendation to use the G1 garbage collector for <abbr title="Java Virtual Machine">JVM</abbr> applications running on multi-core machines. In addition to using the G1 garbage collector the <code class="docutils literal notranslate"><span class="pre">InitiatingHeapOccupancyPercent</span></code> was lowered to run garbage collection more frequently which improved overall throughput for Traffic Router and reduced ‘Stop the World’ garbage collection. Note that any environment variable settings in this file will override those set in <code class="file docutils literal notranslate"><span class="pre">/lib/systemd/system/traffic_router.service</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id17">
+<div class="code-block-caption"><span class="caption-number">#41 </span><span class="caption-text">Example CATALINA_OPTS Configuration</span><a class="headerlink" href="#id17" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CATALINA_OPTS</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">-server -Xms2g -Xmx8g \</span>
+<span class="s2">-Dlog4j.configuration=file://</span><span class="nv">$CATALINA_BASE</span><span class="s2">/conf/log4j.properties \</span>
+<span class="s2">-Djava.library.path=/usr/lib64 \</span>
+<span class="s2">-XX:+UseG1GC \</span>
+<span class="s2">-XX:+UnlockExperimentalVMOptions \</span>
+<span class="s2">-XX:InitiatingHeapOccupancyPercent=30&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="traffic_router/migrationto2-3.html" class="btn btn-neutral float-right" title="Traffic Router - Migrating to 3.0" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="traffic_monitor.html" class="btn btn-neutral" title="Traffic Monitor Administration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,395 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Ops - Using &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Traffic Portal Administration" href="../traffic_portal/installation.html" />
+    <link rel="prev" title="Traffic Ops - Installing" href="installation.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Ops - Using</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-traffic-ops-menu">The Traffic Ops Menu</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#changelog">ChangeLog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#help">Help</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#invalidate-content">Invalidate Content</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manage-dnssec-keys">Manage DNSSEC Keys</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#activate-deactivate-dnssec-for-a-cdn">Activate/Deactivate DNSSEC for a CDN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#generate-keys">Generate Keys</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#regenerate-ksk">Regenerate KSK</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#generation-of-keys-for-new-delivery-services">Generation of keys for new Delivery Services</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#regeneration-of-expiring-keys-for-a-delivery-service">Regeneration of expiring keys for a Delivery Service</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quick_howto/index.html">Quick How To Guides</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Administrator’s Guide</a> &raquo;</li>
+        
+      <li>Traffic Ops - Using</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/admin/traffic_ops/using.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-ops-using">
+<span id="to-using"></span><h1>Traffic Ops - Using<a class="headerlink" href="#traffic-ops-using" title="Permalink to this headline">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 3.0: </span>The Traffic Ops UI is deprecated, and will be removed entirely in the next major release (4.0). A much better way to interact with the CDN is to <a class="reference internal" href="../traffic_portal/usingtrafficportal.html#usingtrafficportal"><span class="std std-ref">use Traffic Portal</span></a>, which is the the only UI that will be receiving updates for the foreseeable future.</p>
+</div>
+<div class="section" id="the-traffic-ops-menu">
+<h2>The Traffic Ops Menu<a class="headerlink" href="#the-traffic-ops-menu" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id1">
+<img alt="The Traffic Ops Landing Page" src="../../_images/12m.png" />
+<p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">The Traffic Ops Landing Page</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p>The following tabs are available in the menu at the top of the Traffic Ops user interface.</p>
+<div class="section" id="changelog">
+<span id="index-0"></span><h3>ChangeLog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h3>
+<p>The Changelog table displays the changes that are being made to the Traffic Ops database through the Traffic Ops user interface. This tab will show the number of changes since you last visited this tab in (brackets) since the last time you visited this tab. There are currently no sub menus for this tab.</p>
+</div>
+<div class="section" id="help">
+<h3>Help<a class="headerlink" href="#help" title="Permalink to this headline">¶</a></h3>
+<p>Help for Traffic Ops and Traffic Control. Hover over this tab to get the following options:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 82%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>About</p></td>
+<td><p>Traffic Ops information, such as version, database information, etc</p></td>
+</tr>
+<tr class="row-odd"><td><p>Release Notes</p></td>
+<td><p>Release notes for the most recent releases of Traffic Ops</p></td>
+</tr>
+<tr class="row-even"><td><p>Logout</p></td>
+<td><p>Logout from Traffic Ops</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="invalidate-content">
+<span id="purge"></span><span id="index-1"></span><h2>Invalidate Content<a class="headerlink" href="#invalidate-content" title="Permalink to this headline">¶</a></h2>
+<p>Invalidating content on the CDN is sometimes necessary when the origin was mis-configured and something is cached in the CDN  that needs to be removed. Given the size of a typical Traffic Control CDN and the amount of content that can be cached in it, removing the content from all the caches may take a long time. To speed up content invalidation, Traffic Ops will not try to remove the content from the caches, but it makes the content inaccessible using the <em>regex_revalidate</em> ATS plugin. This forces a <em>revalidation</em> of the content, rather than a new get.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method forces a HTTP <em>revalidation</em> of the content, and not a new <em>GET</em> - the origin needs to support revalidation according to the HTTP/1.1 specification, and send a <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code> or <code class="docutils literal notranslate"><span class="pre">304</span> <span class="pre">Not</span> <span class="pre">Modified</span></code> as applicable.</p>
+</div>
+<p>To invalidate content:</p>
+<ol class="arabic">
+<li><p>Click <strong>Tools &gt; Invalidate Content</strong></p></li>
+<li><p>Fill out the form fields:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Select the <em>:term:`Delivery Service`*</em></p></li>
+<li><p>Enter the <strong>Path Regex</strong> - this should be a <a class="reference external" href="http://www.pcre.org/">PCRE</a> compatible regular expression for the path to match for forcing the revalidation. Be careful to only match on the content you need to remove - revalidation is an expensive operation for many origins, and a simple <code class="docutils literal notranslate"><span class="pre">/.*</span></code> can cause an overload condition of the origin.</p></li>
+<li><p>Enter the <strong>Time To Live</strong> - this is how long the revalidation rule will be active for. It usually makes sense to make this the same as the <code class="docutils literal notranslate"><span class="pre">Cache-Control</span></code> header from the origin which sets the object time to live in cache (by <code class="docutils literal notranslate"><span class="pre">max-age</span></code> or <code class="docutils literal notranslate"><span class="pre">Expires</span></code>). Entering a longer TTL here will make the caches do unnecessary work.</p></li>
+<li><p>Enter the <strong>Start Time</strong> - this is the start time when the revalidation rule will be made active. It is pre-populated with the current time, leave as is to schedule ASAP.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Click the <strong>Submit</strong> button.</p></li>
+</ol>
+</div>
+<div class="section" id="manage-dnssec-keys">
+<h2>Manage DNSSEC Keys<a class="headerlink" href="#manage-dnssec-keys" title="Permalink to this headline">¶</a></h2>
+<p>In order to support <a class="reference external" href="https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">DNSSEC</a> in Traffic Router, Traffic Ops provides some actions for managing DNSSEC keys for a CDN and associated <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s.  DNSSEC Keys consist of a Key Signing Keys (KSK) which are used to sign other DNSKEY records as well as Zone Signing Keys (ZSK) which are used to sign other records.  DNSSEC Keys are stored in <a class="reference external" href="../../overview/traffic_vault.html">Traffic Vault</a> and should only be accessible to Traffic Ops.  Other applications needing access to this data, such as Traffic Router, must use the Traffic Ops <a class="reference external" href="../../development/traffic_ops_api/v12/cdn.html#dnssec-keys">DNSSEC APIs</a> to retrieve this information.</p>
+<p>To Manage DNSSEC Keys:
+1. Click <strong>Tools -&gt; Manage DNSSEC Keys</strong>
+2. Choose a CDN and click <strong>Manage DNSSEC Keys</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>If keys have not yet been generated for a CDN, this screen will be mostly blank with just the <strong>CDN</strong> and <strong>DNSSEC Active?</strong> fields being populated.</p></li>
+<li><p>If keys have been generated for the CDN, the Manage DNSSEC Keys screen will show the TTL and Top Level Domain (TLD) <abbr title="Key Signing Key">KSK</abbr> Expiration for the CDN as well as DS Record information which will need to be added to the parent zone of the TLD in order for DNSSEC to work.</p></li>
+</ul>
+</div></blockquote>
+<p>The Manage DNSSEC Keys screen also allows a user to perform the following actions:</p>
+<div class="section" id="activate-deactivate-dnssec-for-a-cdn">
+<h3>Activate/Deactivate DNSSEC for a CDN<a class="headerlink" href="#activate-deactivate-dnssec-for-a-cdn" title="Permalink to this headline">¶</a></h3>
+<p>Fairly straight forward, this button set the <a class="reference internal" href="../../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> with the <a class="reference internal" href="../../overview/profiles_and_parameters.html#parameter-name"><span class="std std-ref">Name</span></a> “dnssec.enabled” to have a <a class="reference internal" href="../../overview/profiles_and_parameters.html#parameter-value"><span class="std std-ref">Value</span></a> of either “true” or “false” on the Traffic Router <a class="reference internal" href="../../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a> for the CDN.  The Activate/Deactivate option is only available if DNSSEC keys exist for CDN.  In order to active DNSSEC for a CDN a user must first generate keys and then click the <span class="guilabel">Active DNSSEC</span> button.</p>
+</div>
+<div class="section" id="generate-keys">
+<h3>Generate Keys<a class="headerlink" href="#generate-keys" title="Permalink to this headline">¶</a></h3>
+<p>Generate Keys will generate DNSSEC keys for the CDN TLD as well as for each <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> in the CDN.  It is important to note that this button will create a new <abbr title="Key Signing Key">KSK</abbr> for the TLD and, therefore, a new DS Record.  Any time a new DS Record is created, it will need to be added to the parent zone of the TLD in order for DNSSEC to work properly.  When a user clicks the <strong>Generate Keys</strong> button, they will be presented with a screen with the following fields:</p>
+<ul class="simple">
+<li><p><strong>CDN:</strong> This is not editable and displays the CDN for which keys will be generated</p></li>
+<li><p><strong>ZSK Expiration (Days):</strong>  Sets how long (in days) the Zone Signing Key will be valid for the CDN and associated <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s. The default is 30 days.</p></li>
+<li><p><strong>KSK Expiration (Days):</strong>  Sets how long (in days) the Key Signing Key will be valid for the CDN and associated <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s. The default is 365 days.</p></li>
+<li><p><strong>Effective Date (GMT):</strong> The time from which the new keys will be active.  Traffic Router will use this value to determine when to start signing with the new keys and stop signing with the old keys.</p></li>
+</ul>
+<p>Once these fields have been correctly entered, a user can click Generate Keys.  The user will be presented with a confirmation screen to help them understand the impact of generating the keys.  If a user confirms, the keys will be generated and stored in Traffic Vault.</p>
+</div>
+<div class="section" id="regenerate-ksk">
+<h3>Regenerate KSK<a class="headerlink" href="#regenerate-ksk" title="Permalink to this headline">¶</a></h3>
+<p>Regenerate <abbr title="Key Signing Key">KSK</abbr> will create a new Key Signing Key for the CDN TLD. A new DS Record will also be generated and need to be put into the parent zone in order for DNSSEC to work correctly. The <strong>Regenerate KSK</strong> button is only available if keys have already been generated for a CDN.  The intent of the button is to provide a mechanism for generating a new <abbr title="Key Signing Key">KSK</abbr> when a previous one expires or if necessary for other reasons such as a security breach.  When a user goes to generate a new <abbr title="Key Signing Key">KSK</abbr> they are presented with a screen with the following options:</p>
+<dl class="field-list simple">
+<dt class="field-odd">CDN</dt>
+<dd class="field-odd"><p>This is not editable and displays the CDN for which keys will be generated</p>
+</dd>
+<dt class="field-even">KSK Expiration (Days)</dt>
+<dd class="field-even"><p>Sets how long (in days) the Key Signing Key will be valid for the CDN and associated <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s. The default is 365 days.</p>
+</dd>
+<dt class="field-odd">Effective Date (GMT)</dt>
+<dd class="field-odd"><p>The time from which the new <abbr title="Key Signing Key">KSK</abbr> and DS Record will be active. Since generating a new <abbr title="Key Signing Key">KSK</abbr> will generate a new DS Record that needs to be added to the parent zone, it is very important to make sure that an effective date is chosen that allows for time to get the DS Record into the parent zone. Failure to get the new DS Record into the parent zone in time could result in DNSSEC errors when Traffic Router tries to sign responses.</p>
+</dd>
+</dl>
+<p>Once these fields have been correctly entered, a user can click Generate KSK. The user will be presented with a confirmation screen to help them understand the impact of generating the KSK.  If a user confirms, the <abbr title="Key Signing Key">KSK</abbr> will be generated and stored in Traffic Vault.</p>
+<p>Additionally, Traffic Ops also performs some systematic management of <abbr title="DNS Security Extensions">DNSSEC</abbr> keys. This management is necessary to help keep keys in sync for <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s in a CDN as well as to make sure keys do not expire without human intervention.</p>
+</div>
+<div class="section" id="generation-of-keys-for-new-delivery-services">
+<h3>Generation of keys for new Delivery Services<a class="headerlink" href="#generation-of-keys-for-new-delivery-services" title="Permalink to this headline">¶</a></h3>
+<p>If a new <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> is created and added to a CDN that has <abbr title="DNS Security Extensions">DNSSEC</abbr> enabled, Traffic Ops will create <abbr title="DNS Security Extensions">DNSSEC</abbr> keys for the <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> and store them in Traffic Vault.</p>
+</div>
+<div class="section" id="regeneration-of-expiring-keys-for-a-delivery-service">
+<h3>Regeneration of expiring keys for a Delivery Service<a class="headerlink" href="#regeneration-of-expiring-keys-for-a-delivery-service" title="Permalink to this headline">¶</a></h3>
+<p>Traffic Ops has a process, controlled by <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/cron(8)">cron(8)</a></em>, to check for expired or expiring keys and re-generate them. The process runs at 5 minute intervals to check and see if keys are expired or close to expiring (withing 10 minutes by default). If keys are expired for a <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>, Traffic Ops will regenerate new keys and store them in Traffic Vault. This process is the same for the CDN <abbr title="Top-Level Domain">TLD</abbr> <abbr title="Zone Signing Key">ZSK</abbr>, however Traffic Ops will not re-generate the CDN <abbr title="Top-Level Domain">TLD</abbr> <abbr title="Key Signing Key">KSK</abbr> systematically. The reason is that when a <abbr title="Key Signing Key">KSK</abbr> is regenerated for the CDN <abbr title="Top-Level Domain">TLD</abbr> then a new DS Record will also be created. The new DS Record needs to be added to the parent zone before Traffic Router attempts to sign with the new <abbr title="Key Signing Key">KSK</abbr> in order for <abbr title="DNS Security Extensions">DNSSEC</abbr> to work correctly. Therefore, management of the <abbr title="Key Signing Key">KSK</abbr> needs to be a manual process.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../traffic_portal/installation.html" class="btn btn-neutral float-right" title="Traffic Portal Administration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Traffic Ops - Installing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

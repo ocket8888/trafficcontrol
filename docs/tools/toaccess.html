@@ -1,0 +1,580 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>toaccess &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FAQ" href="../faq.html" />
+    <link rel="prev" title="Traffic Vault Util" href="traffic_vault_util.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tools</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="compare.html">The Compare Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_client.html">Apache-TrafficControl Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_vault_util.html">Traffic Vault Util</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">toaccess</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">toaccess</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#arguments-and-flags">Arguments and Flags</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#exit-codes">Exit Codes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-reference">Module Reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Tools</a> &raquo;</li>
+        
+      <li>toaccess</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tools/toaccess.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-to_access">
+<span id="toaccess"></span><span id="toaccess-module"></span><h1>toaccess<a class="headerlink" href="#module-to_access" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<span id="id2"></span><h2><code class="docutils literal notranslate"><span class="pre">toaccess</span></code><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a set of functions meant to provide ease-of-use functionality for interacting
+with the Traffic Ops API. It provides scripts named <code class="file docutils literal notranslate"><span class="pre">to</span><em><span class="pre">method</span></em></code> where <cite>method</cite> is the name of
+an HTTP method (in lowercase). Collectively they are referred to as <strong class="program">toaccess</strong> Implemented
+methods thus far are:</p>
+<ul class="simple">
+<li><p>delete</p></li>
+<li><p>head</p></li>
+<li><p>get</p></li>
+<li><p>options</p></li>
+<li><p>patch</p></li>
+<li><p>post</p></li>
+<li><p>put</p></li>
+</ul>
+<div class="section" id="arguments-and-flags">
+<h3>Arguments and Flags<a class="headerlink" href="#arguments-and-flags" title="Permalink to this headline">¶</a></h3>
+<dl class="option">
+<dt id="cmdoption-toaccess-arg-path">
+<code class="sig-name descname">PATH</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-toaccess-arg-path" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the request path. By default, whatever is passed is considered to be relative to
+<code class="file docutils literal notranslate"><span class="pre">/api/</span><em><span class="pre">api-version</span></em><span class="pre">/</span></code> where <code class="docutils literal notranslate"><span class="pre">api-version</span></code> is <a class="reference internal" href="#cmdoption-toaccess-a"><code class="xref std std-option docutils literal notranslate"><span class="pre">--api-version</span></code></a>. This behavior can
+be disabled by using <a class="reference internal" href="#cmdoption-toaccess-r"><code class="xref std std-option docutils literal notranslate"><span class="pre">--raw-path</span></code></a>.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-toaccess-arg-data">
+<code class="sig-name descname">DATA</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-toaccess-arg-data" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional positional argument that is a data payload to pass to the Traffic Ops server in the
+request body. If this is the absolute or relative path to a file, the contents of the file will
+instead be read and used as the request payload.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-toaccess-h">
+<code class="sig-name descname">-h</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--help</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-toaccess-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print usage information and exit</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-toaccess-a">
+<code class="sig-name descname">-a</code><code class="sig-prename descclassname"> API_VERSION</code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--api-version</code><code class="sig-prename descclassname"> API_VERSION</code><a class="headerlink" href="#cmdoption-toaccess-a" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the version of the Traffic Ops API that will be used for the request. Has no effect if
+<a class="reference internal" href="#cmdoption-toaccess-r"><code class="xref std std-option docutils literal notranslate"><span class="pre">--raw-path</span></code></a> is used. (Default: 1.3)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-toaccess-f">
+<code class="sig-name descname">-f</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--full</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-toaccess-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output the full HTTP exchange including request method line, request headers, request body (if
+any), response status line, and response headers (as well as the response body, if any). This is
+equivalent to using <a class="reference internal" href="#cmdoption-toaccess-request-headers"><code class="xref std std-option docutils literal notranslate"><span class="pre">--request-headers</span></code></a>, <a class="reference internal" href="#cmdoption-toaccess-request-payload"><code class="xref std std-option docutils literal notranslate"><span class="pre">--request-payload</span></code></a>, and
+<a class="reference internal" href="#cmdoption-toaccess-response-headers"><code class="xref std std-option docutils literal notranslate"><span class="pre">--response-headers</span></code></a> at the same time, and those options will have no effect if given.
+(Default: false)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-toaccess-k">
+<code class="sig-name descname">-k</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--insecure</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-toaccess-k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do not verify SSL certificates - typically useful for making requests to development or testing
+servers as they frequently have self-signed certificates. (Default: false)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-toaccess-p">
+<code class="sig-name descname">-p</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--pretty</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-toaccess-p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pretty-print any payloads that are output as formatted JSON. Has no effect on plaintext payloads.
+Uses tab characters for indentation. (Default: false)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-toaccess-r">
+<code class="sig-name descname">-r</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--raw-path</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-toaccess-r" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request exactly <a class="reference internal" href="#cmdoption-toaccess-arg-path"><code class="xref std std-option docutils literal notranslate"><span class="pre">PATH</span></code></a>; do not preface the request path with <code class="file docutils literal notranslate"><span class="pre">/api/</span><em><span class="pre">api_version</span></em></code>.
+This effectively means that <a class="reference internal" href="#cmdoption-toaccess-a"><code class="xref std std-option docutils literal notranslate"><span class="pre">--api-version</span></code></a> will have no effect. (Default: false)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-toaccess-request-headers">
+<code class="sig-name descname">--request-headers</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-toaccess-request-headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output the request method line and any and all request headers. (Default: false)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-toaccess-request-payload">
+<code class="sig-name descname">--request-payload</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-toaccess-request-payload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output the request body if any was sent. Will attempt to pretty-print the body as JSON if
+<a class="reference internal" href="#cmdoption-toaccess-p"><code class="xref std std-option docutils literal notranslate"><span class="pre">--pretty</span></code></a> is used. (Default: false)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-toaccess-response-headers">
+<code class="sig-name descname">--response-headers</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-toaccess-response-headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output the response status line and any and all response headers. (Default: false)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-toaccess-to-url">
+<code class="sig-name descname">--to-url</code><code class="sig-prename descclassname"> URL</code><a class="headerlink" href="#cmdoption-toaccess-to-url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <abbr title="Fully Qualified Domain Name">FQDN</abbr> and optionally the port and scheme of the Traffic
+Ops server. This will override <span class="target" id="index-0"></span><a class="reference internal" href="#envvar-TO_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_URL</span></code></a>. The format is the same as for <span class="target" id="index-1"></span><a class="reference internal" href="#envvar-TO_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_URL</span></code></a>.
+(Default: uses the value of <span class="target" id="index-2"></span><a class="reference internal" href="#envvar-TO_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_URL</span></code></a>)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-toaccess-to-password">
+<code class="sig-name descname">--to-password</code><code class="sig-prename descclassname"> PASSWORD</code><a class="headerlink" href="#cmdoption-toaccess-to-password" title="Permalink to this definition">¶</a></dt>
+<dd><p>The password to use when authenticating to Traffic Ops. Overrides <span class="target" id="index-3"></span><a class="reference internal" href="#envvar-TO_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_PASSWORD</span></code></a>.
+(Default: uses the value of <span class="target" id="index-4"></span><a class="reference internal" href="#envvar-TO_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_PASSWORD</span></code></a>)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-toaccess-to-user">
+<code class="sig-name descname">--to-user</code><code class="sig-prename descclassname"> USERNAME</code><a class="headerlink" href="#cmdoption-toaccess-to-user" title="Permalink to this definition">¶</a></dt>
+<dd><p>The username to use when connecting to Traffic Ops. Overrides <span class="target" id="index-5"></span><a class="reference internal" href="#envvar-TO_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_USER</span></code></a>. (Default: uses
+the value of <span class="target" id="index-6"></span><a class="reference internal" href="#envvar-TO_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_USER</span></code></a>)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="environment-variables">
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>
+<p>If defined, <strong class="program">toaccess</strong> scripts will use these environment variables to define their
+connection to and authentication with the Traffic Ops server. Typically, setting these is easier
+than using the long options <a class="reference internal" href="#cmdoption-toaccess-to-url"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to-url</span></code></a>, <a class="reference internal" href="#cmdoption-toaccess-to-user"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to-user</span></code></a>, and <a class="reference internal" href="#cmdoption-toaccess-to-password"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to-password</span></code></a> on
+every invocation.</p>
+<dl class="envvar">
+<dt id="envvar-TO_PASSWORD">
+<code class="sig-name descname">TO_PASSWORD</code><a class="headerlink" href="#envvar-TO_PASSWORD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Will be used to authenticate the user defined by either <a class="reference internal" href="#cmdoption-toaccess-to-user"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to-user</span></code></a> or <span class="target" id="index-7"></span><a class="reference internal" href="#envvar-TO_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_USER</span></code></a>.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-TO_URL">
+<code class="sig-name descname">TO_URL</code><a class="headerlink" href="#envvar-TO_URL" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <abbr title="Fully Qualified Domain Name">FQDN</abbr> of the Traffic Ops server to which the script
+will connect. The format of this should be <code class="file docutils literal notranslate"><span class="pre">[</span><em><span class="pre">http</span> <span class="pre">or</span> <span class="pre">https</span></em><span class="pre">://]</span><em><span class="pre">hostname</span></em><span class="pre">[:</span><em><span class="pre">port</span></em><span class="pre">]</span></code>. Note
+that this may optionally start with <code class="docutils literal notranslate"><span class="pre">http://</span></code> or <code class="docutils literal notranslate"><span class="pre">https://</span></code> (case insensitive), but
+typically this is unnecessary. Also notice that the port number may be specified, though again
+this isn’t usually required. All <strong class="program">toaccess</strong> scripts will assume that port 443 should be
+used unless otherwise specified. They will further assume that the protocol is HTTPS unless
+<span class="target" id="index-8"></span><a class="reference internal" href="#envvar-TO_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_URL</span></code></a> (or <a class="reference internal" href="#cmdoption-toaccess-to-url"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to-url</span></code></a>) starts with <code class="docutils literal notranslate"><span class="pre">http://</span></code>, in which case the default port
+will also be set to 80 unless otherwise specified in the URL.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-TO_USER">
+<code class="sig-name descname">TO_USER</code><a class="headerlink" href="#envvar-TO_USER" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the user as whom to connect to the Traffic Ops server. Overriden by
+<a class="reference internal" href="#cmdoption-toaccess-to-user"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to-user</span></code></a>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="exit-codes">
+<h3>Exit Codes<a class="headerlink" href="#exit-codes" title="Permalink to this headline">¶</a></h3>
+<p>The exit code of a <strong class="program">toaccess</strong> script can sometimes be used by the caller to determine what
+the result of calling the script was without needing to parse the output. The exit codes used are:</p>
+<dl class="simple">
+<dt>0</dt><dd><p>The command executed successfully, and the result is on STDOUT.</p>
+</dd>
+<dt>1</dt><dd><p>Typically this exit code means that an error was encountered when parsing positional command
+line arguments. However, this is also the exit code used by most Python interpreters to signal
+an unhandled exception.</p>
+</dd>
+<dt>2</dt><dd><p>Signifies a runtime error that caused the request to fail - this is <strong>not</strong> generally indicative
+of an HTTP client or server error, but rather an underlying issue connecting to or
+authenticating with Traffic Ops. This is distinct from an exit code of <code class="docutils literal notranslate"><span class="pre">32</span></code> in that the
+<em>format</em> of the arguments was correct, but there was some problem with the <em>value</em>. For example,
+passing <code class="docutils literal notranslate"><span class="pre">https://test:</span></code> to <a class="reference internal" href="#cmdoption-toaccess-to-url"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to-url</span></code></a> will cause an exit code of <code class="docutils literal notranslate"><span class="pre">2</span></code>, not <code class="docutils literal notranslate"><span class="pre">32</span></code>.</p>
+</dd>
+<dt>4</dt><dd><p>An HTTP client error occurred. The HTTP stack will be printed to stdout as indicated by other
+options - meaning by default it will only print the response payload if one was given, but will
+respect options like e.g. <a class="reference internal" href="#cmdoption-toaccess-request-payload"><code class="xref std std-option docutils literal notranslate"><span class="pre">--request-payload</span></code></a> as well as
+<a class="reference internal" href="#cmdoption-toaccess-p"><code class="xref std std-option docutils literal notranslate"><span class="pre">-p</span></code></a>/<a class="reference internal" href="#cmdoption-toaccess-p"><code class="xref std std-option docutils literal notranslate"><span class="pre">--pretty</span></code></a>.</p>
+</dd>
+<dt>5</dt><dd><p>An HTTP server error occurred. The HTTP stack will be printed to stdout as indicated by other
+options - meaning by default it will only print the response payload if one was given, but will
+respect options like e.g. <a class="reference internal" href="#cmdoption-toaccess-request-payload"><code class="xref std std-option docutils literal notranslate"><span class="pre">--request-payload</span></code></a> as well as
+<a class="reference internal" href="#cmdoption-toaccess-p"><code class="xref std std-option docutils literal notranslate"><span class="pre">-p</span></code></a>/<a class="reference internal" href="#cmdoption-toaccess-p"><code class="xref std std-option docutils literal notranslate"><span class="pre">--pretty</span></code></a>.</p>
+</dd>
+<dt>32</dt><dd><p>This is the error code emitted by Python’s <code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code> module when the passed arguments
+could not be parsed successfully.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The way exit codes <code class="docutils literal notranslate"><span class="pre">4</span></code> and <code class="docutils literal notranslate"><span class="pre">5</span></code> are implemented is by returning the status code of the
+HTTP request divided by 100 whenever it is at least 400. This means that if the Traffic Ops
+server ever started returning e.g. 700 status codes, the exit code of the script would be 7.</p>
+</div>
+</div>
+</div>
+<div class="section" id="module-reference">
+<h2>Module Reference<a class="headerlink" href="#module-reference" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="to_access.delete">
+<code class="sig-prename descclassname">to_access.</code><code class="sig-name descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#to_access.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point for <strong class="program">todelete</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The program’s exit code</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="to_access.get">
+<code class="sig-prename descclassname">to_access.</code><code class="sig-name descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#to_access.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point for <strong class="program">toget</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The program’s exit code</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="to_access.head">
+<code class="sig-prename descclassname">to_access.</code><code class="sig-name descname">head</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#to_access.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point for <strong class="program">tohead</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The program’s exit code</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="to_access.options">
+<code class="sig-prename descclassname">to_access.</code><code class="sig-name descname">options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#to_access.options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point for <strong class="program">tooptions</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The program’s exit code</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="to_access.output">
+<code class="sig-prename descclassname">to_access.</code><code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">pretty</em>, <em class="sig-param">request_header</em>, <em class="sig-param">response_header</em>, <em class="sig-param">request_payload</em>, <em class="sig-param">indent='\t'</em><span class="sig-paren">)</span><a class="headerlink" href="#to_access.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the passed response object in a format consistent with the other parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> – The <code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code> response object being printed</p></li>
+<li><p><strong>pretty</strong> – If <code class="xref py py-const docutils literal notranslate"><span class="pre">True</span></code>, attempt to pretty-print payloads as JSON</p></li>
+<li><p><strong>request_header</strong> – If <code class="xref py py-const docutils literal notranslate"><span class="pre">True</span></code>, print request line and request headers</p></li>
+<li><p><strong>response_header</strong> – If <code class="xref py py-const docutils literal notranslate"><span class="pre">True</span></code>, print response line and response headers</p></li>
+<li><p><strong>request_payload</strong> – If <code class="xref py py-const docutils literal notranslate"><span class="pre">True</span></code>, print the request payload</p></li>
+<li><p><strong>indent</strong> – An optional number of spaces for pretty-printing indentation (default is the tab character)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="to_access.parse_arguments">
+<code class="sig-prename descclassname">to_access.</code><code class="sig-name descname">parse_arguments</code><span class="sig-paren">(</span><em class="sig-param">program</em><span class="sig-paren">)</span><a class="headerlink" href="#to_access.parse_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>A common-use function that parses the command line arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>program</strong> – The name of the program being run - used for usage informational output</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The Traffic Ops HTTP session object, the requested path, any data to be sent, an output
+format specification, whether or not the path is raw, and whether or not output should
+be prettified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="to_access.patch">
+<code class="sig-prename descclassname">to_access.</code><code class="sig-name descname">patch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#to_access.patch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point for <strong class="program">topatch</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The program’s exit code</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="to_access.post">
+<code class="sig-prename descclassname">to_access.</code><code class="sig-name descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#to_access.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point for <strong class="program">topost</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The program’s exit code</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="to_access.put">
+<code class="sig-prename descclassname">to_access.</code><code class="sig-name descname">put</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#to_access.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point for <strong class="program">toput</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The program’s exit code</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="to_access.request">
+<code class="sig-prename descclassname">to_access.</code><code class="sig-name descname">request</code><span class="sig-paren">(</span><em class="sig-param">method</em><span class="sig-paren">)</span><a class="headerlink" href="#to_access.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>All of the scripts wind up calling this function to handle their common functionality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>method</strong> – The name of the request method to use (case-insensitive)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The program’s exit code</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../faq.html" class="btn btn-neutral float-right" title="FAQ" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="traffic_vault_util.html" class="btn btn-neutral" title="Traffic Vault Util" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

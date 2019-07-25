@@ -1,0 +1,1033 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Router API &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Traffic Monitor" href="../traffic_monitor.html" />
+    <link rel="prev" title="Traffic Router" href="../traffic_router.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../building.html">Building Traffic Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops.html">Traffic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops_golang.html">Traffic Ops - Go</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ort/traffic_ops_ort.html">traffic_ops_ort package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal.html">Traffic Portal</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../traffic_router.html">Traffic Router</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../traffic_router.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../traffic_router.html#software-requirements">Software Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../traffic_router.html#traffic-router-project-tree-overview">Traffic Router Project Tree Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../traffic_router.html#java-formatting-conventions">Java Formatting Conventions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../traffic_router.html#installing-the-developer-environment">Installing The Developer Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../traffic_router.html#manual-testing">Manual Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../traffic_router.html#test-cases">Test Cases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../traffic_router.html#rpm-packaging">RPM Packaging</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../traffic_router.html#api">API</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Traffic Router API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation_guidelines.html">Documentation Guidelines</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Developer’s Guide</a> &raquo;</li>
+        
+          <li><a href="../traffic_router.html">Traffic Router</a> &raquo;</li>
+        
+      <li>Traffic Router API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/development/traffic_router/traffic_router_api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-router-api">
+<span id="tr-api"></span><h1>Traffic Router API<a class="headerlink" href="#traffic-router-api" title="Permalink to this headline">¶</a></h1>
+<p>By default, Traffic Router serves its API via HTTP (not HTTPS) on port 3333. This can be configured in <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_router/conf/server.xml</span></code> or by setting a <a class="reference internal" href="../../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> with the <a class="reference internal" href="../../overview/profiles_and_parameters.html#parameter-name"><span class="std std-ref">Name</span></a> “api.port”, and the <a class="reference internal" href="../../overview/profiles_and_parameters.html#parameter-config-file"><span class="std std-ref">Config File</span></a> “server.xml” on the Traffic Router’s <a class="reference internal" href="../../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a>.</p>
+<p>Traffic Router API endpoints only respond to <code class="docutils literal notranslate"><span class="pre">GET</span></code> requests.</p>
+<div class="section" id="crs-stats">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/stats</span></code><a class="headerlink" href="#crs-stats" title="Permalink to this headline">¶</a></h2>
+<p>General stats.</p>
+<div class="section" id="request-structure">
+<h3>Request Structure<a class="headerlink" href="#request-structure" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id29">
+<div class="code-block-caption"><span class="caption-number">#88 </span><span class="caption-text">Request Example</span><a class="headerlink" href="#id29" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/crs/stats</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">trafficrouter.infra.ciab.test</span>
+<span class="na">User-Agent</span><span class="o">:</span> <span class="l">curl/7.47.0</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">*/*</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="response-structure">
+<h3>Response Structure<a class="headerlink" href="#response-structure" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id30">
+<div class="code-block-caption"><span class="caption-number">#89 </span><span class="caption-text">Response Example</span><a class="headerlink" href="#id30" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json;charset=UTF-8</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Tue, 15 Jan 2019 21:02:09 GMT</span>
+
+<span class="p">{</span> <span class="nt">&quot;app&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;buildTimestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2019-01-10&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;traffic_router&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;deploy-dir&quot;</span><span class="p">:</span> <span class="s2">&quot;/opt/traffic_router&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;git-revision&quot;</span><span class="p">:</span> <span class="s2">&quot;437e9df81&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;3.0.0&quot;</span>
+<span class="p">},</span>
+<span class="nt">&quot;stats&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;dnsMap&quot;</span><span class="p">:</span> <span class="p">{},</span>
+    <span class="nt">&quot;httpMap&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;video.demo1.mycdn.ciab.test&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;czCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;geoCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;deepCzCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;missCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;dsrCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;errCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;staticRouteCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;fedCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;regionalDeniedCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;regionalAlternateCount&quot;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;totalDnsCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;totalHttpCount&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;totalDsMissCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;appStartTime&quot;</span><span class="p">:</span> <span class="mi">1547584831677</span><span class="p">,</span>
+    <span class="nt">&quot;averageDnsTime&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;averageHttpTime&quot;</span><span class="p">:</span> <span class="mi">1547584863270</span><span class="p">,</span>
+    <span class="nt">&quot;updateTracker&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;lastHttpsCertificatesCheck&quot;</span><span class="p">:</span> <span class="mi">1547586068932</span><span class="p">,</span>
+        <span class="nt">&quot;lastGeolocationDatabaseUpdaterUpdate&quot;</span><span class="p">:</span> <span class="mi">1547584858917</span><span class="p">,</span>
+        <span class="nt">&quot;lastCacheStateCheck&quot;</span><span class="p">:</span> <span class="mi">1547586128932</span><span class="p">,</span>
+        <span class="nt">&quot;lastCacheStateChange&quot;</span><span class="p">:</span> <span class="mi">1547584867102</span><span class="p">,</span>
+        <span class="nt">&quot;lastNetworkUpdaterUpdate&quot;</span><span class="p">:</span> <span class="mi">1547584857484</span><span class="p">,</span>
+        <span class="nt">&quot;lastHttpsCertificatesUpdate&quot;</span><span class="p">:</span> <span class="mi">1547586071079</span><span class="p">,</span>
+        <span class="nt">&quot;lastSteeringWatcherUpdate&quot;</span><span class="p">:</span> <span class="mi">1547584923514</span><span class="p">,</span>
+        <span class="nt">&quot;lastConfigCheck&quot;</span><span class="p">:</span> <span class="mi">1547586127344</span><span class="p">,</span>
+        <span class="nt">&quot;lastConfigChange&quot;</span><span class="p">:</span> <span class="mi">1547584863406</span><span class="p">,</span>
+        <span class="nt">&quot;lastNetworkUpdaterCheck&quot;</span><span class="p">:</span> <span class="mi">1547584857465</span><span class="p">,</span>
+        <span class="nt">&quot;lastGeolocationDatabaseUpdaterCheck&quot;</span><span class="p">:</span> <span class="mi">1547584858906</span><span class="p">,</span>
+        <span class="nt">&quot;lastFederationsWatcherUpdate&quot;</span><span class="p">:</span> <span class="mi">1547584863433</span><span class="p">,</span>
+        <span class="nt">&quot;lastHttpsCertificatesFetchSuccess&quot;</span><span class="p">:</span> <span class="mi">1547586069070</span><span class="p">,</span>
+        <span class="nt">&quot;lastSteeringWatcherCheck&quot;</span><span class="p">:</span> <span class="mi">1547586124630</span><span class="p">,</span>
+        <span class="nt">&quot;lastFederationsWatcherCheck&quot;</span><span class="p">:</span> <span class="mi">1547586124584</span><span class="p">,</span>
+        <span class="nt">&quot;lastHttpsCertificatesFetchAttempt&quot;</span><span class="p">:</span> <span class="mi">1547586068932</span>
+    <span class="p">}</span>
+<span class="p">}}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="crs-stats-ip-ip">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/stats/ip/{{IP}}</span></code><a class="headerlink" href="#crs-stats-ip-ip" title="Permalink to this headline">¶</a></h2>
+<p>Geolocation information for an IPv4 or IPv6 address.</p>
+<div class="section" id="id1">
+<h3>Request Structure<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id31">
+<caption><span class="caption-number">Table 46 </span><span class="caption-text">Request Path Parameters</span><a class="headerlink" href="#id31" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 92%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>IP</p></td>
+<td><p>The IP address for which statics will be returned. May be IPv4 or IPv6</p></td>
+</tr>
+</tbody>
+</table>
+<div class="literal-block-wrapper docutils container" id="id32">
+<div class="code-block-caption"><span class="caption-number">#90 </span><span class="caption-text">Request Example</span><a class="headerlink" href="#id32" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/crs/stats/ip/255.255.255.255</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">trafficrouter.infra.ciab.test</span>
+<span class="na">User-Agent</span><span class="o">:</span> <span class="l">curl/7.47.0</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">*/*</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Response Structure<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id33">
+<div class="code-block-caption"><span class="caption-number">#91 </span><span class="caption-text">Response Example</span><a class="headerlink" href="#id33" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Disposition</span><span class="o">:</span> <span class="l">inline;filename=f.txt</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json;charset=UTF-8</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Tue, 15 Jan 2019 21:06:09 GMT</span>
+
+<span class="p">{</span> <span class="nt">&quot;locationByGeo&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;city&quot;</span><span class="p">:</span> <span class="s2">&quot;Woodridge&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;countryCode&quot;</span><span class="p">:</span> <span class="s2">&quot;US&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;latitude&quot;</span><span class="p">:</span> <span class="s2">&quot;41.7518&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;postalCode&quot;</span><span class="p">:</span> <span class="s2">&quot;60517&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;countryName&quot;</span><span class="p">:</span> <span class="s2">&quot;United States&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;longitude&quot;</span><span class="p">:</span> <span class="s2">&quot;-88.0489&quot;</span>
+<span class="p">},</span>
+<span class="nt">&quot;locationByFederation&quot;</span><span class="p">:</span> <span class="s2">&quot;not found&quot;</span><span class="p">,</span>
+<span class="nt">&quot;requestIp&quot;</span><span class="p">:</span> <span class="s2">&quot;69.241.118.34&quot;</span><span class="p">,</span>
+<span class="nt">&quot;locationByCoverageZone&quot;</span><span class="p">:</span> <span class="s2">&quot;not found&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="crs-locations">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/locations</span></code><a class="headerlink" href="#crs-locations" title="Permalink to this headline">¶</a></h2>
+<p>A list of configured <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>s to which the Traffic Router is capable of routing client traffic.</p>
+<div class="section" id="id3">
+<h3>Request Structure<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id34">
+<div class="code-block-caption"><span class="caption-number">#92 </span><span class="caption-text">Request Example</span><a class="headerlink" href="#id34" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/crs/locations</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">trafficrouter.infra.ciab.test</span>
+<span class="na">User-Agent</span><span class="o">:</span> <span class="l">curl/7.47.0</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">*/*</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>Response Structure<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">locations</dt>
+<dd class="field-odd"><p>An array of the names of <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>s to which this Traffic Router is capable of routing client traffic</p>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id35">
+<div class="code-block-caption"><span class="caption-number">#93 </span><span class="caption-text">Response Example</span><a class="headerlink" href="#id35" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json;charset=UTF-8</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Tue, 15 Jan 2019 21:12:17 GMT</span>
+
+<span class="p">{</span> <span class="nt">&quot;locations&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;CDN_in_a_Box_Edge&quot;</span>
+<span class="p">]}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="crs-locations-caches">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/locations/caches</span></code><a class="headerlink" href="#crs-locations-caches" title="Permalink to this headline">¶</a></h2>
+<p>A mapping of caches to cache groups and their current health state.</p>
+<div class="section" id="id5">
+<h3>Request Structure<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id36">
+<div class="code-block-caption"><span class="caption-number">#94 </span><span class="caption-text">Request Example</span><a class="headerlink" href="#id36" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/crs/locations/caches</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">trafficrouter.infra.ciab.test</span>
+<span class="na">User-Agent</span><span class="o">:</span> <span class="l">curl/7.47.0</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">*/*</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id6">
+<h3>Response Structure<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id37">
+<div class="code-block-caption"><span class="caption-number">#95 </span><span class="caption-text">Response Example</span><a class="headerlink" href="#id37" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json;charset=UTF-8</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Tue, 15 Jan 2019 21:15:53 GMT</span>
+
+<span class="p">{</span> <span class="nt">&quot;locations&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;CDN_in_a_Box_Edge&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;cacheId&quot;</span><span class="p">:</span> <span class="s2">&quot;edge&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;fqdn&quot;</span><span class="p">:</span> <span class="s2">&quot;edge.infra.ciab.test&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;ipAddresses&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;172.16.239.100&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;fc01:9400:1000:8:0:0:0:100&quot;</span>
+            <span class="p">],</span>
+            <span class="nt">&quot;port&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;adminStatus&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+            <span class="nt">&quot;lastUpdateHealthy&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+            <span class="nt">&quot;lastUpdateTime&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;connections&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;currentBW&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;availBW&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;cacheOnline&quot;</span><span class="p">:</span> <span class="kc">true</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="crs-locations-cachegroup-caches">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/locations/{{cachegroup}}/caches</span></code><a class="headerlink" href="#crs-locations-cachegroup-caches" title="Permalink to this headline">¶</a></h2>
+<p>A list of <a class="reference internal" href="../../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s for this <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> only.</p>
+<div class="section" id="id7">
+<h3>Request Structure<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id38">
+<caption><span class="caption-number">Table 47 </span><span class="caption-text">Request Path Parameters</span><a class="headerlink" href="#id38" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>cachegroup</p></td>
+<td><p>The name of a <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> of which a list of constituent <a class="reference internal" href="../../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s will be retrieved</p></td>
+</tr>
+</tbody>
+</table>
+<div class="literal-block-wrapper docutils container" id="id39">
+<div class="code-block-caption"><span class="caption-number">#96 </span><span class="caption-text">Request Example</span><a class="headerlink" href="#id39" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/crs/locations/CDN_in_a_Box_Edge/caches</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">trafficrouter.infra.ciab.test</span>
+<span class="na">User-Agent</span><span class="o">:</span> <span class="l">curl/7.47.0</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">*/*</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id8">
+<h3>Response Structure<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id40">
+<div class="code-block-caption"><span class="caption-number">#97 </span><span class="caption-text">Response Example</span><a class="headerlink" href="#id40" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json;charset=UTF-8</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Tue, 15 Jan 2019 21:18:25 GMT</span>
+
+<span class="p">{</span> <span class="nt">&quot;caches&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="nt">&quot;cacheId&quot;</span><span class="p">:</span> <span class="s2">&quot;edge&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;fqdn&quot;</span><span class="p">:</span> <span class="s2">&quot;edge.infra.ciab.test&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;ipAddresses&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;172.16.239.100&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fc01:9400:1000:8:0:0:0:100&quot;</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;port&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;adminStatus&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nt">&quot;lastUpdateHealthy&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;lastUpdateTime&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;connections&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;currentBW&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;availBW&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;cacheOnline&quot;</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">}</span>
+<span class="p">]}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="crs-consistenthash-cache-coveragezone">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/consistenthash/cache/coveragezone</span></code><a class="headerlink" href="#crs-consistenthash-cache-coveragezone" title="Permalink to this headline">¶</a></h2>
+<p>The resulting cache of the consistent hash using coverage zone file for a given client IP, <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>, and request path.</p>
+<div class="section" id="id9">
+<h3>Request Structure<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id41">
+<caption><span class="caption-number">Table 48 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id41" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 7%" />
+<col style="width: 79%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ip</p></td>
+<td><p>yes</p></td>
+<td><p>The IP address of a potential client</p></td>
+</tr>
+<tr class="row-odd"><td><p>deliveryServiceId</p></td>
+<td><p>yes</p></td>
+<td><p>The integral, unique identifier?/’xml_id’?/name? of a <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> served by this Traffic Router</p></td>
+</tr>
+<tr class="row-even"><td><p>requestPath</p></td>
+<td><p>yes</p></td>
+<td><p>The… request path?</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id10">
+<h3>Response Structure<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<p>TBD</p>
+</div>
+</div>
+<div class="section" id="crs-consistenthash-cache-deep-coveragezone">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/consistenthash/cache/deep/coveragezone</span></code><a class="headerlink" href="#crs-consistenthash-cache-deep-coveragezone" title="Permalink to this headline">¶</a></h2>
+<p>The resulting cache of the consistent hash using deep coverage zone file (deep caching) for a given client IP, <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>, and request path.</p>
+<div class="section" id="id11">
+<h3>Request Structure<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id42">
+<caption><span class="caption-number">Table 49 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id42" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 7%" />
+<col style="width: 79%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ip</p></td>
+<td><p>yes</p></td>
+<td><p>The IP address of a potential client</p></td>
+</tr>
+<tr class="row-odd"><td><p>deliveryServiceId</p></td>
+<td><p>yes</p></td>
+<td><p>The integral, unique identifier?/’xml_id’?/name? of a <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> served by this Traffic Router</p></td>
+</tr>
+<tr class="row-even"><td><p>requestPath</p></td>
+<td><p>yes</p></td>
+<td><p>The… request path?</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id12">
+<h3>Response Structure<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<p>TBD</p>
+</div>
+</div>
+<div class="section" id="crs-consistenthash-cache-geolocation">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/consistenthash/cache/geolocation</span></code><a class="headerlink" href="#crs-consistenthash-cache-geolocation" title="Permalink to this headline">¶</a></h2>
+<p>The resulting cache of the consistent hash using geographic location for a given client IP, <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>, and request path.</p>
+<div class="section" id="id13">
+<h3>Request Structure<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id43">
+<caption><span class="caption-number">Table 50 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id43" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 7%" />
+<col style="width: 79%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ip</p></td>
+<td><p>yes</p></td>
+<td><p>The IP address of a potential client</p></td>
+</tr>
+<tr class="row-odd"><td><p>deliveryServiceId</p></td>
+<td><p>yes</p></td>
+<td><p>The integral, unique identifier?/’xml_id’?/name? of a <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> served by this Traffic Router</p></td>
+</tr>
+<tr class="row-even"><td><p>requestPath</p></td>
+<td><p>yes</p></td>
+<td><p>The… request path?</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id14">
+<h3>Response Structure<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<p>TBD</p>
+</div>
+</div>
+<div class="section" id="crs-consistenthash-deliveryservice">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/consistenthash/deliveryservice/</span></code><a class="headerlink" href="#crs-consistenthash-deliveryservice" title="Permalink to this headline">¶</a></h2>
+<p>The resulting <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> of the consistent hash for a given <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> and request path – used to test STEERING <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s.</p>
+<div class="section" id="id15">
+<h3>Request Structure<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id44">
+<caption><span class="caption-number">Table 51 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id44" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 7%" />
+<col style="width: 79%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>deliveryServiceId</p></td>
+<td><p>yes</p></td>
+<td><p>The integral, unique identifier?/’xml_id’?/name? of a <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> served by this Traffic Router</p></td>
+</tr>
+<tr class="row-odd"><td><p>requestPath</p></td>
+<td><p>yes</p></td>
+<td><p>The… request path?</p></td>
+</tr>
+</tbody>
+</table>
+<div class="literal-block-wrapper docutils container" id="id45">
+<div class="code-block-caption"><span class="caption-number">#98 </span><span class="caption-text">Request Example</span><a class="headerlink" href="#id45" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/crs/consistenthash/deliveryservice?deliveryServiceId=demo1&amp;requestPath=/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">trafficrouter.infra.ciab.test</span>
+<span class="na">User-Agent</span><span class="o">:</span> <span class="l">curl/7.47.0</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">*/*</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id16">
+<h3>Response Structure<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id46">
+<div class="code-block-caption"><span class="caption-number">#99 </span><span class="caption-text">Response Example</span><a class="headerlink" href="#id46" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json;charset=UTF-8</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Tue, 15 Jan 2019 21:40:51 GMT</span>
+
+<span class="p">{</span> <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;demo1&quot;</span><span class="p">,</span>
+<span class="nt">&quot;coverageZoneOnly&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+<span class="nt">&quot;geoRedirectUrl&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+<span class="nt">&quot;geoRedirectFile&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+<span class="nt">&quot;geoRedirectUrlType&quot;</span><span class="p">:</span> <span class="s2">&quot;INVALID_URL&quot;</span><span class="p">,</span>
+<span class="nt">&quot;routingName&quot;</span><span class="p">:</span> <span class="s2">&quot;video&quot;</span><span class="p">,</span>
+<span class="nt">&quot;missLocation&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;latitude&quot;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+    <span class="nt">&quot;longitude&quot;</span><span class="p">:</span> <span class="mi">-88</span><span class="p">,</span>
+    <span class="nt">&quot;postalCode&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;city&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;countryCode&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;countryName&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;defaultLocation&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;city&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nt">&quot;countryCode&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nt">&quot;latitude&quot;</span><span class="p">:</span> <span class="s2">&quot;42.0&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;postalCode&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nt">&quot;countryName&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nt">&quot;longitude&quot;</span><span class="p">:</span> <span class="s2">&quot;-88.0&quot;</span>
+    <span class="p">}</span>
+<span class="p">},</span>
+<span class="nt">&quot;dispersion&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;shuffled&quot;</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">},</span>
+<span class="nt">&quot;ip6RoutingEnabled&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+<span class="nt">&quot;responseHeaders&quot;</span><span class="p">:</span> <span class="p">{},</span>
+<span class="nt">&quot;requestHeaders&quot;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="nt">&quot;regionalGeoEnabled&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+<span class="nt">&quot;geolocationProvider&quot;</span><span class="p">:</span> <span class="s2">&quot;maxmindGeolocationService&quot;</span><span class="p">,</span>
+<span class="nt">&quot;anonymousIpEnabled&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+<span class="nt">&quot;sslEnabled&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+<span class="nt">&quot;acceptHttp&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+<span class="nt">&quot;deepCache&quot;</span><span class="p">:</span> <span class="s2">&quot;NEVER&quot;</span><span class="p">,</span>
+<span class="nt">&quot;dns&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+<span class="nt">&quot;locationLimit&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="nt">&quot;maxDnsIps&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="nt">&quot;sslReady&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+<span class="nt">&quot;available&quot;</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="crs-coveragezone-caches">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/coveragezone/caches</span></code><a class="headerlink" href="#crs-coveragezone-caches" title="Permalink to this headline">¶</a></h2>
+<p>A list of caches for a given <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> and <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>.</p>
+<div class="section" id="id17">
+<h3>Request Structure<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id47">
+<caption><span class="caption-number">Table 52 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id47" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 7%" />
+<col style="width: 79%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>deliveryServiceId</p></td>
+<td><p>yes</p></td>
+<td><p>The integral, unique identifier?/’xml_id’?/name? of a <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> served by this Traffic Router</p></td>
+</tr>
+<tr class="row-odd"><td><p>cacheLocationId</p></td>
+<td><p>yes</p></td>
+<td><p>The name of a <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> to which this Traffic Router is capable of routing client traffic</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id18">
+<h3>Response Structure<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<p>TBD</p>
+</div>
+</div>
+<div class="section" id="crs-coveragezone-cachelocation">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/coveragezone/cachelocation</span></code><a class="headerlink" href="#crs-coveragezone-cachelocation" title="Permalink to this headline">¶</a></h2>
+<p>The resulting <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> for a given client IP and <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>.</p>
+<div class="section" id="id19">
+<h3>Request Structure<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id48">
+<caption><span class="caption-number">Table 53 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id48" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 7%" />
+<col style="width: 79%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ip</p></td>
+<td><p>yes</p></td>
+<td><p>The IP address of a potential client</p></td>
+</tr>
+<tr class="row-odd"><td><p>deliveryServiceId</p></td>
+<td><p>yes</p></td>
+<td><p>The integral, unique identifier?/’xml_id’?/name? of a <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> served by this Traffic Router</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id20">
+<h3>Response Structure<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<p>TBD</p>
+</div>
+</div>
+<div class="section" id="crs-deepcoveragezone-cachelocation">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/deepcoveragezone/cachelocation</span></code><a class="headerlink" href="#crs-deepcoveragezone-cachelocation" title="Permalink to this headline">¶</a></h2>
+<p>The resulting <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> using deep coverage zone file (deep caching) for a given client IP and <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>.</p>
+<div class="section" id="id21">
+<h3>Request Structure<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id49">
+<caption><span class="caption-number">Table 54 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id49" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 7%" />
+<col style="width: 79%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ip</p></td>
+<td><p>yes</p></td>
+<td><p>The IP address of a potential client</p></td>
+</tr>
+<tr class="row-odd"><td><p>deliveryServiceId</p></td>
+<td><p>yes</p></td>
+<td><p>The integral, unique identifier?/’xml_id’?/name? of a <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> served by this Traffic Router</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id22">
+<h3>Response Structure<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<p>TBD</p>
+</div>
+</div>
+<div class="section" id="crs-consistenthash-patternbased-regex">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/consistenthash/patternbased/regex</span></code><a class="headerlink" href="#crs-consistenthash-patternbased-regex" title="Permalink to this headline">¶</a></h2>
+<p>The resulting path that will be used for consistent hashing when the given regex is applied to the given request path.</p>
+<div class="section" id="id23">
+<h3>Request Structure<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id50">
+<caption><span class="caption-number">Table 55 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id50" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 7%" />
+<col style="width: 79%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>regex</p></td>
+<td><p>yes</p></td>
+<td><p>The (URI encoded) regular expression to be used to test pattern based consistent hashing</p></td>
+</tr>
+<tr class="row-odd"><td><p>requestPath</p></td>
+<td><p>yes</p></td>
+<td><p>The (URI encoded) request path to use to test pattern based consistent hashing</p></td>
+</tr>
+</tbody>
+</table>
+<div class="literal-block-wrapper docutils container" id="id51">
+<div class="code-block-caption"><span class="caption-number">#100 </span><span class="caption-text">Request Example</span><a class="headerlink" href="#id51" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/crs/consistenthash/patternbased/regex?regex=%2F.*%3F%28%2F.*%3F%2F%29.*%3F%28%5C.m3u8%29&amp;requestPath=%2Ftext1234%2Fname%2Fasset.m3u8</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:3333</span>
+<span class="na">User-Agent</span><span class="o">:</span> <span class="l">curl/7.54.0</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">*/*</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id24">
+<h3>Response Structure<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id52">
+<div class="code-block-caption"><span class="caption-number">#101 </span><span class="caption-text">Response Example</span><a class="headerlink" href="#id52" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json;charset=UTF-8</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Fri, 15 Feb 2019 22:06:53 GMT</span>
+
+<span class="p">{</span>
+<span class="nt">&quot;resultingPathToConsistentHash&quot;</span><span class="p">:</span><span class="s2">&quot;/name/.m3u8&quot;</span><span class="p">,</span>
+<span class="nt">&quot;consistentHashRegex&quot;</span><span class="p">:</span><span class="s2">&quot;/.*?(/.*?/).*?(\\.m3u8)&quot;</span><span class="p">,</span>
+<span class="nt">&quot;requestPath&quot;</span><span class="p">:</span><span class="s2">&quot;/text1234/name/asset.m3u8&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="crs-consistenthash-patternbased-deliveryservice">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/consistenthash/patternbased/deliveryservice</span></code><a class="headerlink" href="#crs-consistenthash-patternbased-deliveryservice" title="Permalink to this headline">¶</a></h2>
+<p>The resulting path that will be used for consistent hashing for the given delivery service and the given request path.</p>
+<div class="section" id="id25">
+<h3>Request Structure<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id53">
+<caption><span class="caption-number">Table 56 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id53" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 7%" />
+<col style="width: 79%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>requestPath</p></td>
+<td><p>yes</p></td>
+<td><p>The (URI encoded) request path to use to test pattern based consistent hashing</p></td>
+</tr>
+<tr class="row-odd"><td><p>deliveryServiceId</p></td>
+<td><p>yes</p></td>
+<td><p>The integral, unique identifier?/’xml_id’?/name? of a <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> served by this Traffic Router</p></td>
+</tr>
+</tbody>
+</table>
+<div class="literal-block-wrapper docutils container" id="id54">
+<div class="code-block-caption"><span class="caption-number">#102 </span><span class="caption-text">Request Example</span><a class="headerlink" href="#id54" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/crs/consistenthash/patternbased/deliveryservice?deliveryServiceId=asdf&amp;requestPath=%2Fsometext1234%2Fstream_name%2Fasset_name.m3u8</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">localhost:3333</span>
+<span class="na">User-Agent</span><span class="o">:</span> <span class="l">curl/7.54.0</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">*/*</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id26">
+<h3>Response Structure<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id55">
+<div class="code-block-caption"><span class="caption-number">#103 </span><span class="caption-text">Response Example</span><a class="headerlink" href="#id55" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json;charset=UTF-8</span>
+<span class="na">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Fri, 15 Feb 2019 22:12:38 GMT</span>
+
+<span class="p">{</span>
+<span class="nt">&quot;resultingPathToConsistentHash&quot;</span><span class="p">:</span><span class="s2">&quot;/sometext1234/stream_name/asset_name.m3u8&quot;</span><span class="p">,</span>
+<span class="nt">&quot;deliveryServiceId&quot;</span><span class="p">:</span><span class="s2">&quot;asdf&quot;</span><span class="p">,</span>
+<span class="nt">&quot;requestPath&quot;</span><span class="p">:</span><span class="s2">&quot;/sometext1234/stream_name/asset_name.m3u8&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="crs-consistenthash-cache-coveragezone-steering">
+<h2><code class="docutils literal notranslate"><span class="pre">/crs/consistenthash/cache/coveragezone/steering</span></code><a class="headerlink" href="#crs-consistenthash-cache-coveragezone-steering" title="Permalink to this headline">¶</a></h2>
+<p>The resulting cache of the consistent hash using coverage zone for a given client IP, delivery service and, request path – used to test cache selection for steering delivery services.</p>
+<div class="section" id="id27">
+<h3>Request Structure<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id56">
+<caption><span class="caption-number">Table 57 </span><span class="caption-text">Request Query Parameters</span><a class="headerlink" href="#id56" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 7%" />
+<col style="width: 79%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>requestPath</p></td>
+<td><p>yes</p></td>
+<td><p>The (URI encoded) request path to use to test pattern based consistent hashing</p></td>
+</tr>
+<tr class="row-odd"><td><p>deliveryServiceId</p></td>
+<td><p>yes</p></td>
+<td><p>The integral, unique identifier?/’xml_id’?/name? of a <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> served by this Traffic Router</p></td>
+</tr>
+<tr class="row-even"><td><p>ip</p></td>
+<td><p>yes</p></td>
+<td><p>The IP address of a potential client</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id28">
+<h3>Response Structure<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h3>
+<p>TBD</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../traffic_monitor.html" class="btn btn-neutral float-right" title="Traffic Monitor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../traffic_router.html" class="btn btn-neutral" title="Traffic Router" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

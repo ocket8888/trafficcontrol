@@ -1,0 +1,330 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configure Cache Group Fallbacks &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="CDN in a Box" href="ciab.html" />
+    <link rel="prev" title="Configure Anonymous Blocking" href="anonymous_blocking.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Quick How To Guides</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="anonymous_blocking.html">Configure Anonymous Blocking</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Configure Cache Group Fallbacks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html">CDN in a Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dnssec.html">Configure DNSSEC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_requests.html">Delivery Service Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="federations.html">Configure Federations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multi_site.html">Configure Multi-Site Origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="regionalgeo.html">Configure Regional Geo-blocking (RGB)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static_dns.html">Configuring Static DNS Entries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="steering.html">Configure Delivery Service Steering</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Administrator’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">Quick How To Guides</a> &raquo;</li>
+        
+      <li>Configure Cache Group Fallbacks</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/admin/quick_howto/cachegroup_fallback.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configure-cache-group-fallbacks">
+<span id="cachegroup-fallback-qht"></span><h1>Configure Cache Group Fallbacks<a class="headerlink" href="#configure-cache-group-fallbacks" title="Permalink to this headline">¶</a></h1>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../traffic_portal/usingtrafficportal.html#tp-configure-cache-groups"><span class="std std-ref">Cache Groups</span></a></p>
+</div>
+<ol class="arabic">
+<li><p>Go to ‘Topology’, click on <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>s, and click on your desired <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> or click the <span class="guilabel">+</span> button to create a new <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>.</p>
+<blockquote>
+<div><div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="../../_images/00.png"><img alt="Screenshot of the Traffic Portal UI depicting the Cache Groups page" src="../../_images/00.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 11 </span><span class="caption-text">Cache Groups Page</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Verify that the <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> is of type EDGE_LOC. <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> Failovers only apply to EDGE_LOC <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>s.</p>
+<blockquote>
+<div><div class="figure align-center" id="id2">
+<a class="reference internal image-reference" href="../../_images/011.png"><img alt="Screenshot of the Traffic Portal UI depicting the Cache Group details page" src="../../_images/011.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 12 </span><span class="caption-text">Cache Group Details Page</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Once EDGE_LOC is selected, the Failover Cache Groups section will appear at the bottom of the page. If you are editing an existing <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>, then the current Failovers will be listed. If creating a new <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>, the Fallback to Geo Failover box will default to be checked.</p>
+<blockquote>
+<div><div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="../../_images/021.png"><img alt="Screenshot of the Traffic Portal UI depicting the Failover Cache Groups section of the Cache Group details page" src="../../_images/021.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 13 </span><span class="caption-text">Failover Cache Groups Section of Cache Group Details Page</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>To add a new Failover to the list, select the “Add Failover <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>” drop down and choose which <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> you would like. While in the drop down, you can also type in order to search.</p>
+<blockquote>
+<div><div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="../../_images/031.png"><img alt="Screenshot of the Traffic Portal UI depicting the Failover Cache Groups section of the Cache Group details page" src="../../_images/031.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 14 </span><span class="caption-text">Add New Failover Cache Group Section of Cache Group Details Page</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>The order of the Failovers is important. If you want to reorder the Failovers, you can drag and drop them into a new position. A red line will appear to show where the Failover will be dropped.</p>
+<blockquote>
+<div><div class="figure align-center" id="id5">
+<a class="reference internal image-reference" href="../../_images/04.png"><img alt="Screenshot of the Traffic Portal UI depicting the Failover Cache Groups Drag and Drop of the Cache Group details page" src="../../_images/04.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 15 </span><span class="caption-text">Failover Cache Groups Section Drag and Drop Functionality</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>To remove a Failover, click the trash can symbol on the right hand side of the list.</p>
+<blockquote>
+<div><div class="figure align-center" id="id6">
+<a class="reference internal image-reference" href="../../_images/05.png"><img alt="Screenshot of the Traffic Portal UI depicting the Failover Cache Groups Delete of the Cache Group details page" src="../../_images/05.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 16 </span><span class="caption-text">Failover Cache Groups Delete</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Click the <span class="guilabel">Update</span> button (if editing existing <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>) or the <span class="guilabel">Create</span> button (if creating new <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>) in order to save the Failovers to the <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>.</p></li>
+</ol>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ciab.html" class="btn btn-neutral float-right" title="CDN in a Box" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="anonymous_blocking.html" class="btn btn-neutral" title="Configure Anonymous Blocking" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

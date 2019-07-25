@@ -1,0 +1,438 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>traffic_ops_ort.main_routines module &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="traffic_ops_ort.packaging module" href="traffic_ops_ort.packaging.html" />
+    <link rel="prev" title="traffic_ops_ort.configuration module" href="traffic_ops_ort.configuration.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../building.html">Building Traffic Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops.html">Traffic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops_golang.html">Traffic Ops - Go</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="traffic_ops_ort.html">traffic_ops_ort package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="traffic_ops_ort.html#usage">Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traffic_ops_ort.html#strings-with-special-meaning-to-ort">Strings with Special Meaning to ORT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traffic_ops_ort.html#module-contents">Module Contents</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="traffic_ops_ort.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="traffic_ops_ort.configuration.html">traffic_ops_ort.configuration module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">traffic_ops_ort.main_routines module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traffic_ops_ort.packaging.html">traffic_ops_ort.packaging module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traffic_ops_ort.to_api.html">traffic_ops_ort.to_api module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traffic_ops_ort.utils.html">traffic_ops_ort.utils module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal.html">Traffic Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation_guidelines.html">Documentation Guidelines</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Developer’s Guide</a> &raquo;</li>
+        
+          <li><a href="traffic_ops_ort.html">traffic_ops_ort package</a> &raquo;</li>
+        
+      <li>traffic_ops_ort.main_routines module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/development/ort/traffic_ops_ort.main_routines.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-traffic_ops_ort.main_routines">
+<span id="traffic-ops-ort-main-routines-module"></span><h1>traffic_ops_ort.main_routines module<a class="headerlink" href="#module-traffic_ops_ort.main_routines" title="Permalink to this headline">¶</a></h1>
+<p>This module is meant to run the main routines of the script,
+and performs a variety of operations based on the run mode.</p>
+<dl class="exception">
+<dt id="traffic_ops_ort.main_routines.ORTException">
+<em class="property">exception </em><code class="sig-prename descclassname">traffic_ops_ort.main_routines.</code><code class="sig-name descname">ORTException</code><a class="headerlink" href="#traffic_ops_ort.main_routines.ORTException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Signifies an ORT related error</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="traffic_ops_ort.main_routines.STATUS_FILE_DIR">
+<code class="sig-prename descclassname">traffic_ops_ort.main_routines.</code><code class="sig-name descname">STATUS_FILE_DIR</code><em class="property"> = '/opt/ort/status'</em><a class="headerlink" href="#traffic_ops_ort.main_routines.STATUS_FILE_DIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>A constant that holds the absolute path to the status file directory</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traffic_ops_ort.main_routines.deleteOldStatusFiles">
+<code class="sig-prename descclassname">traffic_ops_ort.main_routines.</code><code class="sig-name descname">deleteOldStatusFiles</code><span class="sig-paren">(</span><em class="sig-param">myStatus</em>, <em class="sig-param">conf</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.main_routines.deleteOldStatusFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to delete any and all old status files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>myStatus</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the current status - files by this name will not be deleted</p></li>
+<li><p><strong>conf</strong> (<a class="reference internal" href="traffic_ops_ort.configuration.html#traffic_ops_ort.configuration.Configuration" title="traffic_ops_ort.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a>) – An object containing the configuration of <strong class="program">traffic_ops_ort</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ConnectionError</strong> – if there’s an issue retrieving a list of statuses from Traffic Ops</p></li>
+<li><p><strong>OSError</strong> – if a file cannot be deleted for any reason</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="traffic_ops_ort.main_routines.processConfigurationFiles">
+<code class="sig-prename descclassname">traffic_ops_ort.main_routines.</code><code class="sig-name descname">processConfigurationFiles</code><span class="sig-paren">(</span><em class="sig-param">conf</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.main_routines.processConfigurationFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates and backs up all of a server’s configuration files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>conf</strong> (<a class="reference internal" href="traffic_ops_ort.configuration.html#traffic_ops_ort.configuration.Configuration" title="traffic_ops_ort.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a>) – An object containing the configuration for <strong class="program">traffic_ops_ort</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>whether or not the configuration changes were successful</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="traffic_ops_ort.main_routines.processPackages">
+<code class="sig-prename descclassname">traffic_ops_ort.main_routines.</code><code class="sig-name descname">processPackages</code><span class="sig-paren">(</span><em class="sig-param">conf</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.main_routines.processPackages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manages the packages that Traffic Ops reports are required for this server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>conf</strong> (<a class="reference internal" href="traffic_ops_ort.configuration.html#traffic_ops_ort.configuration.Configuration" title="traffic_ops_ort.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a>) – An object containing the configuration of <strong class="program">traffic_ops_ort</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>whether or not the package processing was successfully completed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="traffic_ops_ort.main_routines.processServices">
+<code class="sig-prename descclassname">traffic_ops_ort.main_routines.</code><code class="sig-name descname">processServices</code><span class="sig-paren">(</span><em class="sig-param">conf</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.main_routines.processServices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manages the running processes of the server, according to an ancient system known as ‘chkconfig’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>conf</strong> (<a class="reference internal" href="traffic_ops_ort.configuration.html#traffic_ops_ort.configuration.Configuration" title="traffic_ops_ort.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a>) – An object containing the configuration for <strong class="program">traffic_ops_ort</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>whether or not the service processing was completed successfully</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="traffic_ops_ort.main_routines.revalidateState">
+<code class="sig-prename descclassname">traffic_ops_ort.main_routines.</code><code class="sig-name descname">revalidateState</code><span class="sig-paren">(</span><em class="sig-param">conf</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.main_routines.revalidateState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the revalidation status of this server in Traffic Ops</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>conf</strong> (<a class="reference internal" href="traffic_ops_ort.configuration.html#traffic_ops_ort.configuration.Configuration" title="traffic_ops_ort.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a>) – The script’s configuration</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>whether or not this server has a revalidation pending</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ConnectionError</strong> – when something goes wrong communicating with Traffic Ops</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="traffic_ops_ort.main_routines.run">
+<code class="sig-prename descclassname">traffic_ops_ort.main_routines.</code><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">conf</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.main_routines.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is the entrypoint into the script’s main flow from <a class="reference internal" href="traffic_ops_ort.html#traffic_ops_ort.doMain" title="traffic_ops_ort.doMain"><code class="xref py py-func docutils literal notranslate"><span class="pre">traffic_ops_ort.doMain()</span></code></a>
+It runs the appropriate actions depending on the run mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>conf</strong> (<a class="reference internal" href="traffic_ops_ort.configuration.html#traffic_ops_ort.configuration.Configuration" title="traffic_ops_ort.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a>) – An object that holds the script’s configuration</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an exit code for the script</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="traffic_ops_ort.main_routines.setStatusFile">
+<code class="sig-prename descclassname">traffic_ops_ort.main_routines.</code><code class="sig-name descname">setStatusFile</code><span class="sig-paren">(</span><em class="sig-param">conf</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.main_routines.setStatusFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to set the status file according to this server’s reported status in Traffic Ops.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This will create the directory ‘/opt/ORTstatus’ if it does not exist, and may
+delete files there without warning!</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>conf</strong> (<a class="reference internal" href="traffic_ops_ort.configuration.html#traffic_ops_ort.configuration.Configuration" title="traffic_ops_ort.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a>) – An object that contains the configuration for <strong class="program">traffic_ops_ort</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>whether or not the status file could be set properly</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="traffic_ops_ort.main_routines.syncDSState">
+<code class="sig-prename descclassname">traffic_ops_ort.main_routines.</code><code class="sig-name descname">syncDSState</code><span class="sig-paren">(</span><em class="sig-param">conf</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.main_routines.syncDSState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries Traffic Ops for the <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>’s sync state</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>conf</strong> (<a class="reference internal" href="traffic_ops_ort.configuration.html#traffic_ops_ort.configuration.Configuration" title="traffic_ops_ort.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a>) – The script’s configuration</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>whether or not an update is needed</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ConnectionError</strong> – when something goes wrong communicating with Traffic Ops</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="traffic_ops_ort.packaging.html" class="btn btn-neutral float-right" title="traffic_ops_ort.packaging module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="traffic_ops_ort.configuration.html" class="btn btn-neutral" title="traffic_ops_ort.configuration module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,535 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The Compare Tool &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Apache-TrafficControl Package" href="python_client.html" />
+    <link rel="prev" title="Tools" href="index.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tools</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The Compare Tool</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#location-and-dependencies">Location and Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#traffic-ops-testing-compare-compare-go">traffic_ops/testing/compare/compare.go</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#traffic-ops-testing-compare-genconfigroutes-py">traffic_ops/testing/compare/genConfigRoutes.py</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#usage-in-a-pipeline">Usage in a Pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage-with-docker">Usage with Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python_client.html">Apache-TrafficControl Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_vault_util.html">Traffic Vault Util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toaccess.html">toaccess</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Tools</a> &raquo;</li>
+        
+      <li>The Compare Tool</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tools/compare.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-compare-tool">
+<span id="compare-tool"></span><h1>The Compare Tool<a class="headerlink" href="#the-compare-tool" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">compare</span></code> tool is used to compare the output of a set of <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> endpoints between two running instances of Traffic Ops. The idea is that two different versions of Traffic Ops with the same data will have differences in the output of their API endpoints <em>if and only if</em> either the change was intentional, or a new bug was introduced in the newer version. Typically, this isn’t really true, due to rapidly changing data structures like timestamps in the API outputs, but this should offer a good starting point for identifying bugs in changes made to the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a>.</p>
+<div class="section" id="location-and-dependencies">
+<h2>Location and Dependencies<a class="headerlink" href="#location-and-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">compare</span></code> tool is written in Go, and can be found from within the Traffic Control repository at <code class="docutils literal notranslate"><span class="pre">traffic_ops/testing/compare/</span></code>. The main file of interest is <code class="docutils literal notranslate"><span class="pre">compare.go</span></code>, which contains the main routine and logic for checking endpoints. To build the executable, run <code class="docutils literal notranslate"><span class="pre">go</span> <span class="pre">build</span> <span class="pre">.</span></code> from within the <code class="docutils literal notranslate"><span class="pre">traffic_ops/testing/compare/</span></code> directory. Alternatively, run the file without storing a built binary by using <code class="docutils literal notranslate"><span class="pre">go</span> <span class="pre">run</span> <span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">compare.go&gt;</span></code>. In order to build/run the <code class="docutils literal notranslate"><span class="pre">compare</span></code> tool, the following dependencies should be satisfied, probably via <code class="docutils literal notranslate"><span class="pre">go</span> <span class="pre">get</span></code>:</p>
+<ul class="simple">
+<li><p>github.com/apache/trafficcontrol/lib/go-tc<a class="footnote-reference brackets" href="#id2" id="id1">1</a></p></li>
+<li><p>github.com/kelseyhightower/envconfig</p></li>
+<li><p>golang.org/x/net/publicsuffix</p></li>
+</ul>
+<p>The directory containing the <code class="docutils literal notranslate"><span class="pre">compare</span></code> tool also contains an executable Python 3 script named <code class="docutils literal notranslate"><span class="pre">genConfigRoutes.py</span></code>. This script can be used to scrape the two Traffic Ops instances for API routes that resolve to generated configuration files for mid-tier and edge-tier <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s, which can then be fed directly into the <code class="docutils literal notranslate"><span class="pre">compare</span></code> tool via a file or pipe. While the script itself has no actual dependencies, it <em>must</em> be run from within the full Traffic Control repository, as it imports the Python client for Traffic Ops (located in <code class="docutils literal notranslate"><span class="pre">traffic_control/clients/python/trafficops</span></code> inside the repository). The client itself has its own documented dependencies</p>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Theoretically, if you downloaded the Traffic Control repository properly (into <code class="docutils literal notranslate"><span class="pre">$GOPATH/src/github.com/apache/trafficcontrol</span></code>), this will already be satisfied.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="traffic-ops-testing-compare-compare-go">
+<h3>traffic_ops/testing/compare/compare.go<a class="headerlink" href="#traffic-ops-testing-compare-compare-go" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">compare</span> <span class="pre">[-hsV]</span> <span class="pre">[-f</span> <span class="pre">FILE]</span> <span class="pre">[--ref_passwd</span> <span class="pre">PASSWD]</span> <span class="pre">[--ref_url</span> <span class="pre">URL]</span> <span class="pre">[--ref_user</span> <span class="pre">USER]</span> <span class="pre">[-r</span> <span class="pre">PATH]</span> <span class="pre">[--test_passwd</span> <span class="pre">PASSWD]</span> <span class="pre">[--test_url</span> <span class="pre">URL]</span> <span class="pre">[--test_user</span> <span class="pre">USER]</span> <span class="pre">[parameters</span> <span class="pre">...]</span></code></p>
+<dl class="option">
+<dt id="cmdoption-compare-ref-passwd">
+<code class="sig-name descname">--ref_passwd</code><code class="sig-prename descclassname"> PASSWD</code><a class="headerlink" href="#cmdoption-compare-ref-passwd" title="Permalink to this definition">¶</a></dt>
+<dd><p>The password for logging into the reference Traffic Ops instance. This option overrides the <span class="target" id="index-0"></span><a class="reference internal" href="toaccess.html#envvar-TO_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_PASSWORD</span></code></a> environment variable, and is required if and only if <span class="target" id="index-1"></span><a class="reference internal" href="toaccess.html#envvar-TO_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_PASSWORD</span></code></a> is not set.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-compare-ref-url">
+<code class="sig-name descname">--ref_url</code><code class="sig-prename descclassname"> URL</code><a class="headerlink" href="#cmdoption-compare-ref-url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL that points to the reference Traffic Ops instance. This option overrides the <span class="target" id="index-2"></span><a class="reference internal" href="toaccess.html#envvar-TO_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_URL</span></code></a> environment variable, and is required if and only if <span class="target" id="index-3"></span><a class="reference internal" href="toaccess.html#envvar-TO_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_URL</span></code></a> is not set.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-compare-ref-user">
+<code class="sig-name descname">--ref_user</code><code class="sig-prename descclassname"> USER</code><a class="headerlink" href="#cmdoption-compare-ref-user" title="Permalink to this definition">¶</a></dt>
+<dd><p>The username for logging into the reference Traffic Ops instance. This option overrides the <span class="target" id="index-4"></span><a class="reference internal" href="toaccess.html#envvar-TO_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_USER</span></code></a> environment variable, and is required if and only if <span class="target" id="index-5"></span><a class="reference internal" href="toaccess.html#envvar-TO_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_USER</span></code></a> is not set.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-compare-test-passwd">
+<code class="sig-name descname">--test_passwd</code><code class="sig-prename descclassname"> PASSWD</code><a class="headerlink" href="#cmdoption-compare-test-passwd" title="Permalink to this definition">¶</a></dt>
+<dd><p>The password for logging into the testing Traffic Ops instance. This option overrides the <span class="target" id="index-6"></span><a class="reference internal" href="#envvar-TEST_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TEST_PASSWORD</span></code></a> environment variable. Additionally, if this option is not specified <em>and</em> <span class="target" id="index-7"></span><a class="reference internal" href="#envvar-TEST_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TEST_PASSWORD</span></code></a> is not set, the value for <span class="target" id="index-8"></span><a class="reference internal" href="toaccess.html#envvar-TO_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_PASSWORD</span></code></a> (or <a class="reference internal" href="#cmdoption-compare-ref-passwd"><code class="xref std std-option docutils literal notranslate"><span class="pre">--ref_passwd</span></code></a> if overridden) will be used.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-compare-test-url">
+<code class="sig-name descname">--test_url</code><code class="sig-prename descclassname"> URL</code><a class="headerlink" href="#cmdoption-compare-test-url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL for the testing Traffic Ops instance. This option overrides the <span class="target" id="index-9"></span><a class="reference internal" href="#envvar-TEST_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TEST_URL</span></code></a> environment variable. Additionally, if this option is not specified <em>and</em> <span class="target" id="index-10"></span><a class="reference internal" href="#envvar-TEST_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TEST_URL</span></code></a> is not set, the value for <span class="target" id="index-11"></span><a class="reference internal" href="toaccess.html#envvar-TO_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_URL</span></code></a> (or <a class="reference internal" href="#cmdoption-compare-ref-url"><code class="xref std std-option docutils literal notranslate"><span class="pre">--ref_url</span></code></a> if overridden) will be used.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-compare-test-user">
+<code class="sig-name descname">--test_user</code><code class="sig-prename descclassname"> USER</code><a class="headerlink" href="#cmdoption-compare-test-user" title="Permalink to this definition">¶</a></dt>
+<dd><p>The username for logging into the testing Traffic Ops instance. This option overrides the <span class="target" id="index-12"></span><a class="reference internal" href="#envvar-TEST_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TEST_USER</span></code></a> environment variable. Additionally, if this option is not specified <em>and</em> <span class="target" id="index-13"></span><a class="reference internal" href="#envvar-TEST_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TEST_USER</span></code></a> is not set, the value for <span class="target" id="index-14"></span><a class="reference internal" href="toaccess.html#envvar-TO_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_USER</span></code></a> (or <a class="reference internal" href="#cmdoption-compare-ref-user"><code class="xref std std-option docutils literal notranslate"><span class="pre">--ref_user</span></code></a> if overridden) will be used.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-compare-f">
+<code class="sig-name descname">-f</code><code class="sig-prename descclassname"> FILE</code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--file</code><code class="sig-prename descclassname"> FILE</code><a class="headerlink" href="#cmdoption-compare-f" title="Permalink to this definition">¶</a></dt>
+<dd><p>This optional flag specifies a file from which to list API paths to test. If this option is not given, <strong class="program">compare</strong> will read from STDIN.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-compare-h">
+<code class="sig-name descname">-h</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--help</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-compare-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print usage information and exit</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-compare-r">
+<code class="sig-name descname">-r</code><code class="sig-prename descclassname"> PATH</code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--results_path</code><code class="sig-prename descclassname"> PATH</code><a class="headerlink" href="#cmdoption-compare-r" title="Permalink to this definition">¶</a></dt>
+<dd><p>This optional flag specifies an output directory where results will be written. Default: <code class="docutils literal notranslate"><span class="pre">./results</span></code></p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-compare-v">
+<code class="sig-name descname">-V</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--version</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-compare-v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print version information and exit</p>
+</dd></dl>
+
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.0.0: </span>Removed the <code class="docutils literal notranslate"><span class="pre">-s</span></code> command line switch to compare CDN <a class="reference internal" href="../glossary.html#term-snapshots"><span class="xref std std-term">Snapshots</span></a> - this is now the responsibility of the <strong class="program">genConfigRoutes.py</strong> script.</p>
+</div>
+</div>
+<div class="section" id="traffic-ops-testing-compare-genconfigroutes-py">
+<h3>traffic_ops/testing/compare/genConfigRoutes.py<a class="headerlink" href="#traffic-ops-testing-compare-genconfigroutes-py" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This script uses the <a class="reference internal" href="python_client.html#py-client"><span class="std std-ref">Apache-TrafficControl Package</span></a>, and so that must be installed to use it.</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">genConfigRoutes.py</span> <span class="pre">[-h]</span> <span class="pre">[-v]</span> <span class="pre">[--refURL</span> <span class="pre">URL]</span> <span class="pre">[--testURL</span> <span class="pre">URL]</span> <span class="pre">[--refUser</span> <span class="pre">USER]</span> <span class="pre">[--refPasswd</span> <span class="pre">PASSWD]</span> <span class="pre">[--testUser</span> <span class="pre">USER]</span> <span class="pre">[--testPasswd</span> <span class="pre">PASSWD]</span> <span class="pre">[-k]</span> <span class="pre">[-l</span> <span class="pre">LOG_LEVEL]</span> <span class="pre">[-q]</span></code></p>
+<p>A simple script to generate API routes to server configuration files for a given pair of Traffic Ops instances. This, for the purpose of using the <strong class="program">compare</strong> tool</p>
+<dl class="option">
+<dt id="cmdoption-genconfigroutes-py-h">
+<code class="sig-name descname">-h</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--help</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-genconfigroutes-py-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show usage information and exit</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-genconfigroutes-py-refurl">
+<code class="sig-name descname">--refURL</code><code class="sig-prename descclassname"> URL</code><a class="headerlink" href="#cmdoption-genconfigroutes-py-refurl" title="Permalink to this definition">¶</a></dt>
+<dd><p>The full URL of the reference Traffic Ops instance. This option overrides the <span class="target" id="index-15"></span><a class="reference internal" href="toaccess.html#envvar-TO_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_URL</span></code></a> environment variable, and is required if and only if <span class="target" id="index-16"></span><a class="reference internal" href="toaccess.html#envvar-TO_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_URL</span></code></a> is not set.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-genconfigroutes-py-testurl">
+<code class="sig-name descname">--testURL</code><code class="sig-prename descclassname"> URL</code><a class="headerlink" href="#cmdoption-genconfigroutes-py-testurl" title="Permalink to this definition">¶</a></dt>
+<dd><p>The full URL of the testing Traffic Ops instance. This option overrides the <span class="target" id="index-17"></span><a class="reference internal" href="#envvar-TEST_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TEST_URL</span></code></a> environment variable. Additionally, if this option is not specified <em>and</em> <span class="target" id="index-18"></span><a class="reference internal" href="#envvar-TEST_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TEST_URL</span></code></a> is not set, the value for <span class="target" id="index-19"></span><a class="reference internal" href="toaccess.html#envvar-TO_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_URL</span></code></a> (or <a class="reference internal" href="#cmdoption-genconfigroutes-py-refurl"><code class="xref std std-option docutils literal notranslate"><span class="pre">--refURL</span></code></a> if overridden) will be used.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-genconfigroutes-py-refuser">
+<code class="sig-name descname">--refUser</code><code class="sig-prename descclassname"> USER</code><a class="headerlink" href="#cmdoption-genconfigroutes-py-refuser" title="Permalink to this definition">¶</a></dt>
+<dd><p>A username for logging into the reference Traffic Ops instance. This option overrides the <span class="target" id="index-20"></span><a class="reference internal" href="toaccess.html#envvar-TO_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_USER</span></code></a> environment variable, and is required if and only if <span class="target" id="index-21"></span><a class="reference internal" href="toaccess.html#envvar-TO_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_USER</span></code></a> is not set.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-genconfigroutes-py-refpasswd">
+<code class="sig-name descname">--refPasswd</code><code class="sig-prename descclassname"> PASSWD</code><a class="headerlink" href="#cmdoption-genconfigroutes-py-refpasswd" title="Permalink to this definition">¶</a></dt>
+<dd><p>A password for logging into the reference Traffic Ops instance. This option overrides the <span class="target" id="index-22"></span><a class="reference internal" href="toaccess.html#envvar-TO_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_PASSWORD</span></code></a> environment variable, and is required if and only if <span class="target" id="index-23"></span><a class="reference internal" href="toaccess.html#envvar-TO_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_PASSWORD</span></code></a> is not set.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-genconfigroutes-py-testuser">
+<code class="sig-name descname">--testUser</code><code class="sig-prename descclassname"> USER</code><a class="headerlink" href="#cmdoption-genconfigroutes-py-testuser" title="Permalink to this definition">¶</a></dt>
+<dd><p>A username for logging into the testing Traffic Ops instance. This option overrides the <span class="target" id="index-24"></span><a class="reference internal" href="#envvar-TEST_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TEST_USER</span></code></a> environment variable. Additionally, if this option is not specified <em>and</em> <span class="target" id="index-25"></span><a class="reference internal" href="#envvar-TEST_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TEST_USER</span></code></a> is not set, the value for <span class="target" id="index-26"></span><a class="reference internal" href="toaccess.html#envvar-TO_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_USER</span></code></a> (or <a class="reference internal" href="#cmdoption-genconfigroutes-py-refuser"><code class="xref std std-option docutils literal notranslate"><span class="pre">--refUser</span></code></a> if overridden) will be used.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-genconfigroutes-py-testpasswd">
+<code class="sig-name descname">--testPasswd</code><code class="sig-prename descclassname"> PASSWD</code><a class="headerlink" href="#cmdoption-genconfigroutes-py-testpasswd" title="Permalink to this definition">¶</a></dt>
+<dd><p>A password for logging into the testing Traffic Ops instance. This option overrides the <span class="target" id="index-27"></span><a class="reference internal" href="#envvar-TEST_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TEST_PASSWORD</span></code></a> environment variable. Additionally, if this option is not specified <em>and</em> <span class="target" id="index-28"></span><a class="reference internal" href="#envvar-TEST_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TEST_PASSWORD</span></code></a> is not set, the value for <span class="target" id="index-29"></span><a class="reference internal" href="toaccess.html#envvar-TO_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_PASSWORD</span></code></a> (or <a class="reference internal" href="#cmdoption-genconfigroutes-py-refpasswd"><code class="xref std std-option docutils literal notranslate"><span class="pre">--refPasswd</span></code></a> if overridden) will be used.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-genconfigroutes-py-k">
+<code class="sig-name descname">-k</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--insecure</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-genconfigroutes-py-k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do not verify SSL certificate signatures against <em>either</em> Traffic Ops instance (default: False)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-genconfigroutes-py-v">
+<code class="sig-name descname">-v</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--version</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-genconfigroutes-py-v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print version information and exit</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-genconfigroutes-py-l">
+<code class="sig-name descname">-l</code><code class="sig-prename descclassname"> LOG_LEVEL</code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--log_level</code><code class="sig-prename descclassname"> LOG_LEVEL</code><a class="headerlink" href="#cmdoption-genconfigroutes-py-l" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the Python log level, one of</p>
+<ul class="simple">
+<li><p>DEBUG</p></li>
+<li><p>INFO</p></li>
+<li><p>WARN</p></li>
+<li><p>ERROR</p></li>
+<li><p>CRITICAL</p></li>
+</ul>
+<p>(default: INFO)</p>
+</dd></dl>
+
+<p>..option:: -q, –quiet</p>
+<blockquote>
+<div><p>Suppresses all logging output - even for critical errors (default: False)</p>
+</div></blockquote>
+<dl class="option">
+<dt id="cmdoption-genconfigroutes-py-s">
+<code class="sig-name descname">-s</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--snapshot</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-genconfigroutes-py-s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> routes in the output (CRConfig.json, snapshot/new etc.) (default: False)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-genconfigroutes-py-c">
+<code class="sig-name descname">-C</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--no-server-configs</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-genconfigroutes-py-c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do not generate routes for server configuration files (default: False)</p>
+</dd></dl>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you’re using a CDN-in-a-Box environment for testing, it’s likely that you’ll need the <a class="reference internal" href="#cmdoption-genconfigroutes-py-k"><code class="xref std std-option docutils literal notranslate"><span class="pre">-k</span></code></a>/<a class="reference internal" href="#cmdoption-genconfigroutes-py-k"><code class="xref std std-option docutils literal notranslate"><span class="pre">--insecure</span></code></a> option if you’re outside the Docker network</p>
+</div>
+</div>
+<div class="section" id="environment-variables">
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>
+<p>Both <strong class="program">compare</strong> and <strong class="program">genConfigRoutes.py</strong> require connection and authentication methods for two Traffic Ops instances. For ease of use, these can be provided by environment variables. Both programs are capable of using the same environment variables, so that they only need to be defined once each.</p>
+<dl class="envvar">
+<dt id="envvar-TO_URL">
+<code class="sig-name descname">TO_URL</code><a class="headerlink" href="#envvar-TO_URL" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL of the reference Traffic Ops instance. Overridden by <a class="reference internal" href="#cmdoption-genconfigroutes-py-refurl"><code class="xref std std-option docutils literal notranslate"><span class="pre">genConfigRoutes.py</span> <span class="pre">--refURL</span></code></a> and <a class="reference internal" href="#cmdoption-compare-ref-url"><code class="xref std std-option docutils literal notranslate"><span class="pre">compare</span> <span class="pre">--ref_url</span></code></a>.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-TO_USER">
+<code class="sig-name descname">TO_USER</code><a class="headerlink" href="#envvar-TO_USER" title="Permalink to this definition">¶</a></dt>
+<dd><p>The username to authenticate with the reference Traffic Ops instance. Overridden by <a class="reference internal" href="#cmdoption-genconfigroutes-py-refuser"><code class="xref std std-option docutils literal notranslate"><span class="pre">genConfigRoutes.py</span> <span class="pre">--refUser</span></code></a> and <a class="reference internal" href="#cmdoption-compare-ref-user"><code class="xref std std-option docutils literal notranslate"><span class="pre">compare</span> <span class="pre">--ref_user</span></code></a>.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-TO_PASSWORD">
+<code class="sig-name descname">TO_PASSWORD</code><a class="headerlink" href="#envvar-TO_PASSWORD" title="Permalink to this definition">¶</a></dt>
+<dd><p>The password to authenticate with the reference Traffic Ops instance. Overridden by <a class="reference internal" href="#cmdoption-genconfigroutes-py-refpasswd"><code class="xref std std-option docutils literal notranslate"><span class="pre">genConfigRoutes.py</span> <span class="pre">--refPasswd</span></code></a> and <a class="reference internal" href="#cmdoption-compare-ref-passwd"><code class="xref std std-option docutils literal notranslate"><span class="pre">compare</span> <span class="pre">--ref_passwd</span></code></a>.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-TEST_URL">
+<code class="sig-name descname">TEST_URL</code><a class="headerlink" href="#envvar-TEST_URL" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL of the testing Traffic Ops instance. Overridden by <a class="reference internal" href="#cmdoption-genconfigroutes-py-testurl"><code class="xref std std-option docutils literal notranslate"><span class="pre">genConfigRoutes.py</span> <span class="pre">--testURL</span></code></a> and <a class="reference internal" href="#cmdoption-compare-test-url"><code class="xref std std-option docutils literal notranslate"><span class="pre">compare</span> <span class="pre">--test_url</span></code></a>.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-TEST_USER">
+<code class="sig-name descname">TEST_USER</code><a class="headerlink" href="#envvar-TEST_USER" title="Permalink to this definition">¶</a></dt>
+<dd><p>The username to authenticate with the testing Traffic Ops instance. Overridden by <a class="reference internal" href="#cmdoption-genconfigroutes-py-testuser"><code class="xref std std-option docutils literal notranslate"><span class="pre">genConfigRoutes.py</span> <span class="pre">--testUser</span></code></a> and <a class="reference internal" href="#cmdoption-compare-test-user"><code class="xref std std-option docutils literal notranslate"><span class="pre">compare</span> <span class="pre">--test_user</span></code></a>.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-TEST_PASSWORD">
+<code class="sig-name descname">TEST_PASSWORD</code><a class="headerlink" href="#envvar-TEST_PASSWORD" title="Permalink to this definition">¶</a></dt>
+<dd><p>The password to authenticate with the testing Traffic Ops instance. Overridden by <a class="reference internal" href="#cmdoption-genconfigroutes-py-testpasswd"><code class="xref std std-option docutils literal notranslate"><span class="pre">genConfigRoutes.py</span> <span class="pre">--testPasswd</span></code></a> and <a class="reference internal" href="#cmdoption-compare-test-passwd"><code class="xref std std-option docutils literal notranslate"><span class="pre">compare</span> <span class="pre">--test_passwd</span></code></a>.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="usage-in-a-pipeline">
+<h2>Usage in a Pipeline<a class="headerlink" href="#usage-in-a-pipeline" title="Permalink to this headline">¶</a></h2>
+<p>The <strong class="program">genConfigRoutes.py</strong> script will output list of unique API routes (relative to the desired Traffic Ops URL) that point to generated configuration files for a sample set of servers common to both  Traffic Ops instances. The results are printed to STDOUT, making the output perfect for piping directly into <strong class="program">compare</strong> like so:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">#515 </span><span class="caption-text">Example Pipeline from <strong class="program">genConfigRoutes.py</strong> into <strong class="program">compare</strong></span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./genConfigRoutes.py https://trafficopsA.example.test https://trafficopsB.example.test username:password <span class="p">|</span> ./compare
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is assuming the proper <a class="reference internal" href="#environment-variables">Environment Variables</a> have been set for <strong class="program">compare</strong>.</p>
+</div>
+</div>
+<div class="section" id="usage-with-docker">
+<h2>Usage with Docker<a class="headerlink" href="#usage-with-docker" title="Permalink to this headline">¶</a></h2>
+<p>A Dockerfile is provided to run tests on a pair of instances given the configuration environment variables necessary. This will generate configuration file routes using <strong class="program">genConfigRoutes.py</strong>, and add them to whatever is already contained in <code class="file docutils literal notranslate"><span class="pre">traffic_ops/testing/compare/testroutes.txt</span></code>, then run the <strong class="program">compare</strong> tool on the final API route list. Build artifacts (i.e. anything output files created by the <strong class="program">compare</strong> tool) are placed in the <code class="file docutils literal notranslate"><span class="pre">/artifacts/</span></code> directory on the container. To retrieve these results, the use of a volume is recommended. The build context <em>must</em> be at the root of the Traffic Control repository, as the tools have dependencies on the Traffic Control clients.</p>
+<p>Arguments can be passed to the <strong class="program">genConfigRoutes.py</strong> script by defining the build-time argument <code class="docutils literal notranslate"><span class="pre">MODE</span></code>. By default it expands to <a class="reference internal" href="#cmdoption-genconfigroutes-py-s"><code class="xref std std-option docutils literal notranslate"><span class="pre">-s</span></code></a> to allow the generation of CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> routes. It is not necessary to pass <a class="reference internal" href="#cmdoption-genconfigroutes-py-k"><code class="xref std std-option docutils literal notranslate"><span class="pre">-k</span></code></a>/<a class="reference internal" href="#cmdoption-genconfigroutes-py-k"><code class="xref std std-option docutils literal notranslate"><span class="pre">--insecure</span></code></a>, as the Dockerfile will do that implicitly.</p>
+<p>In order to use the container, the following environment variables must be defined for the container at runtime:</p>
+<dl class="simple">
+<dt>TO_URL</dt><dd><p>The URL of the reference Traffic Ops instance</p>
+</dd>
+<dt>TO_USER</dt><dd><p>The username to authenticate with the reference Traffic Ops instance</p>
+</dd>
+<dt>TO_PASSWORD</dt><dd><p>The password to authenticate with the reference Traffic Ops instance</p>
+</dd>
+<dt>TEST_URL</dt><dd><p>The URL of the testing Traffic Ops instance</p>
+</dd>
+<dt>TEST_USER</dt><dd><p>The username to authenticate with the testing Traffic Ops instance</p>
+</dd>
+<dt>TEST_PASSWORD</dt><dd><p>The password to authenticate with the testing Traffic Ops instance</p>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">#516 </span><span class="caption-text">Sample Script to Build and Run</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo docker build . -f traffic_ops/testing/compare/Dockerfile -t compare:latest
+sudo docker run -v <span class="nv">$PWD</span>/artifacts:/artifacts -e <span class="nv">TO_URL</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$TO_URL</span><span class="s2">&quot;</span> -e <span class="nv">TEST_URL</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$TEST_URL</span><span class="s2">&quot;</span> -e <span class="nv">TO_USER</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span> -e <span class="nv">TO_PASSWORD</span><span class="o">=</span><span class="s2">&quot;twelve&quot;</span> -e <span class="nv">TEST_USER</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span> -e <span class="nv">TEST_PASSWORD</span><span class="o">=</span><span class="s2">&quot;twelve&quot;</span> compare:latest
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The above code example assumes that the environment variables <code class="docutils literal notranslate"><span class="pre">TO_URL</span></code> and <code class="docutils literal notranslate"><span class="pre">TEST_URL</span></code> refer to the URL of the reference Traffic Ops instance and the URL of the test Traffic Ops instance, respectively (including port numbers). It also uses credentials suitable for logging into a stock <a class="reference internal" href="../admin/quick_howto/ciab.html#ciab"><span class="std std-ref">CDN in a Box</span></a> instance.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unlike using the <strong class="program">genConfigRoutes.py</strong> script and/or the <strong class="program">compare</strong> on their own, <em>all</em> of the variables must be defined, even if they are duplicates.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="python_client.html" class="btn btn-neutral float-right" title="Apache-TrafficControl Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

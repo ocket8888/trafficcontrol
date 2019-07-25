@@ -1,0 +1,264 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Content Delivery Networks &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="HTTP/1.1" href="http_11.html" />
+    <link rel="prev" title="CDN Basics" href="index.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">CDN Basics</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Content Delivery Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http_11.html">HTTP/1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cache_revalidation.html">Cache Control Headers and Revalidation</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">CDN Basics</a> &raquo;</li>
+        
+      <li>Content Delivery Networks</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/basics/content_delivery_networks.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="content-delivery-networks">
+<h1>Content Delivery Networks<a class="headerlink" href="#content-delivery-networks" title="Permalink to this headline">¶</a></h1>
+<p>The vast majority of today’s Internet traffic is media files (often video or audio) being sent from a single source (the <em>Content Provider</em>) to many thousands or even millions of destinations (the <em>Content Consumers</em>). <abbr title="Content Delivery Network">CDN</abbr>s are the technology that make that one-to-many distribution efficient. A <abbr title="Content Delivery Network">CDN</abbr> is a distributed system of servers for delivering content over HTTP(S). These servers are deployed in multiple locations with the goal of optimizing the delivery of content to the end users, while minimizing the traffic on the network. A <abbr title="Content Delivery Network">CDN</abbr> typically consists of the following:</p>
+<dl class="simple">
+<dt><a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">Cache Server</span></a>s</dt><dd><p>The <em class="dfn">cache server</em> is a server that both proxies the requests and caches the results for reuse. Traffic Control uses <a class="reference external" href="http://trafficserver.apache.org/">Apache Traffic Server</a> to provide <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s.</p>
+</dd>
+<dt>Content Router</dt><dd><p>A <em class="dfn">content router</em> ensures that the end user is connected to the optimal <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> for the location of the end user and content availability. Traffic Control uses <a class="reference internal" href="../overview/traffic_router.html#tr-overview"><span class="std std-ref">Traffic Router</span></a> as a <em class="dfn">content router</em>.</p>
+</dd>
+<dt>Health Protocol</dt><dd><p>The <a class="reference internal" href="../overview/traffic_monitor.html#health-proto"><span class="std std-ref">Health Protocol</span></a> monitors the usage of the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s and tenants in the <abbr title="Content Delivery Network">CDN</abbr>.</p>
+</dd>
+<dt>Configuration Management System</dt><dd><p>In many cases a <abbr title="Content Delivery Network">CDN</abbr> encompasses hundreds or even thousands of servers across a large geographic area. In such cases, manual configuration of servers becomes impractical, and so a central authority on configuration is used to automate the tasks as much as possible. <a class="reference internal" href="../overview/traffic_ops.html#to-overview"><span class="std std-ref">Traffic Ops</span></a> is the Traffic Control configuration management system, which is interacted with via <a class="reference internal" href="../overview/traffic_portal.html#tp-overview"><span class="std std-ref">Traffic Portal</span></a>.</p>
+</dd>
+<dt>Log File Analysis System</dt><dd><p>Statistics and analysis are extremely important to the management and administration of a <abbr title="Content Delivery Network">CDN</abbr>. Transaction logs and usage statistics for a Traffic Control <abbr title="Content Delivery Network">CDN</abbr> are gathered into <a class="reference internal" href="../overview/traffic_stats.html#ts-overview"><span class="std std-ref">Traffic Stats</span></a>.</p>
+</dd>
+</dl>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="http_11.html" class="btn btn-neutral float-right" title="HTTP/1.1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="CDN Basics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

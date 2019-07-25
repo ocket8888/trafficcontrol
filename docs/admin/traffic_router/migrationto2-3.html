@@ -1,0 +1,344 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Router - Migrating to 3.0 &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Traffic Stats Administration" href="../traffic_stats.html" />
+    <link rel="prev" title="Traffic Router Administration" href="../traffic_router.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Router - Migrating to 3.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#release-notes-v3-0">Release Notes v3.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-requirements">System Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#upgrade-procedure">Upgrade Procedure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#upload-tomcat-rpm">Upload tomcat.rpm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#update-the-traffic-router-package">Update the traffic_router Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#restore-property-files">Restore Property Files</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#development-environment-upgrade">Development Environment Upgrade</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quick_howto/index.html">Quick How To Guides</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Administrator’s Guide</a> &raquo;</li>
+        
+      <li>Traffic Router - Migrating to 3.0</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/admin/traffic_router/migrationto2-3.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-router-migrating-to-3-0">
+<h1><a class="toc-backref" href="#contents">Traffic Router - Migrating to 3.0</a><a class="headerlink" href="#traffic-router-migrating-to-3-0" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#traffic-router-migrating-to-3-0" id="id2">Traffic Router - Migrating to 3.0</a></p>
+<ul>
+<li><p><a class="reference internal" href="#release-notes-v3-0" id="id3">Release Notes v3.0</a></p></li>
+<li><p><a class="reference internal" href="#system-requirements" id="id4">System Requirements</a></p></li>
+<li><p><a class="reference internal" href="#upgrade-procedure" id="id5">Upgrade Procedure</a></p></li>
+<li><p><a class="reference internal" href="#development-environment-upgrade" id="id6">Development Environment Upgrade</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="release-notes-v3-0">
+<h2><a class="toc-backref" href="#contents">Release Notes v3.0</a><a class="headerlink" href="#release-notes-v3-0" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Replaced custom Java <abbr title="Server Name Indication">SNI</abbr> implementation with a native implementation using tomcat-native, <abbr title="Apache Portable Runtime">APR</abbr> and OpenSSL. This should significantly improve the performance of routing HTTPS <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s.</p>
+<blockquote>
+<div><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Server_Name_Indication">The Server Name Indication Wikipedia page</a>, <a class="reference external" href="https://apr.apache.org/">The Apache Portable Runtime project site</a> and/or <a class="reference external" href="https://www.openssl.org/">the OpenSSL project site</a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Upgraded to Tomcat 8.5.30</p></li>
+<li><p>Separated the Traffic Router installation from the Tomcat deployment and created a new ‘tomcat’ package for installing Tomcat. Traffic Router and Tomcat can now be upgraded independently</p></li>
+<li><p>Converted Traffic Router to a <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemd(1)">systemd(1)</a></em> service</p></li>
+<li><p>Modified the development test and deployment processes to be more consistent with production</p></li>
+</ul>
+</div>
+<div class="section" id="system-requirements">
+<h2><a class="toc-backref" href="#contents">System Requirements</a><a class="headerlink" href="#system-requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Centos 7.2</p></li>
+<li><p>OpenSSL &gt;= 1.0.2 installed</p></li>
+<li><p>JDK &gt;= 8.0 installed or available in an accessible <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> repository</p></li>
+<li><p><abbr title="Apache Portable Runtime">APR</abbr> &gt;= 1.4.8-3 installed or available in an accessible <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> repository</p></li>
+<li><p>Tomcat Native &gt;= 1.2.16 installed or available in an accessible <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> repository</p></li>
+<li><p>tomcat &gt;= 8.5-30 installed or available in an accessible <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> repository (This package is created automatically by the Traffic Router build process)</p></li>
+</ul>
+</div>
+<div class="section" id="upgrade-procedure">
+<h2><a class="toc-backref" href="#contents">Upgrade Procedure</a><a class="headerlink" href="#upgrade-procedure" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>upload the <code class="file docutils literal notranslate"><span class="pre">dist/tomcat-</span><em><span class="pre">version</span> <span class="pre">string</span></em><span class="pre">.rpm</span></code> file generated as a part of the build instructions outlined in <a class="reference internal" href="../../development/building.html#dev-building"><span class="std std-ref">Building Traffic Control</span></a> to an accessible <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> repository</p></li>
+<li><p>update the <code class="docutils literal notranslate"><span class="pre">traffic_router</span></code> package with <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em></p></li>
+<li><p>restore property files</p></li>
+</ul>
+<div class="section" id="upload-tomcat-rpm">
+<h3>Upload tomcat.rpm<a class="headerlink" href="#upload-tomcat-rpm" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="file docutils literal notranslate"><span class="pre">term-</span><em><span class="pre">version</span> <span class="pre">string</span></em><span class="pre">.rpm</span></code> package should have been created when Traffic Router was built according to the instructions in <a class="reference internal" href="../../development/building.html#dev-building"><span class="std std-ref">Building Traffic Control</span></a>. It must must either be added to an accessible <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> repository, or manually copied to the servers where Traffic Router will be installed. It is generally better that it be added to a <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> repository because then it will be installed automatically when Traffic Router is updated.</p>
+</div>
+<div class="section" id="update-the-traffic-router-package">
+<h3>Update the traffic_router Package<a class="headerlink" href="#update-the-traffic-router-package" title="Permalink to this headline">¶</a></h3>
+<p>If <code class="docutils literal notranslate"><span class="pre">openssl</span></code>, <code class="docutils literal notranslate"><span class="pre">apr</span></code>, <code class="docutils literal notranslate"><span class="pre">tomcat-native</span></code>, <code class="docutils literal notranslate"><span class="pre">java-1.8.0-openjdk</span></code>, <code class="docutils literal notranslate"><span class="pre">java-1.8.0-openjdk-devel</span></code> and <code class="docutils literal notranslate"><span class="pre">tomcat_tr</span></code> packages are all in an available <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> repository then an upgrade can be performed by running <code class="docutils literal notranslate"><span class="pre">yum</span> <span class="pre">update</span> <span class="pre">traffic_router</span></code> as the root user or with <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/sudo(8)">sudo(8)</a></em>. This will first cause the <code class="docutils literal notranslate"><span class="pre">apr</span></code>, <code class="docutils literal notranslate"><span class="pre">tomcat-native</span></code>, <code class="docutils literal notranslate"><span class="pre">java-1.8.0-openjdk</span></code>, <code class="docutils literal notranslate"><span class="pre">java-1.8.0-openjdk-devel</span></code> and <code class="docutils literal notranslate"><span class="pre">tomcat</span></code> packages to be installed. When the <code class="docutils literal notranslate"><span class="pre">tomcat</span></code> package runs, it will cause any older versions of <code class="docutils literal notranslate"><span class="pre">traffic_router</span></code> or <code class="docutils literal notranslate"><span class="pre">tomcat</span></code> to be uninstalled. This is because the previous versions of the <code class="docutils literal notranslate"><span class="pre">traffic_router</span></code> package included an untracked installation of <code class="docutils literal notranslate"><span class="pre">tomcat</span></code>.</p>
+</div>
+<div class="section" id="restore-property-files">
+<h3>Restore Property Files<a class="headerlink" href="#restore-property-files" title="Permalink to this headline">¶</a></h3>
+<p>The install process does not override or replace any of the files in the <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_router/conf</span></code> directory. Previous versions of the <code class="file docutils literal notranslate"><span class="pre">traffic_ops.properties</span></code>, <code class="file docutils literal notranslate"><span class="pre">traffic_monitor.properties</span></code> and <code class="file docutils literal notranslate"><span class="pre">startup.properties</span></code> should still be good. On a new install replace the Traffic Router properties files with the correct ones for the CDN.</p>
+</div>
+</div>
+<div class="section" id="development-environment-upgrade">
+<h2><a class="toc-backref" href="#contents">Development Environment Upgrade</a><a class="headerlink" href="#development-environment-upgrade" title="Permalink to this headline">¶</a></h2>
+<p>If a development environment is already set up for the previous version of Traffic Router, then <code class="docutils literal notranslate"><span class="pre">openssl</span></code>, <code class="docutils literal notranslate"><span class="pre">apr</span></code> and <code class="docutils literal notranslate"><span class="pre">tomcat-native</span></code> will need to be manually installed with <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> or <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/rpm(8)">rpm(8)</a></em>. Also, whenever either <code class="docutils literal notranslate"><span class="pre">mvn</span> <span class="pre">clean</span> <span class="pre">verify</span></code> or <code class="docutils literal notranslate"><span class="pre">TrafficRouterStart</span></code> is/are run, the location of the <code class="docutils literal notranslate"><span class="pre">tomcat-native</span></code> libraries will need to be made known to the <abbr title="Java Virtual Machine">JVM</abbr> via command line arguments.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">#42 </span><span class="caption-text">Example Commands Specifying a Path to the tomcat-native Library</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mvn clean verify -Djava.library.path<span class="o">=[</span>tomcat native library path on your box<span class="o">]</span>
+java -Djava.library.path<span class="o">=[</span>tomcat native library path on your box<span class="o">]</span> TrafficRouterStart
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../traffic_stats.html" class="btn btn-neutral float-right" title="Traffic Stats Administration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../traffic_router.html" class="btn btn-neutral" title="Traffic Router Administration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,533 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Vault Administration &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Quick How To Guides" href="quick_howto/index.html" />
+    <link rel="prev" title="Traffic Server Administration" href="traffic_server.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Vault Administration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-traffic-vault">Installing Traffic Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-traffic-vault">Configuring Traffic Vault</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#self-signed-certificate-configuration">Self Signed Certificate configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#riak-configuration-file">Riak Configuration File</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#riak-admin-configuration"><code class="docutils literal notranslate"><span class="pre">riak-admin</span></code> Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#traffic-ops-configuration">Traffic Ops Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-riak-search">Configuring Riak Search</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#riak-configuration">Riak Configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quick_howto/index.html">Quick How To Guides</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Administrator’s Guide</a> &raquo;</li>
+        
+      <li>Traffic Vault Administration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/admin/traffic_vault.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-vault-administration">
+<h1>Traffic Vault Administration<a class="headerlink" href="#traffic-vault-administration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installing-traffic-vault">
+<h2>Installing Traffic Vault<a class="headerlink" href="#installing-traffic-vault" title="Permalink to this headline">¶</a></h2>
+<p>In order to successfully store private keys you will need to install Riak. The latest version of Riak can be downloaded on <a class="reference external" href="http://docs.basho.com/riak/latest/downloads/">the Riak website</a>. The installation instructions for Riak can be found <a class="reference external" href="http://docs.basho.com/riak/latest/ops/building/installing/">here</a>. Based on experience, version 2.0.5 of Riak is recommended, but the latest version should suffice.</p>
+</div>
+<div class="section" id="configuring-traffic-vault">
+<h2>Configuring Traffic Vault<a class="headerlink" href="#configuring-traffic-vault" title="Permalink to this headline">¶</a></h2>
+<p>The following steps were taken to configure Riak in Comcast production environments.</p>
+<div class="section" id="self-signed-certificate-configuration">
+<h3>Self Signed Certificate configuration<a class="headerlink" href="#self-signed-certificate-configuration" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Self-signed certificates are not recommended for production use. Intended for development or learning purposes only. Modify subject as necessary.</p>
+</div>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">#49 </span><span class="caption-text">Self-Signed Certificate Configuration</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~
+mkdir certs
+<span class="nb">cd</span> certs
+openssl genrsa -out ca-bundle.key <span class="m">2048</span>
+openssl req -new -key ca-bundle.key -out ca-bundle.csr -subj <span class="s2">&quot;/C=US/ST=CO/L=DEN/O=somecompany/OU=CDN/CN=somecompany.net/emailAddress=someuser@somecompany.net&quot;</span>
+openssl x509 -req -days <span class="m">365</span> -in ca-bundle.csr -signkey ca-bundle.key -out ca-bundle.crt
+openssl genrsa -out server.key <span class="m">2048</span>
+openssl req -new -key server.key -out server.csr -subj <span class="s2">&quot;/C=US/ST=CO/L=DEN/O=somecompany/OU=CDN/CN=somecompany.net/emailAddress=someuser@somecompany.net&quot;</span>
+openssl x509 -req -days <span class="m">365</span> -in server.csr -CA ca-bundle.crt -CAkey ca-bundle.key -CAcreateserial -out server.crt
+mkdir /etc/riak/certs
+mv -f server.crt /etc/riak/certs/.
+mv -f server.key /etc/riak/certs/.
+mv -f ca-bundle.crt /etc/pki/tls/certs/.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="riak-configuration-file">
+<h3>Riak Configuration File<a class="headerlink" href="#riak-configuration-file" title="Permalink to this headline">¶</a></h3>
+<p>The following steps need to be performed on each Riak server in the cluster:</p>
+<ol class="arabic">
+<li><p>Log into Riak server as root</p></li>
+<li><p>Update the following in <code class="file docutils literal notranslate"><span class="pre">riak.conf</span></code> to reflect your IP, hostname, and CDN domains and sub-domains:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nodename</span> <span class="pre">=</span> <span class="pre">riak&#64;a-host.sys.kabletown.net</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">listener.http.internal</span> <span class="pre">=</span> <span class="pre">a-host.sys.kabletown.net:8098</span></code> (port can be 80 - This endpoint will not work over HTTPS)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">listener.protobuf.internal</span> <span class="pre">=</span> <span class="pre">a-host.sys.kabletown.net:8087</span></code> (can be different port if you want)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">listener.https.internal</span> <span class="pre">=</span> <span class="pre">a-host.sys.kabletown.net:8088</span></code> (port can be 443)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Update the following in <code class="file docutils literal notranslate"><span class="pre">riak.conf</span></code> file to point to your SSL certificate files</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ssl.certfile</span> <span class="pre">=</span> <span class="pre">/etc/riak/certs/server.crt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ssl.keyfile</span> <span class="pre">=</span> <span class="pre">/etc/riak/certs/server.key</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ssl.cacertfile</span> <span class="pre">=</span> <span class="pre">/etc/pki/tls/certs/ca-bundle.crt</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Add a line at the bottom of the <code class="file docutils literal notranslate"><span class="pre">riak.conf</span></code> for TLSv1 by setting <code class="docutils literal notranslate"><span class="pre">tls_protocols.tlsv1</span> <span class="pre">=</span> <span class="pre">on</span></code></p></li>
+<li><p>Once the configuration file has been updated restart Riak</p></li>
+<li><p>Consult the <a class="reference external" href="http://docs.basho.com/riak/kv/2.2.3/setup/installing/verify/">Riak documentation</a> for instructions on how to verify the installed service</p></li>
+</ol>
+</div>
+<div class="section" id="riak-admin-configuration">
+<h3><code class="docutils literal notranslate"><span class="pre">riak-admin</span></code> Configuration<a class="headerlink" href="#riak-admin-configuration" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">riak-admin</span></code> is a command line utility used to configure Riak that needs to be run as root on a server in the Riak cluster.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="http://docs.basho.com/riak/kv/2.2.3/using/admin/riak-admin/">The riak-admin documentation</a></p>
+</div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">#50 </span><span class="caption-text">Traffic Vault Setup with <code class="docutils literal notranslate"><span class="pre">riak-admin</span></code></span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># This script need only be run on any *one* Riak server in the cluster</span>
+
+<span class="c1"># Enable security and secure access groups</span>
+riak-admin security <span class="nb">enable</span>
+riak-admin security add-group admins
+riak-admin security add-group keysusers
+
+<span class="c1"># User name and password should be stored in</span>
+<span class="c1"># /opt/traffic_ops/app/conf/&lt;environment&gt;/riak.conf on the Traffic Ops</span>
+<span class="c1"># server</span>
+<span class="c1"># In this example, we assume the usernames &#39;admin&#39; and &#39;riakuser&#39; with</span>
+<span class="c1"># respective passwords stored in the ADMIN_PASSWORD and RIAK_USER_PASSWORD</span>
+<span class="c1"># environment variables</span>
+riak-admin security add-user admin <span class="nv">password</span><span class="o">=</span><span class="nv">$ADMIN_PASSWORD</span> <span class="nv">groups</span><span class="o">=</span>admins
+riak-admin security add-user riakuser <span class="nv">password</span><span class="o">=</span><span class="nv">$RIAK_USER_PASSWORD</span> <span class="nv">groups</span><span class="o">=</span>keysusers
+riak-admin security add-source riakuser <span class="m">0</span>.0.0.0/0 password
+riak-admin security add-source admin <span class="m">0</span>.0.0.0/0 password
+
+<span class="c1"># Grant privileges to the admins group for everything</span>
+riak-admin security grant riak_kv.list_buckets,riak_kv.list_keys,riak_kv.get,riak_kv.put,riak_kv.delete on any to admins
+
+<span class="c1"># Grant privileges to keysusers group for SSL, DNSSEC, and url_sig_keys buckets only</span>
+riak-admin security grant riak_kv.get,riak_kv.put,riak_kv.delete on default ssl to keysusers
+riak-admin security grant riak_kv.get,riak_kv.put,riak_kv.delete on default dnssec to keysusers
+riak-admin security grant riak_kv.get,riak_kv.put,riak_kv.delete on default url_sig_keys to keysusers
+riak-admin security grant riak_kv.get,riak_kv.put,riak_kv.delete on default cdn_uri_sig_keys to keysusers
+</pre></div>
+</div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For more information on security in Riak, see the <a class="reference external" href="http://docs.basho.com/riak/2.0.4/ops/advanced/security/">Riak Security documentation</a>.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For more information on authentication and authorization in Riak, see the <a class="reference external" href="http://docs.basho.com/riak/2.0.4/ops/running/authz/">Riak Authentication and Authorization documentation</a>.</p>
+</div>
+</div>
+<div class="section" id="traffic-ops-configuration">
+<h3>Traffic Ops Configuration<a class="headerlink" href="#traffic-ops-configuration" title="Permalink to this headline">¶</a></h3>
+<p>Before a fully set-up Traffic Vault instance may be used, it must be added as a server to Traffic Ops. The easiest way to accomplish this is via Traffic Portal at <span class="menuselection">Configure ‣ Servers</span>, though <a class="reference internal" href="../api/servers.html#to-api-servers"><span class="std std-ref">servers</span></a> may also be used by low-level tools and/or scripts. The Traffic Ops configuration file <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_ops/app/conf/</span><em><span class="pre">environment</span></em><span class="pre">/riak.conf</span></code> for the appropriate environment must also be updated to reflect the correct username and password for accessing the Riak database.</p>
+</div>
+</div>
+<div class="section" id="configuring-riak-search">
+<h2>Configuring Riak Search<a class="headerlink" href="#configuring-riak-search" title="Permalink to this headline">¶</a></h2>
+<p>In order to more effectively support retrieval of SSL certificates by Traffic Router and <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a>, Traffic Vault uses <a class="reference external" href="http://docs.basho.com/riak/kv/latest/using/reference/search/">Riak search</a>. Riak Search uses <a class="reference external" href="http://lucene.apache.org/solr">Apache Solr</a> for indexing and searching of records. This section explains how to enable, configure, and validate Riak Search.</p>
+<div class="section" id="riak-configuration">
+<h3>Riak Configuration<a class="headerlink" href="#riak-configuration" title="Permalink to this headline">¶</a></h3>
+<p>On each Traffic Vault server follow these steps.</p>
+<ol class="arabic">
+<li><p>If Java (JDKv1.8+) is not already installed on your Riak server, install Java</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">#51 </span><span class="caption-text">Check if Java is Installed, Then Install if Needed</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ensure that this outputs a Java version that is at least 1.8</span>
+java -version
+
+<span class="c1"># If it didn&#39;t, or produced an error because `java` doesn&#39;t exist,</span>
+<span class="c1"># install the correct version</span>
+<span class="c1"># (OpenJDK is used here because of its permissive license, though OracleJDK</span>
+<span class="c1"># should work with some tinkering)</span>
+
+<span class="c1"># On CentOS/RedHat/Fedora (recommended)</span>
+yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel
+
+<span class="c1"># On Ubuntu/Debian/Linux Mint</span>
+apt install -y openjdk-8-jdk
+
+<span class="c1"># Arch/Manjaro</span>
+pacman -Sy jdk8-openjdk
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Enable search in <code class="file docutils literal notranslate"><span class="pre">riak.conf</span></code> by changing the <code class="docutils literal notranslate"><span class="pre">search</span> <span class="pre">=</span> <span class="pre">off</span></code> setting to <code class="docutils literal notranslate"><span class="pre">search</span> <span class="pre">=</span> <span class="pre">on</span></code></p></li>
+<li><p>Restart Riak to propagate configuration changes</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">#52 </span><span class="caption-text">Restarting Riak on <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemd(1)">systemd(1)</a></em> Systems</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>systemctl restart riak
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+<div class="section" id="one-time-configuration">
+<h4>One-time Configuration<a class="headerlink" href="#one-time-configuration" title="Permalink to this headline">¶</a></h4>
+<p>After Riak has been configured to use Riak Search, permissions still need need to be updated to allow users to utilize this feature. Unlike actually setting up Riak Search, the permissions step need only be done on any <em>one</em> of the Riak servers in the cluster.</p>
+<ol class="arabic">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">riak-admin</span></code> to grant <code class="docutils literal notranslate"><span class="pre">search.admin</span></code> permissions to the “admin” user and <code class="docutils literal notranslate"><span class="pre">search.query</span></code> permissions to <strong>both</strong> the “admin” user and the “riakuser” user. The “admin” user will also require <code class="docutils literal notranslate"><span class="pre">search.admin</span></code> permissions on the <code class="docutils literal notranslate"><span class="pre">schema</span></code> (in addition to <code class="docutils literal notranslate"><span class="pre">index</span></code>) and <code class="docutils literal notranslate"><span class="pre">riak_core.set_bucket</span></code> permissions on <code class="docutils literal notranslate"><span class="pre">any</span></code>.</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-number">#53 </span><span class="caption-text">Setting up Riak Search Permissions</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>riak-admin security grant search.admin on schema to admin
+riak-admin security grant search.admin on index to admin
+riak-admin security grant search.query on index to admin
+riak-admin security grant search.query on index sslkeys to admin
+riak-admin security grant search.query on index to riakuser
+riak-admin security grant search.query on index sslkeys to riakuser
+riak-admin security grant riak_core.set_bucket on any to admin
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Add the search schema to Riak. This schema is a simple Apache Solr configuration file which will index all records on CDN, hostname, and <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>. The file can be found at <code class="file docutils literal notranslate"><span class="pre">traffic_ops/app/config/misc/riak_search/sslkeys.xml</span></code> in the Traffic Control repository.</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-number">#54 </span><span class="caption-text">Adding the GitHub-hosted Search Schema to Riak</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Obtain the configuration file - in this example by downloading it from GitHub</span>
+wget https://raw.githubusercontent.com/apache/trafficcontrol/master/traffic_ops/app/conf/misc/riak_search/sslkeys.xml
+
+<span class="c1"># Upload the schema to the Riak server using its API</span>
+<span class="c1"># Note that the assumptions made here are that the &quot;admin&quot; user&#39;s password is &quot;pass&quot;</span>
+<span class="c1"># and the server is accessible at port 8088 on the hostname &quot;trafficvault.infra.ciab.test&quot;</span>
+curl -kvsX PUT <span class="s2">&quot;https://admin:pass@trafficvault.infra.ciab.test:8088/search/schema/sslkeys&quot;</span> -H <span class="s2">&quot;Content-Type: application/xml&quot;</span> -d @sslkeys.xml
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Add the search index to Riak.</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-number">#55 </span><span class="caption-text">Adding the Search Index to Riak Via its API</span><a class="headerlink" href="#id7" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note that the assumptions made here are that the &quot;admin&quot; user&#39;s password is &quot;pass&quot;</span>
+<span class="c1"># and the server is accessible at port 8088 on the hostname &quot;trafficvault.infra.ciab.test&quot;</span>
+curl -kvsX PUT <span class="s2">&quot;https://admin:pass@trafficvault.infra.ciab.test:8088/search/index/sslkeys&quot;</span> -H <span class="s1">&#39;Content-Type: application/json&#39;</span> -d <span class="s1">&#39;{&quot;schema&quot;:&quot;sslkeys&quot;}&#39;</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+<ol class="arabic" start="4">
+<li><p>Associate the <code class="docutils literal notranslate"><span class="pre">sslkeys</span></code> index to the <code class="docutils literal notranslate"><span class="pre">ssl</span></code> bucket in Riak</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-number">#56 </span><span class="caption-text">Using the Riak API to Create an Index-to-Bucket Association for <code class="docutils literal notranslate"><span class="pre">sslkeys</span></code></span><a class="headerlink" href="#id8" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note that the assumptions made here are that the &quot;admin&quot; user&#39;s password is &quot;pass&quot;</span>
+<span class="c1"># and the server is accessible at port 8088 on the hostname &quot;trafficvault.infra.ciab.test&quot;</span>
+curl -kvs -XPUT <span class="s2">&quot;https://admin:pass@trafficvault.infra.ciab.test:8088/buckets/ssl/props&quot;</span> -H<span class="s1">&#39;content-type:application/json&#39;</span> -d<span class="s1">&#39;{&quot;props&quot;:{&quot;search_index&quot;:&quot;sslkeys&quot;}}&#39;</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+</div>
+<div class="section" id="adding-newly-indexed-fields-to-existing-records">
+<h4>Adding Newly Indexed Fields to Existing Records<a class="headerlink" href="#adding-newly-indexed-fields-to-existing-records" title="Permalink to this headline">¶</a></h4>
+<p>Riak Search (using Apache Solr) will now index all <strong>new</strong> records that are added to the <code class="docutils literal notranslate"><span class="pre">ssl</span></code> bucket. The <code class="docutils literal notranslate"><span class="pre">cdn</span></code>, <code class="docutils literal notranslate"><span class="pre">deliveryservice</span></code>, and <code class="docutils literal notranslate"><span class="pre">hostname</span></code> fields are indexed. When a search is performed Riak will return the indexed fields along with the certificate and key values for a SSL record. In order to add the indexed fields to current records and to get the current records added, the <code class="file docutils literal notranslate"><span class="pre">traffic_ops/app/script/update_riak_for_search.pl</span></code> script needs to be run. This does not need to be done on new installs. The following explains how to run the script.</p>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-number">#57 </span><span class="caption-text">Example Usage of <code class="file docutils literal notranslate"><span class="pre">traffic_ops/app/script/update_riak_for_search.pl</span></code></span><a class="headerlink" href="#id9" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">### Note that the following steps should be done on the Traffic VAULT server ###</span>
+
+<span class="c1"># Obtain the script - in this example by downloading it from GitHub</span>
+wget https://raw.githubusercontent.com/apache/trafficcontrol/master/traffic_ops/app/script/update_riak_for_search.pl
+
+<span class="c1"># Assuming Traffic Ops is hosted at trafficops.infra.ciab.test, with username &#39;admin&#39; and password &#39;twelve!&#39;</span>
+<span class="c1"># the script should be run like so:</span>
+
+./update_riak_for_search.pl -to_url<span class="o">=</span>https://trafficops.infra.ciab.test -to_un<span class="o">=</span>admin -to_pw<span class="o">=</span><span class="s2">&quot;twelve!&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>To validate the search is working run a query against the Riak database server, or use the Traffic Ops API endpoint: <a class="reference internal" href="../api/cdns_name_name_sslkeys.html#to-api-cdns-name-name-sslkeys"><span class="std std-ref">cdns/name/{{name}}/sslkeys</span></a></p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-number">#58 </span><span class="caption-text">Validate Riak Search is Working</span><a class="headerlink" href="#id10" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note that the assumptions made here are that the &quot;admin&quot; user&#39;s password is</span>
+<span class="c1"># &quot;pass&quot;, the Traffic Vault server&#39;s Riak database is accessible at port 8088 on</span>
+<span class="c1"># the hostname &quot;trafficvault.infra.ciab.test&quot;, $COOKIE contains a valid</span>
+<span class="c1"># Mojolicious cookie for a Traffic Ops user with proper permissions, and the</span>
+<span class="c1"># Traffic Ops server is available at the hostname &quot;trafficops.infra.ciab.test&quot;</span>
+
+<span class="c1"># Verify by querying Riak directly</span>
+curl -kvs <span class="s2">&quot;https://admin:password@trafficvault.infra.ciab.test:8088/search/query/sslkeys?wt=json&amp;q=cdn:CDN-in-a-Box&quot;</span>
+
+<span class="c1"># Verify using the Traffic Ops API</span>
+curl -Lvs -H <span class="s2">&quot;Cookie: </span><span class="nv">$COOKIE</span><span class="s2">&quot;</span> https://trafficops.infra.ciab.test/api/1.4/cdns/name/mycdn/sslkeys
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="quick_howto/index.html" class="btn btn-neutral float-right" title="Quick How To Guides" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="traffic_server.html" class="btn btn-neutral" title="Traffic Server Administration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

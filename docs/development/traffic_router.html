@@ -1,0 +1,556 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Router &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Traffic Router API" href="traffic_router/traffic_router_api.html" />
+    <link rel="prev" title="Traffic Portal" href="traffic_portal.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="building.html">Building Traffic Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops.html">Traffic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops_golang.html">Traffic Ops - Go</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ort/traffic_ops_ort.html">traffic_ops_ort package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal.html">Traffic Portal</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Router</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#software-requirements">Software Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#traffic-router-project-tree-overview">Traffic Router Project Tree Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#java-formatting-conventions">Java Formatting Conventions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-the-developer-environment">Installing The Developer Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manual-testing">Manual Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-cases">Test Cases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rpm-packaging">RPM Packaging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api">API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="traffic_router/traffic_router_api.html">Traffic Router API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_monitor.html">Traffic Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_stats.html">Traffic Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation_guidelines.html">Documentation Guidelines</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Developer’s Guide</a> &raquo;</li>
+        
+      <li>Traffic Router</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/development/traffic_router.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-router">
+<h1>Traffic Router<a class="headerlink" href="#traffic-router" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Traffic Router is a Java Tomcat application that routes clients to the closest available cache on the CDN using both HTTP and DNS. Cache server availability is determined by Traffic Monitor; consequently Traffic Router polls Traffic Monitor for its configuration and <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> health state information, and uses this data to make routing decisions.  HTTP routing is performed by localizing the client based on the request’s source IP address (IPv4 or IPv6), and issues an HTTP 302 response to redirect to the nearest <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>. HTTP routing utilizes consistent hashing on request URLs to optimize cache performance and request distribution. DNS routing is performed by localizing clients, resolvers in most cases, requesting <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">AAAA</span></code> records for a configurable name such as <code class="docutils literal notranslate"><span class="pre">foo.deliveryservice.somecdn.net</span></code>. Traffic Router is comprised of seven separate Maven modules:</p>
+<ul class="simple">
+<li><p>shared - A reusable utility JAR for defining <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> Certificates</p></li>
+<li><p>configuration - A reusable JAR defining the ConfigurationListener interface</p></li>
+<li><p>connector - A JAR that overrides Tomcat’s standard Http11Protocol Connector class and allows Traffic Router to delay opening listen sockets until it is in a state suitable for routing traffic</p></li>
+<li><p>geolocation - Submodule for defining geolocation services</p></li>
+<li><p>neustar - A JAR that provides a bean “neustarGeolocationService” that implements the GeolocationService interface defined in the geolocation maven submodule, which can optionally be added to the build of Traffic Router</p></li>
+<li><p>core - Services DNS and HTTP requests, performs localization on routing requests, and is deployed as a WAR to a Service (read: connector/listen port) within Tomcat which is separate from the API</p></li>
+<li><p>build - A simple Maven project which gathers the artifacts from the modules and builds an RPM</p></li>
+</ul>
+</div>
+<div class="section" id="software-requirements">
+<h2>Software Requirements<a class="headerlink" href="#software-requirements" title="Permalink to this headline">¶</a></h2>
+<p>To work on Traffic Router you need a *nix (MacOS and Linux are most commonly used) environment that has the following installed:</p>
+<ul class="simple">
+<li><p>Eclipse &gt;= Kepler SR2 (or another Java IDE)</p></li>
+<li><p>Maven &gt;= 3.3.1</p></li>
+<li><p>JDK &gt;= 8.0 (OpenJDK suggested, but not required)</p></li>
+<li><p>OpenSSL &gt;= 1.0.2</p></li>
+<li><p><abbr title="Apache Portable Runtime">APR</abbr> &gt;= 1.4.8-3</p></li>
+<li><p>Tomcat Native &gt;= 1.2.16</p></li>
+<li><p>Not Tomcat - You do not need a Tomcat installation for development. An embedded version is launched for development testing instead.</p></li>
+</ul>
+</div>
+<div class="section" id="traffic-router-project-tree-overview">
+<h2>Traffic Router Project Tree Overview<a class="headerlink" href="#traffic-router-project-tree-overview" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">traffic_control/traffic_traffic_router/</span></code> - base directory for Traffic Router</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">connector/</span></code> - Source code for Traffic Router Connector;</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">src/main/java</span></code> - Java source directory for Traffic Router Connector</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">core/</span></code> - Source code for Traffic Router Core, which is built as its own deployable WAR file and communicates with <a class="reference internal" href="traffic_router/traffic_router_api.html#tr-api"><span class="std std-ref">Traffic Router API</span></a> using JMX</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/main</span></code> - Main source directory for Traffic Router Core</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">lib/systemd/system/traffic_router.service</span></code> - Unit script for launching the Traffic Router with Tomcat</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">conf/</span></code> - All of the required configuration files for running the traffic_router web application, including those needed for Tomcat</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">java/</span></code> - Java source code for Traffic Router Core</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">resources/</span></code> - Resources pulled in during an RPM build</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scripts/</span></code> - Scripts used by the RPM build process</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">webapp/</span></code> - Java “webapp” resources</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">var/log/</span></code> - location of all the Traffic Router runtime logs</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/test</span></code> - Test source directory for Traffic Router Core</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">conf/</span></code> - Minimal Configuration files that make it possible to run JUnit tests</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">db/</span></code> - Files downloaded by unit tests</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">java/</span></code> - JUnit-based unit tests for Traffic Router Core</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">resources/</span></code> - Example data files used by junit tests</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">var/auto-zones</span></code> - BIND formatted zone files generated by Traffic Router Core during unit testing</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="java-formatting-conventions">
+<h2>Java Formatting Conventions<a class="headerlink" href="#java-formatting-conventions" title="Permalink to this headline">¶</a></h2>
+<p>None at this time. The codebase will eventually be formatted per Java standards.</p>
+</div>
+<div class="section" id="installing-the-developer-environment">
+<h2>Installing The Developer Environment<a class="headerlink" href="#installing-the-developer-environment" title="Permalink to this headline">¶</a></h2>
+<p>To install the Traffic Router Developer environment:</p>
+<ol class="arabic simple">
+<li><p>Clone the traffic_control repository using Git.</p></li>
+<li><p>Change directories into <code class="docutils literal notranslate"><span class="pre">traffic_control/traffic_router</span></code>.</p></li>
+<li><p>Set the environment variable TRAFFIC_MONITOR_HOSTS to be a semicolon delimited list of Traffic Monitors that can be accessed during integration tests OR install the <code class="file docutils literal notranslate"><span class="pre">traffic_monitor.properties</span></code> file.</p></li>
+<li><p>Additional configuration is set using the below files:</p></li>
+</ol>
+<blockquote>
+<div><ul>
+<li><p>copy <code class="file docutils literal notranslate"><span class="pre">core/src/test/conf/dns.properties</span></code> from <code class="file docutils literal notranslate"><span class="pre">core/src/main/conf/</span></code></p></li>
+<li><p>copy <code class="file docutils literal notranslate"><span class="pre">core/src/test/conf/http.properties</span></code> from <code class="file docutils literal notranslate"><span class="pre">core/src/main/conf/</span></code></p></li>
+<li><p>copy <code class="file docutils literal notranslate"><span class="pre">core/src/test/conf/log4j.properties</span></code> from <code class="file docutils literal notranslate"><span class="pre">core/src/main/conf/</span></code></p></li>
+<li><p>copy <code class="file docutils literal notranslate"><span class="pre">core/src/test/conf/traffic_monitor.properties</span></code> from <code class="file docutils literal notranslate"><span class="pre">core/src/main/conf/</span></code> and then edit the <code class="docutils literal notranslate"><span class="pre">traffic_monitor.bootstrap.hosts</span></code> property</p></li>
+<li><p><code class="file docutils literal notranslate"><span class="pre">core/src/test/conf/traffic_ops.properties</span></code> holds the credentials for accessing Traffic Ops. Copy it from <code class="file docutils literal notranslate"><span class="pre">core/src/main/conf/</span></code> and then edit the credentials as appropriate for the Traffic Ops instance you will be using.</p></li>
+<li><p>Default configuration values now reside in <code class="file docutils literal notranslate"><span class="pre">core/src/main/webapp/WEB-INF/applicationContext.xml</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These values may be overridden by creating and/or modifying the property files listed in <code class="file docutils literal notranslate"><span class="pre">core/src/main/resources/applicationProperties.xml</span></code></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Pre-existing properties files are still honored by Traffic Router. For example <code class="file docutils literal notranslate"><span class="pre">traffic_monitor.properties</span></code> may contain the <abbr title="Fully Qualified Domain Name">FQDN</abbr> and port of the Traffic Monitor instance(s), separated by semicolons as necessary (do not include scheme e.g. <code class="docutils literal notranslate"><span class="pre">http://</span></code>)</p>
+</div>
+</li>
+</ul>
+</div></blockquote>
+<ol class="arabic">
+<li><p>Import the existing git repository as projects into your IDE (Eclipse):</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p><span class="menuselection">File ‣ Import ‣ Git ‣ Projects from Git</span>; <span class="guilabel">Next</span></p></li>
+<li><p><span class="guilabel">Existing local repository</span>; <span class="guilabel">Next</span></p></li>
+<li><p><span class="guilabel">Add</span> - browse to find <code class="docutils literal notranslate"><span class="pre">traffic_control</span></code>; <span class="guilabel">Open</span></p></li>
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">traffic_control</span></code>; <span class="guilabel">Next</span></p></li>
+<li><p>Ensure <span class="guilabel">Import existing projects</span> is selected, expand <code class="docutils literal notranslate"><span class="pre">traffic_control</span></code>, select <code class="docutils literal notranslate"><span class="pre">traffic_router</span></code>; <span class="guilabel">Next</span></p></li>
+<li><p>Ensure <code class="docutils literal notranslate"><span class="pre">traffic_router_api</span></code>, <code class="docutils literal notranslate"><span class="pre">traffic_router_connector</span></code>, and <code class="docutils literal notranslate"><span class="pre">traffic_router_core</span></code> are checked; <span class="guilabel">Finish</span> (this step can take several minutes to complete)</p></li>
+<li><p>Ensure <code class="docutils literal notranslate"><span class="pre">traffic_router_api</span></code>, <code class="docutils literal notranslate"><span class="pre">traffic_router_connector</span></code>, and <code class="docutils literal notranslate"><span class="pre">traffic_router_core</span></code> have been opened by Eclipse after importing</p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>From the terminal or your IDE, run <code class="docutils literal notranslate"><span class="pre">mvn</span> <span class="pre">clean</span> <span class="pre">verify</span></code> from the <code class="docutils literal notranslate"><span class="pre">traffic_router</span></code> directory. This will run a series of integration tests and will temporarily start and embedded version of Traffic Router and a ‘fake’ simulated instance of Traffic Monitor.</p></li>
+<li><p>Start the embedded Tomcat instance for Core from within your IDE by following these steps:</p>
+<blockquote>
+<div><ol class="loweralpha">
+<li><p>In the package explorer, expand <code class="docutils literal notranslate"><span class="pre">traffic_router_core</span></code></p></li>
+<li><p>Expand <code class="docutils literal notranslate"><span class="pre">src/test/java</span></code></p></li>
+<li><p>Expand the package <code class="docutils literal notranslate"><span class="pre">com.comcast.cdn.traffic_control.traffic_router.core</span></code></p></li>
+<li><p>Open and run <code class="docutils literal notranslate"><span class="pre">TrafficRouterStart.java</span></code></p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If an error is displayed in the Console, run <code class="docutils literal notranslate"><span class="pre">mvn</span> <span class="pre">clean</span> <span class="pre">verify</span></code> from the <code class="docutils literal notranslate"><span class="pre">traffic_router</span></code> directory</p>
+</div>
+</div></blockquote>
+</li>
+</ol>
+</div></blockquote>
+</li>
+</ol>
+<p>Once running, the <a class="reference internal" href="traffic_router/traffic_router_api.html#tr-api"><span class="std std-ref">Traffic Router API</span></a> is available at <a class="reference external" href="http://localhost:3333">http://localhost:3333</a>, the HTTP routing interface is available on <a class="reference external" href="http://localhost:8888">http://localhost:8888</a> and HTTPS is available on <a class="reference external" href="http://localhost:8443">http://localhost:8443</a>. The DNS server and routing interface is available on localhost:53 via TCP and UDP.</p>
+</div>
+<div class="section" id="manual-testing">
+<h2>Manual Testing<a class="headerlink" href="#manual-testing" title="Permalink to this headline">¶</a></h2>
+<p>Look up the URL for a test HTTP <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> in Traffic Ops and then make a request. When Traffic Router is running and used as a resolver for the host in the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> URL, the requested origin content should be found through an Edge-tier <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">#87 </span><span class="caption-text">Example Test for an HTTP <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a></span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">root@enroller:/shared/enroller#</span> curl -skvL http://video.demo1.mycdn.ciab.test/
+<span class="go">*   Trying fc01:9400:1000:8::60...</span>
+<span class="go">* TCP_NODELAY set</span>
+<span class="go">* Connected to video.demo1.mycdn.ciab.test (fc01:9400:1000:8::60) port 80 (#0)</span>
+<span class="gp">&gt;</span> GET / HTTP/1.1
+<span class="gp">&gt;</span> Host: video.demo1.mycdn.ciab.test
+<span class="gp">&gt;</span> User-Agent: curl/7.52.1
+<span class="gp">&gt;</span> Accept: */*
+<span class="gp">&gt;</span>
+<span class="go">&lt; HTTP/1.1 302 Found</span>
+<span class="go">&lt; Location: http://edge.demo1.mycdn.ciab.test/</span>
+<span class="go">&lt; Content-Length: 0</span>
+<span class="go">&lt; Date: Wed, 16 Jan 2019 21:52:14 GMT</span>
+<span class="go">&lt;</span>
+<span class="go">* Curl_http_done: called premature == 0</span>
+<span class="go">* Connection #0 to host video.demo1.mycdn.ciab.test left intact</span>
+<span class="go">* Issue another request to this URL: &#39;http://edge.demo1.mycdn.ciab.test/&#39;</span>
+<span class="go">*   Trying fc01:9400:1000:8::100...</span>
+<span class="go">* TCP_NODELAY set</span>
+<span class="go">* Connected to edge.demo1.mycdn.ciab.test (fc01:9400:1000:8::100) port 80 (#1)</span>
+<span class="gp">&gt;</span> GET / HTTP/1.1
+<span class="gp">&gt;</span> Host: edge.demo1.mycdn.ciab.test
+<span class="gp">&gt;</span> User-Agent: curl/7.52.1
+<span class="gp">&gt;</span> Accept: */*
+<span class="gp">&gt;</span>
+<span class="go">&lt; HTTP/1.1 200 OK</span>
+<span class="go">&lt; Content-Type: text/html</span>
+<span class="go">&lt; Accept-Ranges: bytes</span>
+<span class="go">&lt; ETag: &quot;1473249267&quot;</span>
+<span class="go">&lt; Last-Modified: Wed, 07 Nov 2018 13:53:57 GMT</span>
+<span class="go">&lt; Cache-Control: public, max-age=300</span>
+<span class="go">&lt; Access-Control-Allow-Origin: *</span>
+<span class="go">&lt; Access-Control-Allow-Headers: Accept, Origin, Content-Type</span>
+<span class="go">&lt; Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS</span>
+<span class="go">&lt; Content-Length: 1881</span>
+<span class="go">&lt; Date: Wed, 16 Jan 2019 21:52:15 GMT</span>
+<span class="go">&lt; Server: ATS/7.1.4</span>
+<span class="go">&lt; Age: 1</span>
+<span class="go">&lt; Via: http/1.1 mid.infra.ciab.test (ApacheTrafficServer/7.1.4 [uScMsSfWpSeN:t cCMi p sS]), http/1.1 edge.infra.ciab.test (ApacheTrafficServer/7.1.4 [uScMsSfWpSeN:t cCMi pSs ])</span>
+<span class="go">&lt; Connection: keep-alive</span>
+<span class="go">&lt;</span>
+<span class="go">&lt;!DOCTYPE html&gt;</span>
+<span class="go">&lt;!-- Licensed to the Apache Software Foundation (ASF) under one</span>
+<span class="go">or more contributor license agreements.  See the NOTICE file</span>
+<span class="go">distributed with this work for additional information</span>
+<span class="go">regarding copyright ownership.  The ASF licenses this file</span>
+<span class="go">to you under the Apache License, Version 2.0 (the</span>
+<span class="go">&quot;License&quot;); you may not use this file except in compliance</span>
+<span class="go">with the License.  You may obtain a copy of the License at</span>
+
+<span class="go">  http://www.apache.org/licenses/LICENSE-2.0</span>
+
+<span class="go">Unless required by applicable law or agreed to in writing,</span>
+<span class="go">software distributed under the License is distributed on an</span>
+<span class="go">&quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="go">KIND, either express or implied.  See the License for the</span>
+<span class="go">specific language governing permissions and limitations</span>
+<span class="go">under the License. --&gt;</span>
+<span class="go">&lt;html lang=&quot;en&quot;&gt;</span>
+<span class="go">&lt;head&gt;</span>
+<span class="go">    &lt;title&gt;CDN In a Box&lt;/title&gt;</span>
+<span class="go">    &lt;meta charset=&quot;utf-8&quot;/&gt;</span>
+<span class="go">    &lt;meta charset=&quot;utf-8&quot;/&gt;</span>
+<span class="go">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width; height=device-height; initial-scale=1&quot;/&gt;</span>
+<span class="go">    &lt;link rel=&quot;shortcut-icon&quot; href=&quot;/tc_logo.svg&quot;/&gt;</span>
+<span class="go">    &lt;meta name=&quot;author&quot; content=&quot;Apache&quot;/&gt;</span>
+<span class="go">    &lt;meta name=&quot;creator&quot; content=&quot;Apache&quot;/&gt;</span>
+<span class="go">    &lt;meta name=&quot;publisher&quot; content=&quot;Apache&quot;/&gt;</span>
+<span class="go">    &lt;meta name=&quot;description&quot; content=&quot;A simple test origin for Apache Traffic Control&quot;/&gt;</span>
+<span class="go">    &lt;style type=&quot;text/css&quot;&gt;</span>
+<span class="go">        html {</span>
+<span class="go">            height: 100vh;</span>
+<span class="go">            width: 100vw;</span>
+<span class="go">        }</span>
+
+<span class="go">        body {</span>
+<span class="go">            text-align: center;</span>
+<span class="go">            background-image: url(/tc_logo.svg);</span>
+<span class="go">            background-color: black;</span>
+<span class="go">            background-position: center;</span>
+<span class="go">            background-repeat: no-repeat;</span>
+<span class="go">            background-size: 25%;</span>
+<span class="go">            font-family: &quot;Ubuntu Mono&quot;,&quot;Consolas&quot;,sans-serif;</span>
+<span class="go">            color: white;</span>
+<span class="go">            margin: 0;</span>
+<span class="go">            padding-top: 0.67em;</span>
+<span class="go">            max-width: 100%;</span>
+<span class="go">        }</span>
+
+<span class="go">        h1 {</span>
+<span class="go">            margin-top: 0.67em;</span>
+<span class="go">        }</span>
+
+<span class="go">        p {</span>
+<span class="go">            text-align: left;</span>
+<span class="go">            width: 80vw;</span>
+<span class="go">            min-width: 320px;</span>
+<span class="go">            margin: auto;</span>
+<span class="go">        }</span>
+<span class="go">    &lt;/style&gt;</span>
+<span class="go">&lt;/head&gt;</span>
+<span class="go">&lt;body&gt;</span>
+<span class="go">    &lt;h1&gt;Test Origin&lt;/h1&gt;</span>
+<span class="go">    &lt;p&gt;This is a test &quot;origin&quot; server for Apache Traffic Control&lt;/p&gt;</span>
+<span class="go">&lt;/body&gt;</span>
+<span class="go">&lt;/html&gt;</span>
+<span class="go">* Curl_http_done: called premature == 0</span>
+<span class="go">* Connection #1 to host edge.demo1.mycdn.ciab.test left intact</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="test-cases">
+<h2>Test Cases<a class="headerlink" href="#test-cases" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Unit tests can be executed using Maven by running <code class="docutils literal notranslate"><span class="pre">mvn</span> <span class="pre">test</span></code> at the root of the <code class="docutils literal notranslate"><span class="pre">traffic_router</span></code> project.</p></li>
+<li><p>Unit and Integration tests can be executed using Maven by running <code class="docutils literal notranslate"><span class="pre">mvn</span> <span class="pre">verify</span></code> at the root of the <code class="docutils literal notranslate"><span class="pre">traffic_router</span></code> project.</p></li>
+</ul>
+</div>
+<div class="section" id="rpm-packaging">
+<h2>RPM Packaging<a class="headerlink" href="#rpm-packaging" title="Permalink to this headline">¶</a></h2>
+<p>Running <code class="docutils literal notranslate"><span class="pre">mvn</span> <span class="pre">package</span></code> on a Linux-based distribution will trigger the build process to create the Traffic Router RPM and the Traffic Router <code class="docutils literal notranslate"><span class="pre">.war</span></code> file, but will not run the integration tests, so it is a good way to update those artifacts quickly during development. But the preferred way to build the Traffic Router RPMs is by following the instructions in <a class="reference internal" href="building.html#dev-building"><span class="std std-ref">Building Traffic Control</span></a></p>
+</div>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="traffic_router/traffic_router_api.html#tr-api"><span class="std std-ref">Traffic Router API</span></a></p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="traffic_router/traffic_router_api.html" class="btn btn-neutral float-right" title="Traffic Router API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="traffic_portal.html" class="btn btn-neutral" title="Traffic Portal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

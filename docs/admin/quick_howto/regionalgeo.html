@@ -1,0 +1,381 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configure Regional Geo-blocking (RGB) &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Configuring Static DNS Entries" href="static_dns.html" />
+    <link rel="prev" title="Configure Multi-Site Origin" href="multi_site.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Quick How To Guides</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="anonymous_blocking.html">Configure Anonymous Blocking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroup_fallback.html">Configure Cache Group Fallbacks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html">CDN in a Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dnssec.html">Configure DNSSEC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_requests.html">Delivery Service Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="federations.html">Configure Federations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multi_site.html">Configure Multi-Site Origin</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Configure Regional Geo-blocking (RGB)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#traffic-router-access-log">Traffic Router Access Log</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="static_dns.html">Configuring Static DNS Entries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="steering.html">Configure Delivery Service Steering</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Administrator’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">Quick How To Guides</a> &raquo;</li>
+        
+      <li>Configure Regional Geo-blocking (RGB)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/admin/quick_howto/regionalgeo.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configure-regional-geo-blocking-rgb">
+<span id="regionalgeo-qht"></span><h1>Configure Regional Geo-blocking (RGB)<a class="headerlink" href="#configure-regional-geo-blocking-rgb" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><abbr title="Regional Geographic-based Blocking">RGB</abbr> is only supported for HTTP <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s.</p>
+</div>
+<ol class="arabic">
+<li><p>Prepare an <abbr title="Regional Geographic-based Blocking">RGB</abbr> configuration file. <abbr title="Regional Geographic-based Blocking">RGB</abbr> uses a configuration file in JSON format to define regional geographic blocking rules for <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s. The file needs to be put on an HTTP server accessible to Traffic Router.</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">#75 </span><span class="caption-text">Example Configuration File</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="nt">&quot;deliveryServices&quot;</span><span class="p">:</span>
+    <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;deliveryServiceId&quot;</span><span class="p">:</span> <span class="s2">&quot;hls-live&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;urlRegex&quot;</span><span class="p">:</span> <span class="s2">&quot;.*live4\\.m3u8&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;geoLocation&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;includePostalCode&quot;</span><span class="p">:[</span><span class="s2">&quot;N0H&quot;</span><span class="p">,</span> <span class="s2">&quot;L9V&quot;</span><span class="p">,</span> <span class="s2">&quot;L9W&quot;</span><span class="p">]},</span>
+            <span class="nt">&quot;redirectUrl&quot;</span><span class="p">:</span> <span class="s2">&quot;http://third-party.com/blacked_out.html&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;deliveryServiceId&quot;</span><span class="p">:</span> <span class="s2">&quot;hls-live&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;urlRegex&quot;</span><span class="p">:</span> <span class="s2">&quot;.*live5\\.m3u8&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;ipWhiteList&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;185.68.71.9/22&quot;</span><span class="p">,</span><span class="s2">&quot;142.232.0.79/24&quot;</span><span class="p">],</span>
+            <span class="nt">&quot;geoLocation&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;excludePostalCode&quot;</span><span class="p">:[</span><span class="s2">&quot;N0H&quot;</span><span class="p">,</span> <span class="s2">&quot;L9V&quot;</span><span class="p">]},</span>
+            <span class="nt">&quot;redirectUrl&quot;</span><span class="p">:</span> <span class="s2">&quot;/live5_low_bitrate.m3u8&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">deliveryServiceId</span></code></dt><dd><p>Should be equal to the <code class="docutils literal notranslate"><span class="pre">ID</span></code> or <code class="docutils literal notranslate"><span class="pre">xml_id</span></code> field of the intended <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> as configured in Traffic Portal</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">urlRegex</span></code></dt><dd><p>A regular expression to be used to determine to what URLs the rule shall apply; a URL that matches it is subject to the rule</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">geoLocation</span></code></dt><dd><p>An object that currently supports only the keys <code class="docutils literal notranslate"><span class="pre">includePostalCode</span></code> and <code class="docutils literal notranslate"><span class="pre">excludePostalCode</span></code> (mutually exclusive). When the <code class="docutils literal notranslate"><span class="pre">includePostalCode</span></code> key is used, only the clients whose <abbr title="Forward Sortation Areas">FSA</abbr>s - the first three postal characters of Canadian postal codes - are in the <code class="docutils literal notranslate"><span class="pre">includePostalCode</span></code> list are able to view the content at URLs matched by the <code class="docutils literal notranslate"><span class="pre">urlRegex</span></code>. When <code class="docutils literal notranslate"><span class="pre">excludePostalCode</span></code> is used, any client whose <abbr title="Forward Sortation Areas">FSA</abbr> is not in the <code class="docutils literal notranslate"><span class="pre">excludePostalCode</span></code> list will be allowed to view the content</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">redirectUrl</span></code></dt><dd><p>The URL that will be returned to the blocked clients. Without a domain name in the URL, the URL will still be served in the same <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>. Thus Traffic Router will redirect the client to a chosen <a class="reference internal" href="../../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> assigned to the <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>. If the URL includes a domain name, Traffic Router simply redirects the client to the defined URL. In the latter case, the redirect URL must not match the <code class="docutils literal notranslate"><span class="pre">urlRegex</span></code> value, or an infinite loop of  HTTP <code class="docutils literal notranslate"><span class="pre">302</span> <span class="pre">Found</span></code> responses will occur at the Traffic Router</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ipWhiteList</span></code></dt><dd><p>An optional element that is an array of <abbr title="Classless Inter-Domain Routing">CIDR</abbr> blocks indicating the IPv4 subnets that are allowed by the rule. If this list exists and the value is not empty, client IP will be matched against the <abbr title="Classless Inter-Domain Routing">CIDR</abbr> list, bypassing the value of <code class="docutils literal notranslate"><span class="pre">geoLocation</span></code>. If there is no match in the white list, Traffic Router defers to the value of <code class="docutils literal notranslate"><span class="pre">geoLocation</span></code> to determine if content ought to be blocked.</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>Add <abbr title="Regional Geographic-based Blocking">RGB</abbr> <a class="reference internal" href="../../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a> in Traffic Portal to the <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>’s Traffic Router(s)’s <a class="reference internal" href="../../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a>(s). The <a class="reference internal" href="../../overview/profiles_and_parameters.html#parameter-config-file"><span class="std std-ref">Config File</span></a> value should be set to <code class="docutils literal notranslate"><span class="pre">CRConfig.json</span></code>, and the following two <a class="reference internal" href="../../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> <a class="reference internal" href="../../overview/profiles_and_parameters.html#parameter-name"><span class="std std-ref">Name</span></a>/<a class="reference internal" href="../../overview/profiles_and_parameters.html#parameter-value"><span class="std std-ref">Value</span></a> pairs need to be specified:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">regional_geoblocking.polling.url</span></code></dt><dd><p>The URL of the RGB configuration file. Traffic Router will fetch the file from this URL using an HTTP <code class="docutils literal notranslate"><span class="pre">GET</span></code> request.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">regional_geoblocking.polling.interval</span></code></dt><dd><p>The interval on which Traffic Router polls the <abbr title="Regional Geographic-based Blocking">RGB</abbr> configuration file.</p>
+</dd>
+</dl>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../_images/015.png"><img alt="../../_images/015.png" src="../../_images/015.png" style="width: 40%;" /></a>
+</div>
+</div></blockquote>
+</li>
+<li><p>Enable <abbr title="Regional Geographic-based Blocking">RGB</abbr> for a <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> using the <a class="reference internal" href="../traffic_portal/usingtrafficportal.html#tp-services-delivery-service"><span class="std std-ref">Delivery Services view in Traffic Portal</span></a> (don’t forget to save changes!)</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="../../_images/025.png"><img alt="../../_images/025.png" src="../../_images/025.png" style="width: 40%;" /></a>
+</div>
+</div></blockquote>
+</li>
+<li><p>Go to <a class="reference internal" href="../traffic_portal/usingtrafficportal.html#tp-cdns"><span class="std std-ref">the Traffic Portal CDNs view</span></a>, click on <span class="guilabel">Diff CDN Config Snapshot</span>, and click <span class="guilabel">Perform Snapshot</span>.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="../../_images/035.png"><img alt="../../_images/035.png" src="../../_images/035.png" style="width: 40%;" /></a>
+</div>
+</div></blockquote>
+</li>
+</ol>
+<div class="section" id="traffic-router-access-log">
+<h2>Traffic Router Access Log<a class="headerlink" href="#traffic-router-access-log" title="Permalink to this headline">¶</a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../traffic_router.html#tr-logs"><span class="std std-ref">Troubleshooting and Log Files</span></a></p>
+</div>
+<p>RGB extends the <code class="docutils literal notranslate"><span class="pre">rtype</span></code> field and adds a new field <code class="docutils literal notranslate"><span class="pre">rgb</span></code> in Traffic Router access.log to help to monitor this feature. A value of <code class="docutils literal notranslate"><span class="pre">RGALT</span></code> in the <code class="docutils literal notranslate"><span class="pre">rtype</span></code> field indicates that a request is redirected to an alternate URL by <abbr title="Regional Geographic-based Blocking">RGB</abbr>; a value of <code class="docutils literal notranslate"><span class="pre">RGDENY</span></code> indicates that a request is denied by <abbr title="Regional Geographic-based Blocking">RGB</abbr> because there is no matching rule in the <abbr title="Regional Geographic-based Blocking">RGB</abbr> configuration file for this request. When <abbr title="Regional Geographic-based Blocking">RGB</abbr> is enabled, the <code class="docutils literal notranslate"><span class="pre">RGB</span></code> field will be non-empty with following format:</p>
+<p><code class="docutils literal notranslate"><span class="pre">{FSA}:{allowed/disallowed}:{include/exclude</span> <span class="pre">postal}:{fallback</span> <span class="pre">config}:{allowed</span> <span class="pre">by</span> <span class="pre">whitelist}</span></code></p>
+<dl class="simple">
+<dt>FSA</dt><dd><p><em class="dfn">FSA</em> part of the client’s postal code, which is retrieved from a geographic location database. If this field is empty, a dash (“-“) is filled in.</p>
+</dd>
+<dt>allowed/disallowed</dt><dd><p>This flag shows if a request was allowed or disallowed by <abbr title="Regional Geographic-based Blocking">RGB</abbr> (1 for yes, and 0 for no).</p>
+</dd>
+<dt>include/exclude postal</dt><dd><p>This shows that when a rule in JSON is matched for a request, it’s value is “I” if the rule matched because of an <code class="docutils literal notranslate"><span class="pre">includePostalCode</span></code> rule, “X” if the rule matched because of an <code class="docutils literal notranslate"><span class="pre">excludePostalCode</span></code> rule, or “-” if no rule matched.</p>
+</dd>
+<dt>fallback config</dt><dd><p>When Traffic Router fails to parse an <abbr title="Regional Geographic-based Blocking">RGB</abbr> configuration file as JSON, Traffic Router will handle requests with latest valid configuration that it had, but will set the <code class="docutils literal notranslate"><span class="pre">fallback</span> <span class="pre">config</span></code> flag to 1. If no fall-back occurred, then the flag is set to 0.</p>
+</dd>
+<dt>allowed by whitelist</dt><dd><p>If a request is allowed by a <code class="docutils literal notranslate"><span class="pre">whitelist</span></code> field in the configuration, this flag is set to 1; for all other cases, it is 0.</p>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">#76 </span><span class="caption-text">Example</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-squid notranslate"><div class="highlight"><pre><span></span><span class="m">1446442214</span>.685<span class="w"> </span>qtype=HTTP<span class="w"> </span>chi=129.100.254.79<span class="w"> </span>url=&quot;http://foo.geo2.cdn.com/live5.m3u8&quot;<span class="w"> </span>cqhm=GET<span class="w"> </span>cqhv=HTTP/1.1<span class="w"> </span>rtype=GEO<span class="w"> </span>rloc=&quot;-&quot;<span class="w"> </span>rdtl=-<span class="w"> </span>rerr=&quot;-&quot;<span class="w"> </span>rgb=&quot;N6G:1:X:0:0&quot;<span class="w"> </span>pssc=302<span class="w"> </span>ttms=3<span class="w"> </span>rurl=http://cent6-44.geo2.cdn.com/live5.m3u8<span class="w"> </span>rh=&quot;-&quot;<span class="w"></span>
+
+<span class="m">1446442219</span>.181<span class="w"> </span>qtype=HTTP<span class="w"> </span>chi=184.68.71.9<span class="w"> </span>url=&quot;http://foo.geo2.cdn.com/live5.m3u8&quot;<span class="w"> </span>cqhm=GET<span class="w"> </span>cqhv=HTTP/1.1<span class="w"> </span>rtype=RGALT<span class="w"> </span>rloc=&quot;-&quot;<span class="w"> </span>rdtl=-<span class="w"> </span>rerr=&quot;-&quot;<span class="w"> </span>rgb=&quot;-:0:X:0:0&quot;<span class="w"> </span>pssc=302<span class="w"> </span>ttms=3<span class="w"> </span>rurl=http://cent6-44.geo2.cdn.com/low_bitrate.m3u8<span class="w"> </span>rh=&quot;-&quot;<span class="w"></span>
+
+<span class="m">1446445521</span>.677<span class="w"> </span>qtype=HTTP<span class="w"> </span>chi=24.114.29.79<span class="w"> </span>url=&quot;http://foo.geo2.cdn.com/live51.m3u8&quot;<span class="w"> </span>cqhm=GET<span class="w"> </span>cqhv=HTTP/1.1<span class="w"> </span>rtype=RGDENY<span class="w"> </span>rloc=&quot;-&quot;<span class="w"> </span>rdtl=-<span class="w"> </span>rerr=&quot;-&quot;<span class="w"> </span>rgb=&quot;L4S:0:-:0:0&quot;<span class="w"> </span>pssc=520<span class="w"> </span>ttms=3<span class="w"> </span>rurl=&quot;-&quot;<span class="w"> </span>rh=&quot;-&quot;<span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="static_dns.html" class="btn btn-neutral float-right" title="Configuring Static DNS Entries" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="multi_site.html" class="btn btn-neutral" title="Configure Multi-Site Origin" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

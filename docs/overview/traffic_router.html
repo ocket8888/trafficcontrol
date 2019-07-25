@@ -1,0 +1,301 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Router &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Traffic Stats" href="traffic_stats.html" />
+    <link rel="prev" title="Traffic Portal" href="traffic_portal.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Traffic Control Overview</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="delivery_services.html">Delivery Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiles_and_parameters.html">Profiles and Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_monitor.html">Traffic Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops.html">Traffic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal.html">Traffic Portal</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Router</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dns-content-routing">DNS Content Routing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#http-content-routing">HTTP Content Routing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_stats.html">Traffic Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_vault.html">Traffic Vault</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Traffic Control Overview</a> &raquo;</li>
+        
+      <li>Traffic Router</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/overview/traffic_router.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-router">
+<span id="tr-overview"></span><h1>Traffic Router<a class="headerlink" href="#traffic-router" title="Permalink to this headline">¶</a></h1>
+<p>Traffic Router’s function is to send clients to the most optimal <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>. ‘Optimal’ in this case is based on a number of factors:</p>
+<ul class="simple">
+<li><p>Distance between the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> and the client (not necessarily measured in physical distance, but quite often in layer 3 network hops). Less network distance between the client and <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> yields better performance and lower network load. Traffic Router helps clients connect to the best-performing <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> for their location at the lowest network cost.</p></li>
+<li><p>Availability of <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s and the system processing/network load on the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s. A common issue in Internet and television distribution scenarios is having many clients attempting to retrieve the same content at the same time. Traffic Router helps clients route around overloaded or purposely disabled <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s.</p></li>
+<li><p>Availability of content on a particular <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>. Reusing of content through “cache hits” is the most important performance gain a CDN can offer. Traffic Router sends clients to the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> that is most likely to already have the desired content.</p></li>
+</ul>
+<p>Traffic routing options are often configured at the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> level.</p>
+<div class="section" id="dns-content-routing">
+<span id="dns-cr"></span><h2>DNS Content Routing<a class="headerlink" href="#dns-content-routing" title="Permalink to this headline">¶</a></h2>
+<p>For a DNS <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> the client might receive a URL such as <code class="docutils literal notranslate"><span class="pre">http://video.demo1.mycdn.ciab.test/</span></code>. When the <abbr title="Local Domain Name Server">LDNS</abbr> is resolving this <code class="docutils literal notranslate"><span class="pre">video.demo1.mycdn.ciab.test</span></code> hostname to an IP address, it ends at Traffic Router because it is the authoritative DNS server for <code class="docutils literal notranslate"><span class="pre">mycdn.ciab.test</span></code> and the domains below it, and subsequently responds with a list of IP addresses from the eligible <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s based on the location of the <abbr title="Local Domain Name Server">LDNS</abbr>. When responding, Traffic Router does not know the actual client IP address or the path that the client is going to request. The decision on what <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> IP address (or list of <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> IP addresses) to return is solely based on the location of the <abbr title="Local Domain Name Server">LDNS</abbr> and the health of the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s. The client then connects to port 80 (HTTP) or port 443 (HTTPS) on the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>, and sends the <code class="docutils literal notranslate"><span class="pre">Host:</span> <span class="pre">video.demo1.mycdn.ciab.test</span></code> header. The configuration of the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> includes the “remap rule” <code class="docutils literal notranslate"><span class="pre">http://video.demo1.mycdn.ciab.test</span> <span class="pre">http://origin.infra.ciab.test</span></code> to map the routed name to an <a class="reference internal" href="../glossary.html#term-origin"><span class="xref std std-term">origin</span></a> hostname.</p>
+</div>
+<div class="section" id="http-content-routing">
+<span id="http-cr"></span><h2>HTTP Content Routing<a class="headerlink" href="#http-content-routing" title="Permalink to this headline">¶</a></h2>
+<p>For an HTTP <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> the client might receive a URL such as <code class="docutils literal notranslate"><span class="pre">http://video.demo1.mycdn.ciab.test/</span></code>. The <abbr title="Local Domain Name Server">LDNS</abbr> resolves this <code class="docutils literal notranslate"><span class="pre">video.demo1.mycdn.ciab.test</span></code> to an IP address, but in this case Traffic Router returns its own IP address. The client opens a connection to port 80 (HTTP) or port 443 (HTTPS) on the Traffic Router’s IP address, and sends its request.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">#16 </span><span class="caption-text">Example Client Request to Traffic Router</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">video.demo1.mycdn.ciab.test</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">*/*</span>
+</pre></div>
+</div>
+</div>
+<p>Traffic Router uses an HTTP <code class="docutils literal notranslate"><span class="pre">302</span> <span class="pre">Found</span></code> response to redirect the client to the best <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">#17 </span><span class="caption-text">Traffic Router Redirect to Edge-tier <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">Cache Server</span></a></span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">302</span> <span class="ne">Found</span>
+<span class="na">Location</span><span class="o">:</span> <span class="l">http://edge.demo1.mycdn.ciab.test/</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">0</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Tue, 13 Jan 2015 20:01:41 GMT</span>
+</pre></div>
+</div>
+</div>
+<p>The information Traffic Router can consider when selecting a <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> in this case is much better:</p>
+<ul class="simple">
+<li><p>The client’s IP address.</p></li>
+<li><p>The URL path the client is requesting, excluding query string.</p></li>
+<li><p>All HTTP/1.1 headers.</p></li>
+</ul>
+<p>The client follows the redirect and performs a DNS request for the IP address for <code class="docutils literal notranslate"><span class="pre">edge.demo1.mycdn.ciab.test</span></code>, and normal HTTP steps follow, except the sending of the Host: header when connected to the cache is <code class="docutils literal notranslate"><span class="pre">Host:</span> <span class="pre">edge.demo1.mycdn.ciab.test</span></code>, and the configuration of the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> includes the “remap rule” (e.g.``http://edge.demo1.mycdn.ciab.test <a class="reference external" href="http://origin.infra.ciab">http://origin.infra.ciab</a>.test``). Traffic Router sends all requests for the same path in a <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> to the same <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> in a <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> using consistent hashing, in this case all <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s in a <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> are not carrying the same content, and there is a much larger combined cache in the <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>. In many cases DNS content routing is the best possible option, especially in cases where the client is receiving small objects from the CDN like images and web pages. Traffic Router is redundant and horizontally scalable by adding more instances into the DNS hierarchy using NS records.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="traffic_stats.html" class="btn btn-neutral float-right" title="Traffic Stats" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="traffic_portal.html" class="btn btn-neutral" title="Traffic Portal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

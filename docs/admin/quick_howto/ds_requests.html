@@ -1,0 +1,313 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Delivery Service Requests &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Configure Federations" href="federations.html" />
+    <link rel="prev" title="Configure DNSSEC" href="dnssec.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Quick How To Guides</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="anonymous_blocking.html">Configure Anonymous Blocking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroup_fallback.html">Configure Cache Group Fallbacks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html">CDN in a Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dnssec.html">Configure DNSSEC</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Delivery Service Requests</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#who-can-create-a-delivery-service-request-and-how">Who Can Create a Delivery Service Request and How?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#who-can-fulfill-a-delivery-service-request-and-how">Who Can Fulfill a Delivery Service Request and How?</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="federations.html">Configure Federations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multi_site.html">Configure Multi-Site Origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="regionalgeo.html">Configure Regional Geo-blocking (RGB)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static_dns.html">Configuring Static DNS Entries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="steering.html">Configure Delivery Service Steering</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Administrator’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">Quick How To Guides</a> &raquo;</li>
+        
+      <li>Delivery Service Requests</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/admin/quick_howto/ds_requests.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="delivery-service-requests">
+<span id="ds-requests"></span><h1>Delivery Service Requests<a class="headerlink" href="#delivery-service-requests" title="Permalink to this headline">¶</a></h1>
+<p>When enabled in <code class="file docutils literal notranslate"><span class="pre">traffic_portal_properties.json</span></code>, Delivery Service Requests are created when <em>all</em> users attempt to create, update or delete a <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>. This allows users with higher level permissions (“operations” or “admin”) to review the changes for completeness and accuracy before deploying the changes. In addition, most <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> changes require configuration updates (i.e. <a class="reference internal" href="../../glossary.html#term-queue-updates"><span class="xref std std-term">Queue Updates</span></a>) and/or a CDN <a class="reference internal" href="../../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a>. Both of these actions are reserved for users with elevated permissions.</p>
+<p>A list of the Delivery Service requests associated with your <a class="reference internal" href="../../glossary.html#term-tenant"><span class="xref std std-term">Tenant</span></a> can be found under <span class="menuselection">Services ‣ Delivery Service Requests</span></p>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="../../_images/tp_table_ds_requests.png"><img alt="A screenshot of the Traffic Portal UI depicting an example list of Delivery Service Requests" src="../../_images/tp_table_ds_requests.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 24 </span><span class="caption-text">Example Delivery Service Request Listing</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<div class="section" id="who-can-create-a-delivery-service-request-and-how">
+<h2>Who Can Create a Delivery Service Request and How?<a class="headerlink" href="#who-can-create-a-delivery-service-request-and-how" title="Permalink to this headline">¶</a></h2>
+<p>Users with the Portal <a class="reference internal" href="../../glossary.html#term-role"><span class="xref std std-term">Role</span></a> (or above) can create Delivery Service Requests by doing one of three things:</p>
+<ul class="simple">
+<li><p>Creating a new <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a></p></li>
+<li><p>Updating an existing <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a></p></li>
+<li><p>Deleting an exiting <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a></p></li>
+</ul>
+<p>By performing one of these actions, a Delivery Service Request will be created for you with a status of ‘draft’ or ‘submitted’. You determine the status of your request upon submission. Only change the status of your request to ‘submitted’ once the request is ready for review and deployment.</p>
+</div>
+<div class="section" id="who-can-fulfill-a-delivery-service-request-and-how">
+<h2>Who Can Fulfill a Delivery Service Request and How?<a class="headerlink" href="#who-can-fulfill-a-delivery-service-request-and-how" title="Permalink to this headline">¶</a></h2>
+<p>Users with elevated permissions (Operations or above) can fulfill (apply the changes) or reject the Delivery Service Request. In fact, they can do all of the following:</p>
+<dl class="simple">
+<dt>Update the contents of the Delivery Service Request</dt><dd><p>This will update the “Last Edited By” field to indicate who last updated the request.</p>
+</dd>
+<dt>Assign or Unassign the Delivery Service Request</dt><dd><p>Assignment is currently limited to current user. This is optional as fulfillment will auto-assign the request to the user doing the fulfillment.</p>
+</dd>
+<dt>Reject the Delivery Service Request</dt><dd><p>Rejecting a Delivery Service Request will set status to ‘rejected’ and the request can no longer be modified. This will auto-assign the request to the user doing the rejection.</p>
+</dd>
+<dt>Fulfill the Delivery Service Request</dt><dd><p>Fulfilling a Delivery Service Request will show the requested changes and, once committed, will apply the desired changes and set status to ‘pending’. The request is pending because many types of changes will require <a class="reference internal" href="../../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> configuration updates (i.e. <a class="reference internal" href="../../glossary.html#term-queue-updates"><span class="xref std std-term">Queue Updates</span></a>) and/or a CDN <a class="reference internal" href="../../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a>. Once <a class="reference internal" href="../../glossary.html#term-queue-updates"><span class="xref std std-term">Queue Updates</span></a> and/or CDN <a class="reference internal" href="../../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> is complete, the request should be marked ‘complete’.</p>
+</dd>
+<dt>Complete the Delivery Service Request</dt><dd><p>Only after the Delivery Service Request has been fulfilled and the changes have been applied can a Delivery Service Request be marked as ‘complete’. Marking a Delivery Service Request as ‘complete’ is currently a manual step because some changes require <a class="reference internal" href="../../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> configuration updates (i.e. <a class="reference internal" href="../../glossary.html#term-queue-updates"><span class="xref std std-term">Queue Updates</span></a>) and/or a CDN <a class="reference internal" href="../../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a>. Once that is done and the changes have been deployed, the request status should be changed from ‘pending’ to ‘complete’.</p>
+</dd>
+<dt>Delete the Delivery Service request</dt><dd><p>Delivery Service Requests with a status of ‘draft’ or ‘submitted’ can always be deleted entirely if appropriate.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="federations.html" class="btn btn-neutral float-right" title="Configure Federations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="dnssec.html" class="btn btn-neutral" title="Configure DNSSEC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

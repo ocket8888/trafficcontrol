@@ -1,0 +1,996 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Profiles and Parameters &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Traffic Monitor" href="traffic_monitor.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Traffic Control Overview</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="delivery_services.html">Delivery Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Profiles and Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#profiles">Profiles</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#properties">Properties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#default-profiles">Default Profiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-global-profile">The GLOBAL Profile</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id6">Properties</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_monitor.html">Traffic Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops.html">Traffic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal.html">Traffic Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router.html">Traffic Router</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_stats.html">Traffic Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_vault.html">Traffic Vault</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Traffic Control Overview</a> &raquo;</li>
+        
+      <li>Profiles and Parameters</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/overview/profiles_and_parameters.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="profiles-and-parameters">
+<span id="id1"></span><h1>Profiles and Parameters<a class="headerlink" href="#profiles-and-parameters" title="Permalink to this headline">¶</a></h1>
+<p><em class="dfn">Profiles</em> are a collection of configuration options, defined partially by the Profile’s <a class="reference internal" href="#type">Type</a> (not to be confused with the more general “<a class="reference internal" href="../glossary.html#term-type"><span class="xref std std-term">Type</span></a>” used by many other things in Traffic Control) and partially by the <em class="dfn">Parameters</em> set on them. Mainly, Profiles and Parameters are used to configure <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a>, but they can also be used to configure parts of (nearly) any Traffic Control component, and can even be linked with more abstract concepts like <a class="reference internal" href="delivery_services.html#ds-profile"><span class="std std-ref">Delivery Services</span></a> and <a class="reference internal" href="../glossary.html#term-cache-groups"><span class="xref std std-term">Cache Groups</span></a>. The vast majority of configuration done within a Traffic Control CDN must be done through <a class="reference internal" href="#profiles">Profiles</a> and <a class="reference internal" href="#parameters">Parameters</a>, which can be achieved either through the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or in the <a class="reference internal" href="../admin/traffic_portal/usingtrafficportal.html#tp-configure-profiles"><span class="std std-ref">Profiles</span></a> view of Traffic Portal. For ease of use, Traffic Portal allows for duplication, comparison, import and export of <a class="reference internal" href="#profiles">Profiles</a> including all of their associated <a class="reference internal" href="#parameters">Parameters</a>.</p>
+<div class="section" id="profiles">
+<span id="id2"></span><h2>Profiles<a class="headerlink" href="#profiles" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="properties">
+<h3>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h3>
+<p>Profile objects as represented in e.g. the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or in the <a class="reference internal" href="../admin/traffic_portal/usingtrafficportal.html#tp-configure-profiles"><span class="std std-ref">Traffic Portal Profiles view</span></a> have several properties that describe their general operation. In certain contexts, the <a class="reference internal" href="#parameters">Parameters</a> assigned to a Profile (and/or the integral, unique identifiers thereof) may appear as properties of the Profile, but that will not appear in this section as a description of <a class="reference internal" href="#parameters">Parameters</a> is provided in the section of that name.</p>
+<div class="section" id="cdn">
+<span id="profile-cdn"></span><h4>CDN<a class="headerlink" href="#cdn" title="Permalink to this headline">¶</a></h4>
+<p>A Profile is restricted to operate within a single CDN. Often, “CDN” (or “cdn”) refers to the integral, unique identifier of the CDN, but occasionally it refers to the <em>name</em> of said CDN. It may also appear as e.g. <code class="docutils literal notranslate"><span class="pre">cdnId</span></code> or <code class="docutils literal notranslate"><span class="pre">cdnName</span></code> in <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> payloads and responses. A Profile may only be assigned to a server, <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>, or <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> within the same CDN as the Profile itself.</p>
+</div>
+<div class="section" id="description">
+<span id="profile-description"></span><h4>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h4>
+<p>Profiles may have a description provided by the creating user (or Traffic Control itself in the case of the <a class="reference internal" href="#id3">Default Profiles</a>). The <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> does not enforce length requirements on the description (though Traffic Portal does), and so it’s possible for Profiles to have empty descriptions, though it is strongly recommended that Profiles have meaningful descriptions.</p>
+</div>
+<div class="section" id="profile-id">
+<span id="id"></span><h4>ID<a class="headerlink" href="#profile-id" title="Permalink to this headline">¶</a></h4>
+<p>An integral, unique identifier for the Profile.</p>
+</div>
+<div class="section" id="name">
+<span id="profile-name"></span><h4>Name<a class="headerlink" href="#name" title="Permalink to this headline">¶</a></h4>
+<p>Ostensibly this is simply the Profile’s name. However, the name of a Profile has drastic consequences for how Traffic Control treats it. Particularly, the name of a Profile is heavily conflated with its <a class="reference internal" href="#type">Type</a>. These relationships are discussed further in the <a class="reference internal" href="#type">Type</a> section, on a Type-by-Type basis.</p>
+</div>
+<div class="section" id="routing-disabled">
+<span id="profile-routing-disabled"></span><h4>Routing Disabled<a class="headerlink" href="#routing-disabled" title="Permalink to this headline">¶</a></h4>
+<p>This property can - and in fact <em>must</em> - exist on a Profile of any <a class="reference internal" href="#type">Type</a>, but it only has any meaning on a Profile that has a name matching the constraints placed on the names of ATS_PROFILE-<a class="reference internal" href="#type">Type</a> Profiles. This means that it will also have meaning on Profiles of <a class="reference internal" href="#type">Type</a> UNK_PROFILE that for whatever reason have names beginning with <code class="docutils literal notranslate"><span class="pre">EDGE</span></code> or <code class="docutils literal notranslate"><span class="pre">MID</span></code>. When this field is defined as <code class="docutils literal notranslate"><span class="pre">1</span></code> (may be displayed as <code class="docutils literal notranslate"><span class="pre">true</span></code> in e.g. Traffic Portal), Traffic Router will not be informed of any <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a> to which the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> using this Profile may be assigned. Effectively, this means that client traffic cannot be routed to them, although existing connections would be uninterrupted.</p>
+</div>
+<div class="section" id="type">
+<span id="profile-type"></span><h4>Type<a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h4>
+<p>A Profile’s <em class="dfn">Type</em> determines how its configured <a class="reference internal" href="#parameters">Parameters</a> are treated by various components, and often even determine how the object using the Profile is treated (particularly when it is a server). Unlike the more general “<a class="reference internal" href="../glossary.html#term-type"><span class="xref std std-term">Type</span></a>” employed by Traffic Control, the allowed Types of Profiles are set in stone, and they are as follows.</p>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p>Nearly all of these Profile Types have strict naming requirements, and it may be noted that some of said requirements are prefixes ending with <code class="docutils literal notranslate"><span class="pre">_</span></code>, while others are either not prefixes or do not end with <code class="docutils literal notranslate"><span class="pre">_</span></code>. This is exactly true; some requirements <strong>need</strong> that <code class="docutils literal notranslate"><span class="pre">_</span></code> and some may or may not have it. It is our suggestion, therefore, that for the time being all prefixes use the <code class="docutils literal notranslate"><span class="pre">_</span></code> notation to separate words, so as to avoid causing headaches remembering when that matters and when it does not.</p>
+</div>
+<dl>
+<dt>ATS_PROFILE</dt><dd><p>A Profile that can be used with either an Edge-tier or Mid-tier <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> (but not both, in general). This is the only Profile type that will ultimately pass its <a class="reference internal" href="#parameters">Parameters</a> on to <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> in the form of generated configuration files. For this reason, it can make use of the <a class="reference internal" href="../development/ort/traffic_ops_ort.html#ort-special-strings"><span class="std std-ref">Strings with Special Meaning to ORT</span></a> in the values of some of its <a class="reference internal" href="#parameters">Parameters</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For legacy reasons, the names of Profiles of this type <em>must</em> begin with <code class="docutils literal notranslate"><span class="pre">EDGE</span></code> or <code class="docutils literal notranslate"><span class="pre">MID</span></code>. This is <strong>not</strong> enforced by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or Traffic Portal, but certain Traffic Control operations/components expect this and will fail to work otherwise!</p>
+</div>
+</dd>
+<dt>DS_PROFILE</dt><dd><p>A Profile that, rather than applying to a server, is instead <a class="reference internal" href="delivery_services.html#ds-profile"><span class="std std-ref">used by a Delivery Service</span></a>.</p>
+</dd>
+<dt>ES_PROFILE</dt><dd><p>A Profile for <a class="reference external" href="https://www.elastic.co/products/elasticsearch">ElasticSearch</a> servers. This has no known special meaning to any component of Traffic Control, but if ElasticSearch is in use the use of this Profile Type is suggested regardless.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For legacy reasons, the names of Profiles of this type <em>must</em> begin with <code class="docutils literal notranslate"><span class="pre">ELASTICSEARCH</span></code>. This is <strong>not</strong> enforced by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or Traffic Portal, but certain Traffic Control operations/components expect this and will fail to work otherwise!</p>
+</div>
+</dd>
+<dt>GROVE_PROFILE</dt><dd><p>A Profile for use with the experimental Grove HTTP caching proxy.</p>
+</dd>
+<dt>INFLUXDB_PROFILE</dt><dd><p>A Profile used with <a class="reference external" href="https://www.influxdata.com/">InfluxDB</a>, which is used by Traffic Stats.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For legacy reasons, the names of Profiles of this type <em>must</em> begin with <code class="docutils literal notranslate"><span class="pre">INFLUXDB</span></code>. This is <strong>not</strong> enforced by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or Traffic Portal, but certain Traffic Control operations/components expect this and will fail to work otherwise!</p>
+</div>
+</dd>
+<dt>KAFKA_PROFILE</dt><dd><p>A Profile for <a class="reference external" href="https://kafka.apache.org/">Kafka</a> servers. This has no known special meaning to any component of Traffic Control, but if Kafka is in use the use of this Profile Type is suggested regardless.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For legacy reasons, the names of Profiles of this type <em>must</em> begin with <code class="docutils literal notranslate"><span class="pre">KAFKA</span></code>. This is <strong>not</strong> enforced by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or Traffic Portal, but certain Traffic Control operations/components expect this and will fail to work otherwise!</p>
+</div>
+</dd>
+<dt>LOGSTASH_PROFILE</dt><dd><p>A Profile for <a class="reference external" href="https://www.elastic.co/products/logstash">Logstash</a> servers. This has no known special meaning to any component of Traffic Control, but if Logstash is in use the use of this Profile Type is suggested regardless.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For legacy reasons, the names of Profiles of this type <em>must</em> begin with <code class="docutils literal notranslate"><span class="pre">LOGSTASH_</span></code>. This is <strong>not</strong> enforced by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or Traffic Portal, but certain Traffic Control operations/components expect this and will fail to work otherwise!</p>
+</div>
+</dd>
+<dt>ORG_PROFILE</dt><dd><p>A Profile that may be used by either <a class="reference internal" href="../glossary.html#term-origin-servers"><span class="xref std std-term">origin servers</span></a> or <a class="reference internal" href="../glossary.html#term-origins"><span class="xref std std-term">origins</span></a> (no, they aren’t the same thing).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For legacy reasons, the names of Profiles of this type <em>must</em> begin with <code class="docutils literal notranslate"><span class="pre">MSO</span></code>, or contain either <code class="docutils literal notranslate"><span class="pre">ORG</span></code> or <code class="docutils literal notranslate"><span class="pre">ORIGIN</span></code> anywhere in the name. This is <strong>not</strong> enforced by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or Traffic Portal, but certain Traffic Control operations/components expect this and will fail to work otherwise!</p>
+</div>
+</dd>
+<dt>RIAK_PROFILE</dt><dd><p>A Profile used for each <a class="reference external" href="http://basho.com/products/riak-kv/">Riak</a> server in a Traffic Stats cluster.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For legacy reasons, the names of Profiles of this type <em>must</em> begin with <code class="docutils literal notranslate"><span class="pre">RIAK</span></code>. This is <strong>not</strong> enforced by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or Traffic Portal, but certain Traffic Control operations/components expect this and will fail to work otherwise!</p>
+</div>
+</dd>
+<dt>SPLUNK_PROFILE</dt><dd><p>A Profile meant to be used with <a class="reference external" href="https://www.splunk.com/">Splunk</a> servers. This has no known special meaning to any component of Traffic Control, but if Splunk is in use the use of this Profile Type is suggested regardless.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For legacy reasons, the names of Profiles of this type <em>must</em> begin with <code class="docutils literal notranslate"><span class="pre">SPLUNK</span></code>. This is <strong>not</strong> enforced by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or Traffic Portal, but certain Traffic Control operations/components expect this and will fail to work otherwise!</p>
+</div>
+</dd>
+<dt>TM_PROFILE</dt><dd><p>A Traffic Monitor Profile.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For legacy reasons, the names of Profiles of this type <em>must</em> begin with <code class="docutils literal notranslate"><span class="pre">RASCAL_</span></code> or <code class="docutils literal notranslate"><span class="pre">TM_</span></code>. This is <strong>not</strong> enforced by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or Traffic Portal, but certain Traffic Control operations/components expect this and will fail to work otherwise!</p>
+</div>
+</dd>
+<dt>TP_PROFILE</dt><dd><p>A Traffic Portal Profile. This has no known special meaning to any Traffic Control component(s) (not even Traffic Portal itself), but its use is suggested for the profiles used by any and all Traffic Portal servers anyway.</p>
+</dd>
+<dt>TR_PROFILE</dt><dd><p>A Traffic Router Profile.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For legacy reasons, the names of Profiles of this type <em>must</em> begin with <code class="docutils literal notranslate"><span class="pre">CCR_</span></code> or <code class="docutils literal notranslate"><span class="pre">TR_</span></code>. This is <strong>not</strong> enforced by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or Traffic Portal, but certain Traffic Control operations/components expect this and will fail to work otherwise!</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../admin/traffic_router.html#tr-profile"><span class="std std-ref">The Traffic Router Profile</span></a></p>
+</div>
+</dd>
+<dt>TS_PROFILE</dt><dd><p>A Traffic Stats Profile.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>For legacy reasons, the names of Profiles of this type <em>must</em> be <code class="docutils literal notranslate"><span class="pre">TRAFFIC_STATS</span></code>. This is <strong>not</strong> enforced by the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or Traffic Portal, but certain Traffic Control operations/components expect this and will fail to work otherwise! Furthermore, because Profile names must be unique, this means that only one TS_PROFILE-Type Profile can exist at a time.</p>
+</div>
+</dd>
+<dt>UNK_PROFILE</dt><dd><p>A catch-all type that can be assigned to anything without imbuing it with any special meaning or behavior.</p>
+</dd>
+</dl>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>A Profile of the wrong type assigned to a Traffic Control component <em>will</em> (in general) cause it to function incorrectly, regardless of the <a class="reference internal" href="#parameters">Parameters</a> assigned to it.</p>
+</div>
+</div>
+</div>
+<div class="section" id="default-profiles">
+<span id="id3"></span><h3>Default Profiles<a class="headerlink" href="#default-profiles" title="Permalink to this headline">¶</a></h3>
+<p>Traffic Control comes with some pre-installed Profiles for its basic components, but users are free to define their own as needed. Additionally, these default Profiles can be modified or even removed completely. One of these Profiles is <a class="reference internal" href="#id4">The GLOBAL Profile</a>, which has a dedicated section.</p>
+<dl class="simple">
+<dt>INFLUXDB</dt><dd><p>A Profile used by InfluxDB servers that store Traffic Stats information. It has a <a class="reference internal" href="#type">Type</a> of UNK_PROFILE and is assigned to the special “ALL” <a class="reference internal" href="#cdn">CDN</a>.</p>
+</dd>
+<dt>RIAK_ALL</dt><dd><p>This Profile is used by Traffic Vault, which is, generally speaking, the only instance in Traffic Control as it can store keys for an arbitrary number of CDNs. It has a <a class="reference internal" href="#type">Type</a> of UNK_PROFILE and is assigned to the special “ALL” <a class="reference internal" href="#cdn">CDN</a>.</p>
+</dd>
+<dt>TRAFFIC_ANALYTICS</dt><dd><p>A default Profile that was intended for use with the now-unplanned “Traffic Analytics” <abbr title="Apache Traffic Control">ATC</abbr> component. It has a <a class="reference internal" href="#type">Type</a> of UNK_PROFILE and is assigned to the special “ALL” <a class="reference internal" href="#cdn">CDN</a>.</p>
+</dd>
+<dt>TRAFFIC_OPS</dt><dd><p>A Profile used by the Traffic Ops server itself. It’s suggested that any and all “mirrors” of Traffic Ops for a given Traffic Control instance be recorded separately and all assigned to this Profile for record-keeping purposes. It has a <a class="reference internal" href="#type">Type</a> of UNK_PROFILE and is assigned to the special “ALL” <a class="reference internal" href="#cdn">CDN</a>.</p>
+</dd>
+<dt>TRAFFIC_OPS_DB</dt><dd><p>A Profile used by the PostgreSQL database server that stores all of the data needed by Traffic Ops. It has a <a class="reference internal" href="#type">Type</a> of UNK_PROFILE and is assigned to the special “ALL” <a class="reference internal" href="#cdn">CDN</a>.</p>
+</dd>
+<dt>TRAFFIC_PORTAL</dt><dd><p>A Profile used by Traffic Portal servers. This profile name has no known special meaning to any Traffic Control components (not even Traffic Portal itself), but its use is suggested for Traffic Portal servers anyway. It has a <a class="reference internal" href="#type">Type</a> of UNK_PROFILE and is assigned to the special “ALL” <a class="reference internal" href="#cdn">CDN</a>.</p>
+</dd>
+<dt>TRAFFIC_STATS</dt><dd><p>This is the <strong>only</strong> Profile used by Traffic Stats (though InfluxDB servers have their own Profile(s)). It has a <a class="reference internal" href="#type">Type</a> of UNK_PROFILE and is assigned to the special “ALL” <a class="reference internal" href="#cdn">CDN</a>.</p>
+</dd>
+</dl>
+<p>In addition to these Profiles, each release of Apache Traffic Control is accompanied by a set of suggested Profiles suitable for import in the <a class="reference internal" href="../admin/traffic_portal/usingtrafficportal.html#tp-configure-profiles"><span class="std std-ref">Profiles</span></a> view of Traffic Portal. They may be found on <a class="reference external" href="http://trafficcontrol.apache.org/downloads/profiles/">the Profiles Downloads Index page</a>. These Profiles are typically built from production Profiles by a company using Traffic Control, and as such are typically highly specific to the hardware and network infrastructure available to them. <strong>None of the Profiles bundled with a release are suitable for immediate use without modification</strong>, and in fact many of them cannot actually be imported directly into a new Traffic Control environment, because Profiles with the same <a class="reference internal" href="#profile-name"><span class="std std-ref">Names</span></a> already exist (as above).</p>
+<p>Administrators may alternatively wish to consult the Profiles and <a class="reference internal" href="#parameters">Parameters</a> available in the <a class="reference internal" href="../admin/quick_howto/ciab.html#ciab"><span class="std std-ref">CDN in a Box</span></a> environment, as they might be more familiar with them. Furthermore, those Profiles are built with a minimum running Traffic Control system in mind, and thus may be easier to look through. The Profiles and their associated <a class="reference internal" href="#parameters">Parameters</a> may be found within the <a class="reference external" href="https://github.com/apache/trafficcontrol/tree/master/infrastructure/cdn-in-a-box/traffic_ops_data/profiles/"><code class="docutils literal notranslate"><span class="pre">infrastructure/cdn-in-a-box/traffic_ops_data/profiles/</span></code></a> directory.</p>
+</div>
+<div class="section" id="the-global-profile">
+<span id="id4"></span><h3>The GLOBAL Profile<a class="headerlink" href="#the-global-profile" title="Permalink to this headline">¶</a></h3>
+<p>There is a special Profile of <a class="reference internal" href="#type">Type</a> UNK_PROFILE that holds global configuration information - its <a class="reference internal" href="#profile-name"><span class="std std-ref">Name</span></a> is “GLOBAL”, its <a class="reference internal" href="#type">Type</a> is UNK_PROFILE and it is assigned to the special “ALL” <a class="reference internal" href="#cdn">CDN</a>. The <a class="reference internal" href="#parameters">Parameters</a> that may be configured on this Profile are laid out in the <a class="reference internal" href="#global-profile-parameters"><span class="std std-ref">Global Profile Parameters</span></a> Table.</p>
+<span id="global-profile-parameters"></span><table class="docutils align-default" id="id14">
+<caption><span class="caption-number">Table 30 </span><span class="caption-text">Global Profile Parameters</span><a class="headerlink" href="#id14" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 13%" />
+<col style="width: 73%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a></p></th>
+<th class="head"><p><a class="reference internal" href="#config-file">Config File</a></p></th>
+<th class="head"><p><a class="reference internal" href="#value">Value</a></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>tm.url</p></td>
+<td><p>global</p></td>
+<td><p>The URL at which this Traffic Ops instance services requests.</p></td>
+</tr>
+<tr class="row-odd"><td><p>tm.rev_proxy.url</p></td>
+<td><p>global</p></td>
+<td><p>Not required. The URL where a caching proxy for configuration files generated by Traffic Ops may be found. Requires a minimum
+<a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> version of 2.1. When configured, <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> will request configuration files via this
+<abbr title="Fully Qualified Domain Name">FQDN</abbr>, which should be set up as a reverse proxy to the Traffic Ops server(s). The suggested
+cache lifetime for these files is 3 minutes or less. This setting allows for greater scalability of a CDN maintained by Traffic Ops
+by caching configuration files of profile and CDN scope, as generating these is a very computationally expensive process.</p></td>
+</tr>
+<tr class="row-even"><td><p>tm.toolname</p></td>
+<td><p>global</p></td>
+<td><p>The name of the Traffic Ops tool. Usually “Traffic Ops” - this will appear in the comment headers of generated configuration files.</p></td>
+</tr>
+<tr class="row-odd"><td><p>tm.infourl</p></td>
+<td><p>global</p></td>
+<td><p>This is the “for more information go here” URL, which used to be visible in the “About” page of the now-deprecated Traffic Ops UI.</p></td>
+</tr>
+<tr class="row-even"><td><p>tm.logourl</p></td>
+<td><p>global</p></td>
+<td><p>This is the URL of the logo for Traffic Ops and can be relative if the logo is under <code class="file docutils literal notranslate"><span class="pre">traffic_ops/app/public</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>tm.instance_name</p></td>
+<td><p>global</p></td>
+<td><p>The name of the Traffic Ops instance - typically to distinguish instances when multiple are active.</p></td>
+</tr>
+<tr class="row-even"><td><p>tm.traffic_mon_fwd_proxy</p></td>
+<td><p>global</p></td>
+<td><p>When collecting stats from Traffic Monitor, Traffic Ops will use this forward proxy instead of the actual Traffic Monitor host.
+Setting this <a class="reference internal" href="#parameters"><span class="std std-ref">Parameter</span></a> can significantly lighten the load on the Traffic Monitor system and it is therefore
+recommended that this be set on a production  system.</p></td>
+</tr>
+<tr class="row-odd"><td><p>use_reval_pending</p></td>
+<td><p>global</p></td>
+<td><p>When this Parameter is present and its <a class="reference internal" href="#value">Value</a> is exactly “1”, Traffic Ops will separately keep track of <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a>’
+updates and pending content invalidation jobs. This behavior should be enabled by default, and disabling it, while still possible, is
+<strong>EXTREMELY DISCOURAGED</strong>.</p></td>
+</tr>
+<tr class="row-even"><td><p>use_tenancy</p></td>
+<td><p>global</p></td>
+<td><p>This <a class="reference internal" href="#parameters"><span class="std std-ref">Parameter</span></a>, when it exists and has a <a class="reference internal" href="#value">Value</a> of exactly “1” enables the use <a class="reference internal" href="../glossary.html#term-tenants"><span class="xref std std-term">Tenants</span></a> in Traffic
+Control. This should be enabled by default, and while disabling this is still possible, it is <strong>EXTREMELY DISCOURAGED</strong>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>geolocation.polling.url</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The location of a geographic IP mapping database for Traffic Router instances to use.</p></td>
+</tr>
+<tr class="row-even"><td><p>geolocation6.polling.url</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The location of a geographic IPv6 mapping database for Traffic Router instances to use.</p></td>
+</tr>
+<tr class="row-odd"><td><p>maxmind.default.override</p></td>
+<td><p>CRConfig.json</p></td>
+<td><p>The destination geographic coordinates to use for client location when the geographic IP mapping database returns a default location
+that matches the country code. This parameter can be specified multiple times with different values to support default overrides for
+multiple countries. The reason for the name “maxmind” is because the default geographic IP mapping database used by Traffic Control
+is MaxMind’s GeoIP2 database. The format of this <a class="reference internal" href="#parameters"><span class="std std-ref">Parameter</span></a>’s <a class="reference internal" href="#value">Value</a> is:
+<code class="file docutils literal notranslate"><em><span class="pre">Country</span> <span class="pre">Code</span></em><span class="pre">;</span><em><span class="pre">Latitude</span></em><span class="pre">,</span><em><span class="pre">Longitude</span></em></code>, e.g. <code class="docutils literal notranslate"><span class="pre">US;37.751,-97.822</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>maxRevalDurationDays</p></td>
+<td><p>regex_revalidate.config</p></td>
+<td><p>This <a class="reference internal" href="#parameters"><span class="std std-ref">Parameter</span></a> sets the maximum duration, in days, for which a content invalidation job may run. This is
+<strong>extremely</strong> important, as there is currently no way to delete a content invalidation job once it has been created. Furthermore,
+while there is no restriction placed on creating multiple <a class="reference internal" href="#parameters">Parameters</a> with this <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> and <a class="reference internal" href="#config-file">Config File</a> -
+potentially with differing <a class="reference internal" href="#parameter-value"><span class="std std-ref">Values</span></a> - this is <strong>EXTREMELY DISCOURAGED as any</strong> <a class="reference internal" href="#parameters"><span class="std std-ref">Parameter</span></a>
+<strong>that has both that</strong> <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <strong>and</strong> <a class="reference internal" href="#config-file">Config File</a> <strong>might be used when generating any given</strong>
+<a class="reference internal" href="#regex-revalidate-config">regex_revalidate.config</a> <strong>file for any given</strong> <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> <strong>and whenever such</strong> <a class="reference internal" href="#parameters">Parameters</a> <strong>exist, the actual maximum
+duration for content invalidation jobs is undefined, and CAN and WILL differ from server to server, and configuration file to
+configuration file.</strong></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since the Traffic Ops UI has been removed, the tm.logourl has no real meaning, and in fact most Traffic Ops distributions neither set this <a class="reference internal" href="#parameters"><span class="std std-ref">Parameter</span></a>, nor provide a logo.</p>
+</div>
+<p>Some of these <a class="reference internal" href="#parameters">Parameters</a> have the <a class="reference internal" href="#config-file">Config File</a> value <a class="reference internal" href="#global">global</a>, while others have <a class="reference internal" href="#crconfig-json">CRConfig.json</a>. This is not a typo, and the distinction is that those that use <a class="reference internal" href="#global">global</a> are typically configuration options relating to Traffic Control as a whole or to Traffic Ops itself, whereas <a class="reference internal" href="#crconfig-json">CRConfig.json</a> is used by configuration options that are set globally, but pertain mainly to routing and are thus communicated to Traffic Routers through <a class="reference internal" href="../glossary.html#term-cdn-snapshots"><span class="xref std std-term">CDN Snapshots</span></a> (which historically were called “CRConfig Snapshots” or simply “the CRConfig”).
+When a <a class="reference internal" href="#parameters"><span class="std std-ref">Parameter</span></a> has a <a class="reference internal" href="#config-file">Config File</a> value that <em>isn’t</em> one of <a class="reference internal" href="#global">global</a> or <a class="reference internal" href="#crconfig-json">CRConfig.json</a>, it refers to the global configuration of said <a class="reference internal" href="#config-file">Config File</a> across all servers that use it across all CDNs configured in Traffic Control. This can be used to easily apply extremely common configuration to a great many servers in one place.</p>
+</div>
+</div>
+<div class="section" id="parameters">
+<span id="id5"></span><h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<p>A <em class="dfn">Parameter</em> is usually a way to set a line in a configuration file that will appear on the servers using <a class="reference internal" href="#profiles">Profiles</a> that have said Parameter. More generally, though, a Parameter merely describes some kind of configuration for some aspect of some thing. There are many Parameters that <em>must</em> exist for Traffic Control to work properly, such as those on <a class="reference internal" href="#id4">The GLOBAL Profile</a> or the <a class="reference internal" href="#id3">Default Profiles</a>. Some Traffic Control components can be associated with <a class="reference internal" href="#profiles">Profiles</a> that only have a few allowed (or actually just meaningful - others are ignored and don’t cause problems) but some can have any number of Parameters to describe custom configuration of things of which Traffic Control itself may not even be aware (most notably <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a>). For most Parameters, the meaning of each Parameter’s various properties are very heavily tied to the allowed contents of <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/index.en.html">Apache Traffic Server configuration files</a>.</p>
+<div class="section" id="id6">
+<h3>Properties<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>When represented in Traffic Portal (in the <a class="reference internal" href="../admin/traffic_portal/usingtrafficportal.html#tp-configure-parameters"><span class="std std-ref">Parameters</span></a> view) or in <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> request and/or response payloads, a Parameter has several properties that define it. In some of these contexts, the <a class="reference internal" href="#profiles">Profiles</a> to which a Parameter is assigned (and/or the integral, unique identifiers thereof) are represented as a property of the Parameter. However, an explanation of this “property” is not provided here, as the <a class="reference internal" href="#profiles">Profiles</a> section exists for the purpose of explaining those.</p>
+<div class="section" id="config-file">
+<span id="parameter-config-file"></span><h4>Config File<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h4>
+<p>This (usually) names the configuration file to which the Parameter belongs. Note that it is only the <em>name of</em> the file and <strong>not</strong> the <em>full path to</em> the file - e.g. <code class="docutils literal notranslate"><span class="pre">remap.config</span></code> not <code class="docutils literal notranslate"><span class="pre">/opt/trafficserver/etc/trafficserver/remap.config</span></code>. To define the full path to any given configuration file, Traffic Ops relies on a reserved <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> value: <a class="reference internal" href="#parameter-name-location"><span class="std std-ref">“location”</span></a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>This section is only meant to cover the special handling of Parameters assigned to specific Config File values. It is <strong>not</strong> meant to be a primer on Apache Traffic Server configuration files, nor is it intended to be exhaustive of the manners in which said files may be manipulated by Traffic Control. For more information, consult the documentation for <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/index.en.html">Apache Traffic Server configuration files</a>.</p>
+</div>
+<p>Certain Config Files are handled specially by Traffic Ops’s configuration file generation. Specifically, the format of the configuration is tailored to be correct when the syntax of a configuration file is known. However, these configuration files <strong>must</strong> have <a class="reference internal" href="#parameter-name-location"><span class="std std-ref">“location”</span></a> Parameters on the <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> of servers, or they will not be generated. The Config File values that are special in this way are detailed within this section. When a <a class="reference internal" href="#config-file">Config File</a> is none of these special values, each Parameter assigned to given server’s <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> with the same <a class="reference internal" href="#config-file">Config File</a> value will create a single line in the resulting configuration file (with the possible exception being when the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> is “header”)</p>
+<div class="section" id="m-facts">
+<h5>12M_facts<a class="headerlink" href="#m-facts" title="Permalink to this headline">¶</a></h5>
+<p>This legacy file is generated entirely from a <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a>’s metadata, and cannot be affected by Parameters.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>This Config File serves an unknown and likely historical purpose, so most users/administrators/developers don’t need to worry about it.</p>
+</div>
+</div>
+<div class="section" id="ats-rules">
+<h5>50-ats.rules<a class="headerlink" href="#ats-rules" title="Permalink to this headline">¶</a></h5>
+<p>Parameters have no meaning when assigned to this Config File (except <a class="reference internal" href="#parameter-name-location"><span class="std std-ref">“location”</span></a>), but it <em>is</em> affected by Parameters that are on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> with the Config File <code class="docutils literal notranslate"><span class="pre">storage.config</span></code> - <strong>NOT this Config File</strong>. For each letter in the special “Drive Letters” Parameter, a line will be added of the form <code class="file docutils literal notranslate"><span class="pre">KERNEL==&quot;</span><em><span class="pre">Prefix</span></em><em><span class="pre">Letter</span></em><span class="pre">&quot;,</span> <span class="pre">OWNER=&quot;ats&quot;</span></code> where <code class="docutils literal notranslate"><span class="pre">Prefix</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “Drive Prefix” and the Config File <code class="docutils literal notranslate"><span class="pre">storage.config</span></code> - but with the first instance of <code class="docutils literal notranslate"><span class="pre">/dev/</span></code> removed - , and <code class="docutils literal notranslate"><span class="pre">Letter</span></code> is the drive letter. Also, if the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “RAM Drive Prefix” exists on the same Profile assigned to the server, a line will be inserted for each letter in the special “RAM Drive Letters” Parameter of the form <code class="file docutils literal notranslate"><span class="pre">KERNEL==&quot;</span><em><span class="pre">Prefix</span></em><em><span class="pre">Letter</span></em><span class="pre">&quot;,</span> <span class="pre">OWNER=&quot;ats&quot;</span></code> where <code class="docutils literal notranslate"><span class="pre">Prefix</span></code> is the <a class="reference internal" href="#value">Value</a> of the “RAM Drive Prefix” Parameter - but with the first instance of <code class="docutils literal notranslate"><span class="pre">/dev/</span></code> removed -, and <code class="docutils literal notranslate"><span class="pre">Letter</span></code> is the drive letter.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>This Config File serves an unknown and likely historical purpose, so most users/administrators/developers don’t need to worry about it.</p>
+</div>
+</div>
+<div class="section" id="astats-config">
+<h5>astats.config<a class="headerlink" href="#astats-config" title="Permalink to this headline">¶</a></h5>
+<p>This configuration file will be generated with a line for each Parameter with this Config File value on the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> in the form <code class="file docutils literal notranslate"><em><span class="pre">Name</span></em><span class="pre">=</span><em><span class="pre">Value</span></em></code> where <code class="docutils literal notranslate"><span class="pre">Name</span></code> is the Parameter’s <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> with trailing characters that match <code class="regexp docutils literal notranslate"><span class="pre">__\d+$</span></code> stripped, and <code class="docutils literal notranslate"><span class="pre">Value</span></code> is its <a class="reference internal" href="#value">Value</a>.</p>
+</div>
+<div class="section" id="bg-fetch-config">
+<h5>bg_fetch.config<a class="headerlink" href="#bg-fetch-config" title="Permalink to this headline">¶</a></h5>
+<p>This configuration file always generates static contents besides the header, and cannot be affected by any Parameters (besides its <a class="reference internal" href="#parameter-name-location"><span class="std std-ref">“location”</span></a> Parameter).</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For an explanation of the contents of this file, consult <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/plugins/background_fetch.en.html">the Background Fetch Apache Traffic Server plugin’s official documentation</a>.</p>
+</div>
+</div>
+<div class="section" id="cache-config">
+<h5>cache.config<a class="headerlink" href="#cache-config" title="Permalink to this headline">¶</a></h5>
+<p>This configuration is built entirely from <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> configuration, and cannot be affected by Parameters.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/cache.config.en.html">The Apache Traffic Server cache.config documentation</a></p>
+</div>
+</div>
+<div class="section" id="cacheurlanything-config">
+<h5><code class="file docutils literal notranslate"><span class="pre">cacheurl</span><em><span class="pre">anything</span></em><span class="pre">.config</span></code><a class="headerlink" href="#cacheurlanything-config" title="Permalink to this headline">¶</a></h5>
+<p>Config Files that match this pattern - where <code class="docutils literal notranslate"><span class="pre">anything</span></code> is a string of zero or more characters - can only be generated by providing a <a class="reference internal" href="#parameter-name-location"><span class="std std-ref">location</span></a> and their contents will be fully determined by properties of <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.trafficserver.apache.org/en/6.2.x/admin-guide/plugins/cacheurl.en.html">The official documentation for the Cache URL Apache Traffic Server plugin</a>.</p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version ATCv3.0: </span>This configuration file is only used by Apache Traffic Server version 6.x, whose use is deprecated both by that project and Traffic Control. These Config Files will have no special meaning at some point in the future.</p>
+</div>
+</div>
+<div class="section" id="chkconfig">
+<h5>chkconfig<a class="headerlink" href="#chkconfig" title="Permalink to this headline">¶</a></h5>
+<p>This actually isn’t a configuration file at all, kind of. Specifically, it is a valid configuration file for the legacy <a class="reference external" href="https://linux.die.net/man/8/chkconfig">chkconfig utility</a> - but it is never written to disk on any <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>. Though all Traffic Control-supported systems are now using <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemd(8)">systemd(8)</a></em>, <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> still uses <code class="docutils literal notranslate"><span class="pre">chkconfig</span></code>-style configuration to set the status of services on its host system(s). This means that any Parameter with this Config File value should have a <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> that is the name of a service on the <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> using the <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> to which the Parameter is assigned, and it’s <a class="reference internal" href="#value">Value</a> should be a valid <code class="docutils literal notranslate"><span class="pre">chkconfig</span></code> configuration line for that service.</p>
+</div>
+<div class="section" id="crconfig-json">
+<h5>CRConfig.json<a class="headerlink" href="#crconfig-json" title="Permalink to this headline">¶</a></h5>
+<p>In general, the term “CRConfig” refers to <a class="reference internal" href="../glossary.html#term-cdn-snapshots"><span class="xref std std-term">CDN Snapshots</span></a>, which historically were called “CRConfig Snapshots” or simply “the CRConfig”. Parameters with this Config File should be only be on either <a class="reference internal" href="#id4">The GLOBAL Profile</a> where they will affect global routing configuration, or on a Traffic Router’s <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> where they will affect routing configuration for that Traffic Router only.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For the available configuration Parameters for a Traffic Router Profile, see <a class="reference internal" href="../admin/traffic_router.html#tr-profile"><span class="std std-ref">The Traffic Router Profile</span></a>.</p>
+</div>
+</div>
+<div class="section" id="drop-qstring-config">
+<h5>drop_qstring.config<a class="headerlink" href="#drop-qstring-config" title="Permalink to this headline">¶</a></h5>
+<p>This configuration file will be generated with a single line that is exactly: <code class="regexp docutils literal notranslate"><span class="pre">/([^?]+)</span> <span class="pre">$s://$t/$1n</span></code> <strong>unless</strong> a Parameter exists on the <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> with this Config File value, and the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “content”. In the latter case, the contents of the file will be exactly the Parameter’s <a class="reference internal" href="#value">Value</a> (with terminating newline appended).</p>
+</div>
+<div class="section" id="global">
+<h5>global<a class="headerlink" href="#global" title="Permalink to this headline">¶</a></h5>
+<p>In general, this Config File isn’t actually handled specially by Traffic Ops when generating server configuration files. However, this is the Config File value typically used for Parameters assigned to <a class="reference internal" href="#id4">The GLOBAL Profile</a> for truly “global” configuration options, and it is suggested that this precedent be maintained - i.e. don’t create Parameters with this Config File.</p>
+</div>
+<div class="section" id="hdr-rw-anything-config">
+<h5><code class="file docutils literal notranslate"><span class="pre">hdr_rw_</span><em><span class="pre">anything</span></em><span class="pre">.config</span></code><a class="headerlink" href="#hdr-rw-anything-config" title="Permalink to this headline">¶</a></h5>
+<p>Config Files that match this pattern - where <code class="docutils literal notranslate"><span class="pre">anything</span></code> is zero or more characters - are written specially by Traffic Ops to accommodate the <a class="reference internal" href="delivery_services.html#ds-dscp"><span class="std std-ref">DSCP</span></a> setting of <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">anything</span></code> in those file names is typically a <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>’s <a class="reference internal" href="delivery_services.html#ds-xmlid"><span class="std std-ref">xml_id</span></a> - though the inability to affect the file’s contents is utterly independent of whether or not a <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> with that <a class="reference internal" href="delivery_services.html#ds-xmlid"><span class="std std-ref">xml_id</span></a> actually exists.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For information on the contents of files like this, consult <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/plugins/header_rewrite.en.html#rewriting-rules">the Header Rewrite Apache Traffic Server plugin’s documentation</a></p>
+</div>
+</div>
+<div class="section" id="hosting-config">
+<h5>hosting.config<a class="headerlink" href="#hosting-config" title="Permalink to this headline">¶</a></h5>
+<p>This configuration file is mainly generated based on the assignments of <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> to <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a> and the <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> hierarchy, but there are a couple of Parameter <a class="reference internal" href="#parameter-name"><span class="std std-ref">Names</span></a> that can affect it when assigned to this Config File. When a Parameter assigned to the <code class="docutils literal notranslate"><span class="pre">storage.config</span></code> Config File - <strong>NOT this Config File</strong> - with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “RAM_Drive_Prefix” <em>exists</em>, it will cause lines to be generated in this configuration file for each <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> that is of on of the <a class="reference internal" href="delivery_services.html#ds-types"><span class="std std-ref">Types</span></a> DNS_LIVE (only if the server is an <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-Tier Cache Server</span></a>), HTTP_LIVE (only if the server is an <a class="reference internal" href="../glossary.html#term-edge-tier-cache-server"><span class="xref std std-term">Edge-Tier Cache Server</span></a>), DNS_LIVE_NATNL, or HTTP_LIVE_NATNL to which the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> to which the <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> containing that Parameter belongs is assigned. Specifically, it will cause each of them to use <code class="docutils literal notranslate"><span class="pre">volume=1</span></code> <strong>UNLESS</strong> the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “Drive_Prefix” associated with Config File <code class="docutils literal notranslate"><span class="pre">storage.config</span></code> - again, <strong>NOT this Config File</strong> - <em>also</em> exists, in which case they will use <code class="docutils literal notranslate"><span class="pre">volume=2</span></code>.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>If a Parameter with Config File <code class="docutils literal notranslate"><span class="pre">storage.config</span></code> and <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “RAM_Drive_Prefix” does <em>not</em> exist on a <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a>, then the <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> using that <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> will <strong>be incapable of serving traffic for</strong> <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a> <strong>of the aforementioned</strong> <a class="reference internal" href="delivery_services.html#ds-types"><span class="std std-ref">Types</span></a>, <strong>even when a</strong> <a class="reference internal" href="#parameter-name-location"><span class="std std-ref">“location”</span></a> <strong>Parameter exists</strong>.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For an explanation of the syntax of this configuration file, refer to <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/hosting.config.en.html">the Apache Traffic Server hosting.config documentation</a>.</p>
+</div>
+</div>
+<div class="section" id="ip-allow-config">
+<h5>ip_allow.config<a class="headerlink" href="#ip-allow-config" title="Permalink to this headline">¶</a></h5>
+<p>This configuration file is mostly generated from various server data, but can be affected by a Parameter that has a <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> of “purge_allow_ip”, which will cause the insertion of a line with <code class="file docutils literal notranslate"><span class="pre">src_ip=</span><em><span class="pre">VALUE</span></em> <span class="pre">action=ip_allow</span> <span class="pre">method=ALL</span></code> where <code class="docutils literal notranslate"><span class="pre">VALUE</span></code> is the Parameter’s <a class="reference internal" href="#value">Value</a>. Additionally, Parameters with <a class="reference internal" href="#parameter-name"><span class="std std-ref">Names</span></a> like <code class="file docutils literal notranslate"><span class="pre">coalesce_</span><em><span class="pre">masklen|number</span></em><span class="pre">_v</span><em><span class="pre">4|6</span></em></code> cause Traffic Ops to generate coalesced IP ranges in different ways. In the case that <code class="docutils literal notranslate"><span class="pre">number</span></code> was used, the Parameter’s <a class="reference internal" href="#value">Value</a> sets the the maximum number of IP address that may be coalesced into a single range. If <code class="docutils literal notranslate"><span class="pre">masklen</span></code> was used, the lines that are generated are coalesced into <abbr title="Classless Inter-Domain Routing">CIDR</abbr> ranges using mask lengths determined by the <a class="reference internal" href="#value">Value</a> of the parameter (using ‘4’ sets the mask length of IPv4 address coalescing while using ‘6’ sets the mask length to use when coalescing IPv6 addresses). This is not recommended, as the default mask lengths allow for maximum coalescence. Furthermore, if two Parameters on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> assigned to a server having Config File values of <code class="docutils literal notranslate"><span class="pre">ip_allow.config</span></code> and <a class="reference internal" href="#parameter-name"><span class="std std-ref">Names</span></a> that are both “coalesce_masklen_v4” but each has a different <a class="reference internal" href="#value">Value</a>, then the actual mask length used to coalesce IPv4 addresses is undefined (but will be one of the two). All forms of the “coalescence Parameters” have this problem.</p>
+<div class="admonition">
+<p class="admonition-title">Implementation Detail</p>
+<p>At the time of this writing, coalescence is implemented through the <a class="reference external" href="http://search.cpan.org/~miker/NetAddr-IP-4.078/IP.pm">the NetAddr::IP Perl library</a>.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/ip_allow.config.en.html">The Apache Traffic Server ip_allow.config documentation</a> explains the syntax and meaning of lines in that file.</p>
+</div>
+</div>
+<div class="section" id="logging-config">
+<h5>logging.config<a class="headerlink" href="#logging-config" title="Permalink to this headline">¶</a></h5>
+<p>This configuration file can only be affect by Parameters with specific <a class="reference internal" href="#parameter-name"><span class="std std-ref">Names</span></a>. Specifically, for each Parameter assigned to this Config File on the <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> used by the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> with the name <code class="file docutils literal notranslate"><span class="pre">LogFormat</span><em><span class="pre">N</span></em><span class="pre">.Name</span></code> where <code class="docutils literal notranslate"><span class="pre">N</span></code> is either the empty string or a natural number on the interval [1,9] the text in <a class="reference internal" href="#logging-config-format-snippet"><span class="std std-ref">Log Format Snippet</span></a> will be inserted. In that snippet, <code class="docutils literal notranslate"><span class="pre">NAME</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFormat</span><em><span class="pre">N</span></em><span class="pre">.Name</span></code>, and <code class="docutils literal notranslate"><span class="pre">FORMAT</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFormat</span><em><span class="pre">N</span></em><span class="pre">.Format</span></code> for the same value of <code class="docutils literal notranslate"><span class="pre">N</span></code><a class="footnote-reference brackets" href="#logs-format" id="id7">2</a>.</p>
+<div class="literal-block-wrapper docutils container" id="id15">
+<span id="logging-config-format-snippet"></span><div class="code-block-caption"><span class="caption-number">#7 </span><span class="caption-text">Log Format Snippet</span><a class="headerlink" href="#id15" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>NAME = format {
+    Format = &#39;FORMAT &#39;
+}
+</pre></div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The order in which these Parameters are considered is exactly the numerical ordering implied by <code class="docutils literal notranslate"><span class="pre">N</span></code> (starting with it being empty). However, each section is generated for all values of <code class="docutils literal notranslate"><span class="pre">N</span></code> before moving on to the next.</p>
+</div>
+<p>Furthermore, for a given value of <code class="docutils literal notranslate"><span class="pre">N</span></code> - as before restricted to either the empty string or a natural number on the interval [1,9] -, if a Parameter exists on the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> having this Config File value with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFilter</span><em><span class="pre">N</span></em><span class="pre">.Name</span></code>, a line of the format <code class="file docutils literal notranslate"><em><span class="pre">NAME</span></em> <span class="pre">=</span> <span class="pre">filter.</span><em><span class="pre">TYPE</span></em><span class="pre">.('</span><em><span class="pre">FILTER</span></em><span class="pre">')</span></code> will be inserted, where <code class="docutils literal notranslate"><span class="pre">NAME</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFilter</span><em><span class="pre">N</span></em><span class="pre">.Name</span></code>, <code class="docutils literal notranslate"><span class="pre">TYPE</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFilter</span><em><span class="pre">N</span></em><span class="pre">.Type</span></code>, and <code class="docutils literal notranslate"><span class="pre">FILTER</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the name <code class="file docutils literal notranslate"><span class="pre">LogFilter</span><em><span class="pre">N</span></em><span class="pre">.Filter</span></code><a class="footnote-reference brackets" href="#logs-filter" id="id8">3</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When, for a given value of <code class="docutils literal notranslate"><span class="pre">N</span></code>, a Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFilter</span><em><span class="pre">N</span></em><span class="pre">.Name</span></code> exists, but a Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFilter</span><em><span class="pre">N</span></em><span class="pre">.Type</span></code> does <em>not</em> exist, the value of <code class="docutils literal notranslate"><span class="pre">TYPE</span></code> will be <code class="docutils literal notranslate"><span class="pre">accept</span></code>.</p>
+</div>
+<p>Finally, for a given value of <code class="docutils literal notranslate"><span class="pre">N</span></code>, if a Parameter exists on the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> having this Config File value with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Filename</span></code>, the text in <a class="reference internal" href="#logging-config-object-snippet"><span class="std std-ref">Log Object Snippet</span></a> will be inserted. In that snippet, <code class="docutils literal notranslate"><span class="pre">TYPE</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Type</span></code></p>
+<div class="literal-block-wrapper docutils container" id="id16">
+<span id="logging-config-object-snippet"></span><div class="code-block-caption"><span class="caption-number">#8 </span><span class="caption-text">Log Object Snippet</span><a class="headerlink" href="#id16" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>log.TYPE {
+  Format = FORMAT,
+  Filename = &#39;FILENAME&#39;,
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When, for a given value of <code class="docutils literal notranslate"><span class="pre">N</span></code> a Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Filename</span></code> exists, but a Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Type</span></code> does <em>not</em> exist, the value of <code class="docutils literal notranslate"><span class="pre">TYPE</span></code> in <a class="reference internal" href="#logging-config-object-snippet"><span class="std std-ref">Log Object Snippet</span></a> will be <code class="docutils literal notranslate"><span class="pre">ascii</span></code>.</p>
+</div>
+<p>At this point, if the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Type</span></code> is <strong>exactly</strong> <code class="docutils literal notranslate"><span class="pre">pipe</span></code>, a line of the format <code class="file docutils literal notranslate"><span class="pre">Filters</span> <span class="pre">=</span> <em> <span class="pre">FILTERS</span> </em></code> will be inserted where <code class="docutils literal notranslate"><span class="pre">FILTERS</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Filters</span></code>, followed by a line containing only a closing “curly brace” (<kbd class="kbd docutils literal notranslate">}</kbd>) - <em>if and</em> <strong>only</strong> <em>if said Parameter is</em> <strong>not</strong> <em>empty</em>. If, however, the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Type</span></code> is <strong>not</strong> exactly <code class="docutils literal notranslate"><span class="pre">pipe</span></code>, then the text in <a class="reference internal" href="#logging-config-object-not-pipe-snippet"><span class="std std-ref">Log Object (not a “pipe”) Snippet</span></a> is inserted.</p>
+<div class="literal-block-wrapper docutils container" id="id17">
+<span id="logging-config-object-not-pipe-snippet"></span><div class="code-block-caption"><span class="caption-number">#9 </span><span class="caption-text">Log Object (not a “pipe”) Snippet</span><a class="headerlink" href="#id17" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>  RollingEnabled = ROLLING,
+  RollingIntervalSec = INTERVAL,
+  RollingOffsetHr = OFFSET,
+  RollingSizeMb = SIZE
+}
+</pre></div>
+</div>
+</div>
+<p>In this snippet, <code class="docutils literal notranslate"><span class="pre">ROLLING</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.RollingEnabled</span></code>, <code class="docutils literal notranslate"><span class="pre">INTERVAL</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.RollingIntervalSec</span></code>, <code class="docutils literal notranslate"><span class="pre">OFFSET</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.RollingOffsetHr</span></code>, and <code class="docutils literal notranslate"><span class="pre">SIZE</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.SizeMb</span></code> - all still having the same value of <code class="docutils literal notranslate"><span class="pre">N</span></code>, and the Config File value <code class="docutils literal notranslate"><span class="pre">logging.config</span></code>, of course.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The contents of these fields are not validated by Traffic Control - handle with care!</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/logging.config.en.html">The Apache Traffic Server documentation for the logging.config configuration file</a></p>
+</div>
+</div>
+<div class="section" id="logging-yaml">
+<h5>logging.yaml<a class="headerlink" href="#logging-yaml" title="Permalink to this headline">¶</a></h5>
+<p>This is a YAML-format configuration file used by <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> that use Apache Traffic Server version 8 or higher - for lower versions, users/administrators/developers should instead be configuring <code class="docutils literal notranslate"><span class="pre">logging.config</span></code>. This configuration always starts with (after the header) the single line: <code class="docutils literal notranslate"><span class="pre">format:</span></code>. Afterward, for every Parameter assigned to this Config File with a <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> like <code class="file docutils literal notranslate"><span class="pre">LogFormat</span><em><span class="pre">N</span></em><span class="pre">.Name</span></code> where <code class="docutils literal notranslate"><span class="pre">N</span></code> is either the empty string or a natural number on the interval [1,9], the YAML fragment shown in <a class="reference internal" href="#logging-yaml-format-snippet"><span class="std std-ref">Log Format Snippet</span></a> will be inserted. In this snippet, <code class="docutils literal notranslate"><span class="pre">NAME</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFormat</span><em><span class="pre">N</span></em><span class="pre">.Name</span></code>, and for the same value of <code class="docutils literal notranslate"><span class="pre">N</span></code> <code class="docutils literal notranslate"><span class="pre">FORMAT</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFormat</span><em><span class="pre">N</span></em><span class="pre">.Format</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id18">
+<span id="logging-yaml-format-snippet"></span><div class="code-block-caption"><span class="caption-number">#10 </span><span class="caption-text">Log Format Snippet</span><a class="headerlink" href="#id18" title="Permalink to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span> <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">NAME</span>
+   <span class="nt">format</span><span class="p">:</span> <span class="s">&#39;FORMAT&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The order in which these Parameters are considered is exactly the numerical ordering implied by <code class="docutils literal notranslate"><span class="pre">N</span></code> (starting with it being empty). However, each section is generated for all values of <code class="docutils literal notranslate"><span class="pre">N</span></code> before moving on to the next.</p>
+</div>
+<p>After this, a single line containing only <code class="docutils literal notranslate"><span class="pre">filters:</span></code> is inserted. Then, for each Parameter on the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> with a <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> like <code class="file docutils literal notranslate"><span class="pre">LogFilter</span><em><span class="pre">N</span></em><span class="pre">.Name</span></code> where <code class="docutils literal notranslate"><span class="pre">N</span></code> is either the empty string or a natural number on the interval [1,9], the YAML fragment in <a class="reference internal" href="#logging-yaml-filter-snippet"><span class="std std-ref">Log Filter Snippet</span></a> will be inserted. In that snippet, <code class="docutils literal notranslate"><span class="pre">NAME</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFilter</span><em><span class="pre">N</span></em><span class="pre">.Name</span></code>, <code class="docutils literal notranslate"><span class="pre">TYPE</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFilter</span><em><span class="pre">N</span></em><span class="pre">.Type</span></code> for the same value of <code class="docutils literal notranslate"><span class="pre">N</span></code>, and <code class="docutils literal notranslate"><span class="pre">FILTER</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFilter</span><em><span class="pre">N</span></em><span class="pre">.Filter</span></code> for the same value of <code class="docutils literal notranslate"><span class="pre">N</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id19">
+<span id="logging-yaml-filter-snippet"></span><div class="code-block-caption"><span class="caption-number">#11 </span><span class="caption-text">Log Filter Snippet</span><a class="headerlink" href="#id19" title="Permalink to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">NAME</span>
+  <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TYPE</span>
+  <span class="nt">condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">FILTER</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When, for a given value of <code class="docutils literal notranslate"><span class="pre">N</span></code>, a Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFilter</span><em><span class="pre">N</span></em><span class="pre">.Name</span></code> exists, but a Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFilter</span><em><span class="pre">N</span></em><span class="pre">.Type</span></code> does <em>not</em> exist, the value of <code class="docutils literal notranslate"><span class="pre">TYPE</span></code> in <a class="reference internal" href="#logging-yaml-filter-snippet"><span class="std std-ref">Log Filter Snippet</span></a> will be <code class="docutils literal notranslate"><span class="pre">accept</span></code>.</p>
+</div>
+<p>At this point, a single line containing only <code class="docutils literal notranslate"><span class="pre">logs:</span></code> is inserted. Finally, for each Parameter on the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> assigned to this Config File with a <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> like <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Filename</span></code> where <code class="docutils literal notranslate"><span class="pre">N</span></code> is once again either an empty string or a natural number on the interval [1,9] the YAML fragment in <a class="reference internal" href="#logging-yaml-object-snippet"><span class="std std-ref">Log Object Snippet</span></a> will be inserted. In this snippet, for a given value of <code class="docutils literal notranslate"><span class="pre">N</span></code> <code class="docutils literal notranslate"><span class="pre">TYPE</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Type</span></code>, <code class="docutils literal notranslate"><span class="pre">FILENAME</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Filename</span></code>, <code class="docutils literal notranslate"><span class="pre">FORMAT</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Format</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id20">
+<span id="logging-yaml-object-snippet"></span><div class="code-block-caption"><span class="caption-number">#12 </span><span class="caption-text">Log Object Snippet</span><a class="headerlink" href="#id20" title="Permalink to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">mode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TYPE</span>
+  <span class="nt">filename</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">FILENAME</span>
+  <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">FORMAT</span>
+  <span class="l l-Scalar l-Scalar-Plain">ROLLING_OR_FILTERS</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When, for a given value of <code class="docutils literal notranslate"><span class="pre">N</span></code> a Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Filename</span></code> exists, but a Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Type</span></code> does <em>not</em> exist, the value of <code class="docutils literal notranslate"><span class="pre">TYPE</span></code> in <a class="reference internal" href="#logging-yaml-object-snippet"><span class="std std-ref">Log Object Snippet</span></a> will be <code class="docutils literal notranslate"><span class="pre">ascii</span></code>.</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">ROLLING_OR_FILTERS</span></code> will be one of two YAML fragments based on the <a class="reference internal" href="#value">Value</a> of the Parameter with the name <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Type</span></code>. In particular, if it is exactly <code class="docutils literal notranslate"><span class="pre">pipe</span></code>, then <code class="docutils literal notranslate"><span class="pre">ROLLING_OR_FILTERS</span></code> will be <code class="file docutils literal notranslate"><span class="pre">filters:</span> <span class="pre">[</span><em><span class="pre">FILTERS</span></em><span class="pre">]</span></code> where <code class="docutils literal notranslate"><span class="pre">FILTERS</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter assigned to this Config File with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Filters</span></code> for the same value of <code class="docutils literal notranslate"><span class="pre">N</span></code>. If, however, the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Type</span></code> is <strong>not</strong> exactly <code class="docutils literal notranslate"><span class="pre">pipe</span></code>, <code class="docutils literal notranslate"><span class="pre">ROLLING_OR_FILTERS</span></code> will have the format given by <a class="reference internal" href="#logging-yaml-object-not-pipe-snippet"><span class="std std-ref">Log Object (not a “pipe”) Snippet</span></a>. In that snippet, <code class="docutils literal notranslate"><span class="pre">ROLLING</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.RollingEnabled</span></code>, <code class="docutils literal notranslate"><span class="pre">INTERVAL</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.RollingIntervalSec</span></code>, <code class="docutils literal notranslate"><span class="pre">OFFSET</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.RollingOffsetHr</span></code>, and <code class="docutils literal notranslate"><span class="pre">SIZE</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.RollingSizeMb</span></code> - all for the same value of <code class="docutils literal notranslate"><span class="pre">N</span></code> and assigned to the <code class="docutils literal notranslate"><span class="pre">logging.yaml</span></code> Config File, obviously.</p>
+<div class="literal-block-wrapper docutils container" id="id21">
+<span id="logging-yaml-object-not-pipe-snippet"></span><div class="code-block-caption"><span class="caption-number">#13 </span><span class="caption-text">Log Object (not a “pipe”) Snippet</span><a class="headerlink" href="#id21" title="Permalink to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>  <span class="nt">rolling_enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ROLLING</span>
+  <span class="nt">rolling_interval_sec</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">INTERVAL</span>
+  <span class="nt">rolling_offset_hr</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">OFFSET</span>
+  <span class="nt">rolling_size_mb</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">SIZE</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For an explanation of YAML syntax, refer to the <a class="reference external" href="https://yaml.org/">official specification thereof</a>. For an explanation of the syntax of a valid Apache Traffic Server <code class="docutils literal notranslate"><span class="pre">logging.yaml</span></code> configuration file, refer to <a class="reference external" href="https://docs.trafficserver.apache.org/en/8.0.x/admin-guide/files/logging.yaml.en.html">that project’s dedicated documentation</a>.</p>
+</div>
+</div>
+<div class="section" id="logs-xml-config">
+<h5>logs_xml.config<a class="headerlink" href="#logs-xml-config" title="Permalink to this headline">¶</a></h5>
+<p>This configuration file is somewhat more complex than most Config Files, in that it generates XML document tree segments<a class="footnote-reference brackets" href="#xml-caveat" id="id9">1</a> for each Parameter on the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> rather than simply a plain-text line. Specifically, up to ten of the document fragment shown in <a class="reference internal" href="#logs-xml-format-snippet"><span class="std std-ref">LogFormat Snippet</span></a> will be inserted, one for each Parameter with this Config File value on the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> that has a <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> like <code class="file docutils literal notranslate"><span class="pre">LogFormat</span><em><span class="pre">N</span></em><span class="pre">.Name</span></code> where <code class="docutils literal notranslate"><span class="pre">N</span></code> is either the empty string or a natural number on the range [1,9]. In that snippet, the string <code class="docutils literal notranslate"><span class="pre">NAME</span></code> is actually the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFormat</span><em><span class="pre">N</span></em><span class="pre">.Name&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">FORMAT</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogFormat</span><em><span class="pre">N</span></em><span class="pre">.Format</span></code><a class="footnote-reference brackets" href="#logs-format" id="id10">2</a>, where again <code class="docutils literal notranslate"><span class="pre">N</span></code> is either the empty string or a natural number on the interval [1,9] - same-valued <code class="docutils literal notranslate"><span class="pre">N</span></code> Parameters are associated.</p>
+<div class="literal-block-wrapper docutils container" id="id22">
+<span id="logs-xml-format-snippet"></span><div class="code-block-caption"><span class="caption-number">#14 </span><span class="caption-text">LogFormat Snippet</span><a class="headerlink" href="#id22" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;LogFormat&gt;
+    &lt;Name = &quot;NAME&quot;/&gt;
+    &lt;Format = &quot;FORMAT&quot;/&gt;
+&lt;/LogFormat&gt;
+</pre></div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The order in which these Parameters are considered is exactly the numerical ordering implied by <code class="docutils literal notranslate"><span class="pre">N</span></code> (starting with it being empty).</p>
+</div>
+<p>Furthermore, for a given value of <code class="docutils literal notranslate"><span class="pre">N</span></code>, if a Parameter exists on the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> having this Config File value with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Filename</span></code>, the document fragment shown in <a class="reference internal" href="#logs-xml-object-snippet"><span class="std std-ref">LogObject Snippet</span></a> will be inserted. In that snippet, <code class="docutils literal notranslate"><span class="pre">OBJ_FORMAT</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Format</span></code>, <code class="docutils literal notranslate"><span class="pre">FILENAME</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Filename</span></code>, <code class="docutils literal notranslate"><span class="pre">ROLLING</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.RollingEnabled</span></code>, <code class="docutils literal notranslate"><span class="pre">INTERVAL</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.RollingIntervalSec</span></code>, <code class="docutils literal notranslate"><span class="pre">OFFSET</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.RollingOffsetHr</span></code>, <code class="docutils literal notranslate"><span class="pre">SIZE</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.RollingSizeMb</span></code>, and <code class="docutils literal notranslate"><span class="pre">HEADER</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> <code class="file docutils literal notranslate"><span class="pre">LogObject</span><em><span class="pre">N</span></em><span class="pre">.Header</span></code> - all having the same value of <code class="docutils literal notranslate"><span class="pre">N</span></code>, and the Config File value <code class="docutils literal notranslate"><span class="pre">logs_xml.config</span></code>, of course.</p>
+<div class="literal-block-wrapper docutils container" id="id23">
+<span id="logs-xml-object-snippet"></span><div class="code-block-caption"><span class="caption-number">#15 </span><span class="caption-text">LogObject Snippet</span><a class="headerlink" href="#id23" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;LogObject&gt;
+    &lt;Format = &quot;OBJ_FORMAT&quot;/&gt;
+    &lt;Filename = &quot;FILENAME&quot;/&gt;
+    &lt;RollingEnabled = ROLLING/&gt;
+    &lt;RollingInterval = INTERVAL/&gt;
+    &lt;RollingOffsetHr = OFFSET/&gt;
+    &lt;RollingSizeMb = SIZE/&gt;
+    &lt;Header = &quot;HEADER&quot;/&gt;
+&lt;/LogObject&gt;
+</pre></div>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The contents of these fields are not validated by Traffic Control - handle with care!</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The <a class="reference external" href="https://docs.trafficserver.apache.org/en/6.2.x/admin-guide/files/logs_xml.config.en.html">Apache Traffic Control documentation on the logs_xml.config configuration file</a></p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version ATCv3.0: </span>This file is only used by Apache Traffic Server version 6.x. The use of Apache Traffic Server version &lt; 7.1 has been deprecated, and will not be supported in the future. Developers are encouraged to instead configure the <a class="reference internal" href="#logging-config">logging.config</a> configuration file.</p>
+</div>
+</div>
+<div class="section" id="package">
+<h5>package<a class="headerlink" href="#package" title="Permalink to this headline">¶</a></h5>
+<p>This is a special, reserved Config File that isn’t a file at all. When a Parameter’s Config File is <code class="docutils literal notranslate"><span class="pre">package</span></code>, then its name is interpreted as the name of a package. <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> on the server using the <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> that has this Parameter will attempt to install a package by that name, interpreting the Parameter’s <a class="reference internal" href="#value">Value</a> as a version string if it is not empty. The package manager used will be <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em>, regardless of system (though the Python version of <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> will attempt to use the host system’s package manager - <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em>, <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/apt(8)">apt(8)</a></em> and <code class="docutils literal notranslate"><span class="pre">pacman</span></code> are supported) but that shouldn’t be a problem because only CentOS 7 is supported.</p>
+<p>The current implementation of <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> will expect Parameters to exist on a <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>’s <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Names</span></a> <code class="docutils literal notranslate"><span class="pre">astats_over_http</span></code> and <code class="docutils literal notranslate"><span class="pre">trafficserver</span></code> before being run the first time, as both of these are required for a <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> to operate within a Traffic Control CDN. It is possible to install these outside of <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> - and indeed even outside of <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> - but such configuration is not officially supported.</p>
+</div>
+<div class="section" id="packages">
+<h5>packages<a class="headerlink" href="#packages" title="Permalink to this headline">¶</a></h5>
+<p>This Config File is reserved, and is used by <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> to pull bulk information about all of the Parameters with Config File values of <a class="reference internal" href="#package">package</a>. It doesn’t actually correspond to any configuration file.</p>
+</div>
+<div class="section" id="parent-config">
+<h5>parent.config<a class="headerlink" href="#parent-config" title="Permalink to this headline">¶</a></h5>
+<p>This configuration file is generated entirely from <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> relationships, as well as <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> configuration. This file <em>can</em> be affected by Parameters on the server’s <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> if and only if its <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> is one of the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">algorithm</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">qstring</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">psel.qstring_handling</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">not_a_parent</span></code> - unlike the other Parameters listed (which have a 1:1 correspondence with Apache Traffic Server configuration options), this Parameter affects the generation of <a class="reference internal" href="../glossary.html#term-parent"><span class="xref std std-term">parent</span></a> relationships between <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a>. When a Parameter with this <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> and Config File exists on a <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> used by a <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>, it will not be added as a <a class="reference internal" href="../glossary.html#term-parent"><span class="xref std std-term">parent</span></a> of any other <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>, regardless of <a class="reference internal" href="../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> hierarchy. Under ordinary circumstances, there’s no real reason for this Parameter to exist.</p></li>
+</ul>
+<p>Additionally, <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> <a class="reference internal" href="delivery_services.html#ds-profile"><span class="std std-ref">Profiles</span></a> can have special Parameters with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “mso.parent_retry” to <a class="reference internal" href="../admin/quick_howto/multi_site.html#multi-site-origin-qht"><span class="std std-ref">Configure Multi-Site Origin</span></a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>To see how the <a class="reference internal" href="#parameter-value"><span class="std std-ref">Values</span></a> of these Parameters are interpreted, refer to the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/parent.config.en.html">Apache Traffic Server documentation on the parent.config configuration file</a></p>
+</div>
+</div>
+<div class="section" id="plugin-config">
+<h5>plugin.config<a class="headerlink" href="#plugin-config" title="Permalink to this headline">¶</a></h5>
+<p>For each Parameter with this Config File value on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a>, a line in the resulting configuration file is produced in the format <code class="file docutils literal notranslate"><em><span class="pre">NAME</span></em> <em><span class="pre">VALUE</span></em></code> where <code class="docutils literal notranslate"><span class="pre">NAME</span></code> is the Parameter’s <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> with trailing characters matching the regular expression <code class="regexp docutils literal notranslate"><span class="pre">__\d+$</span></code> stripped out and <code class="docutils literal notranslate"><span class="pre">VALUE</span></code> is the Parameter’s <a class="reference internal" href="#value">Value</a>.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>In order for Parameters for Config Files relating to Apache Traffic Server plugins - e.g. <a class="reference internal" href="#regex-revalidate-config">regex_revalidate.config</a> - to have any effect, a Parameter must exist with this Config File value to instruct Apache Traffic Server to load the plugin. Typically, this is more easily achieved by assigning these Parameters to <a class="reference internal" href="#id4">The GLOBAL Profile</a> than on a server-by-server basis.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/plugin.config.en.html">The Apache Traffic server documentation on the plugin.config configuration file</a> explains what <a class="reference internal" href="#value">Value</a> and <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> a Parameter should have to be valid.</p>
+</div>
+</div>
+<div class="section" id="rascal-properties">
+<h5>rascal.properties<a class="headerlink" href="#rascal-properties" title="Permalink to this headline">¶</a></h5>
+<p>This Config File is meant to be on Parameters assigned to either Traffic Monitor <a class="reference internal" href="#profiles">Profiles</a> or <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> <a class="reference internal" href="#profiles">Profiles</a>. Its allowed <a class="reference internal" href="#parameter-name"><span class="std std-ref">Parameter Names</span></a> are all configuration options for Traffic Monitor. The <a class="reference internal" href="#parameter-name"><span class="std std-ref">Names</span></a> with meaning are as follows.</p>
+<dl>
+<dt>health.threshold.loadavg</dt><dd><p>The <a class="reference internal" href="#value">Value</a> of this Parameter sets the “load average” above which the associated <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a>’s <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> will be considered “unhealthy”.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="traffic_monitor.html#health-proto"><span class="std std-ref">Health Protocol</span></a></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The definition of a “load average” can be found in the documentation for the Linux/Unix command <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/uptime(1)">uptime(1)</a></em>.</p>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>If more than one Parameter with this <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> and Config File exist on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> with different <a class="reference internal" href="#parameter-value"><span class="std std-ref">Values</span></a>, the actual <a class="reference internal" href="#value">Value</a> used by any given Traffic Monitor instance is undefined (though it will be the <a class="reference internal" href="#value">Value</a> of one of those Parameters).</p>
+</div>
+</dd>
+<dt>health.threshold.availableBandwidthInKbps</dt><dd><p>The <a class="reference internal" href="#value">Value</a> of this Parameter sets the amount of bandwidth (in kilobits per second) that Traffic Control will try to keep available on the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>. For example a <a class="reference internal" href="#value">Value</a> of “&gt;1500000” indicates that the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> will be marked “unhealthy” if its available remaining bandwidth on the network interface used by the caching proxy falls below 1.5Gbps.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="traffic_monitor.html#health-proto"><span class="std std-ref">Health Protocol</span></a></p>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>If more than one Parameter with this <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> and Config File exist on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> with different <a class="reference internal" href="#parameter-value"><span class="std std-ref">Values</span></a>, the actual <a class="reference internal" href="#value">Value</a> used by any given Traffic Monitor instance is undefined (though it will be the <a class="reference internal" href="#value">Value</a> of one of those Parameters).</p>
+</div>
+</dd>
+</dl>
+</div>
+<div class="section" id="records-config">
+<h5>records.config<a class="headerlink" href="#records-config" title="Permalink to this headline">¶</a></h5>
+<p>For each Parameter with this Config File value on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a>, a line in the resulting configuration file is produced in the format <code class="file docutils literal notranslate"><em><span class="pre">NAME</span></em> <em><span class="pre">VALUE</span></em></code> where <code class="docutils literal notranslate"><span class="pre">NAME</span></code> is the Parameter’s <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> with trailing characters matching the regular expression <code class="regexp docutils literal notranslate"><span class="pre">__\d+$</span></code> stripped out and <code class="docutils literal notranslate"><span class="pre">VALUE</span></code> is the Parameter’s <a class="reference internal" href="#value">Value</a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/records.config.en.html">The Apache Traffic Server records.config documentation</a></p>
+</div>
+</div>
+<div class="section" id="regex-remap-anything-config">
+<h5><code class="file docutils literal notranslate"><span class="pre">regex_remap_</span><em><span class="pre">anything</span></em><span class="pre">.config</span></code><a class="headerlink" href="#regex-remap-anything-config" title="Permalink to this headline">¶</a></h5>
+<p>Config Files matching this pattern - where <code class="docutils literal notranslate"><span class="pre">anything</span></code> is zero or more characters - are generated entirely from <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> configuration, which cannot be affected by any Parameters (except <a class="reference internal" href="#parameter-name-location"><span class="std std-ref">“location”</span></a>).</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For the syntax of configuration files for the “Regex Remap” plugin, see <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/plugins/regex_remap.en.html">the Regex Remap plugin’s official documentation</a>. For instructions on how to enable a plugin, consult, the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/plugin.config.en.html">plugin.config documentation</a>.</p>
+</div>
+</div>
+<div class="section" id="regex-revalidate-config">
+<h5>regex_revalidate.config<a class="headerlink" href="#regex-revalidate-config" title="Permalink to this headline">¶</a></h5>
+<p>This configuration file can only be affected by the special <code class="docutils literal notranslate"><span class="pre">maxRevalDurationDays</span></code>, which is discussed in the <a class="reference internal" href="#id4">The GLOBAL Profile</a> section.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For the syntax of configuration files for the “Regex Revalidate” plugin, see <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/plugins/regex_revalidate.en.html#revalidation-rules">the Regex Revalidate plugin’s official documentation</a>. For instructions on how to enable a plugin, consult, the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/plugin.config.en.html">plugin.config documentation</a>.</p>
+</div>
+</div>
+<div class="section" id="remap-config">
+<h5>remap.config<a class="headerlink" href="#remap-config" title="Permalink to this headline">¶</a></h5>
+<p>This configuration file can only be affected by one Parameter on a <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> assigned to a <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>. Then, for every Parameter assigned to that <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> that has the Config File value “cachekey.config” - <strong>NOT this Config File</strong> -, a parameter will be added to the line for that <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> like so: <code class="file docutils literal notranslate"><span class="pre">pparam=--</span><em><span class="pre">Name</span></em><span class="pre">=</span><em><span class="pre">Value</span></em></code> where <code class="docutils literal notranslate"><span class="pre">Name</span></code> is the Parameter’s <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a>, and <code class="docutils literal notranslate"><span class="pre">Value</span></code> is its <a class="reference internal" href="#value">Value</a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For an explanation of the syntax of this configuration file, refer to <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/remap.config.en.html">the Apache Traffic Server remap.config documentation</a>.</p>
+</div>
+</div>
+<div class="section" id="set-dscp-anything-config">
+<h5><code class="file docutils literal notranslate"><span class="pre">set_dscp_</span><em><span class="pre">anything</span></em><span class="pre">.config</span></code><a class="headerlink" href="#set-dscp-anything-config" title="Permalink to this headline">¶</a></h5>
+<p>Configuration files matching this pattern - where <code class="docutils literal notranslate"><span class="pre">anything</span></code> is a string of zero or more characters is generated entirely from a <a class="reference internal" href="#parameter-name-location"><span class="std std-ref">“location”</span></a> Parameter.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><code class="docutils literal notranslate"><span class="pre">anything</span></code> in that Config File name only has meaning if it is a natural number - specifically, one of each value of <a class="reference internal" href="delivery_services.html#ds-dscp"><span class="std std-ref">DSCP</span></a> on every <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> to which the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> using the <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> on which the Parameter(s) exist(s).</p>
+</div>
+</div>
+<div class="section" id="ssl-multicert-config">
+<h5>ssl_multicert.config<a class="headerlink" href="#ssl-multicert-config" title="Permalink to this headline">¶</a></h5>
+<p>This configuration file is generated from the SSL keys of <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a>, and is unaffected by any Parameters (except <a class="reference internal" href="#parameter-name-location"><span class="std std-ref">“location”</span></a>)</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/ssl_multicert.config.en.html">The official ssl_multicert.config documentation</a></p>
+</div>
+</div>
+<div class="section" id="storage-config">
+<h5>storage.config<a class="headerlink" href="#storage-config" title="Permalink to this headline">¶</a></h5>
+<p>This configuration file can only be affected by a handful of Parameters. If a Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “Drive Prefix” exists the generated configuration file will have a line inserted in the format <code class="file docutils literal notranslate"><em><span class="pre">PREFIX</span></em><em><span class="pre">LETTER</span></em> <span class="pre">volume=1</span></code> for each letter in the comma-delimited list that is the <a class="reference internal" href="#value">Value</a> of the Parameter on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “Drive Letters”, where <code class="docutils literal notranslate"><span class="pre">PREFIX</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “Drive Prefix”, and <code class="docutils literal notranslate"><span class="pre">LETTER</span></code> is each of the aforementioned letters in turn. Additionally, if a Parameter on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> exists with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “RAM Drive Prefix” then for each letter in the comma-delimited list that is the <a class="reference internal" href="#value">Value</a> of the Parameter on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “RAM Drive Letters”, a line will be generated in the format <code class="file docutils literal notranslate"><em><span class="pre">PREFIX</span></em><em><span class="pre">LETTER</span></em> <span class="pre">volume=</span><em><span class="pre">i</span></em></code> where <code class="docutils literal notranslate"><span class="pre">PREFIX</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “RAM Drive Prefix”, <code class="docutils literal notranslate"><span class="pre">LETTER</span></code> is each of the aforementioned letters in turn, and <code class="docutils literal notranslate"><span class="pre">i</span></code> is 1 <em>if and</em> <strong>only</strong> <em>if</em> a Parameter does <strong>not</strong> exist on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “Drive Prefix” and is 2 otherwise. Finally, if a Parameter exists on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “SSD Drive Prefix”, then a line is inserted for each letter in the comma-delimited list that is the <a class="reference internal" href="#value">Value</a> of the Parameter on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “SSD Drive Letters” in the format <code class="file docutils literal notranslate"><em><span class="pre">PREFIX</span></em><em><span class="pre">LETTER</span></em> <span class="pre">volume=</span><em><span class="pre">i</span></em></code> where <code class="docutils literal notranslate"><span class="pre">PREFIX</span></code> is the <a class="reference internal" href="#value">Value</a> of the Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “SSD Drive Prefix”, <code class="docutils literal notranslate"><span class="pre">LETTER</span></code> is each of the aforementioned letters in turn, and <code class="docutils literal notranslate"><span class="pre">i</span></code> is 1 <em>if and</em> <strong>only</strong> <em>if</em> <strong>both</strong> a Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “Drive Prefix” and a Parameter with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> “RAM Drive Prefix” <em>don’t exist on the same</em> <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a>, or 2 if only <strong>one</strong> of them exists, or otherwise 3.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/storage.config.en.html">The Apache Traffic Server storage.config file documentation</a>.</p>
+</div>
+</div>
+<div class="section" id="traffic-stats-config">
+<h5>traffic_stats.config<a class="headerlink" href="#traffic-stats-config" title="Permalink to this headline">¶</a></h5>
+<p>This Config File value is only handled specially when the <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> to which it is assigned is of the special TRAFFIC_STATS <a class="reference internal" href="#type">Type</a>. In that case, the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> of any Parameters with this Config File is restrained to one of “CacheStats” or “DsStats”. When it is “Cache Stats”, the <a class="reference internal" href="#value">Value</a> is interpreted specially based on whether or not it starts with “ats.”. If it does, then what follows must be the name of one of <a class="reference external" href="https://docs.trafficserver.apache.org/en/latest/admin-guide/monitoring/statistics/core-statistics.en.html">the core Apache Traffic Server statistics</a>. This signifies to Traffic Stats that it should store that statistic for <a class="reference internal" href="../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> within Traffic Control. Additionally, the special statistics “bandwidth”, “maxKbps” are supported as <a class="reference internal" href="#parameter-name"><span class="std std-ref">Names</span></a> - and in fact it is suggested that they exist in every Traffic Control deployment.</p>
+<p>When the Parameter <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> is “DSStats”, the allowed <a class="reference internal" href="#parameter-value"><span class="std std-ref">Values</span></a> are:</p>
+<ul class="simple">
+<li><p>kbps</p></li>
+<li><p>status_4xx</p></li>
+<li><p>status_5xx</p></li>
+<li><p>tps_2xx</p></li>
+<li><p>tps_3xx</p></li>
+<li><p>tps_4xx</p></li>
+<li><p>tps_5xx</p></li>
+<li><p>tps_total</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For more information on the statistics gathered by Traffic Stats, see <a class="reference internal" href="../admin/traffic_stats.html#ts-admin"><span class="std std-ref">Traffic Stats Administration</span></a>. For information about how these statics are gathered, consult the only known documentation of the “astats_over_http” Apache Traffic Server plugin: <a class="reference external" href="https://github.com/apache/trafficcontrol/tree/master/traffic_server/plugins/astats_over_http/README.md"><code class="docutils literal notranslate"><span class="pre">traffic_server/plugins/astats_over_http/README.md</span></code></a>.</p>
+</div>
+</div>
+<div class="section" id="sysctl-config">
+<h5>sysctl.config<a class="headerlink" href="#sysctl-config" title="Permalink to this headline">¶</a></h5>
+<p>For each Parameter with this Config File value on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a>, a line in the resulting configuration file is produced in the format <code class="file docutils literal notranslate"><em><span class="pre">NAME</span></em> <span class="pre">=</span> <em><span class="pre">VALUE</span></em></code> where <code class="docutils literal notranslate"><span class="pre">NAME</span></code> is the Parameter’s <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> with trailing characters matching the regular expression <code class="regexp docutils literal notranslate"><span class="pre">__\d+$</span></code> stripped out and <code class="docutils literal notranslate"><span class="pre">VALUE</span></code> is the Parameter’s <a class="reference internal" href="#value">Value</a>.</p>
+</div>
+<div class="section" id="uri-signing-anything-config">
+<h5><code class="file docutils literal notranslate"><span class="pre">uri_signing_</span><em><span class="pre">anything</span></em><span class="pre">.config</span></code><a class="headerlink" href="#uri-signing-anything-config" title="Permalink to this headline">¶</a></h5>
+<p>Config Files matching this pattern - where <code class="docutils literal notranslate"><span class="pre">anything</span></code> is zero or more characters - are generated entirely from the URI Signing Keys configured on a <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> through either the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or the <a class="reference internal" href="../admin/traffic_portal/usingtrafficportal.html#tp-services-delivery-service"><span class="std std-ref">Delivery Service</span></a> view in Traffic Portal.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://tools.ietf.org/html/draft-ietf-cdni-uri-signing-16">The draft RFC for uri_signing</a> - note, however that the current implementation of uri_signing uses Draft 12 of that RFC document, <strong>NOT</strong> the latest.</p>
+</div>
+</div>
+<div class="section" id="url-sig-anything-config">
+<h5><code class="file docutils literal notranslate"><span class="pre">url_sig_</span><em><span class="pre">anything</span></em><span class="pre">.config</span></code><a class="headerlink" href="#url-sig-anything-config" title="Permalink to this headline">¶</a></h5>
+<p>Config Files that match this pattern - where <code class="docutils literal notranslate"><span class="pre">anything</span></code> is zero or more characters - are mostly generated using the URL Signature Keys as configured either through the <a class="reference internal" href="../api/index.html#to-api"><span class="std std-ref">Traffic Ops API</span></a> or the <a class="reference internal" href="../admin/traffic_portal/usingtrafficportal.html#tp-services-delivery-service"><span class="std std-ref">Delivery Service</span></a> view in Traffic Portal. However, if no such keys have been configured, they may be provided by fall-back Parameters. In this case, for each Parameter on assigned to this Config File on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> a line is inserted into the resulting configuration file in the format <code class="file docutils literal notranslate"><em><span class="pre">NAME</span></em> <span class="pre">=</span> <em><span class="pre">VALUE</span></em></code> where <code class="docutils literal notranslate"><span class="pre">NAME</span></code> is the Parameter’s <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a> and <code class="docutils literal notranslate"><span class="pre">VALUE</span></code> is the Parameter’s <a class="reference internal" href="#value">Value</a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.trafficserver.apache.org/en/8.0.x/admin-guide/plugins/url_sig.en.html">The Apache Trafficserver documentation for the url_sig plugin</a>.</p>
+</div>
+</div>
+<div class="section" id="volume-config">
+<h5>volume.config<a class="headerlink" href="#volume-config" title="Permalink to this headline">¶</a></h5>
+<p>This Config File is peculiar in that it depends only on the existence of Parameters, and not each Parameter’s actual <a class="reference internal" href="#value">Value</a>. The Parameters that affect the generated configuration file are the Parameters with the <a class="reference internal" href="#parameter-name"><span class="std std-ref">Names</span></a> “Drive Prefix”, “RAM Drive Prefix”, and “SSD Drive Prefix”. Each of these Parameters must be assigned to the <code class="docutils literal notranslate"><span class="pre">storage.config</span></code> Config File - <strong>NOT this Config File</strong> - and, of course, be on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a>. The contents of the generated Config File will be between zero and three lines (excluding headers) where the number of lines is equal to the number of the aforementioned Parameters that actually exist on the same <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a>. Each line has the format <code class="file docutils literal notranslate"><span class="pre">volume=</span><em><span class="pre">i</span></em> <span class="pre">scheme=http</span> <span class="pre">size=</span><em><span class="pre">SIZE</span></em><span class="pre">%</span></code> where <code class="docutils literal notranslate"><span class="pre">i</span></code> is a natural number that ranges from 1 to the number of those Parameters that exist. <code class="docutils literal notranslate"><span class="pre">SIZE</span></code> is <span class="math notranslate nohighlight">\(100 / N\)</span> - where <span class="math notranslate nohighlight">\(N\)</span> is the number of those special Parameters that exist - truncated to the nearest natural number, e.g. <span class="math notranslate nohighlight">\(100 / 3 = 33\)</span>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/volume.config.en.html">The Apache Traffic Server volume.config file documentation</a>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="parameter-id">
+<span id="id12"></span><h4>ID<a class="headerlink" href="#parameter-id" title="Permalink to this headline">¶</a></h4>
+<p>An integral, unique identifier for a Parameter. Note that Parameters must have a unique combination of <a class="reference internal" href="#config-file">Config File</a>, <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a>, and <a class="reference internal" href="#value">Value</a>, and so those should be used for identifying a unique Parameter whenever possible.</p>
+<div class="admonition">
+<p class="admonition-title">Implementation Detail</p>
+<p>If two <a class="reference internal" href="#profiles">Profiles</a> have been assigned Parameters that have the same values for <a class="reference internal" href="#config-file">Config File</a>, <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a>, and <a class="reference internal" href="#value">Value</a> then Traffic Ops actually only stores one Parameter object and merely <em>links</em> it to both <a class="reference internal" href="#profiles">Profiles</a>. This can be seen by inspecting the Parameters’ IDs, as they will be the same. There are many cases where a user or developer must rely on this implementation detail, but both are encouraged to do so only when absolutely necessary.</p>
+</div>
+</div>
+<div class="section" id="parameter-name">
+<span id="id13"></span><h4>Name<a class="headerlink" href="#parameter-name" title="Permalink to this headline">¶</a></h4>
+<p>The Name of a Parameter has different meanings depending on the type of any and all <a class="reference internal" href="#profiles">Profiles</a> to which it is assigned, as well as the <a class="reference internal" href="#config-file">Config File</a> to which the Parameter belongs, but most generally it is used in <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/index.en.html">Apache Traffic Server configuration files</a> as the name of a configuration option in a name/value pair. Traffic Ops interprets the Name and <a class="reference internal" href="#value">Value</a> of a Parameter in intelligent ways depending on the type of object to which the <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> using the Parameter is assigned. For example, if <a class="reference internal" href="#config-file">Config File</a> is <code class="docutils literal notranslate"><span class="pre">records.config</span></code> and the Parameter’s <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> is assigned to a <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>, then a single line is placed in the configuration file specified by <a class="reference internal" href="#config-file">Config File</a>, and that line will have the contents <code class="file docutils literal notranslate"><em><span class="pre">Name</span></em> <em><span class="pre">Value</span></em></code>. However, if the <a class="reference internal" href="#config-file">Config File</a> of the Parameter is something without special meaning to Traffic Ops e.g. “foo”, then a line containing <strong>only</strong> the Parameter’s <a class="reference internal" href="#value">Value</a> would be inserted into that file (presuming it also has a Parameter with a Name of <a class="reference internal" href="#parameter-name-location"><span class="std std-ref">“location”</span></a> and a <a class="reference internal" href="#config-file">Config File</a> of “foo”). Additionally, there are a few Names that are treated specially by Traffic Control.</p>
+<dl id="parameter-name-location">
+<dt>location</dt><dd><p>The <a class="reference internal" href="#value">Value</a> of this Parameter is to be interpreted as a path under which the configuration file specified by <a class="reference internal" href="#config-file">Config File</a> shall be found (or written, if not found). Any configuration file that is to exist on a server must have an associated “location” Parameter, even if the contents of the file cannot be affected by Parameters.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>If a single <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> has multiple “location” Parameters for the same <a class="reference internal" href="#config-file">Config File</a> with different <a class="reference internal" href="#parameter-value"><span class="std std-ref">Values</span></a>, the actual location of the generated configuration file is undefined (but will be one of those Parameters’ <a class="reference internal" href="#parameter-value"><span class="std std-ref">Values</span></a>).</p>
+</div>
+</dd>
+<dt>header</dt><dd><p>If the <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> containing this Parameter is assigned to a server, <strong>and</strong> if the <a class="reference internal" href="#config-file">Config File</a> is not one of the special values that Traffic Ops uses to determine special syntax formatting, then the <a class="reference internal" href="#value">Value</a> of this Parameter will be used instead of the typical Traffic Ops header - <em>unless</em> it is the special string “none”, in which case no header will be inserted at all.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>If a single <a class="reference internal" href="#profiles"><span class="std std-ref">Profile</span></a> has multiple “header” Parameters for the same <a class="reference internal" href="#config-file">Config File</a> with different <a class="reference internal" href="#parameter-value"><span class="std std-ref">Values</span></a>, the actual header is undefined (but will be one of those Parameters’ <a class="reference internal" href="#parameter-value"><span class="std std-ref">Values</span></a>).</p>
+</div>
+</dd>
+</dl>
+</div>
+<div class="section" id="secure">
+<span id="parameter-secure"></span><h4>Secure<a class="headerlink" href="#secure" title="Permalink to this headline">¶</a></h4>
+<p>When this is ‘true’, a user requesting to see this Parameter will see the value <code class="docutils literal notranslate"><span class="pre">********</span></code> instead of its actual value if the user’s permission <a class="reference internal" href="../glossary.html#term-role"><span class="xref std std-term">Role</span></a> isn’t ‘admin’.</p>
+</div>
+<div class="section" id="value">
+<span id="parameter-value"></span><h4>Value<a class="headerlink" href="#value" title="Permalink to this headline">¶</a></h4>
+<p>In general, a Parameter’s <em class="dfn">Value</em> can be anything, and in the vast majority of cases the Value is <em>in no way validated by Traffic Control</em>. Usually, though, the Value has a special meaning depending on the values of the Parameter’s <a class="reference internal" href="#config-file">Config File</a> and/or <a class="reference internal" href="#parameter-name"><span class="std std-ref">Name</span></a>.</p>
+<dl class="footnote brackets">
+<dt class="label" id="xml-caveat"><span class="brackets"><a class="fn-backref" href="#id9">1</a></span></dt>
+<dd><p>The contents of this file are not valid XML, but are rather XML-like so developers writing procedures that will consume and parse it should be aware of this, and note the actual syntax as specified in the <a class="reference external" href="https://docs.trafficserver.apache.org/en/6.2.x/admin-guide/files/logs_xml.config.en.html">Apache Traffic Server documentation for logs_xml.config</a></p>
+</dd>
+<dt class="label" id="logs-format"><span class="brackets">2</span><span class="fn-backref">(<a href="#id7">1</a>,<a href="#id10">2</a>)</span></dt>
+<dd><p>This <a class="reference internal" href="#value">Value</a> may safely contain double quotes (<kbd class="kbd docutils literal notranslate">&quot;</kbd>) as they will be backslash-escaped in the generated output.</p>
+</dd>
+<dt class="label" id="logs-filter"><span class="brackets"><a class="fn-backref" href="#id8">3</a></span></dt>
+<dd><p>This <a class="reference internal" href="#value">Value</a> may safely contain backslashes (<kbd class="kbd docutils literal notranslate">\</kbd>) and single quotes (<kbd class="kbd docutils literal notranslate">'</kbd>), as they will be backslash-escaped in the generated output.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="traffic_monitor.html" class="btn btn-neutral float-right" title="Traffic Monitor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="introduction.html" class="btn btn-neutral" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

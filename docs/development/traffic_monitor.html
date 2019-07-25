@@ -1,0 +1,486 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Monitor &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Traffic Monitor APIs" href="traffic_monitor/traffic_monitor_api.html" />
+    <link rel="prev" title="Traffic Router API" href="traffic_router/traffic_router_api.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="building.html">Building Traffic Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops.html">Traffic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops_golang.html">Traffic Ops - Go</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ort/traffic_ops_ort.html">traffic_ops_ort package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal.html">Traffic Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router.html">Traffic Router</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Monitor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#software-requirements">Software Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#project-tree-overview">Project Tree Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#architecture">Architecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#stat-pipeline">Stat Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#health-pipeline">Health Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#peer-pipeline">Peer Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#monitor-config-pipeline">Monitor Config Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ops-config-pipeline">Ops Config Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#events">Events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#state-combiner">State Combiner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aggregated-stat-data">Aggregated Stat Data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aggregated-availability-data">Aggregated Availability Data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#http-data-requests">HTTP Data Requests</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shared-data">Shared Data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#disk-backup">Disk Backup</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#formatting-conventions">Formatting Conventions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-the-developer-environment">Installing The Developer Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-cases">Test Cases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api">API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="traffic_monitor/traffic_monitor_api.html">Traffic Monitor APIs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_stats.html">Traffic Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="documentation_guidelines.html">Documentation Guidelines</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Developer’s Guide</a> &raquo;</li>
+        
+      <li>Traffic Monitor</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/development/traffic_monitor.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-monitor">
+<h1>Traffic Monitor<a class="headerlink" href="#traffic-monitor" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Traffic Monitor is an HTTP service application that monitors <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s, provides health state information to Traffic Router, and collects statistics for use in tools such as Traffic Portal and Traffic Stats. The health state provided by Traffic Monitor is used by Traffic Router to control which <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s are available on the CDN.</p>
+</div>
+<div class="section" id="software-requirements">
+<h2>Software Requirements<a class="headerlink" href="#software-requirements" title="Permalink to this headline">¶</a></h2>
+<p>To work on Traffic Monitor you need a Unix-like (MacOS and Linux are most commonly used) environment that has a working install of Go version 1.7+.</p>
+</div>
+<div class="section" id="project-tree-overview">
+<h2>Project Tree Overview<a class="headerlink" href="#project-tree-overview" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">traffic_monitor/</span></code> - base directory for Traffic Monitor.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">cache/</span></code> - Handler for processing cache results.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">config/</span></code> - Application configuration; in-memory objects from <code class="docutils literal notranslate"><span class="pre">traffic_monitor.cfg</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crconfig/</span></code> - data structure for deserlializing the CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> (historically named “CRConfig”) from JSON.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deliveryservice/</span></code> - aggregates <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> data from cache results.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deliveryservicedata/</span></code> - <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> data structures. This exists separate from <code class="docutils literal notranslate"><span class="pre">deliveryservice</span></code> to avoid circular dependencies.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enum/</span></code> - enumerations and name alias types.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">health/</span></code> - functions for calculating <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> health, and creating health event objects.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">manager/</span></code> - manager goroutines (microthreads).</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">health.go</span></code> - Health request manager. Processes health results, from the health poller -&gt; fetcher -&gt; manager. The health poll is the “heartbeat” containing a small amount of stats, primarily to determine whether a <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> is reachable as quickly as possible. Data is aggregated and inserted into shared thread-safe objects.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">manager.go</span></code> - Contains <code class="docutils literal notranslate"><span class="pre">Start</span></code> function to start all pollers, handlers, and managers.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">monitorconfig.go</span></code> - Monitor configuration manager. Gets data from the monitor configuration poller, which polls Traffic Ops for changes to which caches are monitored and how.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">opsconfig.go</span></code> - Ops configuration manager. Gets data from the ops configuration poller, which polls Traffic Ops for changes to monitoring settings.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">peer.go</span></code> - Peer manager. Gets data from the peer poller -&gt; fetcher -&gt; handler and aggregates it into the shared thread-safe objects.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stat.go</span></code> - Stat request manager. Processes stat results, from the stat poller -&gt; fetcher -&gt; manager. The stat poll is the large statistics poll, containing all stats (such as HTTP response status codes, transactions, <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>statistics, and more). Data is aggregated and inserted into shared thread-safe objects.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">statecombiner.go</span></code> - Manager for combining local and peer states, into a single combined states thread-safe object, for serving the CrStates endpoint.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">datareq/</span></code> - HTTP routing, which has thread-safe health and stat objects populated by stat and health managers.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">peer/</span></code> - Manager for getting and populating peer data from other Traffic Monitors</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">srvhttp/</span></code> - HTTP(S) service. Given a map of endpoint functions, which are lambda closures containing aggregated data objects. If HTTPS, the HTTP service will redirect to HTTPS.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">static/</span></code> - Web interface files (markup, styling and scripting)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">threadsafe/</span></code> - Thread-safe objects for storing aggregated data needed by multiple goroutines (typically the aggregator and HTTP server)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trafficopsdata/</span></code> - Data structure for fetching and storing Traffic Ops data needed from the CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a>. This is primarily mappings, such as <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>servers, and server types.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trafficopswrapper/</span></code> - Thread-safe wrapper around the Traffic Ops client. The client used to not be thread-safe, however, it mostly (possibly entirely) is now. But, the wrapper also serves to overwrite the Traffic Ops <code class="file docutils literal notranslate"><span class="pre">monitoring.json</span></code> values, which are live, with values from the CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a>.</p></li>
+</ul>
+</div>
+<div class="section" id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
+<p>At the highest level, Traffic Monitor polls <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> s, aggregates their data and availability, and serves it at HTTP endpoints in JSON format. In the code, the data flows through microthread (goroutine) pipelines. All stages of the pipeline are independently running microthreads<a class="footnote-reference brackets" href="#id2" id="id1">1</a> . The pipelines are:</p>
+<dl class="simple">
+<dt>stat poll</dt><dd><p>Polls caches for all statistics data. This should be a slower poll, which gets a lot of data.</p>
+</dd>
+<dt>health poll</dt><dd><p>Polls caches for a tiny amount of data, typically system information. This poll is designed to be a heartbeat, determining quickly whether the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> is reachable. Since it’s a small amount of data, it should poll more frequently.</p>
+</dd>
+<dt>peer poll</dt><dd><p>Polls Traffic Monitor peers for their availability data, and aggregates it with its own availability results and that of all other peers.</p>
+</dd>
+<dt>monitor config</dt><dd><p>Polls Traffic Ops for the list of Traffic Monitors and their info.</p>
+</dd>
+<dt>ops config</dt><dd><p>Polls for changes to the Traffic Ops configuration file <code class="file docutils literal notranslate"><span class="pre">traffic_ops.cfg</span></code>, and sends updates to other pollers when the configuration file has changed.</p>
+<ul class="simple">
+<li><p>The ops config manager also updates the shared Traffic Ops client, since it’s the actor which becomes notified of configuration changes requiring a new client.</p></li>
+<li><p>The ops config manager also manages, creates, and recreates the HTTP server, since Traffic Ops configuration changes necessitate restarting the HTTP server.</p></li>
+</ul>
+</dd>
+</dl>
+<p>All microthreads in the pipeline are started by <code class="docutils literal notranslate"><span class="pre">manager/manager.go:Start()</span></code>.</p>
+<div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="../_images/Pipeline.svg"><img alt="../_images/Pipeline.svg" src="../_images/Pipeline.svg" width="70%" /></a>
+<p class="caption"><span class="caption-number">Fig. 30 </span><span class="caption-text">Pipeline Overview</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Technically, some stages which are one-to-one simply call the next stage as a function. For example, the Fetcher calls the Handler as a function in the same microthread. But this isn’t architecturally significant.</p>
+</dd>
+</dl>
+<div class="section" id="stat-pipeline">
+<h3>Stat Pipeline<a class="headerlink" href="#stat-pipeline" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="../_images/Stat_Pipeline.svg"><img alt="../_images/Stat_Pipeline.svg" src="../_images/Stat_Pipeline.svg" width="70%" /></a>
+<p class="caption"><span class="caption-number">Fig. 31 </span><span class="caption-text">The Stats Pipeline</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="simple">
+<dt>poller</dt><dd><p><code class="docutils literal notranslate"><span class="pre">common/poller/poller.go:HttpPoller.Poll()</span></code>. Listens for configuration changes (from the Ops Configuration Manager), and starts its own, internal microthreads - one for each cache to poll. These internal microthreads call the Fetcher at each cache’s poll interval.</p>
+</dd>
+<dt>fetcher</dt><dd><p><code class="docutils literal notranslate"><span class="pre">common/fetcher/fetcher.go:HttpFetcher.Fetch()</span></code>. Fetches the given URL, and passes the returned data to the Handler, along with any errors.</p>
+</dd>
+<dt>handler</dt><dd><p><code class="docutils literal notranslate"><span class="pre">traffic_monitor/cache/cache.go:Handler.Handle()</span></code>. Takes the given result and does all data computation possible with the single result. Currently, this computation primarily involves processing the de-normalized <abbr title="Apache Trafficserver">ATS</abbr> data into Go <code class="docutils literal notranslate"><span class="pre">struct</span></code>s, and processing System data into ‘OutBytes’, <abbr title="kilobits per second">Kbps</abbr>, etc. Precomputed data is then passed to its result channel, which is picked up by the Manager.</p>
+</dd>
+<dt>manager</dt><dd><p><code class="docutils literal notranslate"><span class="pre">traffic_monitor/manager/stat.go:StartStatHistoryManager()</span></code>. Takes preprocessed results, and aggregates them. Aggregated results are then placed in shared data structures. The major data aggregated are <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>statistics, and <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> availability data. See <a class="reference internal" href="#aggregated-stat-data">Aggregated Stat Data</a> and <a class="reference internal" href="#aggregated-availability-data">Aggregated Availability Data</a>.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="health-pipeline">
+<h3>Health Pipeline<a class="headerlink" href="#health-pipeline" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-center" id="id5">
+<a class="reference internal image-reference" href="../_images/Health_Pipeline.svg"><img alt="../_images/Health_Pipeline.svg" src="../_images/Health_Pipeline.svg" width="70%" /></a>
+<p class="caption"><span class="caption-number">Fig. 32 </span><span class="caption-text">The Health Pipeline</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="simple">
+<dt>poller</dt><dd><p><code class="docutils literal notranslate"><span class="pre">common/poller/poller.go:HttpPoller.Poll()</span></code>. Same poller type as the Stat Poller pipeline, with a different handler object.</p>
+</dd>
+<dt>fetcher</dt><dd><p><code class="docutils literal notranslate"><span class="pre">common/fetcher/fetcher.go:HttpFetcher.Fetch()</span></code>. Same fetcher type as the Stat Poller pipeline, with a different handler object.</p>
+</dd>
+<dt>handler</dt><dd><p><code class="docutils literal notranslate"><span class="pre">traffic_monitor/cache/cache.go:Handler.Handle()</span></code>. Same handler type as the Stat Poller pipeline, but constructed with a flag to not pre-compute anything. The health endpoint is of the same form as the stat endpoint, but doesn’t return all stat data. So, it doesn’t pre-compute like the Stat Handler, but only processes the system data, and passes the processed result to its result channel, which is picked up by the Manager.</p>
+</dd>
+<dt>manager</dt><dd><p><code class="docutils literal notranslate"><span class="pre">traffic_monitor/manager/health.go:StartHealthResultManager()</span></code>. Takes preprocessed results, and aggregates them. For the Health pipeline, only health availability data is aggregated. Aggregated results are then placed in shared data structures (lastHealthDurationsThreadsafe, lastHealthEndTimes, etc). See <a class="reference internal" href="#aggregated-availability-data">Aggregated Availability Data</a>.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="peer-pipeline">
+<h3>Peer Pipeline<a class="headerlink" href="#peer-pipeline" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-center" id="id6">
+<a class="reference internal image-reference" href="../_images/Peer_Pipeline.svg"><img alt="../_images/Peer_Pipeline.svg" src="../_images/Peer_Pipeline.svg" width="70%" /></a>
+<p class="caption"><span class="caption-number">Fig. 33 </span><span class="caption-text">The Peers Pipeline</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="simple">
+<dt>poller</dt><dd><p><code class="docutils literal notranslate"><span class="pre">common/poller/poller.go:HttpPoller.Poll()</span></code>. Same poller type as the Stat and Health Poller pipelines, with a different handler object. Its configuration changes come from the Monitor Configuration Manager, and it starts an internal microthread for each peer to poll.</p>
+</dd>
+<dt>fetcher</dt><dd><p><code class="docutils literal notranslate"><span class="pre">common/fetcher/fetcher.go:HttpFetcher.Fetch()</span></code>. Same fetcher type as the Stat and Health Poller pipeline, with a different handler object.</p>
+</dd>
+<dt>handler</dt><dd><p><code class="docutils literal notranslate"><span class="pre">traffic_monitor/cache/peer.go:Handler.Handle()</span></code>. Decodes the JSON result into an object, and without further processing passes to its result channel, which is picked up by the Manager.</p>
+</dd>
+<dt>manager</dt><dd><p><code class="docutils literal notranslate"><span class="pre">traffic_monitor/manager/peer.go:StartPeerManager()</span></code>. Takes JSON peer Traffic Monitor results, and aggregates them. The availability of the Peer Traffic Monitor itself, as well as all <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> availability from the given peer result, is stored in the shared <code class="docutils literal notranslate"><span class="pre">peerStates</span></code> object. Results are then aggregated via a call to the <code class="docutils literal notranslate"><span class="pre">combineState()</span></code> lambda, which signals the State Combiner microthread (which stores the combined availability in the shared object <code class="docutils literal notranslate"><span class="pre">combinedStates</span></code>; See <a class="reference internal" href="#state-combiner">State Combiner</a>).</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="monitor-config-pipeline">
+<h3>Monitor Config Pipeline<a class="headerlink" href="#monitor-config-pipeline" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-center" id="id7">
+<a class="reference internal image-reference" href="../_images/Monitor_Pipeline.svg"><img alt="../_images/Monitor_Pipeline.svg" src="../_images/Monitor_Pipeline.svg" width="70%" /></a>
+<p class="caption"><span class="caption-number">Fig. 34 </span><span class="caption-text">The Monitor Configuration Pipeline</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="simple">
+<dt>poller</dt><dd><p><code class="docutils literal notranslate"><span class="pre">common/poller/poller.go:MonitorConfigPoller.Poll()</span></code>. The Monitor Configuration poller, on its interval, polls Traffic Ops for the Monitor configuration, and writes the polled value to its result channel, which is read by the Manager.</p>
+</dd>
+<dt>manager</dt><dd><p><code class="docutils literal notranslate"><span class="pre">traffic_monitor/manager/monitorconfig.go:StartMonitorConfigManager()</span></code>. Listens for results from the poller, and processes them. Cache changes are written to channels read by the Health, Stat, and Peer pollers. In the Shared Data objects, this also sets the list of new <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s and removes ones which no longer exist, and sets the list of peer Traffic Monitors.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="ops-config-pipeline">
+<h3>Ops Config Pipeline<a class="headerlink" href="#ops-config-pipeline" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-center" id="id8">
+<a class="reference internal image-reference" href="../_images/Ops-Config_Pipeline.svg"><img alt="../_images/Ops-Config_Pipeline.svg" src="../_images/Ops-Config_Pipeline.svg" width="70%" /></a>
+<p class="caption"><span class="caption-number">Fig. 35 </span><span class="caption-text">The Ops Configuration Pipeline</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="simple">
+<dt>poller</dt><dd><p><code class="docutils literal notranslate"><span class="pre">common/poller/poller.go:FilePoller.Poll()</span></code>. Polls for changes to the Traffic Ops configuration file <code class="file docutils literal notranslate"><span class="pre">traffic_ops.cfg</span></code>, and writes the changed configuration to its result channel, which is read by the Handler.</p>
+</dd>
+<dt>handler</dt><dd><p><code class="docutils literal notranslate"><span class="pre">common/handler/handler.go:OpsConfigFileHandler.Listen()</span></code>. Takes the given raw configuration, un-marshals the JSON into an object, and writes the object to its channel, which is read by the Manager, along with any error.</p>
+</dd>
+<dt>manager</dt><dd><p><code class="docutils literal notranslate"><span class="pre">traffic_monitor/manager/monitorconfig.go:StartMonitorConfigManager()</span></code>. Listens for new configurations, and processes them. When a new configuration is received, a new HTTP dispatch map is created via <code class="docutils literal notranslate"><span class="pre">traffic_monitor/datareq/datareq.go:MakeDispatchMap()</span></code>, and the HTTP server is restarted with the new dispatch map. The Traffic Ops client is also recreated, and stored in its shared data object. The Ops Configuration change subscribers and Traffic Ops Client change subscribers (the Monitor Configuration poller) are also passed the new Traffic Ops configuration and new Traffic Ops client.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="events">
+<h3>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">events</span></code> shared data object is passed to each pipeline microthread which needs to signal events. Most of them do. Events are then logged, and visible in the UI as well as an HTTP JSON endpoint. Most events are <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> becoming available or unavailable, but include other things such as peer availability changes.</p>
+</div>
+<div class="section" id="state-combiner">
+<h3>State Combiner<a class="headerlink" href="#state-combiner" title="Permalink to this headline">¶</a></h3>
+<p>The State Combiner is a microthread started in <code class="docutils literal notranslate"><span class="pre">traffic_monitor/manager/manager.go:Start()</span></code> via <code class="docutils literal notranslate"><span class="pre">traffic_monitor/manager/statecombiner.go:StartStateCombiner()</span></code>, which listens for signals to combine states. It should be signaled by any pipeline which updates the local or peer availability shared data objects, <code class="docutils literal notranslate"><span class="pre">localStates</span></code> and <code class="docutils literal notranslate"><span class="pre">peerStates</span></code>. It holds the thread-safe shared data objects for local states and peer states, so no data is passed or returned, only a signal. When a signal is received, it combines the local and peer states optimistically. That is, if a <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> is marked available locally or by any peer, that <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> is marked available in the combined states. There exists a variable to combine pessimistically, which may be set at compile time (it’s unusual for a CDN to operate well with pessimistic <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> availability). Combined data is stored in the thread-safe shared data object <code class="docutils literal notranslate"><span class="pre">combinedStates</span></code>.</p>
+</div>
+<div class="section" id="aggregated-stat-data">
+<h3>Aggregated Stat Data<a class="headerlink" href="#aggregated-stat-data" title="Permalink to this headline">¶</a></h3>
+<p>The Stat pipeline Manager is responsible for aggregating stats from all <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> s, into <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s statistics. This is done via a call to <code class="docutils literal notranslate"><span class="pre">traffic_monitor/deliveryservice/stat.go:CreateStats()</span></code>.</p>
+</div>
+<div class="section" id="aggregated-availability-data">
+<h3>Aggregated Availability Data<a class="headerlink" href="#aggregated-availability-data" title="Permalink to this headline">¶</a></h3>
+<p>Both the Stat and Health pipelines aggregate availability data received from caches. This is done via a call to <code class="docutils literal notranslate"><span class="pre">traffic_monitor/deliveryservice/health.go:CalcAvailability()</span></code> followed by a call to <code class="docutils literal notranslate"><span class="pre">combineState()</span></code>. The <code class="docutils literal notranslate"><span class="pre">CalcAvailability</span></code> function calculates the availability of each <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> from the result of polling it, that is, local availability. The <code class="docutils literal notranslate"><span class="pre">combineState()</span></code> function is a lambda passed to the Manager, which signals the State Combiner microthread, which will combine the local and peer Traffic Monitor availability data, and insert it into the shared data <code class="docutils literal notranslate"><span class="pre">combinedStates</span></code> object.</p>
+</div>
+<div class="section" id="http-data-requests">
+<h3>HTTP Data Requests<a class="headerlink" href="#http-data-requests" title="Permalink to this headline">¶</a></h3>
+<p>Data is provided to HTTP requests via the thread-safe shared data objects (see <a class="reference internal" href="#shared-data">Shared Data</a>). These objects are closed in lambdas created via <code class="docutils literal notranslate"><span class="pre">traffic_monitor/datareq/datareq.go:MakeDispatchMap()</span></code>. This is called by the Ops Configuration Manager when it recreates the HTTP(S) server. Each HTTP(S) endpoint is mapped to a function which closes around the shared data objects it needs, and takes the request data it needs (such as query parameters). Each endpoint function resides in its own file in <code class="docutils literal notranslate"><span class="pre">traffic_monitor/datareq/</span></code>. Because each Go HTTP routing function must be a <code class="docutils literal notranslate"><span class="pre">http.HandlerFunc</span></code>, wrapper functions take the endpoint functions and return <code class="docutils literal notranslate"><span class="pre">http.HandlerFunc</span></code> functions which call them, and which are stored in the dispatch map, to be registered with the HTTP(S) server.</p>
+</div>
+<div class="section" id="shared-data">
+<h3>Shared Data<a class="headerlink" href="#shared-data" title="Permalink to this headline">¶</a></h3>
+<p>Processed and aggregated data must be shared between the end of the stat and health processing pipelines, and HTTP requests. The <abbr title="Communicating Sequential Processes">CSP</abbr> paradigm of idiomatic Go does not work efficiently with storing and sharing state. While not idiomatic Go, shared mutexed data structures are faster and simpler than <abbr title="Communicating Sequential Processes">CSP</abbr> manager microthreads for each data object. Traffic Monitor has many thread-safe shared data types and objects. All shared data objects can be seen in <code class="docutils literal notranslate"><span class="pre">manager/manager.go:Start()</span></code>, where they are created and passed to the various pipeline stage microthreads that need them. Their respective types all include the word <code class="docutils literal notranslate"><span class="pre">Threadsafe</span></code>, and can be found in <code class="docutils literal notranslate"><span class="pre">traffic_monitor/threadsafe/</span></code> as well as, for dependency reasons, various appropriate directories. Currently, all thread-safe shared data types use mutexes. In the future, these could be changed to lock-free or wait-free structures, if the performance needs outweighed the readability and correctness costs. They could also easily be changed to internally be manager microthreads and channels, if being idiomatic were deemed more important than readability or performance.</p>
+</div>
+<div class="section" id="disk-backup">
+<h3>Disk Backup<a class="headerlink" href="#disk-backup" title="Permalink to this headline">¶</a></h3>
+<p>The Traffic Monitor configuration and CDN <a class="reference internal" href="../glossary.html#term-snapshot"><span class="xref std std-term">Snapshot</span></a> are both stored as backup files (<code class="file docutils literal notranslate"><span class="pre">tmconfig.backup</span></code> and <code class="file docutils literal notranslate"><span class="pre">crconfig.backup</span></code> or whatever you set the values to in the configuration file). This allows the monitor to come up and continue serving even if Traffic Ops is down. These files are updated any time a valid configuration is received from Traffic Ops, so if Traffic Ops goes down and Traffic Monitor is restarted it can still serve the previous data. These files can also be manually edited and the changes will be reloaded into Traffic Monitor so that if Traffic Ops is down or unreachable for an extended period of time manual updates can be done. If on initial startup Traffic Ops is unavailable then Traffic Monitor will continue through its exponential back-off until it hits the max retry interval, at that point it will create an unauthenticated Traffic Ops session and use the data from disk. It will still poll Traffic Ops for updates though and if it successfully gets through then it will login at that point.</p>
+</div>
+</div>
+<div class="section" id="formatting-conventions">
+<h2>Formatting Conventions<a class="headerlink" href="#formatting-conventions" title="Permalink to this headline">¶</a></h2>
+<p>Go code should be formatted with <code class="docutils literal notranslate"><span class="pre">gofmt</span></code>. See also <code class="file docutils literal notranslate"><span class="pre">CONTRIBUTING.md</span></code>.</p>
+</div>
+<div class="section" id="installing-the-developer-environment">
+<h2>Installing The Developer Environment<a class="headerlink" href="#installing-the-developer-environment" title="Permalink to this headline">¶</a></h2>
+<p>To install the Traffic Monitor Developer environment:</p>
+<ol class="arabic simple">
+<li><p>Install <a class="reference external" href="https://golang.org/doc/install">Go</a> version 1.7 or greater</p></li>
+<li><p>Clone the <a class="reference external" href="https://github.com/apache/trafficcontrol">Traffic Control repository</a> using <code class="docutils literal notranslate"><span class="pre">git</span></code>, into <code class="docutils literal notranslate"><span class="pre">$GOPATH/src/github.com/apache/trafficcontrol</span></code></p></li>
+<li><p>Change directories into <code class="docutils literal notranslate"><span class="pre">$GOPATH/src/github.com/apache/trafficcontrol/traffic_monitor</span></code></p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">./build.sh</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="test-cases">
+<h2>Test Cases<a class="headerlink" href="#test-cases" title="Permalink to this headline">¶</a></h2>
+<p>Tests can be executed by running <code class="docutils literal notranslate"><span class="pre">go</span> <span class="pre">test</span> <span class="pre">./...</span></code> at the root of the <code class="docutils literal notranslate"><span class="pre">traffic_monitor</span></code> project.</p>
+</div>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="traffic_monitor/traffic_monitor_api.html#tm-api"><span class="std std-ref">Traffic Monitor APIs</span></a></p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="traffic_monitor/traffic_monitor_api.html" class="btn btn-neutral float-right" title="Traffic Monitor APIs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="traffic_router/traffic_router_api.html" class="btn btn-neutral" title="Traffic Router API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

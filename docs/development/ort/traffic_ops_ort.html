@@ -1,0 +1,687 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>traffic_ops_ort package &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="traffic_ops_ort.configuration module" href="traffic_ops_ort.configuration.html" />
+    <link rel="prev" title="Traffic Ops - Go" href="../traffic_ops_golang.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../building.html">Building Traffic Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops.html">Traffic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops_golang.html">Traffic Ops - Go</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">traffic_ops_ort package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#arguments-and-flags">Arguments and Flags</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#strings-with-special-meaning-to-ort">Strings with Special Meaning to ORT</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#remap-override">Remap Override</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-contents">Module Contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="traffic_ops_ort.configuration.html">traffic_ops_ort.configuration module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traffic_ops_ort.main_routines.html">traffic_ops_ort.main_routines module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traffic_ops_ort.packaging.html">traffic_ops_ort.packaging module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traffic_ops_ort.to_api.html">traffic_ops_ort.to_api module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traffic_ops_ort.utils.html">traffic_ops_ort.utils module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal.html">Traffic Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation_guidelines.html">Documentation Guidelines</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Developer’s Guide</a> &raquo;</li>
+        
+      <li>traffic_ops_ort package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/development/ort/traffic_ops_ort.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-traffic_ops_ort">
+<span id="traffic-ops-ort-package"></span><h1>traffic_ops_ort package<a class="headerlink" href="#module-traffic_ops_ort" title="Permalink to this headline">¶</a></h1>
+<p>This package is meant to fully implement the Traffic Ops Operational
+Readiness Test - which was originally written in a single, chickenscratch
+Perl script. When the <a class="reference internal" href="#traffic_ops_ort.main" title="traffic_ops_ort.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">main()</span></code></a> function is run, it acts (more or less)
+exactly like that legacy script, with the ability to set system configuration
+files and start, stop, and restart HTTP cache servers etc.</p>
+<p>This package provides an executable script named <strong class="program">traffic_ops_ort</strong></p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>There are two main ways to invoke <strong class="program">traffic_ops_ort</strong>. The first method uses what’s referred
+to as the “legacy call signature” and is meant to match the Perl command line arguments.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">#84 </span><span class="caption-text">Legacy Call Signature</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>traffic_ops_ort [-k] [-h] [-v] [--dispersion DISP] [--login_dispersion DISP]
+         [--retries RETRIES] [--wait_for_parents INT] [--rev_proxy_disable]
+         [--ts_root PATH] MODE LOG_LEVEL TO_URL LOGIN``
+</pre></div>
+</div>
+</div>
+<p>The second method - called the “new call signature” - aims to reduce the complexity of the
+<a class="reference internal" href="../../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> command line. Rather than require a URL and “login string” for connecting and
+authenticating with the Traffic Ops server, these pieces of information are optional and may be
+provided by the <a class="reference internal" href="#cmdoption-traffic-ops-ort-arg-to-url"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to_url</span></code></a>, <a class="reference internal" href="#cmdoption-traffic-ops-ort-u"><code class="xref std std-option docutils literal notranslate"><span class="pre">-u</span></code></a>/<a class="reference internal" href="#cmdoption-traffic-ops-ort-u"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to_user</span></code></a>, and
+<a class="reference internal" href="#cmdoption-traffic-ops-ort-p"><code class="xref std std-option docutils literal notranslate"><span class="pre">-p</span></code></a>/<a class="reference internal" href="#cmdoption-traffic-ops-ort-p"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to_password</span></code></a> options, respectively. If they are NOT provided, then their values
+will be obtained from the <span class="target" id="index-0"></span><a class="reference internal" href="../../tools/toaccess.html#envvar-TO_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_URL</span></code></a>, <span class="target" id="index-1"></span><a class="reference internal" href="../../tools/toaccess.html#envvar-TO_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_USER</span></code></a>, and <span class="target" id="index-2"></span><a class="reference internal" href="../../tools/toaccess.html#envvar-TO_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_PASSWORD</span></code></a> environment
+variables, respectively. Note that <strong class="program">traffic_ops_ort</strong> cannot be run using the new call
+signature without providing a definition for each of these, either on the command line or in the
+execution environment.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">#85 </span><span class="caption-text">New call signature</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>traffic_ops_ort [-k] [-h] [-v] [--dispersion DISP] [--login_dispersion DISP]
+     [--retries RETRIES] [--wait_for_parents INT] [--rev_proxy_disable]
+     [--ts_root PATH] [-l LOG_LEVEL] [-u USER] [-p PASSWORD] [--to_url URL] MODE
+</pre></div>
+</div>
+</div>
+<p>These two call signatures should not be mixed, and <strong class="program">traffic_ops_ort</strong> will exit with an
+error if they are.</p>
+<div class="section" id="arguments-and-flags">
+<h3>Arguments and Flags<a class="headerlink" href="#arguments-and-flags" title="Permalink to this headline">¶</a></h3>
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-h">
+<code class="sig-name descname">-h</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--help</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-traffic-ops-ort-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print usage information and exit</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-v">
+<code class="sig-name descname">-v</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--version</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-traffic-ops-ort-v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print version information and exit</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-k">
+<code class="sig-name descname">-k</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--insecure</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-traffic-ops-ort-k" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional flag which, when used, disables the checking of SSL certificates for validity</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-dispersion">
+<code class="sig-name descname">--dispersion</code><code class="sig-prename descclassname"> DISP</code><a class="headerlink" href="#cmdoption-traffic-ops-ort-dispersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait a random number between 0 and <code class="docutils literal notranslate"><span class="pre">DISP</span></code> seconds before starting. This option <em>only</em> has any
+effect if <a class="reference internal" href="#cmdoption-traffic-ops-ort-arg-mode"><code class="xref std std-option docutils literal notranslate"><span class="pre">MODE</span></code></a> is <code class="docutils literal notranslate"><span class="pre">SYNCDS</span></code>. (Default: 300)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-login-dispersion">
+<code class="sig-name descname">--login_dispersion</code><code class="sig-prename descclassname"> DISP</code><a class="headerlink" href="#cmdoption-traffic-ops-ort-login-dispersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait a random number between 0 and <code class="docutils literal notranslate"><span class="pre">DISP</span></code> seconds before authenticating with Traffic Ops.
+(Default: 0)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-retries">
+<code class="sig-name descname">--retries</code><code class="sig-prename descclassname"> RETRIES</code><a class="headerlink" href="#cmdoption-traffic-ops-ort-retries" title="Permalink to this definition">¶</a></dt>
+<dd><p>If connection to Traffic Ops fails, retry <code class="docutils literal notranslate"><span class="pre">RETRIES</span></code> times before giving up (Default: 3).</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-wait-for-parents">
+<code class="sig-name descname">--wait_for_parents</code><code class="sig-prename descclassname"> INT</code><a class="headerlink" href="#cmdoption-traffic-ops-ort-wait-for-parents" title="Permalink to this definition">¶</a></dt>
+<dd><p>If <code class="docutils literal notranslate"><span class="pre">INT</span></code> is anything but 0, do not apply updates if parents of this server have pending
+updates. This option requires an integer argument for legacy compatibility reasons; 0 is
+considered <code class="docutils literal notranslate"><span class="pre">False</span></code>, anything else is <code class="docutils literal notranslate"><span class="pre">True</span></code>. (Default: 1)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-rev-prox-disable">
+<code class="sig-name descname">--rev_prox_disable</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-traffic-ops-ort-rev-prox-disable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make requests directly to the Traffic Ops server, bypassing a reverse proxy if one exists.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-ts-root">
+<code class="sig-name descname">--ts_root</code><code class="sig-prename descclassname"> PATH</code><a class="headerlink" href="#cmdoption-traffic-ops-ort-ts-root" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional flag which, if present, specifies the absolute path to the install directory of
+Apache Traffic Server. A common alternative to the default is <code class="docutils literal notranslate"><span class="pre">/opt/trafficserver</span></code>.
+(Default: <code class="docutils literal notranslate"><span class="pre">/</span></code>)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-arg-mode">
+<code class="sig-name descname">MODE</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-traffic-ops-ort-arg-mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies <strong class="program">traffic_ops_ort</strong>’s mode of operation. Must be one of:</p>
+<dl>
+<dt>REPORT</dt><dd><p>Runs as though the mode was BADASS, but doesn’t actually change anything on the system.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>This is normally useful with a verbose <a class="reference internal" href="#cmdoption-traffic-ops-ort-arg-log-level"><code class="xref std std-option docutils literal notranslate"><span class="pre">LOG_LEVEL</span></code></a> to check the state of
+the system</p>
+</div>
+</dd>
+<dt>INTERACTIVE</dt><dd><p>Runs as though the mode was BADASS, but asks the user for confirmation before making changes</p>
+</dd>
+<dt>REVALIDATE</dt><dd><p>Will not restart Apache Traffic Server, install packages, or enable/disable system services
+and will exit immediately if this server does not have revalidations pending. Also, the only
+configuration file that will be updated is <cite>regex_revalidate.config</cite>.</p>
+</dd>
+<dt>SYNCDS</dt><dd><p>Will not restart Apache Traffic Server, and will exit immediately if this server does not
+have updates pending. Otherwise, the same as BADASS</p>
+</dd>
+<dt>BADASS</dt><dd><p>Applies all pending configuration in Traffic Ops, and attempts to solve encountered problems
+when possible. This will install packages, enable/disable system services, and will start or
+restart Apache Traffic Server as necessary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-arg-log-level">
+<code class="sig-name descname">LOG_LEVEL</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">-l</code><code class="sig-prename descclassname"> LOG_LEVEL</code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--log_level</code><code class="sig-prename descclassname"> LOG_LEVEL</code><a class="headerlink" href="#cmdoption-traffic-ops-ort-arg-log-level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the verbosity of output provided by <strong class="program">traffic_ops_ort</strong>. This argument is positional
+in the legacy call signature, but optional in the new call signature, wherein it has a default
+value of “WARN”. Must be one of (case-insensitive):</p>
+<dl>
+<dt>NONE</dt><dd><p>Will output nothing, not even fatal errors.</p>
+</dd>
+<dt>CRITICAL</dt><dd><p>Will only output error messages that indicate an unrecoverable error.</p>
+</dd>
+<dt>FATAL</dt><dd><p>A synonym for “CRITICAL”</p>
+</dd>
+<dt>ERROR</dt><dd><p>Will output more general errors about conditions that are causing problems of some kind.</p>
+</dd>
+<dt>WARN</dt><dd><p>In addition to error information, will output warnings about conditions that may cause
+problems, or possible misconfiguration.</p>
+</dd>
+<dt>INFO</dt><dd><p>Outputs informational messages about what <strong class="program">traffic_ops_ort</strong> is doing as it
+progresses.</p>
+</dd>
+<dt>DEBUG</dt><dd><p>Outputs detailed debug information, including stack traces.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not all stack traces indicate problems with <strong class="program">traffic_ops_ort</strong>. Stack
+traces are printed whenever an exception is encountered, whether or not it could be
+handled.</p>
+</div>
+</dd>
+<dt>TRACE</dt><dd><p>A synonym for “DEBUG”</p>
+</dd>
+<dt>ALL</dt><dd><p>A synonym for “DEBUG”</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All logging is sent to STDERR. INTERACTIVE <a class="reference internal" href="#cmdoption-traffic-ops-ort-arg-mode"><code class="xref std std-option docutils literal notranslate"><span class="pre">MODE</span></code></a> prompts are printed to STDOUT</p>
+</div>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-arg-to-url">
+<code class="sig-name descname">TO_URL</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--to_url</code><code class="sig-prename descclassname"> TO_URL</code><a class="headerlink" href="#cmdoption-traffic-ops-ort-arg-to-url" title="Permalink to this definition">¶</a></dt>
+<dd><p>This must be at minimum an <abbr title="Fully Qualified Domain Name">FQDN</abbr> that resolves to the
+Traffic Ops server, but may optionally include the schema and/or port number. E.g.
+<code class="docutils literal notranslate"><span class="pre">https://trafficops.infra.ciab.test:443</span></code>, <code class="docutils literal notranslate"><span class="pre">https://trafficops.infra.ciab.test</span></code>,
+<code class="docutils literal notranslate"><span class="pre">trafficops.infra.ciab.test:443</span></code>, and <code class="docutils literal notranslate"><span class="pre">trafficops.infra.ciab.test</span></code> are all acceptable, and
+in fact are all equivalent. When given a value without a schema, HTTPS will be the assumed
+protocol, and when a port number is not present, 443 will be assumed except in the case that
+the schema <em>is</em> provided and is <code class="docutils literal notranslate"><span class="pre">http://</span></code> (case-insensitive) in which case 80 will be assumed.</p>
+<p>This argument is positional in the legacy call signature, but is optional in the new call
+signature. When the new call signature is used and this option is not present on the command
+line, its value will be obtained from <span class="target" id="index-3"></span><a class="reference internal" href="../../tools/toaccess.html#envvar-TO_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_URL</span></code></a>. Note that <strong class="program">traffic_ops_ort</strong>
+cannot be run using the new call signature unless this value is defined, either on the command
+line or in the execution environment.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-arg-login">
+<code class="sig-name descname">LOGIN</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-traffic-ops-ort-arg-login" title="Permalink to this definition">¶</a></dt>
+<dd><p>The information used to authenticate with Traffic Ops. This must consist of a username and a
+password, delimited by a colon (<code class="docutils literal notranslate"><span class="pre">:</span></code>). E.g. <code class="docutils literal notranslate"><span class="pre">admin:twelve</span></code>. This argument is not used in the
+new call signature, instead <a class="reference internal" href="#cmdoption-traffic-ops-ort-u"><code class="xref std std-option docutils literal notranslate"><span class="pre">-u</span></code></a>/<a class="reference internal" href="#cmdoption-traffic-ops-ort-u"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to_user</span></code></a> and
+<a class="reference internal" href="#cmdoption-traffic-ops-ort-p"><code class="xref std std-option docutils literal notranslate"><span class="pre">-p</span></code></a>/<a class="reference internal" href="#cmdoption-traffic-ops-ort-p"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to_password</span></code></a> are used to separately set the authentication user and
+password, respectively.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The first colon found in this string is considered the delimiter. There is no way
+to escape the delimeter. This effectively means that usernames containing colons cannot be
+used to authenticate with Traffic Ops, though passwords containing colons should be fine.</p>
+</div>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-u">
+<code class="sig-name descname">-u</code><code class="sig-prename descclassname"> USER</code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--to_user</code><code class="sig-prename descclassname"> USER</code><a class="headerlink" href="#cmdoption-traffic-ops-ort-u" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the username of the user as whom to authenticate when connecting to Traffic Ops. This
+option is only available using the new call signature. If not provided when using said new call
+signature, the value will be obtained from the <span class="target" id="index-4"></span><a class="reference internal" href="../../tools/toaccess.html#envvar-TO_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_USER</span></code></a> environment variable. Note that
+<strong class="program">traffic_ops_ort</strong> cannot be run using the new call signature unless this value is
+defined, either on the command line or in the execution environment.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-ops-ort-p">
+<code class="sig-name descname">-p</code><code class="sig-prename descclassname"> PASSWORD</code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--to_password</code><code class="sig-prename descclassname"> PASSWORD</code><a class="headerlink" href="#cmdoption-traffic-ops-ort-p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the password of the user identified by <span class="target" id="index-5"></span><a class="reference internal" href="../../tools/toaccess.html#envvar-TO_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_USER</span></code></a> (or
+<a class="reference internal" href="#cmdoption-traffic-ops-ort-u"><code class="xref std std-option docutils literal notranslate"><span class="pre">-u</span></code></a>/<a class="reference internal" href="#cmdoption-traffic-ops-ort-u"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to_user</span></code></a> if overridden) to use when authenticating to Traffic Ops. This
+option is only available using the new call signature. If not provided when using said new call
+signature, the value will be obtained from the <span class="target" id="index-6"></span><a class="reference internal" href="../../tools/toaccess.html#envvar-TO_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_PASSWORD</span></code></a>  environment variable. Note
+that <strong class="program">traffic_ops_ort</strong> cannot be run using the new call signature unless this value is
+defined, either on the command line or in the execution environment.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="environment-variables">
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>
+<dl class="envvar">
+<dt id="envvar-TO_URL">
+<code class="sig-name descname">TO_URL</code><a class="headerlink" href="#envvar-TO_URL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should be set to the URL of a Traffic Ops server. This doesn’t need to be a full URL, an
+<abbr title="Fully Qualified Domain Name">FQDN</abbr> will do just as well. It may also omit the port
+number on which the Traffic Ops server listens for incoming connections - port 443 will be
+assumed unless <span class="target" id="index-7"></span><a class="reference internal" href="../../tools/toaccess.html#envvar-TO_URL"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TO_URL</span></code></a> is prefixed by <code class="docutils literal notranslate"><span class="pre">http://</span></code> (case-insensitive), in which case
+port 80 will be assumed. The value of this environment variable will only be considered if
+<strong class="program">traffic_ops_ort</strong> was invoked using the new call signature, which allows it to be
+overridden on the command line by the value of <a class="reference internal" href="#cmdoption-traffic-ops-ort-arg-to-url"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to_url</span></code></a>.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-TO_USER">
+<code class="sig-name descname">TO_USER</code><a class="headerlink" href="#envvar-TO_USER" title="Permalink to this definition">¶</a></dt>
+<dd><p>The username to use when authenticating to the Traffic Ops server. The value of this environment
+variable will only be considered if <strong class="program">traffic_ops_ort</strong> was invoked using the new call
+signature, which allows it to be overridden on the command line by the value of
+<a class="reference internal" href="#cmdoption-traffic-ops-ort-u"><code class="xref std std-option docutils literal notranslate"><span class="pre">-u</span></code></a>/<a class="reference internal" href="#cmdoption-traffic-ops-ort-u"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to_user</span></code></a>.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-TO_PASSWORD">
+<code class="sig-name descname">TO_PASSWORD</code><a class="headerlink" href="#envvar-TO_PASSWORD" title="Permalink to this definition">¶</a></dt>
+<dd><p>The password to use when authenticating to the Traffic Ops server. The value of this environment
+variable will only be considered if <strong class="program">traffic_ops_ort</strong> was invoked using the new call
+signature, which allows it to be overridden on the command line by the value of
+<a class="reference internal" href="#cmdoption-traffic-ops-ort-p"><code class="xref std std-option docutils literal notranslate"><span class="pre">-p</span></code></a>/<a class="reference internal" href="#cmdoption-traffic-ops-ort-p"><code class="xref std std-option docutils literal notranslate"><span class="pre">--to_password</span></code></a>.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="strings-with-special-meaning-to-ort">
+<span id="ort-special-strings"></span><h2>Strings with Special Meaning to ORT<a class="headerlink" href="#strings-with-special-meaning-to-ort" title="Permalink to this headline">¶</a></h2>
+<p>When processing configuration files, if <strong class="program">traffic_ops_ort</strong> encounters any of the strings in
+the <a class="reference internal" href="#ort-replacement-strings"><span class="std std-ref">Replacement Strings</span></a> table it will perform the indicated
+replacement. This means that these strings can be used to create templates in <a class="reference internal" href="../../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a>
+<a class="reference internal" href="../../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a> and certain <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> configuration fields.</p>
+<span id="ort-replacement-strings"></span><table class="docutils align-default" id="id3">
+<caption><span class="caption-number">Table 45 </span><span class="caption-text">Replacement Strings</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 73%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>String</p></th>
+<th class="head"><p>Replaced With</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">__CACHE_IPV4__</span></code></p></td>
+<td><p>The IPv4 address of the <a class="reference internal" href="../../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> on which
+<strong class="program">traffic_ops_ort</strong> is running.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">__FULL_HOSTNAME__</span></code></p></td>
+<td><p>The full hostname (i.e. including the full domain to which it
+belongs) of the <a class="reference internal" href="../../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> on which
+<strong class="program">traffic_ops_ort</strong> is running.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">__HOSTNAME__</span></code></p></td>
+<td><p>The (short) hostname of the <a class="reference internal" href="../../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> on which
+<strong class="program">traffic_ops_ort</strong> is running.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">__RETURN__</span></code></p></td>
+<td><p>A newline character (<code class="docutils literal notranslate"><span class="pre">\n</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">__SERVER_TCP_PORT__</span></code></p></td>
+<td><p>If the <a class="reference internal" href="../../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> on which <strong class="program">traffic_ops_ort</strong> is
+being run has a TCP port configured to something besides <code class="docutils literal notranslate"><span class="pre">80</span></code>,
+this will be replaced with that TCP port value. <em>If it</em> <strong>is</strong>
+<em>set to ``80``, this string will simply be removed,</em> <strong>NOT</strong>
+<em>replaced with</em> <strong>ANYTHING</strong>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">##OVERRIDE##</span></code></p></td>
+<td><p>This string is only valid in the content of files named
+“remap.config”. It is further described in <a class="reference internal" href="#remap-override">Remap Override</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version ATCv4.0: </span>The use of <code class="docutils literal notranslate"><span class="pre">__RETURN__</span></code> in lieu of a true newline character is (finally) no longer necessary,
+and the ability to do so will be removed in the future.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is currently no way to indicate that a server’s IPv6 address should be inserted -
+only IPv4 is supported.</p>
+</div>
+<div class="section" id="remap-override">
+<span id="ort-remap-override"></span><h3>Remap Override<a class="headerlink" href="#remap-override" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The ANY_MAP <code class="docutils literal notranslate"><span class="pre">##OVERRIDE##</span></code> special string is a temporary solution and will be
+deprecated once Delivery Service Versioning is implemented. For this reason it is suggested that
+it not be used unless absolutely necessary.</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">##OVERRIDE##</span></code> template string allows the <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> <a class="reference internal" href="../../overview/delivery_services.html#ds-raw-remap"><span class="std std-ref">Raw Remap Text</span></a> field
+to override to fully override the <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>’s line in the
+<a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/files/remap.config.en.html">remap.config ATS configuration file</a>,
+generated by Traffic Ops. The end result is the original, generated line commented out, prepended
+with <code class="docutils literal notranslate"><span class="pre">##OVERRIDDEN##</span></code> and the <code class="docutils literal notranslate"><span class="pre">##OVERRIDE##</span></code> rule is activated in its place. This behavior is
+used to incrementally deploy plugins used in this configuration file. Normally, this entails cloning
+the <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> that will have the plugin, ensuring it is assigned to a subset of the
+<a class="reference internal" href="../../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> that serve the <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> content, then using this
+<code class="docutils literal notranslate"><span class="pre">##OVERRIDE##</span></code> rule to create a <code class="docutils literal notranslate"><span class="pre">remap.config</span></code> rule that will use the plugin, overriding the
+normal rule. Simply grow the subset over time at the desired rate to slowly deploy the plugin. When
+it encompasses all <a class="reference internal" href="../../glossary.html#term-cache-servers"><span class="xref std std-term">cache servers</span></a> that serve the original <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>’s content,
+the “override <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>” can be deleted and the original can use a
+non-<code class="docutils literal notranslate"><span class="pre">##OVERRIDE##</span></code> <a class="reference internal" href="../../overview/delivery_services.html#ds-raw-remap"><span class="std std-ref">Raw Remap Text</span></a> to add the plugin.</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">#86 </span><span class="caption-text">Example of Remap Override</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># This is the original line as generated by Traffic Ops
+map http://from.example.com/ http://to.example.com/
+
+# This is the raw remap text as configured on the delivery service
+##OVERRIDE## map http://from.example.com/ http://to.example.com/ some_plugin.so
+
+# The resulting content is what actually winds up in the remap.config file:
+##OVERRIDE##
+map http://from.example.com/ http://to.example.com/ some_plugin.so
+##OVERRIDDEN## map http://from.example.com/ http://to.example.com/
+</pre></div>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The “from” URL must exactly match for this to properly work (e.g. including trailing
+URL ‘/’), otherwise <abbr title="Apache Traffic Server">ATS</abbr> may fail to initialize or reload while
+processing <code class="file docutils literal notranslate"><span class="pre">remap.config</span></code>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To assist in troubleshooting, it is strongly recommended that any <code class="docutils literal notranslate"><span class="pre">##OVERRIDE##</span></code> rules in
+use should be documented on the original <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="traffic_ops_ort.doMain">
+<code class="sig-prename descclassname">traffic_ops_ort.</code><code class="sig-name descname">doMain</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.doMain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the main routine based on the parsed arguments to the script</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Namespace</span></code>) – A parsed argument list as returned from <code class="xref py py-meth docutils literal notranslate"><span class="pre">argparse.ArgumentParser.parse_args()</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an exit code for the script.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – when the namespace is missing required arguments</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="traffic_ops_ort.main">
+<code class="sig-prename descclassname">traffic_ops_ort.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ORT entrypoint, parses argv before handing it off to <a class="reference internal" href="#traffic_ops_ort.doMain" title="traffic_ops_ort.doMain"><code class="xref py py-func docutils literal notranslate"><span class="pre">doMain()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An exit code for <strong class="program">traffic_ops_ort</strong></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="traffic_ops_ort.configuration.html">traffic_ops_ort.configuration module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traffic_ops_ort.main_routines.html">traffic_ops_ort.main_routines module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traffic_ops_ort.packaging.html">traffic_ops_ort.packaging module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traffic_ops_ort.to_api.html">traffic_ops_ort.to_api module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="traffic_ops_ort.utils.html">traffic_ops_ort.utils module</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="traffic_ops_ort.configuration.html" class="btn btn-neutral float-right" title="traffic_ops_ort.configuration module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../traffic_ops_golang.html" class="btn btn-neutral" title="Traffic Ops - Go" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

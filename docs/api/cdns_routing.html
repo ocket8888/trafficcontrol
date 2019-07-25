@@ -1,0 +1,492 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdns/routing &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="cdns/usage/overview" href="cdns_usage_overview.html" />
+    <link rel="prev" title="cdns/{{name}}/snapshot/new" href="cdns_name_snapshot_new.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Traffic Ops API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#api-routes">API Routes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="api_capabilities.html"><code class="docutils literal notranslate"><span class="pre">api_capabilities</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_capabilities_id.html"><code class="docutils literal notranslate"><span class="pre">api_capabilities/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="asns.html"><code class="docutils literal notranslate"><span class="pre">asns</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="asns_id.html"><code class="docutils literal notranslate"><span class="pre">asns/{{id}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cache_stats.html"><code class="docutils literal notranslate"><span class="pre">cache_stats</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroup_fallbacks.html"><code class="docutils literal notranslate"><span class="pre">cachegroup_fallbacks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroup_parameterID_parameter.html"><code class="docutils literal notranslate"><span class="pre">cachegroup/{{parameter</span> <span class="pre">ID}}/parameter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroupparameters.html"><code class="docutils literal notranslate"><span class="pre">cachegroupparameters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroupparameters_id_parameterID.html"><code class="docutils literal notranslate"><span class="pre">cachegroupparameters/{{ID}}/{{parameterID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroups.html"><code class="docutils literal notranslate"><span class="pre">cachegroups</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroups_id.html"><code class="docutils literal notranslate"><span class="pre">cachegroups/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroups_id_deliveryservices.html"><code class="docutils literal notranslate"><span class="pre">cachegroups/{{ID}}/deliveryservices</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroups_id_parameters.html"><code class="docutils literal notranslate"><span class="pre">cachegroups/{{ID}}/parameters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroups_id_queue_update.html"><code class="docutils literal notranslate"><span class="pre">cachegroups/{{ID}}/queue_update</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroups_id_unassigned_parameters.html"><code class="docutils literal notranslate"><span class="pre">cachegroups/{{id}}/unassigned_parameters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroups_parameterID_parameter_available.html"><code class="docutils literal notranslate"><span class="pre">cachegroups/{{parameter</span> <span class="pre">ID}}/parameter/available</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroups_trimmed.html"><code class="docutils literal notranslate"><span class="pre">cachegroups/trimmed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="caches_stats.html"><code class="docutils literal notranslate"><span class="pre">caches/stats</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="capabilities.html"><code class="docutils literal notranslate"><span class="pre">capabilities</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="capabilities_name.html"><code class="docutils literal notranslate"><span class="pre">capabilities/{{name}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns.html"><code class="docutils literal notranslate"><span class="pre">cdns</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_capacity.html"><code class="docutils literal notranslate"><span class="pre">cdns/capacity</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_cdn_configfiles_ats_filename.html"><code class="docutils literal notranslate"><span class="pre">cdns/{{cdn}}/configfiles/ats/{{filename}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_configs.html"><code class="docutils literal notranslate"><span class="pre">cdns/configs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_dnsseckeys_refresh.html"><code class="docutils literal notranslate"><span class="pre">cdns/dnsseckeys/refresh</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_domains.html"><code class="docutils literal notranslate"><span class="pre">cdns/domains</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_health.html"><code class="docutils literal notranslate"><span class="pre">cdns/health</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_id.html"><code class="docutils literal notranslate"><span class="pre">cdns/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_id_queue_update.html"><code class="docutils literal notranslate"><span class="pre">cdns/{{ID}}/queue_update</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_id_snapshot.html"><code class="docutils literal notranslate"><span class="pre">cdns/{{ID}}/snapshot</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_metric_types_metric_start_date_start_end_date_end.html"><code class="docutils literal notranslate"><span class="pre">cdns/metric_types/{{metric}}/start_date/{{start}}/end_date/{{end}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_name_configs_monitoring.html"><code class="docutils literal notranslate"><span class="pre">cdns/{{name}}/configs/monitoring</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_name_configs_routing.html"><code class="docutils literal notranslate"><span class="pre">cdns/{{name}}/configs/routing</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_name_dnsseckeys_ksk_generate.html"><code class="docutils literal notranslate"><span class="pre">cdns/{{name}}/dnsseckeys/ksk/generate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_name_federations.html"><code class="docutils literal notranslate"><span class="pre">cdns/{{name}}/federations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_name_federations_id.html"><code class="docutils literal notranslate"><span class="pre">cdns/{{name}}/federations/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_name_health.html"><code class="docutils literal notranslate"><span class="pre">cdns/{{name}}/health</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_name_name.html"><code class="docutils literal notranslate"><span class="pre">cdns/name/{{name}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_name_name_dnsseckeys.html"><code class="docutils literal notranslate"><span class="pre">cdns/name/{{name}}/dnsseckeys</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_name_name_dnsseckeys_delete.html"><code class="docutils literal notranslate"><span class="pre">cdns/name/{{name}}/dnsseckeys/delete</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_name_name_sslkeys.html"><code class="docutils literal notranslate"><span class="pre">cdns/name/{{name}}/sslkeys</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_name_snapshot.html"><code class="docutils literal notranslate"><span class="pre">cdns/{{name}}/snapshot</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_name_snapshot_new.html"><code class="docutils literal notranslate"><span class="pre">cdns/{{name}}/snapshot/new</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">cdns/routing</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#get"><code class="docutils literal notranslate"><span class="pre">GET</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdns_usage_overview.html"><code class="docutils literal notranslate"><span class="pre">cdns/usage/overview</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="consistenthash.html"><code class="docutils literal notranslate"><span class="pre">consistenthash</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="coordinates.html"><code class="docutils literal notranslate"><span class="pre">coordinates</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservice_server_dsid_serverid.html"><code class="docutils literal notranslate"><span class="pre">deliveryservice_server/{{DSID}}/{{serverID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservice_stats.html"><code class="docutils literal notranslate"><span class="pre">deliveryservice_stats</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservice_user.html"><code class="docutils literal notranslate"><span class="pre">deliveryservice_user</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservice_user_dsid_userid.html"><code class="docutils literal notranslate"><span class="pre">deliveryservice_user/{{dsID}}/{{userID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_dnsseckeys_generate.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/dnsseckeys/generate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_hostname_name_sslkeys.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/hostname/{{name}}/sslkeys</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_id.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_id_capacity.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/{{ID}}/capacity</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_id_health.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/{{ID}}/health</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_id_regexes.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/{{ID}}/regexes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_id_regexes_rid.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/{{ID}}/regexes/{{rID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_id_routing.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/{{ID}}/routing</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_id_safe.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/{{ID}}/safe</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_id_server_types_type_metric_types_start_date_start_end_date_end.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/{{id}}/server_types/{{type}}/metric_types/start_date/{{start}}/end_date/{{end}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_id_servers.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/{{ID}}/servers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_id_servers_eligible.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/{{ID}}/servers/eligible</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_id_state.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/{{ID}}/state</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_id_unassigned_servers.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/{{ID}}/unassigned_servers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_regexes.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices_regexes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_request.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/request</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_sslkeys_add.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/sslkeys/add</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_sslkeys_generate.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/sslkeys/generate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_xmlid_servers.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/{{xml_id}}/servers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_xmlid_urisignkeys.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/{{xml_id}}/urisignkeys</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_xmlid_xmlid_sslkeys.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/xmlId/{{XMLID}}/sslkeys</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_xmlid_xmlid_sslkeys_delete.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/xmlId/{{xmlid}}/sslkeys/delete</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_xmlid_xmlid_urlkeys.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/xmlId/{{xmlid}}/urlkeys</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_xmlid_xmlid_urlkeys_copyfromxmlid_copyfromxmlid.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/xmlId/{{xml_id}}/urlkeys/copyFromXmlId/{{copyFrom_xml_id}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryservices_xmlid_xmlid_urlkeys_generate.html"><code class="docutils literal notranslate"><span class="pre">deliveryservices/xmlId/{{xml_id}}/urlkeys/generate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deliveryserviceserver.html"><code class="docutils literal notranslate"><span class="pre">deliveryserviceserver</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="divisions.html"><code class="docutils literal notranslate"><span class="pre">divisions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="divisions_id.html"><code class="docutils literal notranslate"><span class="pre">divisions/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="divisions_name_regions.html"><code class="docutils literal notranslate"><span class="pre">divisions/{{name}}/regions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="federation_resolvers.html"><code class="docutils literal notranslate"><span class="pre">federation_resolvers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="federation_resolvers_id.html"><code class="docutils literal notranslate"><span class="pre">federation_resolvers/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="federations.html"><code class="docutils literal notranslate"><span class="pre">federations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="federations_id_deliveryservices.html"><code class="docutils literal notranslate"><span class="pre">federations/{{ID}}/deliveryservices</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="federations_id_deliveryservices_id.html"><code class="docutils literal notranslate"><span class="pre">federations/{{ID}}/deliveryservices/{{dsID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="federations_id_federation_resolvers.html"><code class="docutils literal notranslate"><span class="pre">federations/{{ID}}/federation_resolvers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="federations_id_users.html"><code class="docutils literal notranslate"><span class="pre">federations/{{ID}}/users</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="federations_id_users_id.html"><code class="docutils literal notranslate"><span class="pre">federations/{{ID}}/users/{{userID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hwinfo.html"><code class="docutils literal notranslate"><span class="pre">hwinfo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="isos.html"><code class="docutils literal notranslate"><span class="pre">isos</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="jobs.html"><code class="docutils literal notranslate"><span class="pre">jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="jobs_id.html"><code class="docutils literal notranslate"><span class="pre">jobs/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logs.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logs_days_days.html"><code class="docutils literal notranslate"><span class="pre">logs/{{days}}/days</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logs_newcount.html"><code class="docutils literal notranslate"><span class="pre">logs/newcount</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origins.html"><code class="docutils literal notranslate"><span class="pre">origins</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="osversions.html"><code class="docutils literal notranslate"><span class="pre">osversions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameterprofile.html"><code class="docutils literal notranslate"><span class="pre">parameterprofile</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters.html"><code class="docutils literal notranslate"><span class="pre">parameters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters_id.html"><code class="docutils literal notranslate"><span class="pre">parameters/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters_id_profiles.html"><code class="docutils literal notranslate"><span class="pre">parameters/{{ID}}/profiles</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters_id_unassigned_profiles.html"><code class="docutils literal notranslate"><span class="pre">parameters/{{ID}}/unassigned_profiles</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters_profile_name.html"><code class="docutils literal notranslate"><span class="pre">parameters/profile/{{name}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="parameters_validate.html"><code class="docutils literal notranslate"><span class="pre">parameters/validate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="phys_locations.html"><code class="docutils literal notranslate"><span class="pre">phys_locations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="phys_locations_id.html"><code class="docutils literal notranslate"><span class="pre">phys_locations/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="phys_locations_trimmed.html"><code class="docutils literal notranslate"><span class="pre">phys_locations/trimmed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="profileparameter.html"><code class="docutils literal notranslate"><span class="pre">profileparameter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="profileparameters.html"><code class="docutils literal notranslate"><span class="pre">profileparameters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="profileparameters_profileID_parameterID.html"><code class="docutils literal notranslate"><span class="pre">profileparameters/{{profileID}}/{{parameterID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="profiles.html"><code class="docutils literal notranslate"><span class="pre">profiles</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="profiles_id.html"><code class="docutils literal notranslate"><span class="pre">profiles/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="profiles_id_parameters.html"><code class="docutils literal notranslate"><span class="pre">profiles/{{ID}}/parameters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="profiles_id_unassigned_parameters.html"><code class="docutils literal notranslate"><span class="pre">profiles/{{ID}}/unassigned_parameters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="profiles_name_name_copy_copy.html"><code class="docutils literal notranslate"><span class="pre">profiles/name/{{name}}/copy/{{copy}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="profiles_name_name_parameters.html"><code class="docutils literal notranslate"><span class="pre">profiles/name/{{name}}/parameters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="profiles_profile_configfiles_ats_filename.html"><code class="docutils literal notranslate"><span class="pre">profiles/{{profile}}/configfiles/ats/{{filename}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="profiles_trimmed.html"><code class="docutils literal notranslate"><span class="pre">profiles/trimmed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="regions.html"><code class="docutils literal notranslate"><span class="pre">regions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="regions_id.html"><code class="docutils literal notranslate"><span class="pre">regions/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="regions_name_phys_locations.html"><code class="docutils literal notranslate"><span class="pre">regions/:region_name/phys_locations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="roles.html"><code class="docutils literal notranslate"><span class="pre">roles</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="servercheck.html"><code class="docutils literal notranslate"><span class="pre">servercheck</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="servers.html"><code class="docutils literal notranslate"><span class="pre">servers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="servers_hostname_name_details.html"><code class="docutils literal notranslate"><span class="pre">servers/hostname/{{name}}/details</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="servers_hostname_update_status.html"><code class="docutils literal notranslate"><span class="pre">servers/{{hostname}}/update_status</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="servers_id.html"><code class="docutils literal notranslate"><span class="pre">servers/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="servers_id_deliveryservices.html"><code class="docutils literal notranslate"><span class="pre">servers/{{ID}}/deliveryservices</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="servers_id_queue_update.html"><code class="docutils literal notranslate"><span class="pre">servers/{{ID}}/queue_update</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="servers_id_status.html"><code class="docutils literal notranslate"><span class="pre">servers/{{ID}}/status</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="servers_server_configfiles_ats.html"><code class="docutils literal notranslate"><span class="pre">servers/{{server}}/configfiles/ats</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="servers_server_configfiles_ats_filename.html"><code class="docutils literal notranslate"><span class="pre">servers/{{server}}/configfiles/ats/{{filename}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="servers_status.html"><code class="docutils literal notranslate"><span class="pre">servers/status</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="servers_totals.html"><code class="docutils literal notranslate"><span class="pre">servers/totals</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="snapshot_name.html"><code class="docutils literal notranslate"><span class="pre">snapshot/{{name}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="staticdnsentries.html"><code class="docutils literal notranslate"><span class="pre">staticdnsentries</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="statuses.html"><code class="docutils literal notranslate"><span class="pre">statuses</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="statuses_id.html"><code class="docutils literal notranslate"><span class="pre">statuses/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="steering_id_targets.html"><code class="docutils literal notranslate"><span class="pre">steering/{{ID}}/targets</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="steering_id_targets_targetID.html"><code class="docutils literal notranslate"><span class="pre">steering/{{ID}}/targets/{{targetID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="system_info.html"><code class="docutils literal notranslate"><span class="pre">system/info</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tenants.html"><code class="docutils literal notranslate"><span class="pre">tenants</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tenants_id.html"><code class="docutils literal notranslate"><span class="pre">tenants/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="to_extensions.html"><code class="docutils literal notranslate"><span class="pre">to_extensions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="to_extensions_id_delete.html"><code class="docutils literal notranslate"><span class="pre">to_extensions/{{ID}}/delete</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="traffic_monitor_stats.html"><code class="docutils literal notranslate"><span class="pre">traffic_monitor/stats</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="types.html"><code class="docutils literal notranslate"><span class="pre">types</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="types_id.html"><code class="docutils literal notranslate"><span class="pre">types/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="types_trimmed.html"><code class="docutils literal notranslate"><span class="pre">types/trimmed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_current.html"><code class="docutils literal notranslate"><span class="pre">user/current</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_current_jobs.html"><code class="docutils literal notranslate"><span class="pre">user/current/jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_current_update.html"><code class="docutils literal notranslate"><span class="pre">user/current/update</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_id_deliveryservices_available.html"><code class="docutils literal notranslate"><span class="pre">user/{{ID}}/deliveryservices/available</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_login.html"><code class="docutils literal notranslate"><span class="pre">user/login</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_login_token.html"><code class="docutils literal notranslate"><span class="pre">user/login/token</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_logout.html"><code class="docutils literal notranslate"><span class="pre">user/logout</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_reset_password.html"><code class="docutils literal notranslate"><span class="pre">user/reset_password</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="users.html"><code class="docutils literal notranslate"><span class="pre">users</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="users_id.html"><code class="docutils literal notranslate"><span class="pre">users/{{ID}}</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="users_id_deliveryservices.html"><code class="docutils literal notranslate"><span class="pre">users/{{ID}}/deliveryservices</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="users_register.html"><code class="docutils literal notranslate"><span class="pre">users/register</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#how-to-read-this-documentation">How to Read this Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#using-api-endpoints">Using API Endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#api-errors">API Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#trafficops-native-client-libraries">TrafficOps Native Client Libraries</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Traffic Ops API</a> &raquo;</li>
+        
+      <li><code class="docutils literal notranslate"><span class="pre">cdns/routing</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/cdns_routing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cdns-routing">
+<span id="to-api-cdns-routing"></span><h1><code class="docutils literal notranslate"><span class="pre">cdns/routing</span></code><a class="headerlink" href="#cdns-routing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="get">
+<h2><code class="docutils literal notranslate"><span class="pre">GET</span></code><a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h2>
+<p>Retrieves the aggregate routing percentages of Cache Groups assigned to any CDN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Auth. Required</dt>
+<dd class="field-odd"><p>Yes</p>
+</dd>
+<dt class="field-even">Roles Required</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Response Type</dt>
+<dd class="field-odd"><p>Object</p>
+</dd>
+</dl>
+<div class="section" id="request-structure">
+<h3>Request Structure<a class="headerlink" href="#request-structure" title="Permalink to this headline">¶</a></h3>
+<p>No parameters available</p>
+</div>
+<div class="section" id="response-structure">
+<h3>Response Structure<a class="headerlink" href="#response-structure" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">cz</dt>
+<dd class="field-odd"><p>Used Coverage Zone geographic IP mapping</p>
+</dd>
+<dt class="field-even">dsr</dt>
+<dd class="field-even"><p>Overflow traffic sent to secondary CDN</p>
+</dd>
+<dt class="field-odd">err</dt>
+<dd class="field-odd"><p>Error localizing client IP</p>
+</dd>
+<dt class="field-even">geo</dt>
+<dd class="field-even"><p>Used 3rd party geographic IP mapping</p>
+</dd>
+<dt class="field-odd">miss</dt>
+<dd class="field-odd"><p>No location available for client IP</p>
+</dd>
+<dt class="field-even">staticRoute</dt>
+<dd class="field-even"><p>Used pre-configured DNS entries</p>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">#210 </span><span class="caption-text">Response Example</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Access-Control-Allow-Credentials</span><span class="o">:</span> <span class="l">true</span>
+<span class="na">Access-Control-Allow-Headers</span><span class="o">:</span> <span class="l">Origin, X-Requested-With, Content-Type, Accept</span>
+<span class="na">Access-Control-Allow-Methods</span><span class="o">:</span> <span class="l">POST,GET,OPTIONS,PUT,DELETE</span>
+<span class="na">Access-Control-Allow-Origin</span><span class="o">:</span> <span class="l">*</span>
+<span class="na">Cache-Control</span><span class="o">:</span> <span class="l">no-cache, no-store, max-age=0, must-revalidate</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Wed, 14 Nov 2018 21:29:32 GMT</span>
+<span class="na">Server</span><span class="o">:</span> <span class="l">Mojolicious (Perl)</span>
+<span class="na">Set-Cookie</span><span class="o">:</span> <span class="l">mojolicious=...; expires=Thu, 15 Nov 2018 01:29:32 GMT; path=/; HttpOnly</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept-Encoding</span>
+<span class="na">Whole-Content-Sha512</span><span class="o">:</span> <span class="l">7LjytwKyRzSKM4cRIol4OMIJxApFpTWJaSK73rbtUIQdASZjI64XxLVzZP0OGRU7XeJ22YKUyQ30qbKHDRv7FQ==</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">130</span>
+
+<span class="p">{</span> <span class="nt">&quot;response&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;staticRoute&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;geo&quot;</span><span class="p">:</span> <span class="mf">20.6251834458468</span><span class="p">,</span>
+    <span class="nt">&quot;err&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;fed&quot;</span><span class="p">:</span> <span class="mf">0.287643087760493</span><span class="p">,</span>
+    <span class="nt">&quot;cz&quot;</span><span class="p">:</span> <span class="mf">79.0607572644555</span><span class="p">,</span>
+    <span class="nt">&quot;regionalAlternate&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;dsr&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;miss&quot;</span><span class="p">:</span> <span class="mf">0.0264162019371881</span><span class="p">,</span>
+    <span class="nt">&quot;regionalDenied&quot;</span><span class="p">:</span> <span class="mi">0</span>
+<span class="p">}}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cdns_usage_overview.html" class="btn btn-neutral float-right" title="cdns/usage/overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cdns_name_snapshot_new.html" class="btn btn-neutral" title="cdns/{{name}}/snapshot/new" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,314 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Portal Administration &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Traffic Portal - Using" href="usingtrafficportal.html" />
+    <link rel="prev" title="Traffic Ops - Using" href="../traffic_ops/using.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Portal Administration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-traffic-portal">Installing Traffic Portal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-traffic-portal">Configuring Traffic Portal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#starting-traffic-portal">Starting Traffic Portal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stopping-traffic-portal">Stopping Traffic Portal</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quick_howto/index.html">Quick How To Guides</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Administrator’s Guide</a> &raquo;</li>
+        
+      <li>Traffic Portal Administration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/admin/traffic_portal/installation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-portal-administration">
+<h1>Traffic Portal Administration<a class="headerlink" href="#traffic-portal-administration" title="Permalink to this headline">¶</a></h1>
+<p>Traffic Portal is only supported on CentOS Linux distributions version 7.x. It runs on <a class="reference external" href="https://nodejs.org/">NodeJS</a> and requires version 6.0 or higher.</p>
+<div class="section" id="installing-traffic-portal">
+<h2>Installing Traffic Portal<a class="headerlink" href="#installing-traffic-portal" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Download the Traffic Portal RPM from <a class="reference external" href="https://builds.apache.org/job/trafficcontrol-master-build/">Apache Jenkins</a> or build the Traffic Portal RPM from source using the instructions in <a class="reference internal" href="../../development/building.html#dev-building"><span class="std std-ref">Building Traffic Control</span></a>.</p></li>
+<li><p>Copy the Traffic Portal RPM to your server</p></li>
+<li><p>Install NodeJS. This can be done by building it from source, installing with <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> if it happens to be in your available repositories (at version 6.0+), or using the NodeSource setup script.</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">#34 </span><span class="caption-text">Installing NodeJS using the NodeSource Setup Script</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl --silent --location https://rpm.nodesource.com/setup_6.x <span class="p">|</span> sudo bash -
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Install the Traffic Portal RPM with <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> or <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/rpm(8)">rpm(8)</a></em> e.g. by running <code class="docutils literal notranslate"><span class="pre">yum</span> <span class="pre">install</span> <span class="pre">path/to/traffic_portal.rpm</span></code> as the root user or with <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/sudo(8)">sudo(8)</a></em>.</p></li>
+</ol>
+</div>
+<div class="section" id="configuring-traffic-portal">
+<h2>Configuring Traffic Portal<a class="headerlink" href="#configuring-traffic-portal" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>update <code class="file docutils literal notranslate"><span class="pre">/etc/traffic_portal/conf/config.js</span></code> (if Traffic Portal is being upgraded, reconcile <code class="file docutils literal notranslate"><span class="pre">config.js</span></code> with <code class="file docutils literal notranslate"><span class="pre">config.js.rpmnew</span></code> and then delete <code class="file docutils literal notranslate"><span class="pre">config.js.rpmnew</span></code>)</p></li>
+<li><p>update <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_portal/public/traffic_portal_properties.json</span></code> (if Traffic Portal is being upgraded, reconcile <code class="file docutils literal notranslate"><span class="pre">traffic_portal_properties.json</span></code> with <code class="file docutils literal notranslate"><span class="pre">traffic_portal_properties.json.rpmnew</span></code> and then delete <code class="file docutils literal notranslate"><span class="pre">traffic_portal_properties.json.rpmnew</span></code>)</p></li>
+<li><p>Optional: update <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_portal/public/resources/assets/css/custom.css</span></code> to customize Traffic Portal styling.</p></li>
+</ul>
+</div>
+<div class="section" id="starting-traffic-portal">
+<h2>Starting Traffic Portal<a class="headerlink" href="#starting-traffic-portal" title="Permalink to this headline">¶</a></h2>
+<p>The Traffic Portal RPM comes with a <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemd(1)">systemd(1)</a></em> unit file, so under normal circumstances Traffic Portal may be started with <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemctl(1)">systemctl(1)</a></em>.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">#35 </span><span class="caption-text">Starting Traffic Portal</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>systemctl start traffic_portal
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="stopping-traffic-portal">
+<h2>Stopping Traffic Portal<a class="headerlink" href="#stopping-traffic-portal" title="Permalink to this headline">¶</a></h2>
+<p>The Traffic Portal RPM comes with a <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemd(1)">systemd(1)</a></em> unit file, so under normal circumstances Traffic Portal may be stopped with <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemctl(1)">systemctl(1)</a></em>.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">#36 </span><span class="caption-text">Stopping Traffic Portal</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>systemctl stop traffic_portal
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="usingtrafficportal.html" class="btn btn-neutral float-right" title="Traffic Portal - Using" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../traffic_ops/using.html" class="btn btn-neutral" title="Traffic Ops - Using" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

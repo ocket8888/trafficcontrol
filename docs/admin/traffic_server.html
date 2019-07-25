@@ -1,0 +1,404 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Server Administration &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Traffic Vault Administration" href="traffic_vault.html" />
+    <link rel="prev" title="Traffic Stats Administration" href="traffic_stats.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Server Administration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-traffic-server">Installing Traffic Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-traffic-server">Configuring Traffic Server</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#installing-the-ort-script">Installing the ORT Script</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick_howto/index.html">Quick How To Guides</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Administrator’s Guide</a> &raquo;</li>
+        
+      <li>Traffic Server Administration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/admin/traffic_server.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-server-administration">
+<h1>Traffic Server Administration<a class="headerlink" href="#traffic-server-administration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installing-traffic-server">
+<h2>Installing Traffic Server<a class="headerlink" href="#installing-traffic-server" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Build the Traffic Server RPM. The best way to do this is to follow the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/getting-started/index.en.html#installation">Apache Traffic Server documentation</a>.</p></li>
+<li><p>Build the astats RPM using the appropriate version number - ours are built <a class="reference external" href="https://github.com/apache/trafficcontrol/tree/master/traffic_server">here</a></p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">astats</span></code> plugin is bundled as a part of Apache Traffic Server as of version 7.2.</p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Install Traffic Server and astats</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">#44 </span><span class="caption-text">Apache Traffic Server Installation Using <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em></span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yum -y install trafficserver-*.rpm astats_over_http*.rpm
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Add the server using the Traffic Portal UI:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p>Go to <span class="menuselection">Configure ‣ Servers</span></p></li>
+<li><p>Click on the <span class="guilabel">+</span> button at the top of the page.</p></li>
+<li><p>Complete the form. Be sure to fill out all fields marked ‘Required’</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Set ‘Interface Name’ to the name of the network interface device from which Apache Traffic Server delivers content.</p></li>
+<li><p>Set ‘Type’ to ‘MID’ or ‘EDGE’.</p></li>
+<li><p>If you wish for the server to immediately be polled by the <a class="reference internal" href="../overview/traffic_monitor.html#health-proto"><span class="std std-ref">Health Protocol</span></a>, set ‘Status’ to ‘REPORTED’.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Click on the <span class="guilabel">Create</span> button to submit the form.</p></li>
+<li><p>Verify that the server status is now listed as <strong>Reported</strong></p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>Install the <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> script and run it in ‘BADASS’ mode to create the initial configuration</p>
+<blockquote>
+<div><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#traffic-ops-ort"><span class="std std-ref">Configuring Traffic Server</span></a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Start <abbr title="Apache Traffic Server">ATS</abbr></p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">#45 </span><span class="caption-text">Starting <abbr title="Apache Traffic Server">ATS</abbr> with <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemd(1)">systemd(1)</a></em></span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>systemctl start trafficserver
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>(Optional) Configure <abbr title="Apache Traffic Server">ATS</abbr> to start automatically when the system powers on</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">#46 </span><span class="caption-text">Configuring <abbr title="Apache Traffic Server">ATS</abbr> to Start Automatically Using <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemd(1)">systemd(1)</a></em></span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>systemctl <span class="nb">enable</span> trafficserver
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Verify that the installation is working</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p>Make sure that the service is running</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">#47 </span><span class="caption-text">Checking that <abbr title="Apache Traffic Server">ATS</abbr> is Running Using <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemd(1)">systemd(1)</a></em></span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>systemctl status trafficserver
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Assuming a Traffic Monitor is already installed somewhere, check the “Cache States” table in its Web UI to verify that the <abbr title="Apache Traffic Server">ATS</abbr> server appears.</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ol>
+</div>
+<div class="section" id="configuring-traffic-server">
+<span id="traffic-ops-ort"></span><h2>Configuring Traffic Server<a class="headerlink" href="#configuring-traffic-server" title="Permalink to this headline">¶</a></h2>
+<p>All of the <abbr title="Apache Traffic Server">ATS</abbr> application configuration files are generated by Traffic Ops and installed by <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a>. The <code class="file docutils literal notranslate"><span class="pre">traffic_ops_ort.pl</span></code> file should be installed on all <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> s (See <a class="reference internal" href="#installing-the-ort-script">Installing the ORT Script</a>), usually in <code class="docutils literal notranslate"><span class="pre">/opt/ort</span></code>. It is used to do the initial install of the configuration files when the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> is being deployed, and to keep the configuration files up-to-date when the <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> is already in service.</p>
+<div class="section" id="installing-the-ort-script">
+<span id="installing-ort"></span><h3>Installing the ORT Script<a class="headerlink" href="#installing-the-ort-script" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p>Build the <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> script RPM by following the instructions in <a class="reference internal" href="../development/building.html#dev-building"><span class="std std-ref">Building Traffic Control</span></a> and install it with <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/rpm(8)">rpm(8)</a></em> or <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em>.</p></li>
+<li><p>Install modules required by <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> if needed</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-number">#48 </span><span class="caption-text">Example Installation of Perl Packages Occasionally Missing from Install</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yum install -y perl-JSON perl-Crypt-SSLeay
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>For initial configuration or when major changes (like a <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a> change) need to be made, run the script in “BADASS”. All required RPM packages will be installed, all <abbr title="Apache Traffic Server">ATS</abbr> configuration files will be fetched and installed, and (if needed) the <abbr title="Apache Traffic Server">ATS</abbr> service will be restarted.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The first run gives a lot of state errors that are expected. The “BADASS” mode fixes these issues. If you run it a second time, this should be cleaner. Also, note that many “ERROR” messages emitted by <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> are actually information messages. Do not panic.</p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Create a <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/cron(8)">cron(8)</a></em> entry for running <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> in “SYNCDS” mode every 15 minutes. This makes Traffic Control check periodically if the server has updates pending, and if so get the updated configuration.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By default, running <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> on an Edge-tier <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> will cause it to first wait for its parents (usually Mid-tier <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> s) to download their configuration before downloading its own configuration. Because of this, scheduling <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> for running every 15 minutes (with 5 minutes default dispersion) means that it might take up to ~35 minutes for queued updates to affect all <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> s. To customize this dispersion time, use the command line option <code class="docutils literal notranslate"><span class="pre">--dispersion=x</span></code> where <code class="docutils literal notranslate"><span class="pre">x</span></code> is the number of seconds for the dispersion period. Servers will select a random number from within this dispersion period to being downloading configuration files from Traffic Ops. Another option, <code class="docutils literal notranslate"><span class="pre">--login_dispersion=x</span></code> can be used to create a dispersion period after the job begins during which ORT will wait before logging in and checking Traffic Ops for updates to the server. This defaults to 0. If <code class="docutils literal notranslate"><span class="pre">use_reval_pending</span></code>, a.k.a. “Rapid Revalidate” is enabled, Edge-tier <a class="reference internal" href="../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a> s will <strong>not</strong> wait for their parents to download their configuration before downloading their own.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In “SYNCDS” mode, the <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> script updates only configurations that might be changed as part of normal operations, such as:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s</p></li>
+<li><p>SSL certificates</p></li>
+<li><p>Traffic Monitor IP addresses</p></li>
+<li><p>Logging configuration</p></li>
+<li><p>Revalidation requests (By default - if “Rapid Revalidate” is enabled, this will only be checked by using a separate revalidate command in <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a>)</p></li>
+</ul>
+</div>
+</div></blockquote>
+</li>
+<li><p>If “Rapid Revalidate” is enabled in Traffic Ops, create a second <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/cron(8)">cron(8)</a></em> job for revalidation checks by running <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> in “REVALIDATE” mode. <a class="reference internal" href="../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> will not check revalidation files if “Rapid Revalidate” is enabled. This setting allows for a separate check to be performed every 60 seconds to verify if a revalidation update has been made.</p></li>
+</ol>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="traffic_vault.html" class="btn btn-neutral float-right" title="Traffic Vault Administration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="traffic_stats.html" class="btn btn-neutral" title="Traffic Stats Administration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

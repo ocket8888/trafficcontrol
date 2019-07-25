@@ -1,0 +1,345 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quick How To Guides &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Configure Anonymous Blocking" href="anonymous_blocking.html" />
+    <link rel="prev" title="Traffic Vault Administration" href="../traffic_vault.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Quick How To Guides</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="anonymous_blocking.html">Configure Anonymous Blocking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroup_fallback.html">Configure Cache Group Fallbacks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html">CDN in a Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dnssec.html">Configure DNSSEC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_requests.html">Delivery Service Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="federations.html">Configure Federations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multi_site.html">Configure Multi-Site Origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="regionalgeo.html">Configure Regional Geo-blocking (RGB)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static_dns.html">Configuring Static DNS Entries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="steering.html">Configure Delivery Service Steering</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Administrator’s Guide</a> &raquo;</li>
+        
+      <li>Quick How To Guides</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/admin/quick_howto/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quick-how-to-guides">
+<h1>Quick How To Guides<a class="headerlink" href="#quick-how-to-guides" title="Permalink to this headline">¶</a></h1>
+<p>Traffic Control is a complicated system, and documenting it is not trivial. Sometimes a picture says more than a thousand words, so here are some screenshot-based tutorials on how to use some of the more involved features.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="anonymous_blocking.html">Configure Anonymous Blocking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="anonymous_blocking.html#traffic-router-access-log">Traffic Router Access Log</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cachegroup_fallback.html">Configure Cache Group Fallbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ciab.html">CDN in a Box</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ciab.html#getting-started">Getting Started</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html#building">Building</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ciab.html#variables-env">variables.env</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ciab.html#x-509-ssl-tls-certificates">X.509 SSL/TLS Certificates</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html#trusting-the-certificate-authority">Trusting the Certificate Authority</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ciab.html#importing-the-ca-certificate-on-osx">Importing the <abbr title="Certificate Authority">CA</abbr> Certificate on OSX</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html#importing-the-ca-certificate-on-windows">Importing the <abbr title="Certificate Authority">CA</abbr> certificate on Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html#importing-the-ca-certificate-on-linux-centos7">Importing the <abbr title="Certificate Authority">CA</abbr> certificate on Linux/Centos7</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html#importing-the-ca-certificate-on-linux-ubuntu">Importing the <abbr title="Certificate Authority">CA</abbr> certificate on Linux/Ubuntu</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ciab.html#advanced-usage">Advanced Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html#the-enroller">The Enroller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html#auto-snapshot-queue-updates">Auto Snapshot/Queue-Updates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html#mock-origin-service">Mock Origin Service</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ciab.html#optional-containers">Optional Containers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html#vnc-server">VNC Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html#socks-proxy">Socks Proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html#static-subnet">Static Subnet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html#vpn-server">VPN Server</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ciab.html#how-to-use-it">How to use it</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ciab.html#the-proposed-vpn-client">The proposed VPN client</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ciab.html#private-subnet-for-routing">Private Subnet for Routing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ciab.html#pushed-settings">Pushed Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html#grafana">Grafana</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ciab.html#how-to-start-it">How to start it</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ciab.html#check-the-charts">Check the charts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dnssec.html">Configure DNSSEC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_requests.html">Delivery Service Requests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ds_requests.html#who-can-create-a-delivery-service-request-and-how">Who Can Create a Delivery Service Request and How?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_requests.html#who-can-fulfill-a-delivery-service-request-and-how">Who Can Fulfill a Delivery Service Request and How?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="federations.html">Configure Federations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_site.html">Configure Multi-Site Origin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="regionalgeo.html">Configure Regional Geo-blocking (RGB)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="regionalgeo.html#traffic-router-access-log">Traffic Router Access Log</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="static_dns.html">Configuring Static DNS Entries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static_dns.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="steering.html">Configure Delivery Service Steering</a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="anonymous_blocking.html" class="btn btn-neutral float-right" title="Configure Anonymous Blocking" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../traffic_vault.html" class="btn btn-neutral" title="Traffic Vault Administration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

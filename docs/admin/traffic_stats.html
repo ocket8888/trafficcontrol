@@ -1,0 +1,557 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Stats Administration &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Traffic Server Administration" href="traffic_server.html" />
+    <link rel="prev" title="Traffic Router - Migrating to 3.0" href="traffic_router/migrationto2-3.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_ops/using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Stats Administration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#installing-traffic-stats">Installing Traffic Stats</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installing-influxdb">Installing InfluxDB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installing-grafana">Installing Grafana</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#configuring-traffic-stats">Configuring Traffic Stats</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuring-influxdb">Configuring InfluxDB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuring-grafana">Configuring Grafana</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuring-traffic-portal-for-traffic-stats">Configuring Traffic Portal for Traffic Stats</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuring-traffic-portal-to-use-grafana-dashboards">Configuring Traffic Portal to use Grafana Dashboards</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#influxdb-tools">InfluxDB Tools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#create-create-ts-databases-go">create/create_ts_databases.go</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sync-sync-ts-databases-go">sync/sync_ts_databases.go</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick_howto/index.html">Quick How To Guides</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Administrator’s Guide</a> &raquo;</li>
+        
+      <li>Traffic Stats Administration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/admin/traffic_stats.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-stats-administration">
+<span id="ts-admin"></span><h1>Traffic Stats Administration<a class="headerlink" href="#traffic-stats-administration" title="Permalink to this headline">¶</a></h1>
+<p>Traffic Stats consists of three separate components: Traffic Stats, InfluxDB, and Grafana. See below for information on installing and configuring each component as well as configuring the integration between the three and Traffic Ops.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installing-traffic-stats">
+<h3>Installing Traffic Stats<a class="headerlink" href="#installing-traffic-stats" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>See the <a class="reference external" href="https://trafficcontrol.apache.org/downloads/index.html">downloads</a> page for Traffic Control to get the latest release.</p></li>
+<li><p>Follow the instructions in <a class="reference internal" href="../development/building.html#dev-building"><span class="std std-ref">Building Traffic Control</span></a> to generate an RPM.</p></li>
+<li><p>Copy the RPM to your server</p></li>
+<li><p>Install the generated Traffic Stats RPM with <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/yum(8)">yum(8)</a></em> or <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/rpm(8)">rpm(8)</a></em></p></li>
+</ul>
+</div>
+<div class="section" id="installing-influxdb">
+<h3>Installing InfluxDB<a class="headerlink" href="#installing-influxdb" title="Permalink to this headline">¶</a></h3>
+<p>In order to store Traffic Stats data you will need to install <a class="reference external" href="https://docs.influxdata.com/influxdb/latest/introduction/installation/">InfluxDB</a>. While not required, it is recommended to use some sort of high availability option like <a class="reference external" href="https://portal.influxdata.com/">Influx enterprise</a>, <a class="reference external" href="https://github.com/influxdata/influxdb-relay">InfluxDB Relay</a>, or another <a class="reference external" href="https://www.influxdata.com/high-availability/">high availability option</a>.</p>
+</div>
+<div class="section" id="installing-grafana">
+<h3>Installing Grafana<a class="headerlink" href="#installing-grafana" title="Permalink to this headline">¶</a></h3>
+<p>Grafana is used to display Traffic Stats/InfluxDB data in Traffic Ops. Grafana is typically run on the same server as Traffic Stats but this is not a requirement. Grafana can be installed on any server that can access InfluxDB and can be accessed by Traffic Ops. Documentation on installing Grafana can be found on the <a class="reference external" href="http://docs.grafana.org/installation/">Grafana website</a>.</p>
+</div>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="configuring-traffic-stats">
+<h3>Configuring Traffic Stats<a class="headerlink" href="#configuring-traffic-stats" title="Permalink to this headline">¶</a></h3>
+<p>Traffic Stats’s configuration file can be found in <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_stats/conf/traffic_stats.cfg</span></code>. The following values need to be configured:</p>
+<dl class="simple">
+<dt>toUser</dt><dd><p>The user used to connect to Traffic Ops</p>
+</dd>
+<dt>toPasswd</dt><dd><p>The password to use when connecting to Traffic Ops</p>
+</dd>
+<dt>toUrl</dt><dd><p>The URL of the Traffic Ops server used by Traffic Stats</p>
+</dd>
+<dt>influxUser</dt><dd><p>The user to use when connecting to InfluxDB (if configured on InfluxDB, else leave default)</p>
+</dd>
+<dt>influxPassword</dt><dd><p>That password to use when connecting to InfluxDB (if configured, else leave blank)</p>
+</dd>
+<dt>pollingInterval</dt><dd><p>The interval at which Traffic Monitor is polled and stats are stored in InfluxDB</p>
+</dd>
+<dt>statusToMon</dt><dd><p>The status of Traffic Monitor to poll (poll ONLINE or OFFLINE Traffic Monitors)</p>
+</dd>
+<dt>seelogConfig</dt><dd><p>The absolute path of the seelog configuration file</p>
+</dd>
+<dt>dailySummaryPollingInterval</dt><dd><p>The interval, in seconds, at which Traffic Stats checks to see if daily stats need to be computed and stored.</p>
+</dd>
+<dt>cacheRetentionPolicy</dt><dd><p>The default retention policy for cache stats</p>
+</dd>
+<dt>dsRetentionPolicy</dt><dd><p>The default retention policy for <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> statistics</p>
+</dd>
+<dt>dailySummaryRetentionPolicy</dt><dd><p>The retention policy to be used for the daily statistics</p>
+</dd>
+<dt>influxUrls</dt><dd><p>An array of InfluxDB hosts for Traffic Stats to write stats to.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="configuring-influxdb">
+<h3>Configuring InfluxDB<a class="headerlink" href="#configuring-influxdb" title="Permalink to this headline">¶</a></h3>
+<p>As mentioned above, it is recommended that InfluxDB be running in some sort of high availability configuration. There are several ways to achieve high availability so it is best to consult the high availability options on the <a class="reference external" href="https://www.influxdata.com/high-availability/">InfuxDB website</a>.</p>
+<p>Once InfluxDB is installed and configured, databases and retention policies need to be created. Traffic Stats writes to three different databases: cache_stats, deliveryservice_stats, and daily_stats. More information about the databases and what data is stored in each can be found in the <a class="reference external" href="tc-ts">Traffic Stats Overview</a>.</p>
+<p>To easily create databases, retention policies, and continuous queries, run <strong class="program">create_ts_databases</strong> from the <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_stats/influxdb_tools</span></code> directory on your Traffic Stats server. See the <a class="reference internal" href="#influxdb-tools">InfluxDB Tools</a> section for more information.</p>
+</div>
+<div class="section" id="configuring-grafana">
+<span id="grafana-config"></span><h3>Configuring Grafana<a class="headerlink" href="#configuring-grafana" title="Permalink to this headline">¶</a></h3>
+<p>In Traffic Portal the <span class="menuselection">Other ‣ Grafana</span> menu item can be configured to display Grafana graphs using InfluxDB data (when not configured, this menu item will not appear). In order for this to work correctly, you will need two things:</p>
+<ol class="arabic simple">
+<li><p>A <a class="reference internal" href="../glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> with the graph URL (more information below)</p></li>
+<li><p>The graphs created in Grafana. See below for how to create some simple graphs in Grafana. These instructions assume that InfluxDB has been configured and that data has been written to it. If this is not true, you will not see any graphs.</p></li>
+</ol>
+<p>To create a graph in Grafana, you can follow these basic steps:</p>
+<ol class="arabic">
+<li><p>Login to Grafana as an administrative user</p></li>
+<li><p>Click on <span class="menuselection">Data Sources ‣ Add New</span></p></li>
+<li><p>Enter the necessary information to configure your data source</p></li>
+<li><p>Click on <span class="menuselection">Home ‣ New</span> at the bottom</p></li>
+<li><p>Click on <span class="menuselection">“Collapsed Menu Icon” Button ‣ Add Panel ‣ Graph</span></p></li>
+<li><p>Where it says <span class="guilabel">No Title (click here)</span> click and choose edit</p></li>
+<li><p>Choose your data source at the bottom</p></li>
+<li><p>You can have Grafana help you create a query, or you can create your own.</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">#43 </span><span class="caption-text">Sample Query</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">sum</span><span class="p">(</span><span class="k">value</span><span class="p">)</span><span class="o">*</span><span class="mf">1000</span> <span class="k">FROM</span> <span class="s s-Name">&quot;monthly&quot;</span><span class="mf">.</span><span class="s s-Name">&quot;bandwidth.cdn.1min&quot;</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="nb">time</span><span class="p">(</span><span class="mf">60</span><span class="n">s</span><span class="p">),</span> <span class="n">cdn</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Once you have the graph the way you want it, click the <span class="guilabel">Save Dashboard</span> button at the top</p></li>
+<li><p>You should now have a new saved graph</p></li>
+</ol>
+<p>In order for Traffic Portal users to see Grafana graphs, Grafana will need to allow anonymous access. Information on how to configure anonymous access can be found on the configuration page of the <a class="reference external" href="http://docs.grafana.org/installation/configuration/#authanonymous">Grafana Website</a>.</p>
+<p>Traffic Portal uses custom dashboards to display information about individual <a class="reference internal" href="../glossary.html#term-delivery-services"><span class="xref std std-term">Delivery Services</span></a> or <a class="reference internal" href="../glossary.html#term-cache-groups"><span class="xref std std-term">Cache Groups</span></a>. In order for the custom graphs to display correctly, the Javascript files in <a class="reference external" href="https://github.com/apache/trafficcontrol/tree/master/traffic_stats/grafana/"><code class="docutils literal notranslate"><span class="pre">traffic_stats/grafana/</span></code></a>  need to be in the <code class="file docutils literal notranslate"><span class="pre">/usr/share/grafana/public/dashboards/</span></code> directory on the Grafana server. If your Grafana server is the same as your Traffic Stats server the RPM install process will take care of putting the files in place. If your Grafana server is different from your Traffic Stats server, you will need to manually copy the files to the correct directory.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>More information on custom scripted graphs can be found in the <a class="reference external" href="http://docs.grafana.org/reference/scripting/">scripted dashboards</a> section of the Grafana documentation.</p>
+</div>
+</div>
+<div class="section" id="configuring-traffic-portal-for-traffic-stats">
+<h3>Configuring Traffic Portal for Traffic Stats<a class="headerlink" href="#configuring-traffic-portal-for-traffic-stats" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>The InfluxDB servers need to be added to Traffic Portal with a <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a> that has the <a class="reference internal" href="../overview/profiles_and_parameters.html#profile-type"><span class="std std-ref">Type</span></a> InfluxDB. Make sure to use port 8086 in the configuration.</p></li>
+<li><p>The traffic stats server should be added to Traffic Ops with a <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a> that has the <a class="reference internal" href="../overview/profiles_and_parameters.html#profile-type"><span class="std std-ref">Type</span></a> TRAFFIC_STATS.</p></li>
+<li><p><a class="reference internal" href="../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a> for which stats will be collected are added with the release, but any changes can be made via <a class="reference internal" href="../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a> that are assigned to the Traffic Stats <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a>.</p></li>
+</ul>
+</div>
+<div class="section" id="configuring-traffic-portal-to-use-grafana-dashboards">
+<h3>Configuring Traffic Portal to use Grafana Dashboards<a class="headerlink" href="#configuring-traffic-portal-to-use-grafana-dashboards" title="Permalink to this headline">¶</a></h3>
+<p>To configure Traffic Portal to use Grafana Dashboards, you need to enter the following <a class="reference internal" href="../glossary.html#term-parameters"><span class="xref std std-term">Parameters</span></a> and assign them to the special GLOBAL <a class="reference internal" href="../glossary.html#term-profile"><span class="xref std std-term">Profile</span></a>. This assumes you followed instructions in the <a class="reference internal" href="#installation">Installation</a>, <a class="reference internal" href="#configuring-traffic-stats">Configuring Traffic Stats</a>, <a class="reference internal" href="#configuring-influxdb">Configuring InfluxDB</a>, and <a class="reference internal" href="#configuring-grafana">Configuring Grafana</a> sections.</p>
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-number">Table 39 </span><span class="caption-text">Traffic Stats Parameters</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 81%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>parameter name</p></th>
+<th class="head"><p>parameter value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>all_graph_url</p></td>
+<td><p><code class="file docutils literal notranslate"><span class="pre">https://</span><em><span class="pre">grafanaHost</span></em><span class="pre">/dashboard/db/</span><em><span class="pre">deliveryservice-stats-dashboard</span></em></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>cachegroup_graph_url</p></td>
+<td><p><code class="file docutils literal notranslate"><span class="pre">https://</span><em><span class="pre">grafanaHost</span></em><span class="pre">/dashboard/script/traffic_ops_cachegroup.js?which=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>deliveryservice_graph_url</p></td>
+<td><p><code class="file docutils literal notranslate"><span class="pre">https://</span><em><span class="pre">grafanaHost</span></em><span class="pre">/dashboard/script/traffic_ops_deliveryservice.js?which=</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>server_graph_url</p></td>
+<td><p><code class="file docutils literal notranslate"><span class="pre">https://</span><em><span class="pre">grafanaHost</span></em><span class="pre">/dashboard/script/traffic_ops_server.js?which=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>visual_status_panel_1</p></td>
+<td><p><code class="file docutils literal notranslate"><span class="pre">https://</span><em><span class="pre">grafanaHost</span></em><span class="pre">/dashboard-solo/db/</span><em><span class="pre">cdn-stats-dashboard</span></em><span class="pre">?panelId=2&amp;fullscreen&amp;from=now-24h&amp;to=now-60s</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>visual_status_panel_2</p></td>
+<td><p><code class="file docutils literal notranslate"><span class="pre">https://</span><em><span class="pre">grafanaHost</span></em><span class="pre">/dashboard-solo/db/</span><em><span class="pre">cdn-stats-dashboard</span></em><span class="pre">?panelId=1&amp;fullscreen&amp;from=now-24h&amp;to=now-60s</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>daily_bw_url</p></td>
+<td><p><code class="file docutils literal notranslate"><span class="pre">https://</span><em><span class="pre">grafanaHost</span></em><span class="pre">/dashboard-solo/db/</span><em><span class="pre">daily-summary-dashboard</span></em><span class="pre">?panelId=1&amp;fullscreen&amp;from=now-3y&amp;to=now</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>daily_served_url</p></td>
+<td><p><code class="file docutils literal notranslate"><span class="pre">https://</span><em><span class="pre">grafanaHost</span></em><span class="pre">/dashboard-solo/db/</span><em><span class="pre">daily-summary-dashboard</span></em><span class="pre">?panelId=2&amp;fullscreen&amp;from=now-3y&amp;to=now</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>where</p>
+<dl class="simple">
+<dt>grafanaHost</dt><dd><p>is the <abbr title="Fully Qualified Domain Name">FQDN</abbr> of the Grafana server (again, usually the same as the Traffic Stats server),</p>
+</dd>
+<dt>cdn-stats-dashboard</dt><dd><p>is the name of the Dashboard providing CDN-level statistics,</p>
+</dd>
+<dt>deliveryservice-stats-dashboard</dt><dd><p>is the name of the Dashboard providing <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>-level statistics, and</p>
+</dd>
+<dt>daily-summary-dashboard</dt><dd><p>is the name of the Dashboard providing a daily summary of general statistics that would be of interest to administrators using Traffic Portal</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="influxdb-tools">
+<h2>InfluxDB Tools<a class="headerlink" href="#influxdb-tools" title="Permalink to this headline">¶</a></h2>
+<p>Under the Traffic Stats source directory there is a directory called <code class="docutils literal notranslate"><span class="pre">influxdb_tools</span></code>. These tools are meant to be used as one-off scripts to help a user quickly get new databases and continuous queries setup in InfluxDB. They are specific for Traffic Stats and are not meant to be generic to InfluxDB. Below is an brief description of each script along with how to use it.</p>
+<div class="section" id="create-create-ts-databases-go">
+<span id="create-ts-databases"></span><h3>create/create_ts_databases.go<a class="headerlink" href="#create-create-ts-databases-go" title="Permalink to this headline">¶</a></h3>
+<p>This program creates all <a class="reference external" href="https://docs.influxdata.com/influxdb/latest/concepts/key_concepts/#database">databases</a>, <a class="reference external" href="https://docs.influxdata.com/influxdb/latest/concepts/key_concepts/#retention-policy">retention policies</a>, and <a class="reference external" href="https://docs.influxdata.com/influxdb/v0.11/query_language/continuous_queries/">continuous queries</a> required by Traffic Stats.</p>
+<div class="section" id="pre-requisites">
+<h4>Pre-Requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Go 1.7 or later</p></li>
+<li><p>Configured <code class="docutils literal notranslate"><span class="pre">$GOPATH</span></code> environment variable</p></li>
+</ul>
+</div>
+<div class="section" id="options-and-arguments">
+<h4>Options and Arguments<a class="headerlink" href="#options-and-arguments" title="Permalink to this headline">¶</a></h4>
+<dl class="option">
+<dt id="cmdoption-create-ts-databases-help">
+<code class="sig-name descname">--help</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-create-ts-databases-help" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Optional) Print usage information and exit (with a failure exit code for some reason)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-create-ts-databases-password">
+<code class="sig-name descname">--password</code><code class="sig-prename descclassname"> password</code><a class="headerlink" href="#cmdoption-create-ts-databases-password" title="Permalink to this definition">¶</a></dt>
+<dd><p>The password that will be used by the user defined by <a class="reference internal" href="#cmdoption-create-ts-databases-user"><code class="xref std std-option docutils literal notranslate"><span class="pre">--user</span></code></a> to authenticate.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-create-ts-databases-replication">
+<code class="sig-name descname">--replication</code><code class="sig-prename descclassname"> N</code><a class="headerlink" href="#cmdoption-create-ts-databases-replication" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Optional) The number of nodes in the cluster (default: 3)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-create-ts-databases-url">
+<code class="sig-name descname">--url</code><code class="sig-prename descclassname"> URL</code><a class="headerlink" href="#cmdoption-create-ts-databases-url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The InfluxDB server’s root URL - including port number, if required (default: <code class="docutils literal notranslate"><span class="pre">http://localhost:8086</span></code>)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-create-ts-databases-user">
+<code class="sig-name descname">--user</code><code class="sig-prename descclassname"> username</code><a class="headerlink" href="#cmdoption-create-ts-databases-user" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the user to use when connecting to InfluxDB</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="sync-sync-ts-databases-go">
+<span id="sync-ts-databases"></span><h3>sync/sync_ts_databases.go<a class="headerlink" href="#sync-sync-ts-databases-go" title="Permalink to this headline">¶</a></h3>
+<p>This program is used to sync one InfluxDB environment to another. Only data from continuous queries is synced as it is down-sampled data and much smaller in size than syncing raw data. Possible use cases are syncing from production to development or syncing a new cluster once brought online.</p>
+<div class="section" id="id1">
+<h4>Pre-Requisites<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Go 1.7 or later</p></li>
+<li><p>Configured <code class="docutils literal notranslate"><span class="pre">$GOPATH</span></code> environment variable</p></li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h4>Options and Arguments<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<dl class="option">
+<dt id="cmdoption-sync-ts-databases-database">
+<code class="sig-name descname">--database</code><code class="sig-prename descclassname"> database_name</code><a class="headerlink" href="#cmdoption-sync-ts-databases-database" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Optional) Specify the name of a specific database to sync (default: all databases)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-sync-ts-databases-days">
+<code class="sig-name descname">--days</code><code class="sig-prename descclassname"> N</code><a class="headerlink" href="#cmdoption-sync-ts-databases-days" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of days in the past to sync. <code class="docutils literal notranslate"><span class="pre">0</span></code> means ‘all’</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-sync-ts-databases-help">
+<code class="sig-name descname">--help</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-sync-ts-databases-help" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Optional) Print usage information and exit</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-sync-ts-databases-source-password">
+<code class="sig-name descname">--source-password</code><code class="sig-prename descclassname"> password</code><a class="headerlink" href="#cmdoption-sync-ts-databases-source-password" title="Permalink to this definition">¶</a></dt>
+<dd><p>The password of the user named by <a class="reference internal" href="#cmdoption-sync-ts-databases-source-user"><code class="xref std std-option docutils literal notranslate"><span class="pre">--source-user</span></code></a></p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-sync-ts-databases-source-url">
+<code class="sig-name descname">--source-url</code><code class="sig-prename descclassname"> URL</code><a class="headerlink" href="#cmdoption-sync-ts-databases-source-url" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Optional) The URL of the InfluxDB instance _from_ which data will be copied (default: <code class="docutils literal notranslate"><span class="pre">http://localhost:8086</span></code>)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-sync-ts-databases-source-user">
+<code class="sig-name descname">--source-user</code><code class="sig-prename descclassname"> username</code><a class="headerlink" href="#cmdoption-sync-ts-databases-source-user" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the user as whom the utility will connect to the source InfluxDB instance</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-sync-ts-databases-target-password">
+<code class="sig-name descname">--target-password</code><code class="sig-prename descclassname"> password</code><a class="headerlink" href="#cmdoption-sync-ts-databases-target-password" title="Permalink to this definition">¶</a></dt>
+<dd><p>The password of the user named by <a class="reference internal" href="#cmdoption-sync-ts-databases-target-user"><code class="xref std std-option docutils literal notranslate"><span class="pre">--target-user</span></code></a></p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-sync-ts-databases-target-url">
+<code class="sig-name descname">--target-url</code><code class="sig-prename descclassname"> URL</code><a class="headerlink" href="#cmdoption-sync-ts-databases-target-url" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Optional) The URL of the InfluxDB instance _to_ which data will be copied (default: <code class="docutils literal notranslate"><span class="pre">http://localhost:8086</span></code>)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-sync-ts-databases-target-user">
+<code class="sig-name descname">--target-user</code><code class="sig-prename descclassname"> username</code><a class="headerlink" href="#cmdoption-sync-ts-databases-target-user" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the user as whom the utility will connect to the target InfluxDB instance</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="traffic_server.html" class="btn btn-neutral float-right" title="Traffic Server Administration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="traffic_router/migrationto2-3.html" class="btn btn-neutral" title="Traffic Router - Migrating to 3.0" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

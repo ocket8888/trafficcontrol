@@ -1,0 +1,324 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Vault Util &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="toaccess" href="toaccess.html" />
+    <link rel="prev" title="Apache-TrafficControl Package" href="python_client.html" />
+    <link href="../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tools</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="compare.html">The Compare Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_client.html">Apache-TrafficControl Package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Vault Util</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toaccess.html">toaccess</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Tools</a> &raquo;</li>
+        
+      <li>Traffic Vault Util</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tools/traffic_vault_util.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-vault-util">
+<span id="id1"></span><h1>Traffic Vault Util<a class="headerlink" href="#traffic-vault-util" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">traffic_vault_util</span></code> tool - located at <code class="file docutils literal notranslate"><span class="pre">tools/traffic_vault_util.go</span></code> in the <a class="reference external" href="https://github.com/apache/trafficcontrol">Apache Traffic Control repository</a> - is used to view and modify the contents of a Traffic Vault (i.e. Riak) cluster. The tool contains basic operations to display the buckets, keys and values stored within Traffic Vault.</p>
+<p><code class="docutils literal notranslate"><span class="pre">traffic_vault_util</span></code> also has a small converter utility to perform a one-off conversion of key formats within the SSL bucket. This conversion is useful when moving from an older version of Traffic Ops to the current version. In the older version, SSL records were indexed by <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> database ID. Currently, SSL records are indexed by <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> <code class="docutils literal notranslate"><span class="pre">xml_id</span></code>.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">traffic_vault_util</span> <span class="pre">[--dry_run]</span> <span class="pre">--vault_ip</span> <span class="pre">IP</span> <span class="pre">--vault_action</span> <span class="pre">ACTION</span> <span class="pre">[--vault_user</span> <span class="pre">USER]</span> <span class="pre">[--vault_password</span> <span class="pre">PASSWD]</span> <span class="pre">[--vault_port</span> <span class="pre">PORT]</span></code></p>
+<dl class="option">
+<dt id="cmdoption-traffic-vault-util-dry-run">
+<code class="sig-name descname">--dry_run</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-traffic-vault-util-dry-run" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional flag which, if given, will cause <strong class="program">traffic_vault_util</strong> to not write changes, but merely print what <em>would</em> be done in a real run.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-vault-util-vault-action">
+<code class="sig-name descname">--vault_action</code><code class="sig-prename descclassname"> ACTION</code><a class="headerlink" href="#cmdoption-traffic-vault-util-vault-action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the action to be performed. Available actions are:</p>
+<dl class="simple">
+<dt>list_buckets</dt><dd><p>Lists the “buckets” in the Riak cluster used by Traffic Vault</p>
+</dd>
+<dt>list_keys</dt><dd><p>Lists all the keys in all the buckets in the Riak cluster used by Traffic Vault</p>
+</dd>
+<dt>list_values</dt><dd><p>Lists all the values of all the keys in all the buckets in the Riak cluster used by Traffic Vault</p>
+</dd>
+<dt>convert_ssl_to_xmlid</dt><dd><p>Changes the key of all records in all buckets that start with “ds” into the <code class="docutils literal notranslate"><span class="pre">xml_id</span></code> of the <a class="reference internal" href="../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> for which we assume the record was created.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-vault-util-vault-ip">
+<code class="sig-name descname">--vault_ip</code><code class="sig-prename descclassname"> IP</code><a class="headerlink" href="#cmdoption-traffic-vault-util-vault-ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Either the IP address or <abbr title="Fully Qualified Domain Name">FQDN</abbr> of the Traffic Vault instance with which <strong class="program">traffic_vault_util</strong> will interact.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If this IP address or <abbr title="Fully Qualified Domain Name">FQDN</abbr> does not point to a real Riak cluster, <strong class="program">traffic_vault_util</strong> will print an error message to STDOUT, but <em>will</em> <strong>not</strong> <em>terminate</em>. Instead, it will try forever to query the server to which it failed to connect, consuming large amounts of CPU usage all the while<a class="footnote-reference brackets" href="#id5" id="id2">1</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-vault-util-vault-password">
+<code class="sig-name descname">--vault_password</code><code class="sig-prename descclassname"> PASSWD</code><a class="headerlink" href="#cmdoption-traffic-vault-util-vault-password" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional flag used to specify the password of the user defined by <a class="reference internal" href="#cmdoption-traffic-vault-util-vault-user"><code class="xref std std-option docutils literal notranslate"><span class="pre">--vault_user</span></code></a> when authenticating with Traffic Vault’s Riak cluster.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Although this flag is optional, the utility will not work without it. It will try, but it will fail<a class="footnote-reference brackets" href="#id5" id="id3">1</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-vault-util-vault-port">
+<code class="sig-name descname">--vault_port</code><code class="sig-prename descclassname"> PORT</code><a class="headerlink" href="#cmdoption-traffic-vault-util-vault-port" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional flag which, if given, sets the port to which <strong class="program">traffic_vault_util</strong> will try to connect to Riak. Default: 8087</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-traffic-vault-util-vault-user">
+<code class="sig-name descname">--vault_user</code><code class="sig-prename descclassname"> USER</code><a class="headerlink" href="#cmdoption-traffic-vault-util-vault-user" title="Permalink to this definition">¶</a></dt>
+<dd><p>An optional flag which, if given, specifies the name of the user as whom to connect to Riak.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Although this flag is optional, the utility will not work without it. It will try, but it will fail<a class="footnote-reference brackets" href="#id5" id="id4">1</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="footnote brackets">
+<dt class="label" id="id5"><span class="brackets">1</span><span class="fn-backref">(<a href="#id2">1</a>,<a href="#id3">2</a>,<a href="#id4">3</a>)</span></dt>
+<dd><p>These problems are all tracked by <a class="reference external" href="https://github.com/apache/trafficcontrol/issues/3261">GitHub Issue #3261</a>.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="toaccess.html" class="btn btn-neutral float-right" title="toaccess" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="python_client.html" class="btn btn-neutral" title="Apache-TrafficControl Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

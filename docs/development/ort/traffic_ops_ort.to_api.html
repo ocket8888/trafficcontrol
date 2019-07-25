@@ -1,0 +1,518 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>traffic_ops_ort.to_api module &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="traffic_ops_ort.utils module" href="traffic_ops_ort.utils.html" />
+    <link rel="prev" title="traffic_ops_ort.packaging module" href="traffic_ops_ort.packaging.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administrator’s Guide</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../building.html">Building Traffic Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops.html">Traffic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops_golang.html">Traffic Ops - Go</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="traffic_ops_ort.html">traffic_ops_ort package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="traffic_ops_ort.html#usage">Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traffic_ops_ort.html#strings-with-special-meaning-to-ort">Strings with Special Meaning to ORT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traffic_ops_ort.html#module-contents">Module Contents</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="traffic_ops_ort.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="traffic_ops_ort.configuration.html">traffic_ops_ort.configuration module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traffic_ops_ort.main_routines.html">traffic_ops_ort.main_routines module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traffic_ops_ort.packaging.html">traffic_ops_ort.packaging module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">traffic_ops_ort.to_api module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traffic_ops_ort.utils.html">traffic_ops_ort.utils module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal.html">Traffic Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation_guidelines.html">Documentation Guidelines</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Developer’s Guide</a> &raquo;</li>
+        
+          <li><a href="traffic_ops_ort.html">traffic_ops_ort package</a> &raquo;</li>
+        
+      <li>traffic_ops_ort.to_api module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/development/ort/traffic_ops_ort.to_api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-traffic_ops_ort.to_api">
+<span id="traffic-ops-ort-to-api-module"></span><h1>traffic_ops_ort.to_api module<a class="headerlink" href="#module-traffic_ops_ort.to_api" title="Permalink to this headline">¶</a></h1>
+<p>This module contains functionality for dealing with the Traffic Ops ReST API.
+It extends the class provided by the official Apache Traffic Control Client.</p>
+<dl class="class">
+<dt id="traffic_ops_ort.to_api.API">
+<em class="property">class </em><code class="sig-prename descclassname">traffic_ops_ort.to_api.</code><code class="sig-name descname">API</code><span class="sig-paren">(</span><em class="sig-param">conf</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.to_api.API" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">trafficops.tosession.TOSession</span></code></p>
+<p>This class extends <code class="xref py py-class docutils literal notranslate"><span class="pre">trafficops.tosession.TOSession</span></code> to provide some ease-of-use
+functionality for getting things needed by <a class="reference internal" href="../../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a>.</p>
+<dl class="attribute">
+<dt id="traffic_ops_ort.to_api.API.VERSION">
+<code class="sig-name descname">VERSION</code><em class="property"> = '1.4'</em><a class="headerlink" href="#traffic_ops_ort.to_api.API.VERSION" title="Permalink to this definition">¶</a></dt>
+<dd><p>This should always be the latest API version supported - note this breaks compatability with
+older ATC versions. Go figure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traffic_ops_ort.to_api.API.getMyChkconfig">
+<code class="sig-name descname">getMyChkconfig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.to_api.API.getMyChkconfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches the ‘chkconfig’ for this server</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An iterable list of ‘chkconfig’ entries</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ConnectionError</strong> – when something goes wrong communicating with Traffic Ops</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traffic_ops_ort.to_api.API.getMyConfigFiles">
+<code class="sig-name descname">getMyConfigFiles</code><span class="sig-paren">(</span><em class="sig-param">conf</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.to_api.API.getMyConfigFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches configuration files constructed by Traffic Ops for this server</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function will set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">serverInfo</span></code> attribute of the object passed as
+the <code class="docutils literal notranslate"><span class="pre">conf</span></code> argument to an instance of <a class="reference internal" href="#traffic_ops_ort.to_api.ServerInfo" title="traffic_ops_ort.to_api.ServerInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerInfo</span></code></a> with the provided
+information.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>conf</strong> (<a class="reference internal" href="traffic_ops_ort.configuration.html#traffic_ops_ort.configuration.Configuration" title="traffic_ops_ort.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a>) – An object that represents the configuration of <strong class="program">traffic_ops_ort</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of constructed config file objects</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ConnectionError</strong> – when something goes wrong communicating with Traffic Ops</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traffic_ops_ort.to_api.API.getMyPackages">
+<code class="sig-name descname">getMyPackages</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.to_api.API.getMyPackages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches a list of the packages specified by Traffic Ops that should exist on this server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="traffic_ops_ort.packaging.html#traffic_ops_ort.packaging.Package" title="traffic_ops_ort.packaging.Package"><code class="xref py py-class docutils literal notranslate"><span class="pre">Package</span></code></a>]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>all of the packages which this system must have, according to Traffic Ops.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ConnectionError</strong> – if fetching the package list fails</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traffic_ops_ort.to_api.API.getMyStatus">
+<code class="sig-name descname">getMyStatus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.to_api.API.getMyStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches the status of this server as set in Traffic Ops</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ConnectionError</strong> – if fetching the status fails</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the name of the status to which this server is set in the Traffic Ops configuration</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traffic_ops_ort.to_api.API.getMyUpdateStatus">
+<code class="sig-name descname">getMyUpdateStatus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.to_api.API.getMyUpdateStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the update status of a server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ConnectionError</strong> – if something goes wrong communicating with the server</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An object representing the API’s response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traffic_ops_ort.to_api.API.getRaw">
+<code class="sig-name descname">getRaw</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.to_api.API.getRaw" title="Permalink to this definition">¶</a></dt>
+<dd><p>This gets the API response to a “raw” path, meaning it will queried directly without a
+<code class="docutils literal notranslate"><span class="pre">/api/1.x</span></code> prefix. Because the output structure of the API response is not known, this
+returns the response body as an unprocessed string rather than a Python object via e.g.
+Munch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The raw path on the Traffic Ops server</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The API response payload</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ConnectionError</strong> – When something goes wrong communicating with the Traffic Ops server</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traffic_ops_ort.to_api.API.updateTrafficOps">
+<code class="sig-name descname">updateTrafficOps</code><span class="sig-paren">(</span><em class="sig-param">mode</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.to_api.API.updateTrafficOps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates Traffic Ops’s knowledge of this server’s update status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mode</strong> (<a class="reference internal" href="traffic_ops_ort.configuration.html#traffic_ops_ort.configuration.Configuration.Modes" title="traffic_ops_ort.configuration.Configuration.Modes"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modes</span></code></a>) – The current run-mode of <strong class="program">traffic_ops_ort</strong></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="data">
+<dt id="traffic_ops_ort.to_api.API_LOGGERS">
+<code class="sig-prename descclassname">traffic_ops_ort.to_api.</code><code class="sig-name descname">API_LOGGERS</code><em class="property"> = {'error': &lt;function &lt;lambda&gt;&gt;, 'info': &lt;function &lt;lambda&gt;&gt;, 'success': &lt;function &lt;lambda&gt;&gt;, 'warning': &lt;function &lt;lambda&gt;&gt;}</em><a class="headerlink" href="#traffic_ops_ort.to_api.API_LOGGERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maps Traffic Ops alert levels to logging levels</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="traffic_ops_ort.to_api.CACHED_STATUSES">
+<code class="sig-prename descclassname">traffic_ops_ort.to_api.</code><code class="sig-name descname">CACHED_STATUSES</code><em class="property"> = []</em><a class="headerlink" href="#traffic_ops_ort.to_api.CACHED_STATUSES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Caches the names of statuses supported by Traffic Ops</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traffic_ops_ort.to_api.ServerInfo">
+<em class="property">class </em><code class="sig-prename descclassname">traffic_ops_ort.to_api.</code><code class="sig-name descname">ServerInfo</code><span class="sig-paren">(</span><em class="sig-param">raw</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.to_api.ServerInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Holds information about a server, as returned by the Traffic Ops API
+<code class="docutils literal notranslate"><span class="pre">api/1.x/servers/&lt;hostname&gt;/configfiles/ats</span></code> endpoint</p>
+<dl class="attribute">
+<dt id="traffic_ops_ort.to_api.ServerInfo.cdnId">
+<code class="sig-name descname">cdnId</code><em class="property"> = -1</em><a class="headerlink" href="#traffic_ops_ort.to_api.ServerInfo.cdnId" title="Permalink to this definition">¶</a></dt>
+<dd><p>A database primary key for the CDN to which this server is assigned</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traffic_ops_ort.to_api.ServerInfo.cdnName">
+<code class="sig-name descname">cdnName</code><em class="property"> = ''</em><a class="headerlink" href="#traffic_ops_ort.to_api.ServerInfo.cdnName" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the CDN to which this server is assigned</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traffic_ops_ort.to_api.ServerInfo.profileId">
+<code class="sig-name descname">profileId</code><em class="property"> = -1</em><a class="headerlink" href="#traffic_ops_ort.to_api.ServerInfo.profileId" title="Permalink to this definition">¶</a></dt>
+<dd><p>A database primary key for this server’s profile’s information</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traffic_ops_ort.to_api.ServerInfo.profileName">
+<code class="sig-name descname">profileName</code><em class="property"> = ''</em><a class="headerlink" href="#traffic_ops_ort.to_api.ServerInfo.profileName" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the profile in use by this server</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traffic_ops_ort.to_api.ServerInfo.sanitize">
+<code class="sig-name descname">sanitize</code><span class="sig-paren">(</span><em class="sig-param">fmt</em>, <em class="sig-param">hostname</em><span class="sig-paren">)</span><a class="headerlink" href="#traffic_ops_ort.to_api.ServerInfo.sanitize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sanitizes an input string with the passed hostname information</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fmt</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The string to be sanitized</p></li>
+<li><p><strong>hostname</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – A tuple containing the short and full hostnames of the server</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The string <code class="docutils literal notranslate"><span class="pre">fmt</span></code> after sanitization</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traffic_ops_ort.to_api.ServerInfo.serverId">
+<code class="sig-name descname">serverId</code><em class="property"> = -1</em><a class="headerlink" href="#traffic_ops_ort.to_api.ServerInfo.serverId" title="Permalink to this definition">¶</a></dt>
+<dd><p>A database primary key for this server’s information</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traffic_ops_ort.to_api.ServerInfo.serverIpv4">
+<code class="sig-name descname">serverIpv4</code><em class="property"> = ''</em><a class="headerlink" href="#traffic_ops_ort.to_api.ServerInfo.serverIpv4" title="Permalink to this definition">¶</a></dt>
+<dd><p>This server’s IPv4 address</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traffic_ops_ort.to_api.ServerInfo.serverName">
+<code class="sig-name descname">serverName</code><em class="property"> = ''</em><a class="headerlink" href="#traffic_ops_ort.to_api.ServerInfo.serverName" title="Permalink to this definition">¶</a></dt>
+<dd><p>This server’s short hostname</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traffic_ops_ort.to_api.ServerInfo.serverTcpPort">
+<code class="sig-name descname">serverTcpPort</code><em class="property"> = 80</em><a class="headerlink" href="#traffic_ops_ort.to_api.ServerInfo.serverTcpPort" title="Permalink to this definition">¶</a></dt>
+<dd><p>The port on which the caching proxy of this server listens</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traffic_ops_ort.to_api.ServerInfo.toRevProxyUrl">
+<code class="sig-name descname">toRevProxyUrl</code><em class="property"> = ''</em><a class="headerlink" href="#traffic_ops_ort.to_api.ServerInfo.toRevProxyUrl" title="Permalink to this definition">¶</a></dt>
+<dd><p>This specifies the url of a reverse proxy that should be used for future requests to the
+Traffic Ops API - if present.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traffic_ops_ort.to_api.ServerInfo.toUrl">
+<code class="sig-name descname">toUrl</code><em class="property"> = ''</em><a class="headerlink" href="#traffic_ops_ort.to_api.ServerInfo.toUrl" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Traffic Ops URL… not sure what that’s for…</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="traffic_ops_ort.utils.html" class="btn btn-neutral float-right" title="traffic_ops_ort.utils module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="traffic_ops_ort.packaging.html" class="btn btn-neutral" title="traffic_ops_ort.packaging module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,353 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configure Anonymous Blocking &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Configure Cache Group Fallbacks" href="cachegroup_fallback.html" />
+    <link rel="prev" title="Quick How To Guides" href="index.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_ops/using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Quick How To Guides</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Configure Anonymous Blocking</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#traffic-router-access-log">Traffic Router Access Log</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cachegroup_fallback.html">Configure Cache Group Fallbacks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ciab.html">CDN in a Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dnssec.html">Configure DNSSEC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_requests.html">Delivery Service Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="federations.html">Configure Federations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multi_site.html">Configure Multi-Site Origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="regionalgeo.html">Configure Regional Geo-blocking (RGB)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static_dns.html">Configuring Static DNS Entries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="steering.html">Configure Delivery Service Steering</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Administrator’s Guide</a> &raquo;</li>
+        
+          <li><a href="index.html">Quick How To Guides</a> &raquo;</li>
+        
+      <li>Configure Anonymous Blocking</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/admin/quick_howto/anonymous_blocking.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configure-anonymous-blocking">
+<span id="anonymous-blocking-qht"></span><h1>Configure Anonymous Blocking<a class="headerlink" href="#configure-anonymous-blocking" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Anonymous Blocking is only supported for HTTP delivery services. You will need access to a database that provides anonymous IP statistics (<a class="reference external" href="https://www.maxmind.com/en/solutions/geoip2-enterprise-product-suite/anonymous-ip-database">Maxmind’s database</a> is recommended, as this functionality was built specifically to work with it.)</p>
+</div>
+<ol class="arabic">
+<li><p>Prepare the Anonymous Blocking configuration file. Anonymous Blocking uses a configuration file in JSON format to define blocking rules for <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>s. The file needs to be put on an HTTP server accessible to Traffic Router.</p>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">#59 </span><span class="caption-text">Example Configuration JSON</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;customer&quot;</span><span class="p">:</span> <span class="s2">&quot;YourCompany&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;date&quot;</span> <span class="p">:</span> <span class="s2">&quot;2017-05-23 03:28:25&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Anonymous IP Blocking Policy&quot;</span><span class="p">,</span>
+
+    <span class="nt">&quot;anonymousIp&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;blockAnonymousVPN&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                     <span class="nt">&quot;blockHostingProvider&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                     <span class="nt">&quot;blockPublicProxy&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                     <span class="nt">&quot;blockTorExitNode&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">},</span>
+
+    <span class="nt">&quot;ip4Whitelist&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;192.168.30.0/24&quot;</span><span class="p">,</span> <span class="s2">&quot;10.0.2.0/24&quot;</span><span class="p">,</span> <span class="s2">&quot;10.1.1.1/32&quot;</span><span class="p">],</span>
+    <span class="nt">&quot;ip6Whitelist&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;2001:550:90a::/48&quot;</span><span class="p">,</span> <span class="s2">&quot;::1/128&quot;</span><span class="p">],</span>
+    <span class="nt">&quot;redirectUrl&quot;</span><span class="p">:</span> <span class="s2">&quot;http://youvebeenblocked.com&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<dl class="simple">
+<dt>anonymousIp</dt><dd><p>Contains the types of IPs which can be checked against the Anonymous IP Database. There are 4 types of IPs which can be checked: <abbr title="Virtual Private Network">VPN</abbr>s, Hosting Providers, Public Proxies, and <abbr title="The Onion Ring">TOR</abbr> “Exit Nodes”. Each type of IP can be enabled or disabled. If the value is true, IPs matching this type will be blocked when the feature is enabled in the <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>. If the value is false, IPs which match this type will not be blocked. If an IP matches more than 1 type and any type is enabled, the IP will be blocked.</p>
+</dd>
+<dt>redirectUrl</dt><dd><p>The URL that will be returned to the blocked clients. Without a <em class="dfn">redirectUrl</em>, the clients will receive an HTTP response code <code class="docutils literal notranslate"><span class="pre">403</span> <span class="pre">Forbidden</span></code>. With a <em class="dfn">redirectUrl</em>, the clients will be redirected with an HTTP response code <code class="docutils literal notranslate"><span class="pre">302</span> <span class="pre">Found</span></code>.</p>
+</dd>
+<dt>ipWhiteList</dt><dd><p>An optional element. It includes a list of <abbr title="Classless Inter-Domain Routing">CIDR</abbr> blocks indicating the IPv4 and IPv6 subnets that are allowed by the rule. If this list exists and the value is not <code class="docutils literal notranslate"><span class="pre">null</span></code>, client IPs will be matched against the <abbr title="Classless Inter-Domain Routing">CIDR</abbr> list, and if there is any match, the request will be allowed. If there is no match in the white list, further anonymous blocking logic will continue.</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>Add the following three Anonymous Blocking <a class="reference internal" href="../../overview/profiles_and_parameters.html#parameters"><span class="std std-ref">Parameters</span></a> in Traffic Portal with the “CRConfig.json” <a class="reference internal" href="../../overview/profiles_and_parameters.html#parameter-config-file"><span class="std std-ref">Config File</span></a>, and ensure they are assigned to all of the Traffic Routers that should perform Anonymous Blocking:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">anonymousip.policy.configuration</span></code></dt><dd><p>The URL of the Anonymous Blocking configuration file. Traffic Router will fetch the file from this URL.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">anonymousip.polling.url</span></code></dt><dd><p>The URL of the Anonymous IP Database. Traffic Router will fetch the file from this URL.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">anonymousip.polling.interval</span></code></dt><dd><p>The interval that Traffic Router polls the Anonymous Blocking configuration file and Anonymous IP Database.</p>
+</dd>
+</dl>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../_images/01.png"><img alt="../../_images/01.png" src="../../_images/01.png" style="width: 40%;" /></a>
+</div>
+</div></blockquote>
+</li>
+<li><p>Enable Anonmyous Blocking for a <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a> using the <a class="reference internal" href="../traffic_portal/usingtrafficportal.html#tp-services-delivery-service"><span class="std std-ref">Delivery Services view in Traffic Portal</span></a> (don’t forget to save changes!)</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="../../_images/02.png"><img alt="../../_images/02.png" src="../../_images/02.png" style="width: 40%;" /></a>
+</div>
+</div></blockquote>
+</li>
+<li><p>Go to <a class="reference internal" href="../traffic_portal/usingtrafficportal.html#tp-cdns"><span class="std std-ref">the Traffic Portal CDNs view</span></a>, click on <span class="guilabel">Diff CDN Config Snapshot</span>, and click <span class="guilabel">Perform Snapshot</span>.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="../../_images/03.png"><img alt="../../_images/03.png" src="../../_images/03.png" style="width: 40%;" /></a>
+</div>
+</div></blockquote>
+</li>
+</ol>
+<div class="section" id="traffic-router-access-log">
+<h2>Traffic Router Access Log<a class="headerlink" href="#traffic-router-access-log" title="Permalink to this headline">¶</a></h2>
+<p>Anonymous Blocking extends the field of <code class="docutils literal notranslate"><span class="pre">rtype</span></code> and adds a new field <code class="docutils literal notranslate"><span class="pre">ANON_BLOCK</span></code> in the Traffic Router <code class="docutils literal notranslate"><span class="pre">access.log</span></code> file to help monitor this feature. If the <code class="docutils literal notranslate"><span class="pre">rtype</span></code> in an access log is <code class="docutils literal notranslate"><span class="pre">ANON_BLOCK</span></code> then the client’s IP was found in the Anonymous IP Database and was blocked.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../traffic_router.html#tr-logs"><span class="std std-ref">Troubleshooting and Log Files</span></a></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cachegroup_fallback.html" class="btn btn-neutral float-right" title="Configure Cache Group Fallbacks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Quick How To Guides" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

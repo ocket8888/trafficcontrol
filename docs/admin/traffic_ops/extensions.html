@@ -1,0 +1,375 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Managing Traffic Ops Extensions &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Traffic Ops - Installing" href="installation.html" />
+    <link rel="prev" title="Traffic Ops - Configuring" href="configuration.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Traffic Ops - Configuring</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Managing Traffic Ops Extensions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#check-extensions">Check Extensions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#check-extensions-installed-by-default">Check Extensions Installed by Default</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#data-source-extensions">Data Source Extensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-cron-file">Example Cron File</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quick_howto/index.html">Quick How To Guides</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Administrator’s Guide</a> &raquo;</li>
+        
+      <li>Managing Traffic Ops Extensions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/admin/traffic_ops/extensions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="managing-traffic-ops-extensions">
+<span id="admin-to-ext-script"></span><h1>Managing Traffic Ops Extensions<a class="headerlink" href="#managing-traffic-ops-extensions" title="Permalink to this headline">¶</a></h1>
+<p>Traffic Ops supports two types of extensions. <a class="reference internal" href="#check-extensions">Check Extensions</a> are analytics scripts that collect and display information as columns in the table under <span class="menuselection">Monitor ‣ Cache Checks</span> in Traffic Portal. <a class="reference internal" href="#data-source-extensions">Data Source Extensions</a> provide ways to add data to the graph views and usage APIs.</p>
+<div class="section" id="check-extensions">
+<span id="to-check-ext"></span><h2>Check Extensions<a class="headerlink" href="#check-extensions" title="Permalink to this headline">¶</a></h2>
+<p>Check Extensions are scripts that, after registering with Traffic Ops, have a column reserved in the <span class="menuselection">Monitor ‣ Cache Checks</span> view and usually run periodically using <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/cron(8)">cron(8)</a></em>. Each extension is a separate executable located in <code class="file docutils literal notranslate"><em><span class="pre">$TO_HOME</span></em><span class="pre">/bin/checks/</span></code> on the Traffic Ops server (though all of the default extensions are written in Perl, this is in <em>no way</em> a requirement; they can be any valid executable). The currently registered extensions can be listed by running <code class="docutils literal notranslate"><span class="pre">/opt/traffic_ops/app/bin/extensions</span> <span class="pre">-a</span></code>. Some extensions automatically registered with the Traffic Ops database (<code class="docutils literal notranslate"><span class="pre">to_extension</span></code> table) at install time (see <a class="reference external" href="https://github.com/apache/trafficcontrol/tree/master/traffic_ops/app/db/seeds.sql"><code class="docutils literal notranslate"><span class="pre">traffic_ops/app/db/seeds.sql</span></code></a>). However, <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/cron(8)">cron(8)</a></em> must still be configured to run these checks periodically. The extensions are called like so:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">#24 </span><span class="caption-text">Example Check Extension Call</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$TO_HOME</span>/bin/checks/&lt;name&gt;  -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;,https://\&quot;&lt;traffic_ops_ip&gt;\&quot;, \&quot;check_name\&quot;: \&quot;&lt;check_name&gt;\&quot;}&quot;</span> -l &lt;log level&gt;
+</pre></div>
+</div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">name</dt>
+<dd class="field-odd"><p>The basename of the extension executable</p>
+</dd>
+<dt class="field-even">traffic_ops_ip</dt>
+<dd class="field-even"><p>The IP address or <abbr title="Fully Qualified Domain Name">FQDN</abbr> of the Traffic Ops server</p>
+</dd>
+<dt class="field-odd">check_name</dt>
+<dd class="field-odd"><p>The name of the check e.g. <code class="docutils literal notranslate"><span class="pre">CDU</span></code>, <code class="docutils literal notranslate"><span class="pre">CHR</span></code>, <code class="docutils literal notranslate"><span class="pre">DSCP</span></code>, <code class="docutils literal notranslate"><span class="pre">MTU</span></code>, etc…</p>
+</dd>
+<dt class="field-even">log_level</dt>
+<dd class="field-even"><p>A whole number between 1 and 4 (inclusive), with 4 being the most verbose. Implementation of this field is optional</p>
+</dd>
+</dl>
+<p>It is the responsibility of the check extension script to iterate over the servers it wants to check and post the results. An example script might proceed by logging into the Traffic Ops server using the HTTPS <code class="docutils literal notranslate"><span class="pre">base_url</span></code> provided on the command line. The script is hard-coded with an authentication token that is also provisioned in the Traffic Ops User database. This token allows the script to obtain a cookie used in later communications with the Traffic Ops API. The script then obtains a list of all <a class="reference internal" href="../../glossary.html#term-cache-server"><span class="xref std std-term">cache server</span></a>s to be polled by accessing <a class="reference internal" href="../../api/servers.html#to-api-servers"><span class="std std-ref">servers</span></a>. This list is then iterated, running a command to gather the stats from each server. For some extensions, an HTTP <code class="docutils literal notranslate"><span class="pre">GET</span></code> request might be made to the <abbr title="Apache Traffic Server">ATS</abbr> <code class="docutils literal notranslate"><span class="pre">astats</span></code> plugin, while for others the server might be pinged, or a command might run over <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/ssh(1)">ssh(1)</a></em>. The results are then compiled into a numeric or boolean result and the script submits a <code class="docutils literal notranslate"><span class="pre">POST</span></code> request containing the result back to Traffic Ops using <a class="reference internal" href="../../api/servercheck.html#to-api-servercheck"><span class="std std-ref">servercheck</span></a>. A check extension can have a column of <img alt="checkmark" src="../../_images/good.png" />‘s and <img alt="X" src="../../_images/bad.png" />‘s (CHECK_EXTENSION_BOOL) or a column that shows a number (CHECK_EXTENSION_NUM).</p>
+<div class="section" id="check-extensions-installed-by-default">
+<h3>Check Extensions Installed by Default<a class="headerlink" href="#check-extensions-installed-by-default" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt><abbr title="Cache Disk Usage">CDU</abbr></dt><dd><p>This check shows how much of the available total cache disk is in use. A “warm” cache should show 100.00.</p>
+</dd>
+<dt><abbr title="Cache Hit Ratio">CHR</abbr></dt><dd><p>The cache hit ratio for the cache in the last 15 minutes (the interval is determined by the <code class="docutils literal notranslate"><span class="pre">cron</span></code> entry).</p>
+</dd>
+<dt><abbr title="Differential Services CodePoint">DSCP</abbr></dt><dd><p>Checks if the returning traffic from the cache has the correct <abbr title="Differential Services CodePoint Check">DSCP</abbr> value as assigned in the <a class="reference internal" href="../../glossary.html#term-delivery-service"><span class="xref std std-term">Delivery Service</span></a>. (Some routers will overwrite <abbr title="Differential Services CodePoint">DSCP</abbr>)</p>
+</dd>
+<dt><abbr title="Maximum Transmission Unit">MTU</abbr></dt><dd><p>Checks if the Traffic Ops host (if that is the one running the check) can send and receive 8192B packets to the <code class="docutils literal notranslate"><span class="pre">ip_address</span></code> of the server in the server table.</p>
+</dd>
+<dt><abbr title="Operational Readiness Test">ORT</abbr></dt><dd><p>The ORT column shows how many changes the <a class="reference internal" href="../../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> script would apply if it was run. The number in this column should be 0 for caches that do not have updates pending.</p>
+</dd>
+<dt>10G</dt><dd><p>Is the <code class="docutils literal notranslate"><span class="pre">ip_address</span></code> (the main IPv4 address) from the server table ping-able?</p>
+</dd>
+<dt><abbr title="Integrated Lights-Out">ILO</abbr></dt><dd><p>Is the <code class="docutils literal notranslate"><span class="pre">ilo_ip_address</span></code> (the lights-out-management IPv4 address) from the server table ping-able?</p>
+</dd>
+<dt>10G6</dt><dd><p>Is the <code class="docutils literal notranslate"><span class="pre">ip6_address</span></code> (the main IPv6 address) from the server table ping-able?</p>
+</dd>
+<dt><abbr title="Fully Qualified Domain Name">FQDN</abbr></dt><dd><p>Is the <abbr title="Fully Qualified Domain Name">FQDN</abbr> (the concatenation of <code class="docutils literal notranslate"><span class="pre">host_name</span></code> and <code class="docutils literal notranslate"><span class="pre">.</span></code> and <code class="docutils literal notranslate"><span class="pre">domain_name</span></code> from the server table) ping-able?</p>
+</dd>
+<dt><abbr title="Responds to Traffic Router">RTR</abbr></dt><dd><p>Checks the state of each cache as perceived by all Traffic Monitors (via Traffic Router). This extension asks each Traffic Router for the state of the cache. A check failure is indicated if one or more monitors report an error for a cache. A cache is only marked as good if all reports are positive. (This is a pessimistic approach, opposite of how TM marks a cache as up, “the optimistic approach”)</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="data-source-extensions">
+<span id="to-datasource-ext"></span><h2>Data Source Extensions<a class="headerlink" href="#data-source-extensions" title="Permalink to this headline">¶</a></h2>
+<p>Data Source Extensions work in much the same way as <a class="reference internal" href="#check-extensions">Check Extensions</a>, but are implemented differently. Rather than being a totally external executable, a Data Source Extension <em>must</em> be written in Perl 5, as they are injected via manipulation of the <code class="docutils literal notranslate"><span class="pre">$PERL5LIB</span></code> environment variable. These extensions are not very well-documented (as you may be able to tell), and support for extending them may be phased out in future releases.</p>
+</div>
+<div class="section" id="example-cron-file">
+<h2>Example Cron File<a class="headerlink" href="#example-cron-file" title="Permalink to this headline">¶</a></h2>
+<p>The <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/cron(8)">cron(8)</a></em> file should be edited by running  <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/crontab(1)">crontab(1)</a></em> as the <code class="docutils literal notranslate"><span class="pre">traffops</span></code> user, or with <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/sudo(8)">sudo(8)</a></em>. You may need to adjust the path to your <code class="docutils literal notranslate"><span class="pre">$TO_HOME</span></code> to match your system.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">#25 </span><span class="caption-text">Example Cron File</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">PERL5LIB</span><span class="o">=</span>/opt/traffic_ops/app/local/lib/perl5:/opt/traffic_ops/app/lib
+
+<span class="c1"># IPv4 ping examples - The &#39;select: [&quot;hostName&quot;,&quot;domainName&quot;]&#39; works but, if you want to check DNS resolution use FQDN.</span>
+*/15 * * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;10G\&quot;, \&quot;select\&quot;: [\&quot;hostName\&quot;,\&quot;domainName\&quot;]}&quot;</span> &gt;&gt; /var/log/traffic_ops/extensionCheck.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+*/15 * * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;10G\&quot;, \&quot;select\&quot;: \&quot;ipAddress\&quot;}&quot;</span> &gt;&gt; /var/log/traffic_ops/extensionCheck.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+*/15 * * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;10G\&quot;, \&quot;name\&quot;: \&quot;IPv4 Ping\&quot;, \&quot;select\&quot;: \&quot;ipAddress\&quot;, \&quot;syslog_facility\&quot;: \&quot;local0\&quot;}&quot;</span> &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c1"># IPv6 ping examples</span>
+*/15 * * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;10G6\&quot;, \&quot;name\&quot;: \&quot;IPv6 Ping\&quot;, \&quot;select\&quot;: \&quot;ip6Address\&quot;, \&quot;syslog_facility\&quot;: \&quot;local0\&quot;}&quot;</span> &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+*/15 * * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;10G6\&quot;, \&quot;select\&quot;: \&quot;ip6Address\&quot;}&quot;</span> &gt;&gt; /var/log/traffic_ops/extensionCheck.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c1"># iLO ping</span>
+<span class="m">18</span> * * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;ILO\&quot;, \&quot;select\&quot;: \&quot;iloIpAddress\&quot;}&quot;</span> &gt;&gt; /var/log/traffic_ops/extensionCheck.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="m">18</span> * * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;ILO\&quot;, \&quot;name\&quot;: \&quot;ILO ping\&quot;, \&quot;select\&quot;: \&quot;iloIpAddress\&quot;, \&quot;syslog_facility\&quot;: \&quot;local0\&quot;}&quot;</span> &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c1"># MTU ping</span>
+<span class="m">45</span> <span class="m">0</span> * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;MTU\&quot;, \&quot;select\&quot;: \&quot;ipAddress\&quot;}&quot;</span> &gt;&gt; /var/log/traffic_ops/extensionCheck.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="m">45</span> <span class="m">0</span> * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;MTU\&quot;, \&quot;select\&quot;: \&quot;ip6Address\&quot;}&quot;</span> &gt;&gt; /var/log/traffic_ops/extensionCheck.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="m">45</span> <span class="m">0</span> * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;MTU\&quot;, \&quot;name\&quot;: \&quot;Max Trans Unit\&quot;, \&quot;select\&quot;: \&quot;ipAddress\&quot;, \&quot;syslog_facility\&quot;: \&quot;local0\&quot;}&quot;</span> &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="m">45</span> <span class="m">0</span> * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;MTU\&quot;, \&quot;name\&quot;: \&quot;Max Trans Unit\&quot;, \&quot;select\&quot;: \&quot;ip6Address\&quot;, \&quot;syslog_facility\&quot;: \&quot;local0\&quot;}&quot;</span> &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c1"># FQDN</span>
+<span class="m">27</span> * * * * root /opt/traffic_ops/app/bin/checks/ToFQDNCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;FQDN\&quot;&quot;</span>  &gt;&gt; /var/log/traffic_ops/extensionCheck.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="m">27</span> * * * * root /opt/traffic_ops/app/bin/checks/ToFQDNCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;FQDN\&quot;, \&quot;name\&quot;: \&quot;DNS Lookup\&quot;, \&quot;syslog_facility\&quot;: \&quot;local0\&quot;}&quot;</span> &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c1"># DSCP</span>
+<span class="m">36</span> * * * * root /opt/traffic_ops/app/bin/checks/ToDSCPCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;DSCP\&quot;, \&quot;cms_interface\&quot;: \&quot;eth0\&quot;}&quot;</span> &gt;&gt; /var/log/traffic_ops/extensionCheck.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="m">36</span> * * * * root /opt/traffic_ops/app/bin/checks/ToDSCPCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;DSCP\&quot;, \&quot;name\&quot;: \:term:`Delivery Service`\&quot;, \&quot;cms_interface\&quot;: \&quot;eth0\&quot;, \&quot;syslog_facility\&quot;: \&quot;local0\&quot;}&quot;</span> &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c1"># RTR</span>
+<span class="m">10</span> * * * * root /opt/traffic_ops/app/bin/checks/ToRTRCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;RTR\&quot;}&quot;</span>  &gt;&gt; /var/log/traffic_ops/extensionCheck.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="m">10</span> * * * * root /opt/traffic_ops/app/bin/checks/ToRTRCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;RTR\&quot;, \&quot;name\&quot;: \&quot;Content Router Check\&quot;, \&quot;syslog_facility\&quot;: \&quot;local0\&quot;}&quot;</span> &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c1"># CHR</span>
+*/15 * * * * root /opt/traffic_ops/app/bin/checks/ToCHRCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;CHR\&quot;}&quot;</span>  &gt;&gt; /var/log/traffic_ops/extensionCheck.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c1"># CDU</span>
+<span class="m">20</span> * * * * root /opt/traffic_ops/app/bin/checks/ToCDUCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;CDU\&quot;}&quot;</span>  &gt;&gt; /var/log/traffic_ops/extensionCheck.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c1"># ORT</span>
+<span class="m">40</span> * * * * ssh_key_edge_user /opt/traffic_ops/app/bin/checks/ToORTCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;ORT\&quot;}&quot;</span>  &gt;&gt; /var/log/traffic_ops/extensionCheck.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="m">40</span> * * * * ssh_key_edge_user /opt/traffic_ops/app/bin/checks/ToORTCheck.pl -c <span class="s2">&quot;{\&quot;base_url\&quot;: \&quot;https://localhost\&quot;, \&quot;check_name\&quot;: \&quot;ORT\&quot;, \&quot;name\&quot;: \&quot;Operational Readiness Test\&quot;, \&quot;syslog_facility\&quot;: \&quot;local0\&quot;}&quot;</span> &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="installation.html" class="btn btn-neutral float-right" title="Traffic Ops - Installing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="configuration.html" class="btn btn-neutral" title="Traffic Ops - Configuring" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

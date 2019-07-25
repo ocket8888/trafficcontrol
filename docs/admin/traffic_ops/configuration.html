@@ -1,0 +1,445 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Traffic Ops - Configuring &mdash; Traffic Control 3.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Managing Traffic Ops Extensions" href="extensions.html" />
+    <link rel="prev" title="Administrator’s Guide" href="../index.html" />
+    <link href="../../_static/theme_overrides.css" rel="stylesheet" type="text/css"/>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Traffic Control
+          
+
+          
+            
+            <img src="../../_static/ATC-SVG-FULL-WHITE.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../basics/index.html">CDN Basics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">Traffic Control Overview</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Administrator’s Guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Traffic Ops - Configuring</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-the-ssl-certificate">Installing the SSL Certificate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#self-signed-certificate-development">Self-signed Certificate (Development)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#certificate-from-certificate-authority-production">Certificate from Certificate Authority (Production)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#regions-locations-and-cache-groups">Regions, Locations and Cache Groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-content-purge">Configuring Content Purge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-the-centos-kickstart-file">Creating the CentOS Kickstart File</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#generating-a-system-image">Generating a System Image</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring-the-go-application">Configuring the Go Application</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="extensions.html">Managing Traffic Ops Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Traffic Ops - Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using.html">Traffic Ops - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/installation.html">Traffic Portal Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_portal/usingtrafficportal.html">Traffic Portal - Using</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_monitor.html">Traffic Monitor Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router.html">Traffic Router Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_router/migrationto2-3.html">Traffic Router - Migrating to 3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_stats.html">Traffic Stats Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_server.html">Traffic Server Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../traffic_vault.html">Traffic Vault Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quick_howto/index.html">Quick How To Guides</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Developer’s Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Traffic Ops API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tools/index.html">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Traffic Control</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Administrator’s Guide</a> &raquo;</li>
+        
+      <li>Traffic Ops - Configuring</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/admin/traffic_ops/configuration.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="traffic-ops-configuring">
+<h1>Traffic Ops - Configuring<a class="headerlink" href="#traffic-ops-configuring" title="Permalink to this headline">¶</a></h1>
+<p>Follow the steps below to configure the newly installed Traffic Ops Instance.</p>
+<div class="section" id="installing-the-ssl-certificate">
+<h2>Installing the SSL Certificate<a class="headerlink" href="#installing-the-ssl-certificate" title="Permalink to this headline">¶</a></h2>
+<p>By default, Traffic Ops runs as an SSL web server (that is, over HTTPS), and a certificate needs to be installed.</p>
+<div class="section" id="self-signed-certificate-development">
+<h3>Self-signed Certificate (Development)<a class="headerlink" href="#self-signed-certificate-development" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">#18 </span><span class="caption-text">Example Procedure</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> openssl genrsa -des3 -passout pass:x -out localhost.pass.key <span class="m">2048</span>
+<span class="go">Generating RSA private key, 2048 bit long modulus</span>
+<span class="go">...</span>
+<span class="gp">$</span> openssl rsa -passin pass:x -in localhost.pass.key -out localhost.key
+<span class="go">writing RSA key</span>
+<span class="gp">$</span> rm localhost.pass.key
+
+<span class="gp">$</span> openssl req -new -key localhost.key -out localhost.csr
+<span class="go">You are about to be asked to enter information that will be incorporated</span>
+<span class="go">into your certificate request.</span>
+<span class="go">What you are about to enter is what is called a Distinguished Name or a DN.</span>
+<span class="go">There are quite a few fields but you can leave some blank</span>
+<span class="go">For some fields there will be a default value,</span>
+<span class="go">If you enter &#39;.&#39;, the field will be left blank.</span>
+<span class="go">-----</span>
+<span class="go">Country Name (2 letter code) [XX]:US&lt;enter&gt;</span>
+<span class="go">State or Province Name (full name) []:CO&lt;enter&gt;</span>
+<span class="go">Locality Name (eg, city) [Default City]:Denver&lt;enter&gt;</span>
+<span class="go">Organization Name (eg, company) [Default Company Ltd]: &lt;enter&gt;</span>
+<span class="go">Organizational Unit Name (eg, section) []: &lt;enter&gt;</span>
+<span class="go">Common Name (eg, your name or your server&#39;s hostname) []: &lt;enter&gt;</span>
+<span class="go">Email Address []: &lt;enter&gt;</span>
+
+<span class="go">Please enter the following &#39;extra&#39; attributes</span>
+<span class="go">to be sent with your certificate request</span>
+<span class="go">A challenge password []: pass&lt;enter&gt;</span>
+<span class="go">An optional company name []: &lt;enter&gt;</span>
+<span class="gp">$</span> openssl x509 -req -sha256 -days <span class="m">365</span> -in localhost.csr -signkey localhost.key -out localhost.crt
+<span class="go">Signature ok</span>
+<span class="go">subject=/C=US/ST=CO/L=Denver/O=Default Company Ltd</span>
+<span class="go">Getting Private key</span>
+<span class="gp">$</span> sudo cp localhost.crt /etc/pki/tls/certs
+<span class="gp">$</span> sudo cp localhost.key /etc/pki/tls/private
+<span class="gp">$</span> sudo chown trafops:trafops /etc/pki/tls/certs/localhost.crt
+<span class="gp">$</span> sudo chown trafops:trafops /etc/pki/tls/private/localhost.key
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="certificate-from-certificate-authority-production">
+<h3>Certificate from Certificate Authority (Production)<a class="headerlink" href="#certificate-from-certificate-authority-production" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You will need to know the appropriate answers when generating the certificate request file <code class="file docutils literal notranslate"><span class="pre">trafficopss.csr</span></code> below.</p>
+</div>
+<div class="section" id="example-procedure">
+<h4>Example Procedure<a class="headerlink" href="#example-procedure" title="Permalink to this headline">¶</a></h4>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">#19 </span><span class="caption-text">Example Procedure</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> openssl genrsa -des3 -passout pass:x -out trafficops.pass.key <span class="m">2048</span>
+<span class="go">Generating RSA private key, 2048 bit long modulus</span>
+<span class="go">...</span>
+<span class="gp">$</span> openssl rsa -passin pass:x -in trafficops.pass.key -out trafficops.key
+<span class="go">writing RSA key</span>
+<span class="gp">$</span> rm localhost.pass.key
+</pre></div>
+</div>
+</div>
+<p>Generate the <abbr title="Certificate Signing Request">CSR</abbr> file needed for <abbr title="Certificate Authority">CA</abbr> request</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">#20 </span><span class="caption-text">Example Certificate Signing Request File Generation</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> openssl req -new -key trafficops.key -out trafficops.csr
+<span class="go">You are about to be asked to enter information that will be incorporated</span>
+<span class="go">into your certificate request.</span>
+<span class="go">What you are about to enter is what is called a Distinguished Name or a DN.</span>
+<span class="go">There are quite a few fields but you can leave some blank</span>
+<span class="go">For some fields there will be a default value,</span>
+<span class="go">If you enter &#39;.&#39;, the field will be left blank.</span>
+<span class="go">-----</span>
+<span class="go">Country Name (2 letter code) [XX]: &lt;enter country code&gt;</span>
+<span class="go">State or Province Name (full name) []: &lt;enter state or province&gt;</span>
+<span class="go">Locality Name (eg, city) [Default City]: &lt;enter locality name&gt;</span>
+<span class="go">Organization Name (eg, company) [Default Company Ltd]: &lt;enter organization name&gt;</span>
+<span class="go">Organizational Unit Name (eg, section) []: &lt;enter organizational unit name&gt;</span>
+<span class="go">Common Name (eg, your name or your server&#39;s hostname) []: &lt;enter server&#39;s hostname name&gt;</span>
+<span class="go">Email Address []: &lt;enter e-mail address&gt;</span>
+
+<span class="go">Please enter the following &#39;extra&#39; attributes</span>
+<span class="go">to be sent with your certificate request</span>
+<span class="go">A challenge password []: &lt;enter challenge password&gt;</span>
+<span class="go">An optional company name []: &lt;enter&gt;</span>
+<span class="gp">$</span> sudo cp trafficops.key /etc/pki/tls/private
+<span class="gp">$</span> sudo chown trafops:trafops /etc/pki/tls/private/trafficops.key
+</pre></div>
+</div>
+</div>
+<p>You must then take the output file <code class="file docutils literal notranslate"><span class="pre">trafficops.csr</span></code> and submit a request to your <abbr title="Certificate Authority">CA</abbr>. Once you get approved and receive your <code class="file docutils literal notranslate"><span class="pre">trafficops.crt</span></code> file</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-number">#21 </span><span class="caption-text">Certificate Installation</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo cp trafficops.crt /etc/pki/tls/certs
+sudo chown trafops:trafops /etc/pki/tls/certs/trafficops.crt
+</pre></div>
+</div>
+</div>
+<p>If necessary, install the <abbr title="Certificate Authority">CA (Certificate Authority) certificate’s `</abbr>.pem`` and <code class="docutils literal notranslate"><span class="pre">.crt</span></code> files in <code class="docutils literal notranslate"><span class="pre">/etc/pki/tls/certs</span></code>.</p>
+<p>You will need to update the file <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_ops/app/conf/cdn.conf</span></code> with the any necessary changes.</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-number">#22 </span><span class="caption-text">Sample ‘listen’ Line When Path to <code class="docutils literal notranslate"><span class="pre">trafficops.crt</span></code> and <code class="docutils literal notranslate"><span class="pre">trafficops.key</span></code> are Known</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&#39;hypnotoad&#39; =&gt; ...
+    &#39;listen&#39; =&gt; &#39;https://[::]:443?cert=/etc/pki/tls/certs/trafficops.crt&amp;key=/etc/pki/tls/private/trafficops.key&amp;ca=/etc/pki/tls/certs/localhost.ca&amp;verify=0x00&amp;ciphers=AES128-GCM-SHA256:HIGH:!RC4:!MD5:!aNULL:!EDH:!ED&#39;
+     ...
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="regions-locations-and-cache-groups">
+<h2>Regions, Locations and Cache Groups<a class="headerlink" href="#regions-locations-and-cache-groups" title="Permalink to this headline">¶</a></h2>
+<p>All servers have to have a <a class="reference internal" href="../../glossary.html#term-physical-location"><span class="xref std std-term">Physical Location</span></a>, which defines their geographic latitude and longitude. Each <a class="reference internal" href="../../glossary.html#term-physical-location"><span class="xref std std-term">Physical Location</span></a> is part of a <a class="reference internal" href="../../glossary.html#term-region"><span class="xref std std-term">Region</span></a>, and each <a class="reference internal" href="../../glossary.html#term-region"><span class="xref std std-term">Region</span></a> is part of a <a class="reference internal" href="../../glossary.html#term-division"><span class="xref std std-term">Division</span></a>. For example, <code class="docutils literal notranslate"><span class="pre">Denver</span></code> could be the name of a <a class="reference internal" href="../../glossary.html#term-physical-location"><span class="xref std std-term">Physical Location</span></a> in the <code class="docutils literal notranslate"><span class="pre">Mile</span> <span class="pre">High</span></code> <a class="reference internal" href="../../glossary.html#term-region"><span class="xref std std-term">Region</span></a> and that <a class="reference internal" href="../../glossary.html#term-region"><span class="xref std std-term">Region</span></a> could be part of the <code class="docutils literal notranslate"><span class="pre">West</span></code> <a class="reference internal" href="../../glossary.html#term-division"><span class="xref std std-term">Division</span></a>. The hierarchy between these terms is illustrated graphically in <a class="reference internal" href="#topography-hierarchy"><span class="std std-ref">Topography Hierarchy</span></a>.</p>
+<div class="figure align-center" id="id7" style="width: 25%">
+<span id="topography-hierarchy"></span><img alt="A graphic illustrating the hierarchy exhibited by topological groupings" src="../../_images/topography.svg" /><p class="caption"><span class="caption-number">Fig. 1 </span><span class="caption-text">Topography Hierarchy</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</div>
+<p>To create these structures in Traffic Portal, first make at least one <a class="reference internal" href="../../glossary.html#term-division"><span class="xref std std-term">Division</span></a> under <span class="menuselection">Topology ‣ Divisions</span>. Next enter the desired <a class="reference internal" href="../../glossary.html#term-region"><span class="xref std std-term">Region</span></a>(s) in <span class="menuselection">Topology ‣ Regions</span>, referencing the earlier-entered <a class="reference internal" href="../../glossary.html#term-division"><span class="xref std std-term">Division</span></a>(s). Finally, enter the desired <a class="reference internal" href="../../glossary.html#term-physical-location"><span class="xref std std-term">Physical Location</span></a>(s) in <span class="menuselection">Topology ‣ Phys Locations</span>, referencing the earlier-entered <a class="reference internal" href="../../glossary.html#term-region"><span class="xref std std-term">Region</span></a>(s).</p>
+<p>All servers also have to be part of a <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a>. A <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> is a logical grouping of cache servers, that don’t have to be in the same <a class="reference internal" href="../../glossary.html#term-physical-location"><span class="xref std std-term">Physical Location</span></a> (in fact, usually a <a class="reference internal" href="../../glossary.html#term-cache-group"><span class="xref std std-term">Cache Group</span></a> is spread across minimally two <a class="reference internal" href="../../glossary.html#term-physical-location"><span class="xref std std-term">Physical Location</span></a>s for redundancy purposes), but share geographical coordinates for content routing purposes.</p>
+</div>
+<div class="section" id="configuring-content-purge">
+<h2>Configuring Content Purge<a class="headerlink" href="#configuring-content-purge" title="Permalink to this headline">¶</a></h2>
+<p>Purging cached content using <abbr title="Apache Traffic Server">ATS</abbr> is not simple; there is no file system from which to delete files and/or directories, and in large caches it can be hard to delete content matching a simple regular expression from the cache. This is why Traffic Control uses the <a class="reference external" href="https://docs.trafficserver.apache.org/en/7.1.x/admin-guide/plugins/regex_revalidate.en.html">Regex Revalidate Plugin</a> to purge content from the cache. The cached content is not actually removed, instead a check that runs before each request on each cache server is serviced to see if this request matches a list of regular expressions. If it does, the cache server is forced to send the request upstream to its parents (possibly other caches, possibly the origin) without checking for the response in its cache. The Regex Revalidate Plugin will monitor its configuration file, and will pick up changes to it without needing to alert <abbr title="Apache Traffic Server">ATS (Apache Traffic Server). Changes to this file need to be distributed to the highest tier (Mid-tier) cache servers in the CDN before they are distributed to the lower tiers, to prevent filling the lower tiers with the content that should be purged from the higher tiers without hitting the origin. This is why the :term:`ORT</abbr> script will - by default - push out configuration changes to Mid-tier cache servers first, confirm that they have all been updated, and then push out the changes to the lower tiers. In large CDNs, this can make the distribution and time to activation of the purge too long, and because of that there is the option to not distribute the <code class="docutils literal notranslate"><span class="pre">regex_revalidate.config</span></code> file using the <a class="reference internal" href="../../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> script, but to do this using other means. By default, Traffic Ops will use <a class="reference internal" href="../../glossary.html#term-ort"><span class="xref std std-term">ORT</span></a> to distribute the <code class="docutils literal notranslate"><span class="pre">regex_revalidate.config</span></code> file.</p>
+</div>
+<div class="section" id="creating-the-centos-kickstart-file">
+<span id="creating-centos-kickstart"></span><h2>Creating the CentOS Kickstart File<a class="headerlink" href="#creating-the-centos-kickstart-file" title="Permalink to this headline">¶</a></h2>
+<p>The Kickstart file is a text file, containing a list of items, each identified by a keyword. This file can be generated using the <a class="reference external" href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/5/html/installation_guide/ch-redhat-config-kickstart">Red Hat Kickstart Configurator application</a>, or it can be written from scratch. The Red Hat Enterprise Linux installation program also creates a sample Kickstart file based on the options selected during installation. It is written to the file <code class="file docutils literal notranslate"><span class="pre">/root/anaconda-ks.cfg</span></code> in this case. This file is editable using most text editors.</p>
+<div class="section" id="generating-a-system-image">
+<h3>Generating a System Image<a class="headerlink" href="#generating-a-system-image" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Create a Kickstart file.</p></li>
+<li><p>Create a boot media with the Kickstart file or make the Kickstart file available on the network.</p></li>
+<li><p>Make the installation tree available.</p></li>
+<li><p>Start the Kickstart installation.</p></li>
+</ol>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-number">#23 </span><span class="caption-text">Creating a New System Image Definition Tree from an Existing One</span><a class="headerlink" href="#id8" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Starting from the Kickstart root directory (`/var/www/files` by default)</span>
+mkdir newdir
+<span class="nb">cd</span> newdir/
+
+<span class="c1"># In this example, the pre-existing system image definition tree is for CentOS 7.4 located in `centos74`</span>
+cp -r ../centos74/* .
+vim ks.src
+vim isolinux/isolinux.cfg
+<span class="nb">cd</span> ..
+vim osversions.cfg
+</pre></div>
+</div>
+</div>
+<p><code class="file docutils literal notranslate"><span class="pre">ks.src</span></code> is a standard, Kickstart-formatted file that the will be used to create the Kickstart (ks.cfg) file for the install whenever a system image is generated from the source tree. <code class="file docutils literal notranslate"><span class="pre">ks.src</span></code> is a template - it will be overwritten by any information set in the form submitted from <span class="menuselection">Tools ‣ Generate ISO</span> in Traffic Portal. Ultimately, the two are combined to create the final Kickstart file (<code class="file docutils literal notranslate"><span class="pre">ks.cfg</span></code>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is highly recommended for ease of use that the system image source trees be kept under 1GB in size.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For in-depth instructions, please see <a class="reference external" href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Installation_Guide/s1-kickstart2-howuse.html">Kickstart Installation</a> in the Red Hat documentation.</p>
+</div>
+</div>
+</div>
+<div class="section" id="configuring-the-go-application">
+<h2>Configuring the Go Application<a class="headerlink" href="#configuring-the-go-application" title="Permalink to this headline">¶</a></h2>
+<p>Traffic Ops is in the process of migrating from Perl to Go, and currently runs as two applications. The Go application serves all endpoints which have been rewritten in the Go language, and transparently proxies all other requests to the old Perl application. Both applications are installed by the RPM, and both run as a single <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemd(1)">systemd(1)</a></em> service. When the project has fully migrated to Go, the Perl application will be removed, and the RPM and service will consist solely of the Go application.</p>
+<p>By default, the <strong class="program">postinstall</strong> script configures the Go application to behave and transparently serve as the old Perl Traffic Ops did in previous versions. This includes reading the old <code class="docutils literal notranslate"><span class="pre">cdn.conf</span></code> and <code class="docutils literal notranslate"><span class="pre">database.conf</span></code> config files, and logging to the old <code class="docutils literal notranslate"><span class="pre">access.log</span></code> location. However, the Go Traffic Ops application may be customized by passing the command-line flag, <code class="docutils literal notranslate"><span class="pre">-oldcfg=false</span></code>. By default, it will then look for a configuration file at <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_ops/conf/traffic_ops_golang.config</span></code>. The new configuration file location may also be customized via the <code class="docutils literal notranslate"><span class="pre">-cfg</span></code> flag. A sample configuration file is installed by the RPM at <code class="file docutils literal notranslate"><span class="pre">/opt/traffic_ops/conf/traffic_ops_golang.config</span></code>. The new Go Traffic Ops application as a <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/systemd(1)">systemd(1)</a></em> service with a new configuration file, the <code class="docutils literal notranslate"><span class="pre">-oldcfg=false</span></code> and  <code class="docutils literal notranslate"><span class="pre">-cfg</span></code> flags may be added to the <code class="docutils literal notranslate"><span class="pre">start</span></code> function in the service file, located by default at <code class="file docutils literal notranslate"><span class="pre">/etc/init.d/traffic_ops</span></code>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="extensions.html" class="btn btn-neutral float-right" title="Managing Traffic Ops Extensions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="Administrator’s Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Apache Traffic Control
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
