@@ -5,9 +5,12 @@ on: [push]
 jobs:
   build:
 
-    runs-on: golang-latest
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: go test -v lib/...
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Go test lib
+      uses: ./.github/actions/go-test/
+      with:
+        test-dir: ./lib/...
