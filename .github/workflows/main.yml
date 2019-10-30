@@ -5,9 +5,18 @@ on: [push]
 jobs:
   build:
 
-    runs-on: golang-latest
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: go test -v lib/...
+    - name: Checkout
+      uses: actions/checkout@v1
+    - uses: ./.github/actions/go-test/
+    - name: Go test step
+      id: gotest
+      uses: ocket8888/trafficcontrol/.github/actions/go-test@v1
+      with:
+        dir: ./lib/...
+    - name: Get the results
+      run: echo "${{ steps.gotest.outputs.result }}"
+    - name: Print exit code
+      run: echo "Exited with code ${{ steps.gotest.outputs.exit-code }}"
