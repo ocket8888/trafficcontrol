@@ -21,10 +21,6 @@ import (
 	"testing"
 )
 
-func TestUhOhABadTest(t *testing.T) {
-	t.Fatal("It broke!")
-}
-
 func TestCoalesceIPs(t *testing.T) {
 	ips := []net.IP{
 		net.ParseIP("192.168.1.1"),
