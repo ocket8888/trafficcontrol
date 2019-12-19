@@ -70,7 +70,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@master
-    - name: Go test ATSCfg
+    - name: Go test ATSTCCfg
       uses: ./.github/actions/go-test
       with:
-        dir: ./traffic_ops/ort/atsccfg/...
+        dir: ./traffic_ops/ort/atstccfg/...
