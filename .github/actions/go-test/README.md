@@ -19,7 +19,8 @@ Test results.
 Exit code of the test command
 
 ## Example usage
-
+```yaml
 uses: actions/go-test@v1
 with:
   dir: './lib/...'
+```

@@ -1,0 +1,11 @@
+name: 'go-fmt'
+description: 'Runs gofmt on Go files'
+inputs:
+  dir:
+    description: 'The Directory in which all files will be gofmt-ed'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.dir }}
