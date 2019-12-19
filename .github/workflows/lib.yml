@@ -1,0 +1,31 @@
+name: Lib PR CI
+
+on:
+  pull_request:
+    paths:
+      - lib/*
+
+jobs:
+  gofmt:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Go fmt lib
+      uses: ./.github/actions/go-fmt/
+      with:
+        dir: ./lib/...
+
+  gotest:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Run Go unit tests
+      uses: ./.github/actions/go-test/
+      with:
+        dir: ./lib/... ./grove/... ./traffic_monitor/... ./traffic_stats/... ./traffic_ops/traffic_ops_golang/... ./traffic_ops/ort/atstccfg/...
