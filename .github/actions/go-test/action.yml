@@ -1,11 +1,11 @@
 name: 'go-test'
 description: 'Runs go tests'
 inputs:
-  test-dir:  # id of input
+  dir:  # id of input
     description: 'Directory in which to run tests'
     required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.test-dir }}
+    - ${{ inputs.dir }}

@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  build:
+  libtest:
 
     runs-on: ubuntu-latest
 
@@ -13,4 +13,16 @@ jobs:
     - name: Go test lib
       uses: ./.github/actions/go-test/
       with:
-        test-dir: ./lib/...
+        dir: ./lib/...
+
+  totest:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Go test Traffic Ops
+      uses: ./.github/actions/go-test
+      with:
+        dir: ./traffic_ops/traffic_ops_golang/...

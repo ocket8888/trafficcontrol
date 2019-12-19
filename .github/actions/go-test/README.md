@@ -4,7 +4,7 @@ This action runs Go unit tests.
 
 ## Inputs
 
-### `test-dir`
+### `dir`
 
 **Required** Directory in which to run tests.
 
