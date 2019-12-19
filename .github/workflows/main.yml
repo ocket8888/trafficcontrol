@@ -26,3 +26,51 @@ jobs:
       uses: ./.github/actions/go-test
       with:
         dir: ./traffic_ops/traffic_ops_golang/...
+
+  tmtest:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Go test Traffic Monitor
+      uses: ./.github/actions/go-test
+      with:
+        dir: ./traffic_monitor/...
+
+  tstest:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Go test Traffic Stats
+      uses: ./.github/actions/go-test
+      with:
+        dir: ./traffic_stats/...
+
+  grovetest:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Go test Grove
+      uses: ./.github/actions/go-test
+      with:
+        dir: ./grove/...
+
+  atscfgtest:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Go test ATSCfg
+      uses: ./.github/actions/go-test
+      with:
+        dir: ./traffic_ops/ort/atsccfg/...
