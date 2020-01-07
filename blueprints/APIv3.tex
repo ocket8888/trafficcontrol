@@ -1,0 +1,507 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\documentclass{article}
+
+\newcommand{\version}{0.2}
+
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage[newfloat]{minted}
+\usepackage{xcolor}
+
+\newenvironment{codelisting}{\captionsetup{type=listing}}{}
+\SetupFloatingEnvironment{listing}{name=Listing}
+
+\definecolor{inlinecodecolor}{HTML}{800000}
+\newcommand{\code}[1]{\texttt{\color{inlinecodecolor}#1}}
+
+\begin{document}
+\title{%
+Traffic Ops API\\
+\large Guidelines and v3.0 Blueprint\\
+\normalsize Draft Version \version{}}
+\author{The Traffic Ops Working Group}
+\maketitle{}
+\newpage{}
+\tableofcontents{}
+\newpage{}
+\section{Guidelines}
+This section lays out guidelines to be considered by API endpoint authors. What follows are not \emph{strictly} hard-and-fast rules, but
+there should be a very convincing argument accompanying endpoints that do not follow them.
+\subsection{Response Format}
+All valid API responses will be in the form of some serialized object. The main data that represents the result of the clients request
+MUST appear in the \code{response} property of that object. If a warning, error message, success message, or informational message
+is to be issued by the server, then they MUST appear in the \code{alerts} property of the response.\\
+Equally unacceptable API responses are shown in Listings \ref{code:badresponseexample:success-as-response} and \ref{code:badresponseexample:extra-field}.
+
+\begin{codelisting}
+\captionof{listing}{Success message as response object}
+\label{code:badresponseexample:success-as-response}
+\begin{minted}[tabsize=2]{json}
+{
+	"response": "Thing was successfully created."
+}
+\end{minted}
+\end{codelisting}
+
+\begin{codelisting}
+\captionof{listing}{Extra top-level property}
+\label{code:badresponseexample:extra-field}
+\begin{minted}[tabsize=2]{json}
+{
+	"response": {"foo": "bar"},
+	"someOtherField": {"someOtherObject"}
+}
+\end{minted}
+\end{codelisting}
+
+When requests are serviced by Traffic Ops that pass data asking that the returned object list be filtered, the \code{response} property
+MUST be a filtered array of those objects (assuming the request may be successfully serviced). This is true even if filtering is being
+done according to a uniquely identifying property - e.g. a numeric ID. The \code{response} field of an object returned in response to a
+request to create, update, or delete one or more resources may be either a single object representation or an array thereof according to
+the number of objects created, updated, or deleted. However, if a handler is \emph{capable} of creating, updating, or deleting more than
+one object at a time, the \code{response} field SHOULD consistently be represented as an array - even if its length would only be 1.
+
+\subsubsection{Alerts}
+Alerts should be presented as an array containing objects which each conform to the object definition laid out by
+\href{https://godoc.org/github.com/apache/trafficcontrol/lib/go-tc#Alert}{the ATC library's Alert structure}. The allowable \code{level}s of an Alert are:
+
+\begin{itemize}
+	\item \code{error} - This level MUST be used to indicate conditions that caused a request to fail. Because of this, this level MUST NOT appear
+	in the \code{alerts} array of responses with any HTTP response code less than 400. Details of server workings and/or failing
+	components MUST NOT be exposed in this message, which should otherwise be as descriptive as possible.
+	\item \code{info} - This level SHOULD be used to convey supplementary information to a user that is not directly the result of their request.
+	This SHOULD NOT carry information indicating whether or not the request succeeded and why/why not, as that is best left to the \code{error}
+	and \code{success} levels.
+	\item \code{success} - This level MUST be used to convey success messages to the client. In general, it is expected that the message will be
+	directly displayed to the user by the client, and therefore can be used to add human-friendly details about a request beyond the response
+	payload. This level MUST NOT appear in the \code{alerts} array of responses with an HTTP response code that is not between 200 and 399
+	(inclusive).
+	\item \code{warning} - This level is used to warn clients of potentially dangerous conditions when said conditions have not caused a request
+	to fail. The best example of this is deprecation warnings, which should appear on all API routes that have been deprecated.
+\end{itemize}
+
+
+\subsection{HTTP Request Methods}
+\href{https://tools.ietf.org/html/rfc2616#section-9}{RFC 2616 Section 9} defines the semantics of HTTP/1.1 request methods. Authors should conform
+to that set of standards whenever possible, but for convenience the methods recognized by Traffic Ops and their meanings in that context are
+herein defined.
+
+\subsubsection{GET}
+HTTP GET requests are issued by clients who want some data in response. In the context of Traffic Ops, this generally means a serialized
+representation of some object. GET requests MUST NOT alter the state of the server. An example of an API endpoint created in API version 1
+that violates this restriction is \code{cdns/name/\{\{name\}\}/dnsseckeys/delete}.\\
+This is the standard method to be used by all read-only operations, and as such handlers for this method should generally be accessible to
+users with the "read-only" Role.
+
+\subsubsection{POST}
+POST requests ask the server to process some provided data. Most commonly, in Traffic Ops, this means creating an object based on the serialization
+of said object contained in the request body, but it can also be used virtually whenever no other method is appropriate. When an object \emph{is}
+created, the response body MUST contain a representation of the newly created object.\\
+POST requests do not need to be \emph{idempotent}, unlike PUT requests.
+
+\subsubsection{PUT}
+PUT is used to replace existing data with new data that is provided in the request body.
+\href{https://tools.ietf.org/html/rfc2616#section-9.1.2}{RFC 2616 Section 9.1.2} lists PUT as an "idempotent" request method, which means that
+subsequent identical requests should ensure the same state is maintained on the server. What this means is that a client that PUTs an object
+representation to Traffic Ops expects that if they then GET a representation of that object, do the same PUT again and GET another representation,
+the two retrieved representations should be identical. Effectively, the \code{last\_updated} field that is common to objects in the Traffic Ops API
+violates this, but the other properties of objects - which can actually be defined - generally obey this restriction. In general, fulfilling this
+restriction means that handlers will need to require the entirety of an object be defined in the request body.\\
+This is the method of choice for modifying objects when PATCH cannot be implemented. When an object is modified, the response body MUST contain a
+representation of the object after modification.\\
+While RFC 2616 states that servers MAY create objects for the passed representations if they do not already exist, Traffic Ops API endpoint authors
+should instead use POST handlers for object creation.
+
+\subsubsection{PATCH}
+At the time of this writing, no Traffic Ops API endpoints handle the PATCH request method. PATCH requests that the server's stored data be mutated
+in some way using data provided in the request body. Unlike PUT, PATCH is not \emph{idempotent}, which essentially means that it can be used to
+change only part of a stored object. When an object is modified, the response body MUST contain a representation of the object after modification,
+and that representation SHOULD fully describe the modified object, even the parts that were not modified.\\
+Handlers that implement PATCH in the Traffic Ops API MUST use conditional requests to ensure that race conditions are not a problem, e.g. using
+ETag and If-Match, or If-Not-Modified-Since.\\
+Clients SHOULD use PATCH requests rather than PUT requests for modifying existing resources whenever it is supported.
+
+\subsubsection{DELETE}
+DELETE destroys an object stored on the server. Typically the request will contain identifying information for the object(s) to be destroyed either
+in the request URI or in the request's body. Traffic Ops API endpoint authors MUST use this request method whenever an object identified by the
+request URI is being destroyed. When such deletion successfully occurs, the response body MUST contain a representation of the destroyed object.
+
+\subsection{HTTP Response Codes}
+Proper use of HTTP response codes can significantly improve user interfaces built on top of the API. What follows is a (non-exhaustive) set of
+response codes and their appropriate use in the context of Traffic Ops. For more complete information, refer to
+\href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Status}{the Mozilla Developer Network's HTTP Response Code list}.
+
+\subsubsection{200 OK}
+This indicates the request succeeded, with no additional semantics. This MUST be the exact response status code of successful GET requests. This is
+also the default "success" response code for any other request, and is technically permissible even when more specific options exist.
+
+\subsubsection{201 Created}
+This indicates that a resource was successfully created on the server. This SHOULD be the response status code of POST requests that create a new
+object or objects on the server, and in that case the response should also include a Location header that provides a URI where a representation of
+the newly created object may be requested.
+
+\subsubsection{202 Accepted}
+\code{202 Accepted} SHOULD be used when the server is performing some task asynchronously (e.g. refreshing DNSSEC keys) but the status of that task
+cannot be ascertained at the current time. Ideally in this case, when the task completes - either successfully or by failing - the Traffic Ops changelog
+should be updated to indicate that status, along with information to uniquely identify the task (e.g. username and date/time when the task started).
+
+\subsubsection{400 Bad Request\label{sec:400}}
+In general this is used when there's something syntactically wrong with the client's request. For example, Traffic Ops MUST respond with this code
+when the request body was improperly encoded. In most cases, this is also the proper response code when the client submits data that is not semantically
+correct. For example, dates/times represented as timestamp strings in an unsupported format should trigger this response code.\\
+This is also the default "client failure" response code for any other request, and is technically permissible even when more specific options exist.\\
+The response body MUST include an entry in the \code{alerts} array that describes to the client what was wrong with the request.
+
+\subsubsection{401 Unauthorized}
+This MUST be the response code when a client without valid authorization information in the HTTP headers (i.e. a "mojolicious" cookie) requests a resource
+which cannot be accessed without first authorizing. Which should be everything except \code{/ping} and endpoints that provide authorization.
+
+\subsubsection{403 Forbidden\label{sec:403}}
+This SHOULD be used whenever the client is logged-in, but still does not have access to the resource they are requesting. It MAY also be used when they
+have \emph{some} access to the resource, but not with the specific request method they used (the other acceptable option is \code{405 Method Not Allowed},
+in which case the Accept HTTP header should also be sent enumerating the allowed methods).\\
+This can pertain to restricted access on the basis of Role, User Capability/Permissions, as well as Tenancy.\\
+The response body SHOULD contain an Alert describing on what basis access was denied.
+
+\subsubsection{404 Not Found\label{sec:404}}
+This MUST be the returned status code when the client requests a path that does not exist on the server. This also MAY be returned when the user provides
+identifying information for a requested object that does not actually identify an object. Finally, endpoints MAY choose to use this instead of
+\code{403 Forbidden} when a specifically requested object is forbidden to the client based on their Role, User Capabilities/Permissions and/or Tenancy, in
+order to hide the existence of such objects from the client. However, note that this is not entirely effective and can be detrimental to the user experience,
+and so authors SHOULD use \code{403 Forbidden} when possible in that case.
+
+\subsubsection{409 Conflict}
+This SHOULD be used when the request cannot be completed because the current state of the server is fundamentally incompatible with the request. For example,
+creating a new user with an email that is already in use should result in this response.\\
+Additionally, this MAY be used instead of \code{404 Not Found} when the client is requesting a link between an object identified by the request URI and some
+other object (e.g. when assigning a server to a Delivery Service) when the other object does not exist. If the request URI identifies an object that does not
+exist, the response MUST use \code{404 Not Found} instead.\\
+This is also the proper response status code when the conditions of a request cannot be met, e.g. when a client submits a PATCH request for a resource with an
+If-Match header that does not match the stored object's ETag.\\
+The request body MUST indicate what the conflict is that prevented the request from being fulfilled.
+
+\subsubsection{500 Internal Server Error}
+When the Traffic Ops server encounters some error - through no fault of the client or their request - that renders it incapable of servicing the client's
+request, it MUST return this status code if no other code is more appropriate. The response body in this case SHOULD indicate that an error occurred, but
+MUST NOT divulge details about what data was being processed, what (if any) other components are not functioning properly, or what process failed. Generally
+it is advisable that the resultant \code{alerts} array entry just say "Internal Server Error" and nothing else.
+
+\subsubsection{501 Not Implemented}
+This is the response code used when the client requests an API version not implemented by the server. It SHOULD NOT be used in any other case.
+
+\subsubsection{502 Bad Gateway}
+This code indicates that some other service on which the endpoint's processes depend has given back improper data or an error response. It MAY be used
+(with caution) by plugin developers, but SHOULD NOT be used by authors of proper API endpoints, as that divulges information about failing connected systems
+and potentially gives an attacker information about Traffic Control's weak points. API endpoint authors should instead use \code{500 Internal Server Error}.
+
+\subsubsection{504 Gateway Timeout}
+This code indicates that a connection timeout occurred when attempting to contact some other service on which the endpoint's processes depend. It MAY be used
+(with caution) by plugin developers, but SHOULD NOT be used by authors of proper API endpoints, as that divulges information about failing connected systems
+and potentially gives an attacker information about Traffic Control's weak points. API endpoint authors should instead use \code{500 Internal Server Error}.
+
+\subsection{Content Negotiation}
+The default Content-Type for all API responses should be \code{application/json} whenever content-negotiation does not occur. It's not
+necessary to specify the character encoding because all valid JSON is UTF-8-encoded. If the client requests data from Traffic Ops in a
+format unsatisfiable by \code{application/json}, the response MAY address the issue in a Warning-level Alert, but that is not
+necessary. In this case, Traffic Ops MUST NOT respond with \code{406 Not Acceptable} or another error code based solely on content-negotiation.
+Instead, an \code{application/json} response should be returned to the client.\\
+Similarly, if the request does not define a Content-Type for its request body, then Traffic Ops API endpoints MUST treat the body as though it
+were encoded as \code{application/json}, and attempt to parse it as such.
+
+\subsection{Documentation}
+All endpoints must be properly documented. For guidelines for writing API documentation, refer to
+\href{https://traffic-control-cdn.readthedocs.io/en/latest/development/documentation_guidelines.html#documenting-api-routes}{that section of the official ATC documentation}.
+
+\subsection{Passing Request Data}
+Request data may be passed in the request body or as a \code{application/x-www-form-urlencoded}-encoded query string in the request URI. Request data MUST NOT
+be passed through a portion of the request path.\\
+The decision to pass data in the request body or query string is mainly up to the author, but some helpful tips:
+
+\begin{itemize}
+	\item GET and DELETE requests do not typically provide request bodies.
+	\item Query parameters should nearly always be optional. If data is required by an endpoint, consider requiring it in the request body.
+	\item Request body data often represents objects that are being created or updated. If an object is being created or updated, it ought to be defined in the
+	request body, and if any additional data is (possibly optionally) required then it ought to be passed in the query string to separate it from the object definition.
+	\item The following query parameters are reserved for special use by Traffic Ops endpoint handlers, and may not be used for any purpose other
+	than their prescribed functions.
+	\begin{itemize}
+		\item \code{limit}
+		\item \code{newer\_than}
+		\item \code{offset}
+		\item \code{older\_than}
+		\item \code{page\_size}
+		\item \code{page}
+		\item \code{reverse}
+		\item \code{sort\_by}
+	\end{itemize}
+\end{itemize}
+
+\subsection{Identifiers}
+All objects manipulated by the Traffic Ops API MUST have a property that can, by itself, uniquely identify objects of that type. The best case
+scenario is that the identifying property is a human-friendly name of some kind, e.g. username for users. It may be possible to identify an
+object uniquely by another property, or by some combination of other properties, but it is necessary to choose exactly one property to expressly
+serve the purpose of unique identification (ideally in addition to providing useful data).\\
+Authors are encouraged to avoid numeric identifiers that serve no purpose beyond identification, whenever possible. In some cases, though, this
+is not possible.
+
+\subsection{Date/Time Format\label{sec:datetime}}
+Dates MUST be represented in either \href{https://tools.ietf.org/html/rfc3339}{RFC3339} format or as integers indicating the number of
+nanoseconds past the Unix epoch at which the date/time occurs. In either case, Dates included in responses from Traffic Ops MUST be in UTC.
+Wherever date/times are accepted as input, Traffic Ops API endpoints MUST accept either format.\\
+Traffic Ops endpoints MAY return either format as a result of request data/parameters, but MUST document their default format. The default format
+SHOULD be Unix epoch timestamps. This is beneficial because "Unix time" is widely supported by many programming languages' standard libraries,
+and is in fact generally quite fast to parse because it is often the way these libraries store the date/time behind the scenes.
+
+\subsection{Pagination and Sorting}
+All endpoints that involve retrieving representations of objects (i.e. GET requests for collection objects e.g. Cache Servers) MUST implement
+sorting and pagination controls. Sorting controls SHOULD be capable of sorting results in either ascending or descending order by any property
+of the objects the endpoint returns.\\
+Pagination and sorting controls MUST be made available by the query parameters in Table \ref{tbl:pag-and-sort-qparams}, and SHOULD NOT be made
+available by other means.
+
+\begin{table}[h]
+%\centering
+\caption{Sorting and Pagination Query Parameters\label{tbl:pag-and-sort-qparams}}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Parameter} & \textbf{Meaning}\\
+\hline
+\code{page\_size} & An unsigned integer that defines the number of objects that\\
+                  & will appear in a single "page"\\
+\hline
+\code{page}       & An unsigned integer that defines the page that will be returned.\\
+                  & The minimum value is "1"\\
+\hline
+\code{offset}     & An unsigned integer that defines an offset from the first result\\
+                  & at which the returned results will start. The minimum value is\\
+                  & "0".\\
+\hline
+\code{limit}      & An unsigned integer that sets an upper limit on the number of\\
+                  & results returned. The minimum value is "0", which means\\
+                  & "no limit"\\
+\hline
+\code{reverse}    & A boolean value which MUST be recognized as "truthy" by\\
+                  & having the value \code{true}, but endpoints MAY also consider \code{1},\\
+                  & \code{yes}, and case-insensitive variants of those values as "truthy"\\
+\hline
+\code{sort\_by}   & An arbitrary string which MUST be the name of a property of\\
+                  & the returned objects by which results will be sorted\\
+\hline
+\end{tabular}
+\end{table}
+
+Endpoints MAY return errors when a client request gives these parameters improper or invalid values, but MUST at least provide a warning.
+When ambiguity or errors in pagination controls render pagination, sorting, offsetting and/or limiting impossible, the handler MUST NOT
+perform \emph{\textbf{any}} of those operations.\\
+When limiting, pagination, or offsetting is performed, the response SHOULD include an \code{info}-level Alert that indicates the total
+number of available objects that could be returned. If this is done, the entire Text of the Alert must be in the format \code{total:\emph{N}}
+where \code{N} is an unsigned integer that indicates the total number.\\
+Endpoints MUST accept any top-level property that appears on the serialized objects it returns as a valid value for \code{sort\_by},
+\emph{except} for properties that are themselves collections (array, set, object etc.). Such values MUST be acceptable in the same "case"
+as they appear in the serialization, and endpoints SHOULD NOT accept case transformation or aliases for properties.\\
+
+\subsubsection{Multiple Sorting}
+Traffic Ops API endpoints MUST accept single values for \code{sort\_by}, but MAY also accept a priority list of properties by which to sort.
+If implemented, this list MUST be recognized as comma-separated values of the \code{sort\_by} parameter, but MAY also be recognized in the
+tradition of \code{application/x-www-form-urlencoded} as multiple definitions of \code{sort\_by} with different values. If the latter
+representation is \emph{not} supported, then multiple definitions of \code{sort\_by} constitutes an ambiguity and must be handled accordingly.\\
+For example, suppose the fictional \code{/foos} endpoints returns Foo objects. Given the client requests this endpoint with
+\code{GET /api/3.0/foos HTTP/1.1}, suppose the response resembles Listing \ref{code:unsorted-foos}.\\
+To sort this response first by the \code{fizz} property and then by the \code{test} property, the client might make the request\\
+\code{GET /api/3.0/foos?sort\_by=fizz,test HTTP/1.1} or - if supported by the endpoint - the equivalent
+\code{GET /api/3.0/foos?sort\_by=fizz\&sort\_by=test}. In either case, the order in which the properties appear defines their respective
+priorities. The response to this request, then, will be as shown in Listing \ref{code:sorted-foos}.\newpage{}
+
+\begin{codelisting}
+\captionof{listing}{Unsorted Foos Response}
+\label{code:unsorted-foos}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 200 OK
+Content-Type: application/json
+Transfer-Encoding: chunked
+
+{
+	"response": [
+		{
+			"fizz": 1,
+			"test": 1
+		},
+		{
+			"fizz": 0,
+			"test": 1
+		},
+		{
+			"fizz": 0,
+			"test": 0
+		}
+	]
+}
+\end{minted}
+\end{codelisting}
+
+\begin{codelisting}
+\captionof{listing}{Sorted Foos Response}
+\label{code:sorted-foos}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 200 OK
+Content-Type: application/json
+Transfer-Encoding: chunked
+
+{
+	"response": [
+		{
+			"fizz": 0,
+			"test": 0,
+		},
+		{
+			"fizz": 0,
+			"test": 1
+		},
+		{
+			"fizz": 1,
+			"test": 1
+		}
+	]
+}
+\end{minted}
+\end{codelisting}
+
+\subsection{Age Filtering}
+Whenever object age is a property of that object (which is quite often in the form of \code{lastModified}), Traffic Ops endpoint
+handlers that respond to requests for object representations (i.e. GET requests) SHOULD support filtering by age. If age filtering
+is implemented, it MUST be made available using the query parameters in Table \ref{tbl:age-filtering-qparams}.
+
+\begin{table}[h]
+\centering
+\caption{Age Filtering Query Parameters}
+\label{tbl:age-filtering-qparams}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Parameter} & \textbf{Meaning}\\
+\hline
+\code{newer\_than} & A timestamp to be used as the lower limit on an object's age.\\
+                   & Objects older than this MUST NOT appear in the response\\
+                   & body.\\
+\hline
+\code{older\_than} & A timestamp to be used as the upper limit an object's age.\\
+                   & Objects newer than this MUST NOT appear in the response\\
+                   & body.\\
+\hline
+\end{tabular}
+\end{table}
+
+The format of these timestamps - in accordance with Section \ref{sec:datetime} of this document - MUST be accepted as Unix epoch timestamps
+in nanoseconds, AND in the form of RFC3339 date/time strings.\\
+Endpoints MAY return errors when a client request gives these parameters improper or invalid values, but MUST at least provide a warning.
+When ambiguity or errors in age filtering controls render age filtering impossible, the handler MUST NOT perform age filtering.
+
+\subsection{Tenancy}
+When a client requests access to a set of stored objects that are "tenantable" inevitably some of them will be inaccessible to the user
+on the basis of their Tenant. Traffic Ops endpoint handlers that respond to requests for such object representations (i.e. GET requests)
+SHOULD filter their results implicitly according to the requesting Tenant's access. Any request that would modify, create, or destroy an
+object to which the requesting Tenant has access MUST NOT be fulfilled by the server (obviously) and in that case the response status code
+SHOULD be \code{403 Forbidden} as described in Section \ref{sec:403}, but MAY also be \code{404 Not Found} as described in Section \ref{sec:404}
+or \code{400 Bad Request} as described in \ref{sec:400} depending on the circumstances.
+
+\subsection{Naming Conventions}
+The names of properties of objects as they appear in said objects' serializations ought to conform to "camelCase" naming. Initialisms,
+abbreviations, and acronyms that appear in property names should be capitalized unless they are at the very beginning of the name. For
+example, \code{myIPAddress} and \code{someProperty} are both well-formed property names, while \code{IPAddress}, \code{someproperty} and
+\code{SomeProperty} are not.\\
+Query parameters that follow "camelCase" naming are assumed to be filters that act on the properties of objects, so query parameters with
+any other function shouldn't use "camelCase". Instead, query parameters with special functions should use "snake\_case" to distinguish them.\\
+API endpoints themselves should have a name that conveys their purpose. For example, \code{/cdns} is an endpoint that deals with manipulating,
+creating, destroying, or retrieving representations of CDNs. Request paths should use "snake\_case" to separate words whenever necessary, and
+should never include the action being performed by the handler. For example, \code{/myObject/delete} is a poor request path name for both of
+those reasons. Furthermore, when an endpoint deals with an object type of which there are typically multiple, the request path should be plural,
+e.g. \code{/cdns} is better than \code{/cdn}.
+
+\subsection{Relationships as Objects}
+Relationships SHOULD NOT be represented through the API as objects in their own right. For example, instead of an endpoint like
+\code{/delivery\_service\_servers} used to manipulate assignments of Cache Servers to Delivery Services, a Delivery Service itself
+has Servers as a property. Thus assignments are manipulated by manipulating that property. So the only endpoints necessary for fully
+defining and dealing with such relationships are \code{/delivery\_services} and \code{/servers}.
+
+\section{Data Model}
+This section defines the various objects that may be interacted with through the Traffic Ops API and their respective properties.
+
+\subsection{CDNs}
+
+\subsection{Cache Groups}
+
+\subsection{Cache Servers}
+
+\subsection{Delivery Services}
+
+\subsection{Infrastructure Servers}
+
+\subsection{Origins}
+
+\subsection{Profiles and Parameters}
+
+\subsection{Roles and Permissions}
+
+\subsection{Tenants}
+
+\subsection{Traffic Monitors}
+
+\subsection{Traffic Portals}
+
+\subsection{Traffic Routers}
+
+\subsection{Traffic Stats Servers}
+
+\subsection{Traffic Vaults}
+
+\subsection{Users}
+
+\section{Endpoint Specifications}
+
+\subsection{\code{/cdns}}
+
+\subsection{\code{/cache\_groups}}
+
+\subsection{\code{/cache\_servers}}
+
+\subsection{\code{/delivery\_services}}
+
+\subsection{\code{/servers}}
+
+\subsection{\code{/origins}}
+
+\subsection{\code{/profiles}}
+
+\subsection{\code{/roles}}
+
+\subsection{\code{/tenants}}
+
+\subsection{\code{/traffic\_monitors}}
+
+\subsection{\code{/traffic\_portals}}
+
+\subsection{\code{/traffic\_routers}}
+
+\subsection{\code{/traffic\_stats}}
+
+\subsection{\code{/traffic\_vaults}}
+
+\subsection{\code{/users}}
+
+\end{document}
