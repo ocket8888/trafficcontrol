@@ -76,7 +76,11 @@ MUST be a filtered array of those objects (assuming the request may be successfu
 done according to a uniquely identifying property - e.g. a numeric ID. The \code{response} field of an object returned in response to a
 request to create, update, or delete one or more resources may be either a single object representation or an array thereof according to
 the number of objects created, updated, or deleted. However, if a handler is \emph{capable} of creating, updating, or deleting more than
-one object at a time, the \code{response} field SHOULD consistently be represented as an array - even if its length would only be 1.
+one object at a time, the \code{response} field SHOULD consistently be represented as an array - even if its length would only be 1.\\
+The proper value of an empty collection is an empty collection. If a Foo can have zero or more Bars, then the representation of a Foo with
+no Bars MUST be an empty array/list/set, and in particular MUST NOT be either missing from the representation or represented as the "Null"
+value of the representation format. That is, if Foos have no other property than their Bars, then a Foo with no Bars may be represented
+in JSON encoding as \code{\{"bars":[]\}}, but not as \code{\{"bars":null\}} or \code{\{\}}.
 
 \subsubsection{Alerts}
 Alerts should be presented as an array containing objects which each conform to the object definition laid out by
