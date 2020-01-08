@@ -433,9 +433,12 @@ Query parameters that follow "camelCase" naming are assumed to be filters that a
 any other function shouldn't use "camelCase". Instead, query parameters with special functions should use "snake\_case" to distinguish them.\\
 API endpoints themselves should have a name that conveys their purpose. For example, \code{/cdns} is an endpoint that deals with manipulating,
 creating, destroying, or retrieving representations of CDNs. Request paths should use "snake\_case" to separate words whenever necessary, and
-should never include the action being performed by the handler. For example, \code{/myObject/delete} is a poor request path name for both of
-those reasons. Furthermore, when an endpoint deals with an object type of which there are typically multiple, the request path should be plural,
-e.g. \code{/cdns} is better than \code{/cdn}.
+should never include the action being performed by the handler; instead that is decided by the request \emph{method}. For example,
+\code{/myObject/delete} is a poor request path name for both of those reasons. Furthermore, when an endpoint deals with an object type of
+which there are typically multiple, the request path should be plural, e.g. \code{/cdns} is better than \code{/cdn}.\\
+API endpoints MAY support trailing slashes (\code{/}) in the request path, but MUST NOT include suffixes that indicate a particular endcoding;
+that's what the Content-Type header is for. For example, in API version 1.x, \code{/foos} and \code{/foos.json} are both equally valid ways
+to access the \code{/foos} endpoint handlers - this is no longer allowed!
 
 \subsection{Relationships as Objects}
 Relationships SHOULD NOT be represented through the API as objects in their own right. For example, instead of an endpoint like
