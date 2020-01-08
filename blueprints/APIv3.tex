@@ -416,7 +416,7 @@ in nanoseconds, AND in the form of RFC3339 date/time strings.\\
 Endpoints MAY return errors when a client request gives these parameters improper or invalid values, but MUST at least provide a warning.
 When ambiguity or errors in age filtering controls render age filtering impossible, the handler MUST NOT perform age filtering.
 
-\subsection{Tenancy}
+\subsection{Tenancy\label{sec:tenancy}}
 When a client requests access to a set of stored objects that are "tenantable" inevitably some of them will be inaccessible to the user
 on the basis of their Tenant. Traffic Ops endpoint handlers that respond to requests for such object representations (i.e. GET requests)
 SHOULD filter their results implicitly according to the requesting Tenant's access. Any request that would modify, create, or destroy an
@@ -479,9 +479,25 @@ This section defines the various objects that may be interacted with through the
 
 \subsection{Users}
 
+\section{Tenantable Objects}
+A "tenantable" object is one that MUST obey Tenancy rules, as described in Section \ref{sec:tenancy}. For APIv3.0, the following
+object types are to be considered tenantable:
+
+\begin{itemize}
+	\item Delivery Services
+	\item Origins
+	\item Tenants
+	\item Users
+\end{itemize}
+
+This list may not be exhaustive of the tenantable types that will be introduced throughout the lifetime of API v3, and plugins
+may at any time add tenantable objects to Traffic Ops.
+
 \section{Endpoint Specifications}
 
 \subsection{\code{/cdns}}
+
+\subsection{\code{/cdns/\emph{CDN Name}/snapshot}}
 
 \subsection{\code{/cache\_groups}}
 
