@@ -234,8 +234,13 @@ All endpoints must be properly documented. For guidelines for writing API docume
 \href{https://traffic-control-cdn.readthedocs.io/en/latest/development/documentation_guidelines.html#documenting-api-routes}{that section of the official ATC documentation}.
 
 \subsection{Passing Request Data}
-Request data may be passed in the request body or as a \code{application/x-www-form-urlencoded}-encoded query string in the request URI. Request data MUST NOT
-be passed through a portion of the request path.\\
+Request data may be passed in the request body or as a\\ \code{application/x-www-form-urlencoded}-encoded query string in the request URI, or as a part of the
+request path. Request data MUST NOT be passed through a portion of the request path unless it uniquely identifies a resource with which the client may
+interact. For example, \code{/foos/\{\{ID\}\}} is an acceptable path for dealing with the particular "Foo" object that has some identifier \code{ID} (subject
+to the restrictions in Section \ref{sec:duplicate-endpoints}), but \code{logs/\{\{Number of Days\}\}/days} is unacceptable because reasonable default behavior can
+be provided if no number of days is given in the query string parameters, and that doesn't help uniquely identify a resource. Request path parameters should
+use double "curly-braces" (\code{\{} and \code{\}}) to call out variable components of the request path in documentation and references. Request path parameters
+MUST NOT be used for data that is optional to the request (somewhat obviously).\\
 The decision to pass data in the request body or query string is mainly up to the author, but some helpful tips:
 
 \begin{itemize}
@@ -264,6 +269,16 @@ object uniquely by another property, or by some combination of other properties,
 serve the purpose of unique identification (ideally in addition to providing useful data).\\
 Authors are encouraged to avoid numeric identifiers that serve no purpose beyond identification, whenever possible. In some cases, though, this
 is not possible.
+
+\subsection{Duplicate Endpoints\label{sec:duplicate-endpoints}}
+No two endpoints should serve the same purpose. While it's fine to overlap a bit, an endpoint like \code{/foo\_bars} should not exist solely to
+edit the Bars property of Foo objects (which can ostensibly be edited just fine on the object itself), for example. Ideally, there should be
+exactly one way to accomplish something through the API.\\
+A caveat, though, is object relationships. For example, a Delivery Service has zero or more Cache Servers assigned to it, and in turn Cache
+Servers may be assigned to zero or more Delivery Services\footnote{Rails developers may be familiar with this as the concept of a
+"has-and-belongs-to-many" relationship.}. Thus it is permissible to be able to edit the Delivery Services property of a Cache Server using the
+\code{/cache\_servers} API endpoint as well as to be able to edit the Cache Servers property of a Delivery Service using the
+\code{/delivery\_services} API endpoint - though they arguably provide equivalent functionality in that way.
 
 \subsection{Date/Time Format\label{sec:datetime}}
 Dates MUST be represented in either \href{https://tools.ietf.org/html/rfc3339}{RFC3339} format or as integers indicating the number of
@@ -436,9 +451,9 @@ creating, destroying, or retrieving representations of CDNs. Request paths shoul
 should never include the action being performed by the handler; instead that is decided by the request \emph{method}. For example,
 \code{/myObject/delete} is a poor request path name for both of those reasons. Furthermore, when an endpoint deals with an object type of
 which there are typically multiple, the request path should be plural, e.g. \code{/cdns} is better than \code{/cdn}.\\
-API endpoints MAY support trailing slashes (\code{/}) in the request path, but MUST NOT include suffixes that indicate a particular endcoding;
-that's what the Content-Type header is for. For example, in API version 1.x, \code{/foos} and \code{/foos.json} are both equally valid ways
-to access the \code{/foos} endpoint handlers - this is no longer allowed!
+API endpoints MAY support trailing slashes (\code{/}) in the request path, but MUST NOT include suffixes that indicate a particular endcoding
+("file extensions"); that's what the Content-Type header is for. For example, in API version 1.x, \code{/foos} and \code{/foos.json} are both
+equally valid ways to access the \code{/foos} endpoint handlers - this is no longer allowed!
 
 \subsection{Relationships as Objects}
 Relationships SHOULD NOT be represented through the API as objects in their own right. For example, instead of an endpoint like
