@@ -39,6 +39,15 @@ Traffic Ops API\\
 \author{The Traffic Ops Working Group}
 \maketitle{}
 \newpage{}
+\abstract{This document is intended to serve as a blueprint to be followed when implementing the 3.0 version of the Traffic Ops API, as
+well as a set of guidelines to be followed when implementing the API routes herein defined and any subsequently added API endpoints. Plugin
+developers may also find the guidelines useful, though obviously any code not directly contributed to the project is outside of this document's
+purview.\\
+For Traffic Ops API version 3.0, several changes to the API model were discussed including, but not limited to, switching from a REST structure
+to GraphQL, breaking the API apart into multiple separate microservices or even separate APIs, and doing away with cookie-based authentication.
+These ideas have not been adopted and the discussions regarding them tabled for a later date in favor of making the already sweeping changes
+herein outlined no more disruptive than they absolutely need to be and easing the transition of clients.}
+\newpage{}
 \tableofcontents{}
 \newpage{}
 \section{Guidelines}
@@ -80,7 +89,12 @@ one object at a time, the \code{response} field SHOULD consistently be represent
 The proper value of an empty collection is an empty collection. If a Foo can have zero or more Bars, then the representation of a Foo with
 no Bars MUST be an empty array/list/set, and in particular MUST NOT be either missing from the representation or represented as the "Null"
 value of the representation format. That is, if Foos have no other property than their Bars, then a Foo with no Bars may be represented
-in JSON encoding as \code{\{"bars":[]\}}, but not as \code{\{"bars":null\}} or \code{\{\}}.
+in JSON encoding as \code{\{"bars":[]\}}, but not as \code{\{"bars":null\}} or \code{\{\}}. Similarly, an empty string field is properly
+represented as an empty string - e.g. \code{\{"bar":""\}} not \code{\{"bar":null\}} or \code{\{\}} - and the "zero-value" of numbers is
+zero itself - e.g. \code{\{"bar":0\}} not \code{\{"bar":null\}} or \code{\{\}}. Note that "null" values \emph{allowed} when appropriate,
+but "null" values represent the \emph{absence} of a value rather than the "zero-value" of a property. If a property is \emph{missing}
+from an object representation it indicates the absence of that property, and because of that there must be a \emph{very convincing}
+argument if and when that is the case.
 
 \subsubsection{Alerts}
 Alerts should be presented as an array containing objects which each conform to the object definition laid out by
@@ -112,7 +126,9 @@ HTTP GET requests are issued by clients who want some data in response. In the c
 representation of some object. GET requests MUST NOT alter the state of the server. An example of an API endpoint created in API version 1
 that violates this restriction is \code{cdns/name/\{\{name\}\}/dnsseckeys/delete}.\\
 This is the standard method to be used by all read-only operations, and as such handlers for this method should generally be accessible to
-users with the "read-only" Role.
+users with the "read-only" Role.\\
+All endpoints dealing with the manipulation or fetching representations of Data Model objects as defined in Section \ref{sec:data-model}
+MUST support this method.
 
 \subsubsection{POST}
 POST requests ask the server to process some provided data. Most commonly, in Traffic Ops, this means creating an object based on the serialization
@@ -240,12 +256,13 @@ interact. For example, \code{/foos/\{\{ID\}\}} is an acceptable path for dealing
 to the restrictions in Section \ref{sec:duplicate-endpoints}), but \code{logs/\{\{Number of Days\}\}/days} is unacceptable because reasonable default behavior can
 be provided if no number of days is given in the query string parameters, and that doesn't help uniquely identify a resource. Request path parameters should
 use double "curly-braces" (\code{\{} and \code{\}}) to call out variable components of the request path in documentation and references. Request path parameters
-MUST NOT be used for data that is optional to the request (somewhat obviously).\\
+MUST NOT be used for data that is optional to the request (somewhat obviously). Note that all endpoints dealing with the manipulation of Data Model objects as
+described in Section \ref{sec:data-model} MUST support the GET HTTP request method.\\
 The decision to pass data in the request body or query string is mainly up to the author, but some helpful tips:
 
 \begin{itemize}
 	\item GET and DELETE requests do not typically provide request bodies.
-	\item Query parameters should nearly always be optional. If data is required by an endpoint, consider requiring it in the request body.
+	\item Query parameters should nearly always be optional. If data is required by an endpoint, consider requiring it in the request body. If the data identifies a resource, it ought to be a path parameter.
 	\item Request body data often represents objects that are being created or updated. If an object is being created or updated, it ought to be defined in the
 	request body, and if any additional data is (possibly optionally) required then it ought to be passed in the query string to separate it from the object definition.
 	\item The following query parameters are reserved for special use by Traffic Ops endpoint handlers, and may not be used for any purpose other
@@ -281,12 +298,12 @@ Servers may be assigned to zero or more Delivery Services\footnote{Rails develop
 \code{/delivery\_services} API endpoint - though they arguably provide equivalent functionality in that way.
 
 \subsection{Date/Time Format\label{sec:datetime}}
-Dates MUST be represented in either \href{https://tools.ietf.org/html/rfc3339}{RFC3339} format or as integers indicating the number of
-nanoseconds past the Unix epoch at which the date/time occurs. In either case, Dates included in responses from Traffic Ops MUST be in UTC.
-Wherever date/times are accepted as input, Traffic Ops API endpoints MUST accept either format.\\
-Traffic Ops endpoints MAY return either format as a result of request data/parameters, but MUST document their default format. The default format
-SHOULD be Unix epoch timestamps. This is beneficial because "Unix time" is widely supported by many programming languages' standard libraries,
-and is in fact generally quite fast to parse because it is often the way these libraries store the date/time behind the scenes.
+Dates MUST be represented in either \href{https://tools.ietf.org/html/rfc3339}{RFC3339} format (with or without nanosecond precision) or as
+integers indicating the number of nanoseconds past the Unix epoch at which the date/time occurs. In either case, Dates included in responses
+from Traffic Ops MUST be in UTC. Wherever date/times are accepted as input, Traffic Ops API endpoints MUST accept either format.\\
+Traffic Ops endpoints MUST return dates and times in \href{https://tools.ietf.org/html/rfc3339}{RFC3339} format with nanosecond precision.
+Endpoint MAY provide ways for the client to specify alternate representations, but these SHOULD be restricted to only Unix epoch timestamps
+in nanoseconds.
 
 \subsection{Pagination and Sorting}
 All endpoints that involve retrieving representations of objects (i.e. GET requests for collection objects e.g. Cache Servers) MUST implement
@@ -338,15 +355,13 @@ as they appear in the serialization, and endpoints SHOULD NOT accept case transf
 
 \subsubsection{Multiple Sorting}
 Traffic Ops API endpoints MUST accept single values for \code{sort\_by}, but MAY also accept a priority list of properties by which to sort.
-If implemented, this list MUST be recognized as comma-separated values of the \code{sort\_by} parameter, but MAY also be recognized in the
-tradition of \code{application/x-www-form-urlencoded} as multiple definitions of \code{sort\_by} with different values. If the latter
-representation is \emph{not} supported, then multiple definitions of \code{sort\_by} constitutes an ambiguity and must be handled accordingly.\\
+If implemented, this list MUST be recognized as comma-separated values of the \code{sort\_by} parameter. Multiple of the same value appearing
+in the definition of \code{sort\_by} constitutes an ambiguity and must be handled accordingly.\\
 For example, suppose the fictional \code{/foos} endpoints returns Foo objects. Given the client requests this endpoint with
 \code{GET /api/3.0/foos HTTP/1.1}, suppose the response resembles Listing \ref{code:unsorted-foos}.\\
 To sort this response first by the \code{fizz} property and then by the \code{test} property, the client might make the request\\
-\code{GET /api/3.0/foos?sort\_by=fizz,test HTTP/1.1} or - if supported by the endpoint - the equivalent
-\code{GET /api/3.0/foos?sort\_by=fizz\&sort\_by=test}. In either case, the order in which the properties appear defines their respective
-priorities. The response to this request, then, will be as shown in Listing \ref{code:sorted-foos}.\newpage{}
+\code{GET /api/3.0/foos?sort\_by=fizz,test HTTP/1.1}. The order in which the properties appear defines their respective
+priorities. The response to this request, then, will be as shown in Listing \ref{code:sorted-foos}.
 
 \begin{codelisting}
 \captionof{listing}{Unsorted Foos Response}
@@ -461,7 +476,7 @@ Relationships SHOULD NOT be represented through the API as objects in their own 
 has Servers as a property. Thus assignments are manipulated by manipulating that property. So the only endpoints necessary for fully
 defining and dealing with such relationships are \code{/delivery\_services} and \code{/servers}.
 
-\section{Data Model}
+\section{Data Model\label{sec:data-model}}
 This section defines the various objects that may be interacted with through the Traffic Ops API and their respective properties.
 
 \subsection{CDNs}
