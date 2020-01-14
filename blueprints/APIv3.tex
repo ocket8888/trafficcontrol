@@ -529,8 +529,8 @@ set to the value of the public key used to sign the SHA-256 hash in JSON Web Key
 The claims of the JWS Payload - the actual JWT - MUST include the following members:
 
 \begin{itemize}
-	\item \code{iss} The issuer of the JWT. By default this should have the value of the network location of the Traffic Ops server that
-	generated the JWT - e.g. "trafficops.infra.ciab.test" - but may also refer to the LDAP server used when users authenticate using LDAP.
+	\item \code{iss} The issuer of the JWT. This MUST have the value of the network location of the Traffic Ops server that
+	generated the JWT - e.g. "trafficops.infra.ciab.test".
 	\item \code{sub} The "subject" of the JWT - in this case, the Traffic Ops user. This MUST be a \emph{full} representation of the
 	authenticated user according to Section \ref{sec:users}, and must be serialized as a JSON object.
 	\item \code{exp} The timestamp at which this JWT will expire. This MUST coincide with the expiration date/time of the mojolicious
