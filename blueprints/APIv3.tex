@@ -390,6 +390,8 @@ Transfer-Encoding: chunked
 \end{minted}
 \end{codelisting}
 
+\newpage{}
+
 \begin{codelisting}
 \captionof{listing}{Sorted Foos Response}
 \label{code:sorted-foos}
@@ -495,7 +497,7 @@ Clients may present authentication in the "Authorization" HTTP header in the for
 base-64-encoded JWT (and accompanying JWS). When authentication using this method is unsuccessful, the endpoint MUST set the "WWW-Authenticate"
 HTTP header to include the "error" field set to "invalid\_token" and the "error\_description" field, which will likely have the same or similar
 content as the accompanying Alert. An example of such a failed response when the token presented by a client has expired is shown in Listing
-\ref{code:expired-token}.\\
+\ref{code:expired-token}.\newpage{}
 
 \begin{codelisting}
 \captionof{listing}{Expired Token Response}
@@ -603,33 +605,51 @@ may at any time add tenantable objects to Traffic Ops.
 
 \subsection{\code{/cdns}}
 
-\subsection{\code{/cdns/\{\{\emph{CDN Name}\}\}}}
+\subsection{\code{/cdns/\{\{CDN Name\}\}}}
 
-\subsection{\code{/cdns/\{\{\emph{CDN Name}/snapshot\}\}}}
+\subsection{\code{/cdns/\{\{CDN Name/snapshot\}\}}}
 
 \subsection{\code{/cache\_groups}}
 
-\subsection{\code{/cache\_groups}/\{\{Cache Group Name\}\}}
+\subsection{\code{/cache\_groups/\{\{Cache Group Name\}\}}}
 
 \subsection{\code{/cache\_servers}}
 
+\subsection{\code{/cache\_servers/\{\{Cache Server ID\}\}}}
+
 \subsection{\code{/delivery\_services}}
 
+\subsection{\code{/delivery\_services/\{\{Delivery Service Name\}\}}}
+
 \subsection{\code{/servers}}
+
+\subsection{\code{/servers/\{\{Server ID\}\}}}
 
 \subsection{\code{/login}\label{sec:endpoint:login}}
 
 \subsection{\code{/origins}}
 
+\subsection{\code{/origins/\{\{Origin ID\}\}}}
+
 \subsection{\code{/physical\_locations}}
+
+\subsection{\code{/physical\_locations/\{\{Physical Location Name\}\}}}
 
 \subsection{\code{/profiles}}
 
+\subsection{\code{/profiles/\{\{Profile Name\}\}}}
+
 \subsection{\code{/roles}}
+
+\subsection{\code{/roles/\{\{Role Name\}\}}}
 
 \subsection{\code{/tags}}
 
+\subsection{\code{/tags/\{\{Tag\}\}}}
+
 \subsection{\code{/tenants}}
+
+\subsection{\code{/tenants/\{\{Tenant Name\}\}}}
 
 \subsection{\code{/traffic\_monitors}}
 
@@ -642,5 +662,7 @@ may at any time add tenantable objects to Traffic Ops.
 \subsection{\code{/traffic\_vaults}}
 
 \subsection{\code{/users}}
+
+\subsection{\code{/users/\{\{Username\}\}}}
 
 \end{document}
