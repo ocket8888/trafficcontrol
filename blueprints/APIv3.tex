@@ -534,9 +534,8 @@ The claims of the JWS Payload - the actual JWT - MUST include the following memb
 	generated the JWT - e.g. "trafficops.infra.ciab.test".
 	\item \code{sub} The "subject" of the JWT - in this case, the Traffic Ops user. This MUST be a \emph{full} representation of the
 	authenticated user according to Section \ref{sec:users}, and must be serialized as a JSON object.
-	\item \code{exp} The timestamp at which this JWT will expire. This MUST coincide with the expiration date/time of the mojolicious
-	cookie set by the server's response. Unlike other dates and times dealt with through the Traffic Ops API, this MUST be in the format of
-	a Unix epoch timestamp in \emph{seconds}.
+	\item \code{exp} The timestamp at which this JWT will expire. Unlike other dates and times dealt with through the Traffic Ops API, this
+	MUST be in the format of a Unix epoch timestamp in \emph{seconds}.
 	\item \code{iat} The timestamp at which the JWT was issued. Unlike other dates and times dealt with through the Traffic Ops API, this
 	MUST be in the format of a Unix epoch timestamp in \emph{seconds}.
 \end{itemize}
