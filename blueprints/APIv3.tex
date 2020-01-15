@@ -489,10 +489,11 @@ scheme.\\
 \subsection{JWT Authentication}
 Alternatively, authentication can be done using OAuth2 Bearer tokens in JSON Web-Token (JWT) format\footnote{The intention of this section
 is to declare that JWT-based authentication \emph{will} be supported by Traffic Ops API version 3 at some point. This does not necessarily
-mean it will be included in 3.0, but the standards defined here should be enough for clients to start building out support for it.},
-signed with JSON Web-Signatures (JWS). If a client requests a resource and is denied due to failed authentication, the endpoint MUST
-return a \code{401 Unauthorized} response code that contains an appropriate Alert as described in Section \ref{sec:401}, and also MUST set
-the "WWW-Authenticate" header to \emph{exactly} \code{Bearer realm="Apache Traffic Control"} by default. The realm may be configurable.\\
+mean it will be included in 3.0, but the standards defined here should be enough for clients to start building out support for it.} as
+defined by \href{https://tools.ietf.org/html/rfc7519}{RFC7519}, signed with JSON Web-Signatures (JWS). If a client requests a resource and
+is denied due to failed authentication, the endpoint MUST return a \code{401 Unauthorized} response code that contains an appropriate Alert
+as described in Section \ref{sec:401}, and also MUST set the "WWW-Authenticate" header to \emph{exactly}
+\code{Bearer realm="Apache Traffic Control"} by default. The realm may be configurable.\\
 Clients may present authentication in the "Authorization" HTTP header in the format \code{Bearer \emph{JWT}} where "JWT" is the
 base-64-encoded JWT (and accompanying JWS). When authentication using this method is unsuccessful, the endpoint MUST set the "WWW-Authenticate"
 HTTP header to include the "error" field set to "invalid\_token" and the "error\_description" field, which will likely have the same or similar
