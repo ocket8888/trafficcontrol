@@ -16,11 +16,117 @@
 % under the License.
 
 \section{Data Model\label{sec:data-model}}
-This section defines the various objects that may be interacted with through the Traffic Ops API and their respective properties.
+This section defines the various objects that may be interacted with through the
+Traffic Ops API and their respective properties.\\
+An object's properties may principally be of several different types:
+
+\begin{itemize}
+	\item Integers. Integers may be signed or unsigned, to signify whether or not
+	they are capable of being less than zero. Representation formats which are
+	incapable of distinguishing integral and floating-point numbers (e.g. JSON)
+	or of separately describing signed and unsigned types (e.g. JSON again) MUST
+	represent these as numbers. In particular, they MUST NOT be represented as
+	string types. Furthermore, they MUST NOT be represented with a non-zero
+	decimal component and generally SHOULD NOT be represented with a decimal part
+	at all, if possible. Unsigned quantities MUST NOT include a sign (even
+	\code{+}, were it supported by the format).
+
+	\item Floating-point numbers. Floating point numbers are guaranteed to have a
+	precision of at least 64-bits, but clients SHOULD NOT treat representations
+	with a greater apparent precision as if they were more precise than 64 bits
+	can offer. Endpoints MUST NOT implement Not-a-Number nor either positive or
+	negative Infinity values as floating-point numbers, even if the
+	representation format supports them.
+
+	\item Strings. Strings SHOULD always be encoded (along with the rest of the
+	representation, if possible) in UTF-8.
+
+	\item Dates/times. As discussed in section \ref{sec:datetime}, these may be
+	expressed as either strings in RFC3339 format or as a signed integer number
+	of nanoseconds since the Unix epoch if the representation format does not
+	support date/time types natively (e.g. JSON).
+
+	\item Booleans. Boolean concepts MUST be represented as boolean data types in
+	representations that do support them. For example, in JSON,
+	\code{\{"foo":true\}} is acceptable but \code{\{"foo":"true"\}},
+	\code{\{"foo":1\}} and especially \code{\{"foo":"1"\}} are all unacceptable.
+	In representation formats that do not support boolean types, they may be
+	represented as the number zero for "false" and the number one for "true" as
+	unsigned integers.
+
+	\item Collections. There are several collection types used to model ATC data. Commonly, they all may contain arbitrary data types, but SHOULD NOT contain data of more than one type in any representation format.
+
+	\begin{itemize}
+		\item Sets. A set is an unordered collection of unique items. The
+		contents of a set are not guaranteed to be in any particular order, and
+		clients SHOULD NOT expect anything else\footnote{Endpoint authors are,
+		however, encouraged to order these consistently for ease of use, testing,
+		and debugging. This order need not - and indeed SHOULD NOT be documented.}
+		(unless the endpoint provides sorting functionality expressly), and in
+		particular SHOULD NOT conclude that a difference in ordering indicates
+		that data has changed. If a representation format is not capable of
+		expressing set types (e.g. JSON), then sets may be expressed as a list
+		array or other more generic collection, but MUST NEVER contain duplicates.
+
+		\item Lists/Arrays. A list/array is an \emph{ordered} collection of data,
+		and as such the ordering MUST be consistent in representations, as well as
+		meaningful.
+
+		\item Maps. A map may be used to associate any non-collection type "key"
+		with a "value" of arbitrary type. Maps MUST NOT contain duplicate keys in
+		any representation format. If a representation format is not capable of
+		representing maps (e.g. JSON), then they may be represented as objects
+		where the keys are coerced to property names and their values the
+		respective values of those properties.
+	\end{itemize}
+\end{itemize}
+
+With the "fallback" behavior described for each type above, note that valid
+representation formats MUST be capable of representing at least floating-point
+values, array/lists of such primitive values, and either nested object structures
+or maps.
 
 \subsection{CDNs}
+A CDN is a full collection of caching and infrastructural servers and ATC
+components required to service distributed requsests for content, as well as the
+configuration options for the methods of content delivery and the content
+delivered therein.
+
+\subsubsection{Cache Servers}
+A CDN's collection of Cache Servers is represented as set of Cache Server IDs.
+
+\subsubsection{Delivery Services}
+A CDN's collection of Delivery Services is represented as a set of Delivery Service Names.
+
+\subsubsection{DNSSEC Enabled}
+
+
+\subsubsection{DNSSEC Keys}
+% TODO: is this necessary? or is this more of a Delivery Service thing?
+
+\subsubsection{Domain}
+
+\subsubsection{Infrastructure Servers}
+
+\subsubsection{Name}
+
+\subsubsection{Origins}
+
+\subsubsection{Traffic Monitors}
+
+\subsubsection{Traffic Portals}
+
+\subsubsection{Traffic Routers}
+
+\subsubsection{Traffic Stats Servers}
+
+\subsubsection{Traffic Vaults}
+
+
 
 \subsection{Cache Groups}
+
+
 
 \subsection{Cache Servers}
 
@@ -62,6 +168,8 @@ This section defines the various objects that may be interacted with through the
 
 \subsubsection{Updates Pending}
 
+
+
 \subsection{Delivery Services}
 Delivery Services are, at their most basic, an association between a source of
 content and a set of Cache Servers and configuration options used to distribute
@@ -80,29 +188,54 @@ This does not, though, guarantee that Cache Servers do not already have the
 content stored and/or are incapable of serving it if routing is bypassed.}. A
 Delivery Service that is Active is necessarily Primed.
 
+
+
 \subsection{Infrastructure Servers}
+
+
 
 \subsection{Origins}
 
+
+
 \subsection{Profiles and Parameters}
+
+
 
 \subsection{Physical Locations}
 
+
+
 \subsection{Roles and Permissions\label{sec:roles-and-perms}}
+
+
 
 \subsection{Tags}
 
+
+
 \subsection{Tenants}
+
+
 
 \subsection{Traffic Monitors}
 
+
+
 \subsection{Traffic Portals}
+
+
 
 \subsection{Traffic Routers}
 
+
+
 \subsection{Traffic Stats Servers}
+
+
 
 \subsection{Traffic Vaults}
 
-\subsection{Users\label{sec:users}}
 
+
+\subsection{Users\label{sec:users}}
