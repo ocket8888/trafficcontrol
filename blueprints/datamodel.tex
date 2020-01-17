@@ -63,6 +63,22 @@ This section defines the various objects that may be interacted with through the
 \subsubsection{Updates Pending}
 
 \subsection{Delivery Services}
+Delivery Services are, at their most basic, an association between a source of
+content and a set of Cache Servers and configuration options used to distribute
+that content.
+
+\subsubsection{Active}
+A Delivery Service that is "active" is one that is functionally in service, and
+capable of delivering content. This is a boolean concept and is represented by
+boolean values. A Delivery Service cannot be Active if it is not Primed.
+
+\subsubsection{Primed}
+A Delivery Service that is "primed" has had its configuration distributed to the
+various servers required to serve its content. However, the content itself is
+still inaccessible\footnote{The content is not available through normal routing.
+This does not, though, guarantee that Cache Servers do not already have the
+content stored and/or are incapable of serving it if routing is bypassed.}. A
+Delivery Service that is Active is necessarily Primed.
 
 \subsection{Infrastructure Servers}
 
