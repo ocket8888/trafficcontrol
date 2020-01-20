@@ -157,45 +157,177 @@ A CDN's collection of Traffic Vaults is represented by a set of Traffic Vault ID
 
 
 \subsection{Cache Servers}
+Cache servers are the Mid-and-Edge-tier HTTP caching proxies ultimately
+responsible for caching and serving content for a Delivery Service.
+
+\subsubsection{Bandwidth Threshold}
+The "Bandwidth Threshold" of a Cache Server is the maximum used bandwidth which
+can be considered "healthy" for the Cache Server. It is suggested that clients
+presenting controls to create/register a new Cache Server present the most common
+value within the server's Cache Group as the default.
 
 \subsubsection{Cache Group}
+The Cache Group to which the Cache Server belongs is represented as a string that
+uniquely names it.
 
 \subsubsection{Capabilities}
+A Cache Server's "Capabilities" express a Cache Server's ability to serve certain
+kinds of traffic. They are represented on Cache Server objects as a set of
+Capability Names.
 
 \subsubsection{CDN}
+The CDN to which a Cache Server belongs is represented by its Name, which
+uniquely identifies it.
 
 \subsubsection{Delivery Services}
+The Delivery Services for which a Cache Service is tasked with serving content
+are represented by a set of Delivery Service names. Note that such assignments do
+not mean that a Cache Server is capable of serving such content, which truly
+depends on whether or not each Delivery Service is Primed and Active.
 
 \subsubsection{Domain}
+This is the "domain" part of the Cache Server's Fully Qualified Domain Name
+(FQDN) as a string. For example, a Cache Server with an FQDN of \code{github.com}
+has a Domain of \code{com} and a Cache Server with an FQDN of
+\code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.
+
+\subsubsection{Hard Disks}
+A collection of Hard Disk Drives (HDDs)\footnote{This designation is meant to
+contrast with "RAM Drives" where a block device maps to a section of main memory.
+In practice, Hard Disks may be any block device, include Solid-State Drives
+rather than actually HDDs.} available to the Cache Server for caching
+content, represented as a set of file paths as strings to said devices. These
+devices MUST be accessible for full read and write operations to the user as whom
+the caching proxy software runs on the Cache Server.
+
+\subsubsection{Health Polling Path}
+This is a string that names a special request path recognized by the Cache
+Server's caching proxy software which will result in the retrieval of statistics
+rather than content. This MUST NOT be allowed to be an empty string. It MAY
+contain a query string or even document fragment.\\
+The only health-and-statistics-gathering implementation truly supported by ATC is
+the special "astats" Traffic Server plugin.
 
 \subsubsection{Host Name}
+This is the "host" part of the Cache Server's Fully Qualified Domain Name (FQDN)
+as a string. For example, a Cache Server with an FQDN of \code{github.com} has a
+Host Name of \code{github}, and a Cache Server with an FQDN of
+\code{trafficcontrol.apache.org} has a Host Name of \code{trafficcontrol}.\\
+This field does NOT need to be unique, though operators are encouraged to make
+this - or at least the concatenation \code{\emph{Host Name}.{Domain}} - unique
+for ease of operation.
 
 \subsubsection{HTTP Port}
+An unsigned number that designates the port on which this Cache Server listens
+for incoming HTTP requests. If this is a "null"-type then the Cache Server is
+assumed to be incapable of serving unsecured HTTP requests.\\
+Note that if both HTTP Port and HTTPS Port are "null"-type, then ATC
+infrastructure will assume the Cache Server is incapable of serving traffic, and
+treat it accordingly - despite that most clients will attempt to send requests to
+the default 80 and 443 ports unless otherwise instructed.
 
 \subsubsection{HTTPS Port}
+An unsigned number that designates the port on which this Cache Server listens
+for incoming HTTPS requests. If this is a "null"-type then the Cache Server is
+assumed to be incapable of serving secured HTTPS requests.\\
+Note that if both HTTP Port and HTTPS Port are "null"-type, then ATC
+infrastructure will assume the Cache Server is incapable of serving traffic, and
+treat it accordingly - despite that most clients will attempt to send requests to
+the default 80 and 443 ports unless otherwise instructed.
 
 \subsubsection{ID}
+A Cache Server's "ID" is an unsigned integer that uniquely identifies it among
+all Cache Servers. It serves no purpose beyond unique identification of the Cache
+Server.
 
 \subsubsection{IPv4 Address}
+The Cache Server's IPv4 address. If it is a "null"-type then the Cache Server is
+assumed to only operate in IPv6.\\
+Note that if both a Cache Server's IPv4 Address and IPv6 Address are "null"-type
+then clients cannot and will not be routed to them for DNS-routed Delivery
+Services.
 
 \subsubsection{IPv6 Address}
+The Cache Server's IPv6 address. If it is a "null"-type then the Cache Server is
+assumed to only operate in IPv6.\\
+Note that if both a Cache Server's IPv4 Address and IPv6 Address are "null"-type
+then clients cannot and will not be routed to them for DNS-routed Delivery
+Services.
+
+\subsubsection{Loadavg Threshold}
+A Cache Server's "Loadavg Threshold" is a floating-point number - which MUST be
+greater than 0 - that represents the loadavg above which the Cache Server will be
+considered unhealthy. For more information consult the
+\href{https://linux.die.net/man/3/getloadavg}{\code{getloadavg} manual page}.
 
 \subsubsection{Notes}
+This section is an arbitrary string containing miscellaneous, human-friendly
+information about the Cache Server. Other ATC components SHOULD NOT parse this
+for specific information fields, or expect it to be in a particular format.
 
 \subsubsection{Physical Location}
+The Physical Location at which a Cache Server resides is represented by a string
+containing its Name.
 
 \subsubsection{Profile}
+The Profile used by a Cache Server is represented by a string containing its Name.
+
+\subsubsection{Query Time Threshold}
+A Cache Server's "Query Time Threshold" is an unsigned integer number of
+milliseconds after which a Traffic Monitor polling it for health will consider it
+unhealthy, even if it successfully returns healthy metrics. The value "0" has the
+meaning "no threshold" (however, Traffic Monitor polling timeouts still apply).
+
+\subsubsection{RAM Disks}
+A collection of RAM Disk Drives available to the Cache Server for caching
+content, represented as a set of file paths as strings to said devices. These
+devices MUST be accessible for full read and write operations to the user as whom
+the caching proxy software runs on the Cache Server.
 
 \subsubsection{Revalidation Pending}
+This boolean represents whether or not the Cache Server has content revalidation
+requests yet to satisfy. When a new Content Revalidation Request is created on
+one or more Delivery Services to which this Cache Server is assigned, this will
+be set to "true" and updated to "false" when the operation has been completed.
+Being "false" does not mean that the content invalidation request(s) performed by
+the Cache Server have expired and are no longer in effect.
 
 \subsubsection{Status}
+The Cache Server's "Status" is a string constant, which MUST always be one of
+
+\begin{itemize}
+	\item \code{ONLINE} - The Cache Server will always be considered healthy
+	regardless of any thresholds or connectivity state.
+	\item \code{REPORTED} - The Cache Server's health is presented to the Traffic
+	Router(s) as it is reported by its various thresholds, as determined by the
+	Traffic Monitor(s).
+	\item \code{OFFLINE} - The Cache Server is considered unhealthy regardless of
+	any thresholds or connectivity state.
+	\item \code{ADMIN\_DOWN} - The Cache Server is considered unhealthy and its
+	thresholds and connectivity state are not monitored. Its existence is not
+	disclosed to Traffic Router(s).
+\end{itemize}
 
 \subsubsection{Tags}
+A Cache Server's "Tags" are represented as a set of Tag Names.
 
 \subsubsection{Type}
+A Cache Server's "Type" is a string constant, which MUST always be one of
+
+\begin{itemize}
+	\item \code{EDGE} - This is an Edge-tier Cache Server which acts as a reverse
+	proxy.
+	\item \code{MID} - This is an Edge-tier Cache Server which acts as a forward
+	proxy.
+\end{itemize}
 
 \subsubsection{Updates Pending}
+This boolean represents whether or not the Cache Server has configuration updates
+pending. When such updates are applied, this will be set to "false" by the Cache
+Server's ORT/ATSTCCFG instance.
 
+
+\subsection{Capabilities}
 
 
 \subsection{Delivery Services}
