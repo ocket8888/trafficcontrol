@@ -21,22 +21,22 @@ Traffic Ops API and their respective properties.\\
 An object's properties may principally be of several different types:
 
 \begin{itemize}
-	\item Integers. Integers may be signed or unsigned, to signify whether or not
-	they are capable of being less than zero. Representation formats which are
-	incapable of distinguishing integral and floating-point numbers (e.g. JSON)
-	or of separately describing signed and unsigned types (e.g. JSON again) MUST
-	represent these as numbers. In particular, they MUST NOT be represented as
-	string types. Furthermore, they MUST NOT be represented with a non-zero
-	decimal component and generally SHOULD NOT be represented with a decimal part
-	at all, if possible. Unsigned quantities MUST NOT include a sign (even
-	\code{+}, were it supported by the format).
+	\item Integers. Integers may be signed or unsigned, to signify whether or
+	not they are capable of being less than zero. Representation formats which
+	are incapable of distinguishing integral and floating-point numbers (e.g.
+	JSON) or of separately describing signed and unsigned types (e.g. JSON
+	again) MUST represent these as numbers. In particular, they MUST NOT be
+	represented as string types. Furthermore, they MUST NOT be represented with
+	a non-zero decimal component and generally SHOULD NOT be represented with a
+	decimal part at all, if possible. Unsigned quantities MUST NOT include a
+	sign (even \code{+}, were it supported by the format).
 
-	\item Floating-point numbers. Floating point numbers are guaranteed to have a
-	precision of at least 64-bits, but clients SHOULD NOT treat representations
-	with a greater apparent precision as if they were more precise than 64 bits
-	can offer. Endpoints MUST NOT implement Not-a-Number nor either positive or
-	negative Infinity values as floating-point numbers, even if the
-	representation format supports them.
+	\item Floating-point numbers. Floating point numbers are guaranteed to have
+	a precision of at least 64-bits, but clients SHOULD NOT treat
+	representations with a greater apparent precision as if they were more
+	precise than 64 bits can offer. Endpoints MUST NOT implement Not-a-Number
+	nor either positive or negative Infinity values as floating-point numbers,
+	even if the representation format supports them.
 
 	\item Strings. Strings SHOULD always be encoded (along with the rest of the
 	representation, if possible) in UTF-8.
@@ -46,38 +46,41 @@ An object's properties may principally be of several different types:
 	of nanoseconds since the Unix epoch if the representation format does not
 	support date/time types natively (e.g. JSON).
 
-	\item Booleans. Boolean concepts MUST be represented as boolean data types in
-	representations that do support them. For example, in JSON,
+	\item Booleans. Boolean concepts MUST be represented as boolean data types
+	in representations that do support them. For example, in JSON,
 	\code{\{"foo":true\}} is acceptable but \code{\{"foo":"true"\}},
 	\code{\{"foo":1\}} and especially \code{\{"foo":"1"\}} are all unacceptable.
 	In representation formats that do not support boolean types, they may be
 	represented as the number zero for "false" and the number one for "true" as
 	unsigned integers.
 
-	\item Collections. There are several collection types used to model ATC data. Commonly, they all may contain arbitrary data types, but SHOULD NOT contain data of more than one type in any representation format.
+	\item Collections. There are several collection types used to model ATC
+	data. Commonly, they all may contain arbitrary data types, but SHOULD NOT
+	contain data of more than one type in any representation format.
 
 	\begin{itemize}
 		\item Sets. A set is an unordered collection of unique items. The
 		contents of a set are not guaranteed to be in any particular order, and
 		clients SHOULD NOT expect anything else\footnote{Endpoint authors are,
-		however, encouraged to order these consistently for ease of use, testing,
-		and debugging. This order need not - and indeed SHOULD NOT be documented.}
-		(unless the endpoint provides sorting functionality expressly), and in
-		particular SHOULD NOT conclude that a difference in ordering indicates
-		that data has changed. If a representation format is not capable of
-		expressing set types (e.g. JSON), then sets may be expressed as a list
-		array or other more generic collection, but MUST NEVER contain duplicates.
+		however, encouraged to order these consistently for ease of use,
+		testing, and debugging. This order need not - and indeed SHOULD NOT be
+		documented.} (unless the endpoint provides sorting functionality
+		expressly), and in particular SHOULD NOT conclude that a difference in
+		ordering indicates that data has changed. If a representation format is
+		not capable of expressing set types (e.g. JSON), then sets may be
+		expressed as a list array or other more generic collection, but MUST
+		NEVER contain duplicates.
 
-		\item Lists/Arrays. A list/array is an \emph{ordered} collection of data,
-		and as such the ordering MUST be consistent in representations, as well as
-		meaningful.
+		\item Lists/Arrays. A list/array is an \emph{ordered} collection of
+		data, and as such the ordering MUST be consistent in representations, as
+		well as meaningful.
 
 		\item Maps. A map may be used to associate any non-collection type "key"
-		with a "value" of arbitrary type. Maps MUST NOT contain duplicate keys in
-		any representation format. If a representation format is not capable of
-		representing maps (e.g. JSON), then they may be represented as objects
-		where the keys are coerced to property names and their values the
-		respective values of those properties.
+		with a "value" of arbitrary type. Maps MUST NOT contain duplicate keys
+		in any representation format. If a representation format is not capable
+		of representing maps (e.g. JSON), then they may be represented as
+		objects where the keys are coerced to property names and their values
+		the respective values of those properties.
 	\end{itemize}
 \end{itemize}
 
@@ -100,8 +103,8 @@ A CDN's collection of Delivery Services is represented as a set of Delivery
 Service Names.
 
 \subsubsection{DNSSEC Enabled}
-A CDN that has "DNSSEC Enabled" is capable of supporting DNSSEC configurations on
-its constituent Delivery Services. This does \emph{not} mean that all DNS
+A CDN that has "DNSSEC Enabled" is capable of supporting DNSSEC configurations
+on its constituent Delivery Services. This does \emph{not} mean that all DNS
 requests through ATC for this CDN's Domain will be secured with DNSSEC.\\
 This is a boolean concept and as such is represented by boolean values.
 
@@ -112,8 +115,8 @@ Zone-Signing Key will appear first, followed immediately by the Key-Signing Key
 
 \subsubsection{Domain}
 The Top-Level Domain used by the CDN, represented as a string. This MUST be a
-uniquely valued property across all CDNs, and MUST not be an invalid DNS label as
-defined by
+uniquely valued property across all CDNs, and MUST not be an invalid DNS label
+as defined by
 \href{https://tools.ietf.org/html/rfc1035#section-2.3.1}{Section 2.3.1 of RFC1035}.
 
 \subsubsection{Infrastructure Servers}
@@ -123,16 +126,17 @@ Infrastructure Server IDs.
 \subsubsection{Name}
 A CDN's "Name" is a string that uniquely identifies it among all CDNs. It MUST
 NOT be allowed to contain "special characters" - meaning anything other than
-alphanumeric characters, spaces, hyphens, colons and underscores. It further MUST
-NOT be allowed to begin with a non-alphanumeric character nor end with a space.
+alphanumeric characters, spaces, hyphens, colons and underscores. It further
+MUST NOT be allowed to begin with a non-alphanumeric character nor end with a
+space.
 
 \subsubsection{Origins}
 A CDN's collection of Origins is represented by a set of Origin IDs.
 
 \subsubsection{Traffic Monitors}
-A CDN's collection of Traffic Monitors is represented by a set of Traffic Monitor
-IDs. Note that while a functioning CDN must contain at least one Traffic Monitor,
-no such restriction is placed on CDN objects in general.
+A CDN's collection of Traffic Monitors is represented by a set of Traffic
+Monitor IDs. Note that while a functioning CDN must contain at least one Traffic
+Monitor, no such restriction is placed on CDN objects in general.
 
 \subsubsection{Traffic Portals}
 A CDN's collection of Traffic Portal is represented by a set of Traffic Portal
@@ -148,7 +152,8 @@ A CDN's collection of Traffic Stats Servers is represented by a set of Traffic
 Stats Server IDs.
 
 \subsubsection{Traffic Vaults}
-A CDN's collection of Traffic Vaults is represented by a set of Traffic Vault IDs.
+A CDN's collection of Traffic Vaults is represented by a set of Traffic Vault
+IDs.
 
 
 
@@ -163,17 +168,17 @@ responsible for caching and serving content for a Delivery Service.
 \subsubsection{Bandwidth Threshold}
 The "Bandwidth Threshold" of a Cache Server is the maximum used bandwidth which
 can be considered "healthy" for the Cache Server. It is suggested that clients
-presenting controls to create/register a new Cache Server present the most common
-value within the server's Cache Group as the default.
+presenting controls to create/register a new Cache Server present the most
+common value within the server's Cache Group as the default.
 
 \subsubsection{Cache Group}
-The Cache Group to which the Cache Server belongs is represented as a string that
-uniquely names it.
+The Cache Group to which the Cache Server belongs is represented as a string
+that uniquely names it.
 
 \subsubsection{Capabilities}
-A Cache Server's "Capabilities" express a Cache Server's ability to serve certain
-kinds of traffic. They are represented on Cache Server objects as a set of
-Capability Names.
+A Cache Server's "Capabilities" express a Cache Server's ability to serve
+certain kinds of traffic. They are represented on Cache Server objects as a set
+of Capability Names.
 
 \subsubsection{CDN}
 The CDN to which a Cache Server belongs is represented by its Name, which
@@ -181,32 +186,32 @@ uniquely identifies it.
 
 \subsubsection{Delivery Services}
 The Delivery Services for which a Cache Service is tasked with serving content
-are represented by a set of Delivery Service names. Note that such assignments do
-not mean that a Cache Server is capable of serving such content, which truly
+are represented by a set of Delivery Service names. Note that such assignments
+do not mean that a Cache Server is capable of serving such content, which truly
 depends on whether or not each Delivery Service is Primed and Active.
 
 \subsubsection{Domain}
 This is the "domain" part of the Cache Server's Fully Qualified Domain Name
-(FQDN) as a string. For example, a Cache Server with an FQDN of \code{github.com}
-has a Domain of \code{com} and a Cache Server with an FQDN of
+(FQDN) as a string. For example, a Cache Server with an FQDN of
+\code{github.com} has a Domain of \code{com} and a Cache Server with an FQDN of
 \code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.
 
 \subsubsection{Hard Disks}
 A collection of Hard Disk Drives (HDDs)\footnote{This designation is meant to
-contrast with "RAM Drives" where a block device maps to a section of main memory.
-In practice, Hard Disks may be any block device, include Solid-State Drives
-rather than actually HDDs.} available to the Cache Server for caching
+contrast with "RAM Drives" where a block device maps to a section of main
+memory. In practice, Hard Disks may be any block device, include Solid-State
+Drives rather than actually HDDs.} available to the Cache Server for caching
 content, represented as a set of file paths as strings to said devices. These
-devices MUST be accessible for full read and write operations to the user as whom
-the caching proxy software runs on the Cache Server.
+devices MUST be accessible for full read and write operations to the user as
+whom the caching proxy software runs on the Cache Server.
 
 \subsubsection{Health Polling Path}
 This is a string that names a special request path recognized by the Cache
 Server's caching proxy software which will result in the retrieval of statistics
 rather than content. This MUST NOT be allowed to be an empty string. It MAY
 contain a query string or even document fragment.\\
-The only health-and-statistics-gathering implementation truly supported by ATC is
-the special "astats" Traffic Server plugin.
+The only health-and-statistics-gathering implementation truly supported by ATC
+is the special "astats" Traffic Server plugin.
 
 \subsubsection{Host Name}
 This is the "host" part of the Cache Server's Fully Qualified Domain Name (FQDN)
@@ -223,8 +228,8 @@ for incoming HTTP requests. If this is a "null"-type then the Cache Server is
 assumed to be incapable of serving unsecured HTTP requests.\\
 Note that if both HTTP Port and HTTPS Port are "null"-type, then ATC
 infrastructure will assume the Cache Server is incapable of serving traffic, and
-treat it accordingly - despite that most clients will attempt to send requests to
-the default 80 and 443 ports unless otherwise instructed.
+treat it accordingly - despite that most clients will attempt to send requests
+to the default 80 and 443 ports unless otherwise instructed.
 
 \subsubsection{HTTPS Port}
 An unsigned number that designates the port on which this Cache Server listens
@@ -232,13 +237,13 @@ for incoming HTTPS requests. If this is a "null"-type then the Cache Server is
 assumed to be incapable of serving secured HTTPS requests.\\
 Note that if both HTTP Port and HTTPS Port are "null"-type, then ATC
 infrastructure will assume the Cache Server is incapable of serving traffic, and
-treat it accordingly - despite that most clients will attempt to send requests to
-the default 80 and 443 ports unless otherwise instructed.
+treat it accordingly - despite that most clients will attempt to send requests
+to the default 80 and 443 ports unless otherwise instructed.
 
 \subsubsection{ID}
 A Cache Server's "ID" is an unsigned integer that uniquely identifies it among
-all Cache Servers. It serves no purpose beyond unique identification of the Cache
-Server.
+all Cache Servers. It serves no purpose beyond unique identification of the
+Cache Server.
 
 \subsubsection{IPv4 Address}
 The Cache Server's IPv4 address. If it is a "null"-type then the Cache Server is
@@ -256,8 +261,8 @@ Services.
 
 \subsubsection{Loadavg Threshold}
 A Cache Server's "Loadavg Threshold" is a floating-point number - which MUST be
-greater than 0 - that represents the loadavg above which the Cache Server will be
-considered unhealthy. For more information consult the
+greater than 0 - that represents the loadavg above which the Cache Server will
+be considered unhealthy. For more information consult the
 \href{https://linux.die.net/man/3/getloadavg}{\code{getloadavg} manual page}.
 
 \subsubsection{Notes}
@@ -270,27 +275,29 @@ The Physical Location at which a Cache Server resides is represented by a string
 containing its Name.
 
 \subsubsection{Profile}
-The Profile used by a Cache Server is represented by a string containing its Name.
+The Profile used by a Cache Server is represented by a string containing its
+Name.
 
 \subsubsection{Query Time Threshold}
 A Cache Server's "Query Time Threshold" is an unsigned integer number of
-milliseconds after which a Traffic Monitor polling it for health will consider it
-unhealthy, even if it successfully returns healthy metrics. The value "0" has the
-meaning "no threshold" (however, Traffic Monitor polling timeouts still apply).
+milliseconds after which a Traffic Monitor polling it for health will consider
+it unhealthy, even if it successfully returns healthy metrics. The value "0" has
+the meaning "no threshold" (however, Traffic Monitor polling timeouts still
+apply).
 
 \subsubsection{RAM Disks}
 A collection of RAM Disk Drives available to the Cache Server for caching
 content, represented as a set of file paths as strings to said devices. These
-devices MUST be accessible for full read and write operations to the user as whom
-the caching proxy software runs on the Cache Server.
+devices MUST be accessible for full read and write operations to the user as
+whom the caching proxy software runs on the Cache Server.
 
 \subsubsection{Revalidation Pending}
 This boolean represents whether or not the Cache Server has content revalidation
 requests yet to satisfy. When a new Content Revalidation Request is created on
 one or more Delivery Services to which this Cache Server is assigned, this will
 be set to "true" and updated to "false" when the operation has been completed.
-Being "false" does not mean that the content invalidation request(s) performed by
-the Cache Server have expired and are no longer in effect.
+Being "false" does not mean that the content invalidation request(s) performed
+by the Cache Server have expired and are no longer in effect.
 
 \subsubsection{Status}
 The Cache Server's "Status" is a string constant, which MUST always be one of
@@ -298,11 +305,11 @@ The Cache Server's "Status" is a string constant, which MUST always be one of
 \begin{itemize}
 	\item \code{ONLINE} - The Cache Server will always be considered healthy
 	regardless of any thresholds or connectivity state.
-	\item \code{REPORTED} - The Cache Server's health is presented to the Traffic
-	Router(s) as it is reported by its various thresholds, as determined by the
-	Traffic Monitor(s).
-	\item \code{OFFLINE} - The Cache Server is considered unhealthy regardless of
-	any thresholds or connectivity state.
+	\item \code{REPORTED} - The Cache Server's health is presented to the
+	Traffic Router(s) as it is reported by its various thresholds, as determined
+	by the Traffic Monitor(s).
+	\item \code{OFFLINE} - The Cache Server is considered unhealthy regardless
+	of any thresholds or connectivity state.
 	\item \code{ADMIN\_DOWN} - The Cache Server is considered unhealthy and its
 	thresholds and connectivity state are not monitored. Its existence is not
 	disclosed to Traffic Router(s).
@@ -315,16 +322,16 @@ A Cache Server's "Tags" are represented as a set of Tag Names.
 A Cache Server's "Type" is a string constant, which MUST always be one of
 
 \begin{itemize}
-	\item \code{EDGE} - This is an Edge-tier Cache Server which acts as a reverse
-	proxy.
+	\item \code{EDGE} - This is an Edge-tier Cache Server which acts as a
+	reverse proxy.
 	\item \code{MID} - This is an Edge-tier Cache Server which acts as a forward
 	proxy.
 \end{itemize}
 
 \subsubsection{Updates Pending}
-This boolean represents whether or not the Cache Server has configuration updates
-pending. When such updates are applied, this will be set to "false" by the Cache
-Server's ORT/ATSTCCFG instance.
+This boolean represents whether or not the Cache Server has configuration
+updates pending. When such updates are applied, this will be set to "false" by
+the Cache Server's ORT/ATSTCCFG instance.
 
 
 \subsection{Capabilities}
@@ -341,18 +348,21 @@ Routing Type of a Delivery Service encapsulates the methods by which clients
 may request content routing, and depending on its value the Delivery Service
 takes on a set of additional properties. Put simply, these are all different
 types of objects that are closely related.\\
-This section details all of the properties that are common to \emph{all} types of
-Delivery Services.
+This section details all of the properties that are common to \emph{all} types
+of Delivery Services.
 
 \paragraph{Anonymous Blocking}
 A Delivery Service that has "Anonymous Blocking" tells Traffic Router to block
 requests from anonymized IP addresses. Whether or not and how well that can
-actually be done is dependent on the configuration of each Traffic Router itself,
-and if this Delivery Service is DNS-routed the only IP address Traffic Routers
-will be capable of checking for anonymization (e.g. known proxy/VPN/TOR exit node)
-then
+actually be done is dependent on the configuration of each Traffic Router
+itself, and if this Delivery Service is DNS-routed the only IP address Traffic
+Routers will be capable of checking for anonymization (e.g. known proxy/VPN/TOR
+exit node) will be the downstream router requesting the name resolution and thus
+is likely much less effective.
 
 \paragraph{Deep Caching}
+A boolean value that describes whether or not "Deep Caching" may be used for
+this Delivery Service.
 
 \paragraph{Caching}
 \begin{itemize}
@@ -363,34 +373,44 @@ then
 
 %TODO - STEERING doesn't have this?
 \paragraph{Cache Servers}
-A Delivery Service's assigned Cache Servers are expressed as a set of Cache Server
-IDs.
+A Delivery Service's assigned Cache Servers are expressed as a set of Cache
+Server IDs.
 
 \paragraph{CDN}
+The CDN to which a Delivery Service belongs is expressed as a string that is the
+Name used to uniquely identify it.
 
 %TODO: use-case for check path?
 
 \paragraph{Denied Access Redirect}
+This is a string that describes the network location to which clients will be
+directed if they are denied access on the basis of Anonymous Blocking and/or
+Geographic Limiting settings. This MUST always be represented as a string - even
+if the representation format supports IP Addresses as a native type - and its
+interpretation is dependent on the Delivery Service's Routing Type.
 
 \paragraph{DSCP}
 
 \paragraph{ECS}
 
 \paragraph{Geographic Limiting}
-This property describes limitations to the availability of this Delivery Service's
-content on the basis of the requesting client's geographic location. It is a set of
-strings, each of which is an \href{https://www.iso.org/obp/ui/#search/code/}{ISO 3166-1}
-alpha-2 country code, optionally with ISO 3166-2 subdivisional alphabetic code. This is
-a "white list" of countries/subdivisions wherein content is to be made available\footnote{
-This property is meant to inform Traffic Router; Cache Servers cannot be relied upon to
-approve or deny access on a geographic basis. Thus, if routing is bypassed, restricted
-content is totally accessible to requesting clients.}.\\
-Content is \emph{always} available to clients whose IP addresses are found within the
-Traffic Routers' Coverage Zone File(s). With that in mind, when this property is an empty
-set it means that no geographic regions are "whitelisted" and thus \emph{only} clients
-whose IP addresses are found within a Coverage Zone File will be granted access to content.
-When this property has a "Null" type, there is no geographic restriction placed on the
-Delivery Service's content access.
+This property describes limitations to the availability of this Delivery
+Service's content on the basis of the requesting client's geographic location.
+It is a set of strings, each of which is an
+\href{https://www.iso.org/obp/ui/#search/code/}{ISO 3166-1} alpha-2 country
+code, optionally with ISO 3166-2 subdivisional alphabetic code. This is a "white
+list" of countries/subdivisions wherein content is to be made
+available\footnote{This property is meant to inform Traffic Router; Cache
+Servers cannot be relied upon to approve or deny access on a geographic basis.
+Thus, if routing is bypassed, restricted content is totally accessible to
+requesting clients.}.\\
+Content is \emph{always} available to clients whose IP addresses are found
+within the Traffic Routers' Coverage Zone File(s). With that in mind, when this
+property is an empty set it means that no geographic regions are "whitelisted"
+and thus \emph{only} clients whose IP addresses are found within a Coverage Zone
+File will be granted access to content. When this property has a "Null" type,
+there is no geographic restriction placed on the Delivery Service's content
+access.
 
 \paragraph{Maximum Origin Connections}
 
@@ -446,8 +466,9 @@ this for specific information fields, or expect it to be in a particular format.
 \paragraph{Skip Mid Tier}
 
 \paragraph{Status}
-The "Status" of a Delivery Service is a string constant that expresses its ability
-to serve content at the present moment in time. It may have one of three values:
+The "Status" of a Delivery Service is a string constant that expresses its
+ability to serve content at the present moment in time. It may have one of three
+values:
 
 \begin{itemize}
 	\item \code{ACTIVE} A Delivery Service that is "active" is one that is
@@ -455,14 +476,14 @@ to serve content at the present moment in time. It may have one of three values:
 	that its configuration is deployed to Cache Servers and it is available for
 	routing traffic.
 	\item \code{PRIMED} A Delivery Service that is "primed" has had its
-	configuration distributed to the various servers required to serve its content.
-	However, the content itself is still inaccessible\footnote{The content is not
-	available through normal routing. This does not, though, guarantee that Cache
-	Servers do not already have the content stored and/or are incapable of serving
-	it if routing is bypassed.}.
-	\item \code{INACTIVE} A Delivery Service that is "inactive" is not available for
-	routing and has not had its configuration distributed to its assigned Cache
-	Servers.
+	configuration distributed to the various servers required to serve its
+	content. However, the content itself is still inaccessible\footnote{The
+	content is not available through normal routing. This does not, though,
+	guarantee that Cache Servers do not already have the content stored and/or
+	are incapable of serving it if routing is bypassed.}.
+	\item \code{INACTIVE} A Delivery Service that is "inactive" is not available
+	for routing and has not had its configuration distributed to its assigned
+	Cache Servers.
 \end{itemize}
 
 \paragraph{Tenant}
@@ -474,7 +495,8 @@ to serve content at the present moment in time. It may have one of three values:
 \paragraph{Bypass TTL}
 
 \paragraph{DNS TTL}
-An unsigned integer that defines the Time-To-Live (TTL) of DNS responses from the Traffic Router for this Delivery Service's routing, in seconds.
+An unsigned integer that defines the Time-To-Live (TTL) of DNS responses from
+the Traffic Router for this Delivery Service's routing, in seconds.
 
 \paragraph{Max Records}
 
@@ -544,8 +566,8 @@ An unsigned integer that defines the Time-To-Live (TTL) of DNS responses from th
 
 \subsection{Users\label{sec:users}}
 A user represents a person who may be authenticated with the Traffic Ops API and
-their ability to interact with Traffic Ops Data Model objects. A User object also
-contains "meta" information such as their email address.
+their ability to interact with Traffic Ops Data Model objects. A User object
+also contains "meta" information such as their email address.
 
 \subsubsection{Address}
 This is a text field with no defined structure, but semantically it represents a
@@ -566,10 +588,10 @@ Representation formats that do not support email addresses natively as a type
 MUST represent this a string.
 
 \subsubsection{Full Name}
-A user's "full" name, as it would appear on a letter mailed to them, as a string.
-This field, if not empty, is presumed to be the user's name as it would appear on
-normal postage. This field MUST NOT be allowed to contain non-alphabetic
-characters.
+A user's "full" name, as it would appear on a letter mailed to them, as a
+string. This field, if not empty, is presumed to be the user's name as it would
+appear on normal postage. This field MUST NOT be allowed to contain
+non-alphabetic characters.
 
 \subsubsection{Phone Number}
 A string which, if not empty, is presumed to be a telephone number at which the
