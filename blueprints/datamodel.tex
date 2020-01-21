@@ -335,7 +335,117 @@ Delivery Services are, at their most basic, an association between a source of
 content and a set of Cache Servers and configuration options used to distribute
 that content.
 
-\subsubsection{Status}
+\subsubsection{Common Properties}
+Herein described are the properties common to all Delivery Service objects. The
+Routing Type of a Delivery Service encapsulates the methods by which clients
+may request content routing, and depending on its value the Delivery Service
+takes on a set of additional properties. Put simply, these are all different
+types of objects that are closely related.\\
+This section details all of the properties that are common to \emph{all} types of
+Delivery Services.
+
+\paragraph{Anonymous Blocking}
+A Delivery Service that has "Anonymous Blocking" tells Traffic Router to block
+requests from anonymized IP addresses. Whether or not and how well that can
+actually be done is dependent on the configuration of each Traffic Router itself,
+and if this Delivery Service is DNS-routed the only IP address Traffic Routers
+will be capable of checking for anonymization (e.g. known proxy/VPN/TOR exit node)
+then
+
+\paragraph{Deep Caching}
+
+\paragraph{Caching}
+\begin{itemize}
+	\item \code{CACHE}
+	\item \code{RAM\_ONLY}
+	\item \code{NO\_CACHE}
+\end{itemize}
+
+%TODO - STEERING doesn't have this?
+\paragraph{Cache Servers}
+A Delivery Service's assigned Cache Servers are expressed as a set of Cache Server
+IDs.
+
+\paragraph{CDN}
+
+%TODO: use-case for check path?
+
+\paragraph{Denied Access Redirect}
+
+\paragraph{DSCP}
+
+\paragraph{ECS}
+
+\paragraph{Geographic Limiting}
+This property describes limitations to the availability of this Delivery Service's
+content on the basis of the requesting client's geographic location. It is a set of
+strings, each of which is an \href{https://www.iso.org/obp/ui/#search/code/}{ISO 3166-1}
+alpha-2 country code, optionally with ISO 3166-2 subdivisional alphabetic code. This is
+a "white list" of countries/subdivisions wherein content is to be made available\footnote{
+This property is meant to inform Traffic Router; Cache Servers cannot be relied upon to
+approve or deny access on a geographic basis. Thus, if routing is bypassed, restricted
+content is totally accessible to requesting clients.}.\\
+Content is \emph{always} available to clients whose IP addresses are found within the
+Traffic Routers' Coverage Zone File(s). With that in mind, when this property is an empty
+set it means that no geographic regions are "whitelisted" and thus \emph{only} clients
+whose IP addresses are found within a Coverage Zone File will be granted access to content.
+When this property has a "Null" type, there is no geographic restriction placed on the
+Delivery Service's content access.
+
+\paragraph{Maximum Origin Connections}
+
+%TODO: use-case for header-rewrite text?
+
+\paragraph{Miss Location}
+
+\paragraph{Name}
+A Delivery Service's "Name" is a string that uniquely identifies it among all
+Delivery Services. It MUST only contain alphanumerics, hyphens, underscores and
+spaces, and MUST NOT begin with a non-alphanumeric character nor end with a
+non-alphanumeric character. This is used to generate part of the default request
+hostnames by replacing all non-alphanumeric characters with a hyphen.
+
+\paragraph{Notes}
+This section is an arbitrary string containing miscellaneous, human-friendly
+information about the Delivery Service. Other ATC components SHOULD NOT parse
+this for specific information fields, or expect it to be in a particular format.
+
+%TODO: MSO use-case?
+\paragraph{Origin}
+
+\paragraph{Query String Handling}
+
+\begin{itemize}
+	\item \code{DROP}
+	\item \code{IGNORE}
+	\item \code{USE}
+\end{itemize}
+
+\paragraph{Range Request Handling}
+\begin{itemize}
+	\item \code{NO\_CACHE}
+	\item \code{WHOLE\_OBJECT}
+	\item \code{CACHE}
+\end{itemize}
+
+%TODO Raw-Remap use-case?
+%TODO Regex-Remap use-case?
+
+\paragraph{Required Capabilities}
+
+\paragraph{Routing Name}
+
+\paragraph{Routing Type}
+\begin{itemize}
+	\item \code{HTTP}
+	\item \code{DNS}
+	\item \code{STEERING}
+	\item \code{STATIC}
+\end{itemize}
+
+\paragraph{Skip Mid Tier}
+
+\paragraph{Status}
 The "Status" of a Delivery Service is a string constant that expresses its ability
 to serve content at the present moment in time. It may have one of three values:
 
@@ -355,10 +465,33 @@ to serve content at the present moment in time. It may have one of three values:
 	Servers.
 \end{itemize}
 
+\paragraph{Tenant}
 
-\subsubsection{Cache Servers}
-A Delivery Service's assigned Cache Servers are expressed as a set of Cache Server
-IDs.
+\paragraph{Vanity Hostnames}
+
+\subsubsection{DNS-Routed Properties}
+
+\paragraph{Bypass TTL}
+
+\paragraph{DNS TTL}
+An unsigned integer that defines the Time-To-Live (TTL) of DNS responses from the Traffic Router for this Delivery Service's routing, in seconds.
+
+\paragraph{Max Records}
+
+\subsubsection{HTTP-Routed Properties}
+
+\paragraph{Additional Response Headers}
+
+\paragraph{Consistent Hashing Regular Expression}
+
+\paragraph{Logged Request Headers}
+
+\paragraph{Significant Query Parameters}
+
+\subsubsection{Steering-Routed Properties}
+
+\paragraph{Targets}
+
 
 
 \subsection{Infrastructure Servers}
