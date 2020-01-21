@@ -335,19 +335,30 @@ Delivery Services are, at their most basic, an association between a source of
 content and a set of Cache Servers and configuration options used to distribute
 that content.
 
-\subsubsection{Active}
-A Delivery Service that is "active" is one that is functionally in service, and
-capable of delivering content. This is a boolean concept and is represented by
-boolean values. A Delivery Service cannot be Active if it is not Primed.
+\subsubsection{Status}
+The "Status" of a Delivery Service is a string constant that expresses its ability
+to serve content at the present moment in time. It may have one of three values:
 
-\subsubsection{Primed}
-A Delivery Service that is "primed" has had its configuration distributed to the
-various servers required to serve its content. However, the content itself is
-still inaccessible\footnote{The content is not available through normal routing.
-This does not, though, guarantee that Cache Servers do not already have the
-content stored and/or are incapable of serving it if routing is bypassed.}. A
-Delivery Service that is Active is necessarily Primed.
+\begin{itemize}
+	\item \code{ACTIVE} A Delivery Service that is "active" is one that is
+	functionally in service, and fully capable of delivering content. This means
+	that its configuration is deployed to Cache Servers and it is available for
+	routing traffic.
+	\item \code{PRIMED} A Delivery Service that is "primed" has had its
+	configuration distributed to the various servers required to serve its content.
+	However, the content itself is still inaccessible\footnote{The content is not
+	available through normal routing. This does not, though, guarantee that Cache
+	Servers do not already have the content stored and/or are incapable of serving
+	it if routing is bypassed.}.
+	\item \code{INACTIVE} A Delivery Service that is "inactive" is not available for
+	routing and has not had its configuration distributed to its assigned Cache
+	Servers.
+\end{itemize}
 
+
+\subsubsection{Cache Servers}
+A Delivery Service's assigned Cache Servers are expressed as a set of Cache Server
+IDs.
 
 
 \subsection{Infrastructure Servers}
@@ -399,3 +410,48 @@ Delivery Service that is Active is necessarily Primed.
 
 
 \subsection{Users\label{sec:users}}
+A user represents a person who may be authenticated with the Traffic Ops API and
+their ability to interact with Traffic Ops Data Model objects. A User object also
+contains "meta" information such as their email address.
+
+\subsubsection{Address}
+This is a text field with no defined structure, but semantically it represents a
+user's real-world, physical address. If it is not an empty value, it is assumed
+to contain enough information to send a letter through normal postage to the
+user.\\
+Addresses may consist of alphanumeric characters, hyphens, periods, spaces, and
+newlines, but may not end with a space or newline.
+
+\subsubsection{Email}
+A user's email address, which is used for initial registration and password
+recovery. A User object is not guaranteed to have an Email because the initial,
+default User will not have one. However, UIs based on the Traffic Ops API are
+encouraged to require that new users have one, as otherwise they will be unable
+to recover their account if their password is forgotten.\\
+Emails are unique among all Users, unless they are "Null"-valued.\\
+Representation formats that do not support email addresses natively as a type
+MUST represent this a string.
+
+\subsubsection{Full Name}
+A user's "full" name, as it would appear on a letter mailed to them, as a string.
+This field, if not empty, is presumed to be the user's name as it would appear on
+normal postage. This field MUST NOT be allowed to contain non-alphabetic
+characters.
+
+\subsubsection{Phone Number}
+A string which, if not empty, is presumed to be a telephone number at which the
+user may be contacted. It MUST only be allowed to contain numerics and hyphens,
+and must neither start nor end with a hyphen.
+
+\subsubsection{Role}
+A user's permissions are encapsulated by their Role, which is represented as a
+map containing two keys, "name" that maps to the Role's Name as a string and
+"permissions" which maps to a set of Permission Names as strings.
+
+\subsubsection{Tenant}
+The scope of a user's permissions is expressed as a string that is the Name of
+the Tenant to which the user belongs.
+
+\subsubsection{Username}
+A user's "Username" is a string that is used to uniquely identify them among all
+Users. It is only allowed to contain alphanumeric characters.
