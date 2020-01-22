@@ -360,6 +360,18 @@ Routers will be capable of checking for anonymization (e.g. known proxy/VPN/TOR
 exit node) will be the downstream router requesting the name resolution and thus
 is likely much less effective.
 
+\paragraph{Bypass Destination}
+This is a string that describes the network location to which clients will be
+directed if the traffic served by this Delivery Service exceeds its allowed
+maximums. This MUST always be represented as a string - even if the
+representation format supports IP Addresses as a native type - and its
+interpretation is dependent on the Delivery Service's Routing Type.\\
+If the Delivery Service's Routing Type is \code{HTTP}, then this is interpreted
+- and validated by the API - as a Fully Qualified Domain Name optionally
+followed by a colon and port number that defines an HTTP server to which client
+requests will be directed.\\
+If the Delivery Service's Routing Type is \code{DNS}
+
 \paragraph{Deep Caching}
 A boolean value that describes whether or not "Deep Caching" may be used for
 this Delivery Service.
@@ -455,7 +467,9 @@ this for specific information fields, or expect it to be in a particular format.
 
 \paragraph{Routing Name}
 
+%TODO: ANY_MAP use-case?
 \paragraph{Routing Type}
+After creation, Routing Type is a read-only property.
 \begin{itemize}
 	\item \code{HTTP}
 	\item \code{DNS}
@@ -486,6 +500,17 @@ values:
 	Cache Servers.
 \end{itemize}
 
+\paragraph{Supported Protocols}
+This is a set of strings that name protocols served by the Delivery Service.
+Note that this is the method used to retrieve content from the caching system,
+not the method used for routing. The only protocols officially supported by ATC
+are "HTTP" and "HTTPS".\\
+This set is case-insensitive, such that if a Delivery Service is created with a
+Supported Protocols set containing "HTTP" the resulting set is equivalent to
+what would result from creating it with a Supported Protocols set containing
+"http". Representations produced by the Traffic Ops API MUST always use
+only uppercase characters.
+
 \paragraph{Tenant}
 The Tenant to which a Delivery Service belongs is represented by a string that
 is that Tenant's unique Name.
@@ -495,6 +520,8 @@ is that Tenant's unique Name.
 \subsubsection{DNS-Routed Properties}
 
 \paragraph{Bypass TTL}
+An unsigned integer that defines the Time-To-Live (TTL) of DNS responses from
+the Traffic Router for this Delivery Service's Bypass Destination, in seconds.
 
 \paragraph{DNS TTL}
 An unsigned integer that defines the Time-To-Live (TTL) of DNS responses from
