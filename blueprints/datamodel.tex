@@ -367,10 +367,18 @@ maximums. This MUST always be represented as a string - even if the
 representation format supports IP Addresses as a native type - and its
 interpretation is dependent on the Delivery Service's Routing Type.\\
 If the Delivery Service's Routing Type is \code{HTTP}, then this is interpreted
-- and validated by the API - as a Fully Qualified Domain Name optionally
+- and validated by the API - as a Fully Qualified Domain Name (FQDN) optionally
 followed by a colon and port number that defines an HTTP server to which client
 requests will be directed.\\
-If the Delivery Service's Routing Type is \code{DNS}
+If the Delivery Service's Routing Type is \code{DNS} or \code{STATIC}, then if
+this is a valid IPv4 address it is assumed to be one and will be presented as an
+AA record. If not, and it's a valid IPv6 address, then it is assumed to one and
+will be presented as an AAAA record. Finally, it may be an FQDN in which case it
+will be presented as a CNAME record. If none of these formats can be validated,
+then it MUST be rejected by the API.\\
+If the Delivery Service's Routing Type is \code{STEERING}, then this MUST be the
+Name of an existing Delivery Service - though it need not name one of this
+Delivery Service's Targets.
 
 \paragraph{Deep Caching}
 A boolean value that describes whether or not "Deep Caching" may be used for
