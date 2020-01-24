@@ -377,10 +377,15 @@ A boolean value that describes whether or not "Deep Caching" may be used for
 this Delivery Service.
 
 \paragraph{Caching}
+Caching describes how Delivery Service content is cached - if at all. It is a
+string content restricted to one of the values:
+
 \begin{itemize}
-	\item \code{CACHE}
-	\item \code{RAM\_ONLY}
-	\item \code{NO\_CACHE}
+	\item \code{CACHE} The Delivery Service's content will be cached normally.
+	\item \code{RAM\_ONLY} The Delivery Service's content will only be cached
+	in RAM block devices.
+	\item \code{NO\_CACHE} The Delivery Service's content is proxied through
+	Cache Servers without ever being actually cached.
 \end{itemize}
 
 %TODO - STEERING doesn't have this?
