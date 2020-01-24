@@ -16,26 +16,39 @@
 % under the License.
 
 \section{Authentication and Authorization}
-Authentication with the Traffic Ops API is done via the \code{/login} endpoint (detailed in Section \ref{sec:endpoint:login}) to obtain
-credentials, and thereafter by presenting those credentials in requests made to the server. The default authorization scheme is using a
-cookie named "mojolicious" which contains the authenticated user's username using SCRYPT. For more information, consult the
-\href{https://godoc.org/golang.org/x/crypto/scrypt}{documentation for the \code{golang.org/x/crypto/scrypt} package used to implement it}.
-Traffic Ops API endpoints MUST not only recognize this method of authentication, but also MUST check it before any other authentication
-scheme.\\
+Authentication with the Traffic Ops API is done via the \code{/login} endpoint
+(detailed in Section \ref{sec:endpoint:login}) to obtain credentials, and
+thereafter by presenting those credentials in requests made to the server. The
+default authorization scheme is using a cookie named "mojolicious" which
+contains the authenticated user's username using SCRYPT. For more information,
+consult the
+\href{https://godoc.org/golang.org/x/crypto/scrypt}{documentation for the \code{golang.org/x/crypto/scrypt}
+package used to implement it}. Traffic Ops API endpoints MUST not only recognize
+this method of authentication, but also MUST check it before any other
+authentication scheme.\\
 
 \subsection{JWT Authentication}
-Alternatively, authentication can be done using OAuth2 Bearer tokens in JSON Web-Token (JWT) format\footnote{The intention of this section
-is to declare that JWT-based authentication \emph{will} be supported by Traffic Ops API version 3 at some point. This does not necessarily
-mean it will be included in 3.0, but the standards defined here should be enough for clients to start building out support for it.} as
-defined by \href{https://tools.ietf.org/html/rfc7519}{RFC7519}, signed with JSON Web-Signatures (JWS). If a client requests a resource and
-is denied due to failed authentication, the endpoint MUST return a \code{401 Unauthorized} response code that contains an appropriate Alert
-as described in Section \ref{sec:401}, and also MUST set the "WWW-Authenticate" header to \emph{exactly}
-\code{Bearer realm="Apache Traffic Control"} by default. The realm may be configurable.\\
-Clients may present authentication in the "Authorization" HTTP header in the format \code{Bearer \emph{JWT}} where "JWT" is the
-base-64-encoded JWT (and accompanying JWS). When authentication using this method is unsuccessful, the endpoint MUST set the "WWW-Authenticate"
-HTTP header to include the "error" field set to "invalid\_token" and the "error\_description" field, which will likely have the same or similar
-content as the accompanying Alert. An example of such a failed response when the token presented by a client has expired is shown in Listing
-\ref{code:expired-token}.\newpage{}
+Alternatively, authentication can be done using OAuth2 Bearer tokens in JSON
+Web-Token (JWT) format\footnote{The intention of this section is to declare that
+JWT-based authentication \emph{will} be supported by Traffic Ops API version 3
+at some point. This does not necessarily mean it will be included in 3.0, but
+the standards defined here should be enough for clients to start building out
+support for it.} as defined by
+\href{https://tools.ietf.org/html/rfc7519}{RFC7519}, signed with JSON
+Web-Signatures (JWS). If a client requests a resource and is denied due to
+failed authentication, the endpoint MUST return a \code{401 Unauthorized}
+response code that contains an appropriate Alert as described in Section
+\ref{sec:401}, and also MUST set the "WWW-Authenticate" header to \emph{exactly}
+\code{Bearer realm="Apache Traffic Control"} by default. The realm may be
+configurable.\\
+Clients may present authentication in the "Authorization" HTTP header in the
+format \code{Bearer \emph{JWT}} where "JWT" is the base-64-encoded JWT (and
+accompanying JWS). When authentication using this method is unsuccessful, the
+endpoint MUST set the "WWW-Authenticate" HTTP header to include the "error"
+field set to "invalid\_token" and the "error\_description" field, which will
+likely have the same or similar content as the accompanying Alert. An example of
+such a failed response when the token presented by a client has expired is shown
+in Listing \ref{code:expired-token}.\newpage{}
 
 \begin{codelisting}
 \captionof{listing}{Expired Token Response}
@@ -59,31 +72,57 @@ Transfer-Encoding: chunked
 \end{minted}
 \end{codelisting}
 
-Valid JWTs consist of a JSON Object Signing and Encryption (JOSE) header followed by a JWS Payload and finally a JWS signature, as described
-in \href{https://tools.ietf.org/html/rfc7515}{RFC7515}. The JOSE header MUST define its "typ" field as "JWT" and its "alg" field as "HS256".
-This means that the JWS signature was generated using HMAC SHA-256 with the JWS Payload (un-encoded) as input. The JOSE header's "jwk" MUST be
-set to the value of the public key used to sign the SHA-256 hash in JSON Web Key (JWK) format as described in
+Valid JWTs consist of a JSON Object Signing and Encryption (JOSE) header
+followed by a JWS Payload and finally a JWS signature, as described in
+\href{https://tools.ietf.org/html/rfc7515}{RFC7515}. The JOSE header MUST define
+its "typ" field as "JWT" and its "alg" field as "HS256". This means that the JWS
+signature was generated using HMAC SHA-256 with the JWS Payload (un-encoded) as
+input. The JOSE header's "jwk" MUST be set to the value of the public key used
+to sign the SHA-256 hash in JSON Web Key (JWK) format as described in
 \href{https://tools.ietf.org/html/rfc7517}{RFC7517}.\\
-The claims of the JWS Payload - the actual JWT - MUST include the following members:
+The claims of the JWS Payload - the actual JWT - MUST include the following
+members:
 
 \begin{itemize}
-	\item \code{iss} The issuer of the JWT. This MUST have the value of the network location of the Traffic Ops server that
-	generated the JWT - e.g. "trafficops.infra.ciab.test".
-	\item \code{sub} The "subject" of the JWT - in this case, the Traffic Ops user. This MUST be a \emph{full} representation of the
-	authenticated user according to Section \ref{sec:users}, and must be serialized as a JSON object.
-	\item \code{exp} The timestamp at which this JWT will expire. Unlike other dates and times dealt with through the Traffic Ops API, this
-	MUST be in the format of a Unix epoch timestamp in \emph{seconds}.
-	\item \code{iat} The timestamp at which the JWT was issued. Unlike other dates and times dealt with through the Traffic Ops API, this
-	MUST be in the format of a Unix epoch timestamp in \emph{seconds}.
+	\item \code{iss} The issuer of the JWT. This MUST have the value of the
+	network location of the Traffic Ops server that generated the JWT - e.g.
+	"trafficops.infra.ciab.test".
+	\item \code{sub} The "subject" of the JWT - in this case, the Traffic Ops
+	user. This MUST be a JSON-encoded representation of the authenticated user's
+	identifying Username and permissions Role. An example is shown in Listing
+	\ref{code:user-sub}.
+	\item \code{exp} The timestamp at which this JWT will expire. Unlike other
+	dates and times dealt with through the Traffic Ops API, this MUST be in the
+	format of a Unix epoch timestamp in \emph{seconds}.
+	\item \code{iat} The timestamp at which the JWT was issued. Unlike other
+	dates and times dealt with through the Traffic Ops API, this MUST be in the
+	format of a Unix epoch timestamp in \emph{seconds}.
 \end{itemize}
 
-\subsection{User Permissions}
-User permissions are defined by the Permissions assigned to their Role as described in Section \ref{sec:roles-and-perms}. Endpoint definitions
-will define the Permissions required to interact with them via each HTTP method. If a user does not have the required Permission to interact
-with a resource in the way they requested, the server MUST respond with a \code{403 Forbidden} response code containing an Alert that describes
-what Permission(s) the user lacks, according to Section \ref{sec:403}. In general, these Permissions are defined on an endpoint-by-endpoint basis,
-but some of them are shared or are applied conditionally. For example, when creating a Cache Server, the "cache-servers-write" Permission is
-required. However, if the created Cache Server has one or more Delivery Service assignments then the "delivery-services-write" Permission is also
-required (and the assignments are subject to the rules of Tenancy as described in Section \ref{sec:tenancy} because Delivery Services are
-Tenantable objects as discussed in Section \ref{sec:tenantable}).
+\begin{codelisting}
+\captionof{listing}{User Subject Example}
+\label{code:user-sub}
+\begin{minted}[tabsize=2]{json}
+{
+	"username": "testUser",
+	"role": "admin"
+}
+\end{minted}
+\end{codelisting}
 
+\subsection{User Permissions}
+User permissions are defined by the Permissions assigned to their Role as
+described in Section \ref{sec:roles-and-perms}. Endpoint definitions will define
+the Permissions required to interact with them via each HTTP method. If a user
+does not have the required Permission to interact with a resource in the way
+they requested, the server MUST respond with a \code{403 Forbidden} response
+code containing an Alert that describes what Permission(s) the user lacks,
+according to Section \ref{sec:403}. In general, these Permissions are defined on
+an endpoint-by-endpoint basis, but some of them are shared or are applied
+conditionally. For example, when creating a Cache Server, the
+"cache-servers-write" Permission is required. However, if the created Cache
+Server has one or more Delivery Service assignments then the
+"delivery-services-write" Permission is also required (and the assignments are
+subject to the rules of Tenancy as described in Section \ref{sec:tenancy}
+because Delivery Services are Tenantable objects as discussed in Section
+\ref{sec:tenantable}).
