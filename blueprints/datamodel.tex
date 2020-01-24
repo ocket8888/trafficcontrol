@@ -406,13 +406,15 @@ Geographic Limiting settings. This MUST always be represented as a string - even
 if the representation format supports IP Addresses as a native type - and its
 interpretation is dependent on the Delivery Service's Routing Type.
 
+%TODO: steering and static won't have this?
 \paragraph{DSCP}
 Sets the
 \href{https://tools.ietf.org/html/rfc2474}{Differentiated Services Code Point}
 which will be marked on the Delivery Service's traffic. This is an unsigned
 integer with a maximum value of 64.
 
-\paragraph{ECS}
+%TODO: Necessary?
+%\paragraph{ECS}
 
 \paragraph{Geographic Limiting}
 This property describes limitations to the availability of this Delivery
@@ -433,7 +435,10 @@ File will be granted access to content. When this property has a "Null" type,
 there is no geographic restriction placed on the Delivery Service's content
 access.
 
+%TODO: steering and static won't have this?
 \paragraph{Maximum Origin Connections}
+This is an unsigned integer which determines the maximum number of connections
+that any \emph{one} Cache Server may open to the Delivery Service's Origin.
 
 %TODO: use-case for header-rewrite text?
 
@@ -525,6 +530,11 @@ The Tenant to which a Delivery Service belongs is represented by a string that
 is that Tenant's unique Name.
 
 \paragraph{Vanity Hostnames}
+"Vanity Hostnames" is a set of strings that are Fully Qualified Domain Names
+(FQDN) which may be used as alternates to the standard
+\code{\emph{Routing Name}.\emph{Name}.\emph{CDN Domain}} FQDN when requesting
+content from the Delivery Service.\\
+No two Delivery Services may be allowed to share any single Vanity Hostname.
 
 \subsubsection{DNS-Routed Properties}
 
