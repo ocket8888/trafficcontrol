@@ -85,7 +85,7 @@ The following steps need to be performed on each Riak server in the cluster:
 	riak-admin security add-group keysusers
 
 	# User name and password should be stored in
-	# /opt/traffic_ops/app/conf/<environment>/riak.conf on the Traffic Ops
+	# /opt/traffic_ops/conf/<environment>/riak.conf on the Traffic Ops
 	# server
 	# In this example, we assume the usernames 'admin' and 'riakuser' with
 	# respective passwords stored in the ADMIN_PASSWORD and RIAK_USER_PASSWORD
@@ -109,7 +109,7 @@ The following steps need to be performed on each Riak server in the cluster:
 
 Traffic Ops Configuration
 -------------------------
-Before a fully set-up Traffic Vault instance may be used, it must be added as a server to Traffic Ops. The easiest way to accomplish this is via Traffic Portal at :menuselection:`Configure --> Servers`, though :ref:`to-api-servers` may also be used by low-level tools and/or scripts. The Traffic Ops configuration file :file:`/opt/traffic_ops/app/conf/{environment}/riak.conf` for the appropriate environment must also be updated to reflect the correct username and password for accessing the Riak database.
+Before a fully set-up Traffic Vault instance may be used, it must be added as a server to Traffic Ops. The easiest way to accomplish this is via Traffic Portal at :menuselection:`Configure --> Servers`, though :ref:`to-api-servers` may also be used by low-level tools and/or scripts. The Traffic Ops configuration file :file:`/opt/traffic_ops/conf/{environment}/riak.conf` for the appropriate environment must also be updated to reflect the correct username and password for accessing the Riak database.
 
 Configuring Riak Search
 =======================
@@ -166,13 +166,13 @@ After Riak has been configured to use Riak Search, permissions still need need t
 		riak-admin security grant search.query on index sslkeys to riakuser
 		riak-admin security grant riak_core.set_bucket on any to admin
 
-#. Add the search schema to Riak. This schema is a simple Apache Solr configuration file which will index all records on CDN, hostname, and :term:`Delivery Service`. The file can be found at :file:`traffic_ops/app/config/misc/riak_search/sslkeys.xml` in the Traffic Control repository.
+#. Add the search schema to Riak. This schema is a simple Apache Solr configuration file which will index all records on CDN, hostname, and :term:`Delivery Service`. The file can be found at :file:`traffic_ops/conf/misc/riak_search/sslkeys.xml` in the Traffic Control repository.
 
 	.. code-block:: bash
 		:caption: Adding the GitHub-hosted Search Schema to Riak
 
 		# Obtain the configuration file - in this example by downloading it from GitHub
-		wget https://raw.githubusercontent.com/apache/trafficcontrol/master/traffic_ops/app/conf/misc/riak_search/sslkeys.xml
+		wget https://raw.githubusercontent.com/apache/trafficcontrol/master/traffic_ops/conf/misc/riak_search/sslkeys.xml
 
 		# Upload the schema to the Riak server using its API
 		# Note that the assumptions made here are that the "admin" user's password is "pass"

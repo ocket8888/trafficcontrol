@@ -67,7 +67,7 @@ key="$X509_INFRA_KEY_FILE"
 echo "crt=$crt"
 echo "key=$key"
 
-cat <<-EOF >/opt/traffic_ops/app/conf/cdn.conf
+cat <<-EOF >/opt/traffic_ops/conf/cdn.conf
 {
     "hypnotoad" : {
         "listen" : [
@@ -141,7 +141,7 @@ cat <<-EOF >/opt/traffic_ops/app/conf/cdn.conf
 }
 EOF
 
-cat <<-EOF >/opt/traffic_ops/app/conf/production/database.conf
+cat <<-EOF >/opt/traffic_ops/conf/production/database.conf
 {
         "description": "Local PostgreSQL database on port 5432",
         "dbname": "$DB_NAME",
@@ -166,13 +166,13 @@ test:
   open: host=$DB_FQDN port=$DB_PORT user=$DB_USER password=$DB_USER_PASS dbname=to_test sslmode=disable
 EOF
 
-cat <<-EOF >/opt/traffic_ops/app/conf/production/riak.conf
+cat <<-EOF >/opt/traffic_ops/conf/production/riak.conf
 {     "user": "$TV_RIAK_USER",
   "password": "$TV_RIAK_PASSWORD"
 }
 EOF
 
-cat <<-EOF >/opt/traffic_ops/app/conf/production/influx.conf
+cat <<-EOF >/opt/traffic_ops/conf/production/influx.conf
 {
     "user": "$INFLUXDB_ADMIN_USER",
     "password": "$INFLUXDB_ADMIN_PASSWORD",

@@ -117,9 +117,9 @@ cd $TO_DIR
 
 cd /opt/traffic_ops/app
 
-CDNCONF=/opt/traffic_ops/app/conf/cdn.conf
-DBCONF=/opt/traffic_ops/app/conf/production/database.conf
-RIAKCONF=/opt/traffic_ops/app/conf/production/riak.conf
+CDNCONF=/opt/traffic_ops/conf/cdn.conf
+DBCONF=/opt/traffic_ops/conf/production/database.conf
+RIAKCONF=/opt/traffic_ops/conf/production/riak.conf
 mkdir -p /var/log/traffic_ops
 touch /var/log/traffic_ops/traffic_ops.log
 

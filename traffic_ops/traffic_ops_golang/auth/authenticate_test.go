@@ -59,7 +59,7 @@ func TestUsernamePassword(t *testing.T) {
 
 	passwords := []string{"username", "password", "pa$$word", "", "red"}
 	expected := []bool{false, false, true, false, false}
-	if err := LoadPasswordBlacklist("app/conf/invalid_passwords.txt"); err != nil {
+	if err := LoadPasswordBlacklist("conf/invalid_passwords.txt"); err != nil {
 		t.Fatalf("LoadPasswordBlacklist err expected: nil, actual: %v", err)
 	}
 
@@ -87,7 +87,7 @@ func TestCommonPassword(t *testing.T) {
 	passwords := []string{"password", "pa$$word"}
 	expected := []bool{true, false}
 
-	if err := LoadPasswordBlacklist("app/conf/invalid_passwords.txt"); err != nil {
+	if err := LoadPasswordBlacklist("conf/invalid_passwords.txt"); err != nil {
 		t.Fatalf("LoadPasswordBlacklist err expected: nil, actual: %v", err)
 	}
 

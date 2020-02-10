@@ -36,10 +36,10 @@ use GenerateCert qw{ :all };
 use Database qw{ connect };
 
 # paths of the output configuration files
-my $databaseConfFile = "/opt/traffic_ops/app/conf/production/database.conf";
+my $databaseConfFile = "/opt/traffic_ops/conf/production/database.conf";
 my $dbConfFile       = "/opt/traffic_ops/app/db/dbconf.yml";
-my $cdnConfFile      = "/opt/traffic_ops/app/conf/cdn.conf";
-my $ldapConfFile     = "/opt/traffic_ops/app/conf/ldap.conf";
+my $cdnConfFile      = "/opt/traffic_ops/conf/cdn.conf";
+my $ldapConfFile     = "/opt/traffic_ops/conf/ldap.conf";
 my $usersConfFile    = "/opt/traffic_ops/install/data/users.json";
 my $profilesConfFile = "/opt/traffic_ops/install/data/profiles/";
 my $opensslConfFile  = "/opt/traffic_ops/install/data/openssl_configuration.json";
@@ -468,7 +468,7 @@ sub getDefaults {
                 "config_var"         => "base_url"
             },
             {
-                "ldap.conf location? (default is /opt/traffic_ops/app/conf/ldap.conf)" => "",
+                "ldap.conf location? (default is /opt/traffic_ops/conf/ldap.conf)" => "",
                 "config_var"         => "ldap_conf_location"
             }
         ],

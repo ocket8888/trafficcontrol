@@ -53,7 +53,7 @@ init() {
 	local postinstall_input_file="postinstall-input.json"
 	cat > "$postinstall_input_file" <<- ENDOFMESSAGE
 {
-  "/opt/traffic_ops/app/conf/production/database.conf":[
+  "/opt/traffic_ops/conf/production/database.conf":[
     {
       "Database type":"Pg",
       "config_var":"type"
@@ -95,7 +95,7 @@ init() {
       "config_var":"maxmind"
     }
   ],
-  "/opt/traffic_ops/app/conf/cdn.conf":[
+  "/opt/traffic_ops/conf/cdn.conf":[
     {
       "Generate a new secret?":"yes",
       "config_var":"genSecret"
@@ -117,7 +117,7 @@ init() {
       "config_var":"keepSecrets"
     }
   ],
-  "/opt/traffic_ops/app/conf/ldap.conf":[
+  "/opt/traffic_ops/conf/ldap.conf":[
     {
       "Do you want to set up LDAP?":"no",
       "config_var":"setupLdap"
@@ -245,7 +245,7 @@ init() {
 	export TERM=xterm && export USER=root && /opt/traffic_ops/install/bin/postinstall -cfile "$postinstall_input_file"
 
 	# Only listen on IPv4, not IPv6, because Docker doesn't provide a v6 interface by default. See http://mojolicious.org/perldoc/Mojo/Server/Daemon#listen
-	sed -i -e 's#https://\[::\]#https://127\.0\.0\.1#' /opt/traffic_ops/app/conf/cdn.conf
+	sed -i -e 's#https://\[::\]#https://127\.0\.0\.1#' /opt/traffic_ops/conf/cdn.conf
 	service traffic_ops restart
 
 	TRAFFIC_OPS_URI="https://localhost"

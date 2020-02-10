@@ -112,7 +112,7 @@ Guide
 		to-# /opt/traffic_ops/install/bin/postinstall
 		...
 
-		===========/opt/traffic_ops/app/conf/production/database.conf===========
+		===========/opt/traffic_ops/conf/production/database.conf===========
 		Database type [Pg]:
 		Database type: Pg
 		Database name [traffic_ops]:
@@ -125,7 +125,7 @@ Guide
 		Traffic Ops database user: traffic_ops
 		Password for Traffic Ops database user:
 		Re-Enter Password for Traffic Ops database user:
-		Writing json to /opt/traffic_ops/app/conf/production/database.conf
+		Writing json to /opt/traffic_ops/conf/production/database.conf
 		Database configuration has been saved
 		===========/opt/traffic_ops/app/db/dbconf.yml===========
 		Database server root (admin) user [postgres]:
@@ -134,7 +134,7 @@ Guide
 		Re-Enter Password for database server admin:
 		Download Maxmind Database? [yes]:
 		Download Maxmind Database?: yes
-		===========/opt/traffic_ops/app/conf/cdn.conf===========
+		===========/opt/traffic_ops/conf/cdn.conf===========
 		Generate a new secret? [yes]:
 		Generate a new secret?: yes
 		Number of secrets to keep? [10]:
@@ -402,7 +402,7 @@ This file deals with the configuration parameters of running Traffic Ops itself.
 
 Example cdn.conf
 """"""""""""""""
-.. include:: ../../../traffic_ops/app/conf/cdn.conf
+.. include:: ../../../traffic_ops/conf/cdn.conf
 	:code: json
 	:tab-width: 4
 
@@ -421,7 +421,7 @@ This file deals with configuration of the Traffic Ops Database; in particular it
 
 Example database.conf
 """""""""""""""""""""
-.. include:: ../../../traffic_ops/app/conf/production/database.conf
+.. include:: ../../../traffic_ops/conf/production/database.conf
 	:code: json
 	:tab-width: 4
 
@@ -445,7 +445,7 @@ This file deals with configuration of the InfluxDB cluster that serves Traffic S
 
 Example influxdb.conf
 """""""""""""""""""""
-.. include:: ../../../traffic_ops/app/conf/production/influxdb.conf
+.. include:: ../../../traffic_ops/conf/production/influxdb.conf
 	:code: json
 	:tab-width: 4
 
@@ -465,7 +465,7 @@ This file defines methods of connection to an :abbr:`LDAP (Lightweight Directory
 
 Example ldap.conf
 """""""""""""""""
-.. include:: ../../../traffic_ops/app/conf/example-ldap.conf
+.. include:: ../../../traffic_ops/conf/example-ldap.conf
 	:code: json
 	:tab-width: 4
 
@@ -480,7 +480,7 @@ This file sets authentication options for connections to Traffic Vault. `traffic
 
 Example riak.conf
 """""""""""""""""
-.. include:: ../../../traffic_ops/app/conf/production/riak.conf
+.. include:: ../../../traffic_ops/conf/production/riak.conf
 	:code: json
 	:tab-width: 4
 
@@ -604,12 +604,12 @@ Traffic Ops supports two types of extensions. `Check Extensions`_ are analytics 
 
 Check Extensions
 ----------------
-Check Extensions are scripts that, after registering with Traffic Ops, have a column reserved in the :menuselection:`Monitor --> Cache Checks` view and usually run periodically using :manpage:`cron(8)`. Each extension is a separate executable located in :file:`{$TO_HOME}/bin/checks/` on the Traffic Ops server (though all of the default extensions are written in Perl, this is in *no way* a requirement; they can be any valid executable). Some extensions are automatically registered with the Traffic Ops database (``to_extension`` table) at install time (see :atc-file:`traffic_ops/app/db/seeds.sql`). However, :manpage:`cron(8)` must still be configured to run these checks periodically. The extensions are called like so:
+Check Extensions are scripts that, after registering with Traffic Ops, have a column reserved in the :menuselection:`Monitor --> Cache Checks` view and usually run periodically using :manpage:`cron(8)`. Each extension is a separate executable located in :file:`{$TO_HOME}/checks/` on the Traffic Ops server (though all of the default extensions are written in Perl, this is in *no way* a requirement; they can be any valid executable). Some extensions are automatically registered with the Traffic Ops database (``to_extension`` table) at install time (see :atc-file:`traffic_ops/app/db/seeds.sql`). However, :manpage:`cron(8)` must still be configured to run these checks periodically. The extensions are called like so:
 
 .. code-block:: shell
 	:caption: Example Check Extension Call
 
-	$TO_HOME/bin/checks/<name>  -c "{\"base_url\": \",https://\"<traffic_ops_ip>\", \"check_name\": \"<check_name>\"}" -l <log level>
+	$TO_HOME/checks/<name>  -c "{\"base_url\": \",https://\"<traffic_ops_ip>\", \"check_name\": \"<check_name>\"}" -l <log level>
 
 :name: The basename of the extension executable
 :traffic_ops_ip: The IP address or :abbr:`FQDN (Fully Qualified Domain Name)` of the Traffic Ops server
@@ -651,42 +651,42 @@ The :manpage:`cron(8)` file should be edited by running  :manpage:`crontab(1)` a
 	:caption: Example Cron File
 
 	# IPv4 ping examples - The 'select: ["hostName","domainName"]' works but, if you want to check DNS resolution use FQDN.
-	*/15 * * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"10G\", \"select\": [\"hostName\",\"domainName\"]}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
-	*/15 * * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"10G\", \"select\": \"ipAddress\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
-	*/15 * * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"10G\", \"name\": \"IPv4 Ping\", \"select\": \"ipAddress\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
+	*/15 * * * * root /opt/traffic_ops/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"10G\", \"select\": [\"hostName\",\"domainName\"]}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
+	*/15 * * * * root /opt/traffic_ops/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"10G\", \"select\": \"ipAddress\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
+	*/15 * * * * root /opt/traffic_ops/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"10G\", \"name\": \"IPv4 Ping\", \"select\": \"ipAddress\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
 
 	# IPv6 ping examples
-	*/15 * * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"10G6\", \"name\": \"IPv6 Ping\", \"select\": \"ip6Address\", \"syslog_facility\": \"local0\"}" >/dev/null 2>&1
-	*/15 * * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"10G6\", \"select\": \"ip6Address\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
+	*/15 * * * * root /opt/traffic_ops/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"10G6\", \"name\": \"IPv6 Ping\", \"select\": \"ip6Address\", \"syslog_facility\": \"local0\"}" >/dev/null 2>&1
+	*/15 * * * * root /opt/traffic_ops/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"10G6\", \"select\": \"ip6Address\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
 
 	# iLO ping
-	18 * * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"ILO\", \"select\": \"iloIpAddress\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
-	18 * * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"ILO\", \"name\": \"ILO ping\", \"select\": \"iloIpAddress\", \"syslog_facility\": \"local0\"}" >/dev/null 2>&1
+	18 * * * * root /opt/traffic_ops/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"ILO\", \"select\": \"iloIpAddress\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
+	18 * * * * root /opt/traffic_ops/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"ILO\", \"name\": \"ILO ping\", \"select\": \"iloIpAddress\", \"syslog_facility\": \"local0\"}" >/dev/null 2>&1
 
 	# MTU ping
-	45 0 * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"MTU\", \"select\": \"ipAddress\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
-	45 0 * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"MTU\", \"select\": \"ip6Address\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
-	45 0 * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"MTU\", \"name\": \"Max Trans Unit\", \"select\": \"ipAddress\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
-	45 0 * * * root /opt/traffic_ops/app/bin/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"MTU\", \"name\": \"Max Trans Unit\", \"select\": \"ip6Address\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
+	45 0 * * * root /opt/traffic_ops/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"MTU\", \"select\": \"ipAddress\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
+	45 0 * * * root /opt/traffic_ops/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"MTU\", \"select\": \"ip6Address\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
+	45 0 * * * root /opt/traffic_ops/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"MTU\", \"name\": \"Max Trans Unit\", \"select\": \"ipAddress\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
+	45 0 * * * root /opt/traffic_ops/checks/ToPingCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"MTU\", \"name\": \"Max Trans Unit\", \"select\": \"ip6Address\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
 
 	# FQDN
-	27 * * * * root /opt/traffic_ops/app/bin/checks/ToFQDNCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"FQDN\""  >> /var/log/traffic_ops/extensionCheck.log 2>&1
-	27 * * * * root /opt/traffic_ops/app/bin/checks/ToFQDNCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"FQDN\", \"name\": \"DNS Lookup\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
+	27 * * * * root /opt/traffic_ops/checks/ToFQDNCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"FQDN\""  >> /var/log/traffic_ops/extensionCheck.log 2>&1
+	27 * * * * root /opt/traffic_ops/checks/ToFQDNCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"FQDN\", \"name\": \"DNS Lookup\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
 
 	# DSCP
-	36 * * * * root /opt/traffic_ops/app/bin/checks/ToDSCPCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"DSCP\", \"cms_interface\": \"eth0\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
-	36 * * * * root /opt/traffic_ops/app/bin/checks/ToDSCPCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"DSCP\", \"name\": \:term:`Delivery Service`\", \"cms_interface\": \"eth0\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
+	36 * * * * root /opt/traffic_ops/checks/ToDSCPCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"DSCP\", \"cms_interface\": \"eth0\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
+	36 * * * * root /opt/traffic_ops/checks/ToDSCPCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"DSCP\", \"name\": \:term:`Delivery Service`\", \"cms_interface\": \"eth0\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
 
 	# RTR
-	10 * * * * root /opt/traffic_ops/app/bin/checks/ToRTRCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"RTR\"}"  >> /var/log/traffic_ops/extensionCheck.log 2>&1
-	10 * * * * root /opt/traffic_ops/app/bin/checks/ToRTRCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"RTR\", \"name\": \"Content Router Check\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
+	10 * * * * root /opt/traffic_ops/checks/ToRTRCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"RTR\"}"  >> /var/log/traffic_ops/extensionCheck.log 2>&1
+	10 * * * * root /opt/traffic_ops/checks/ToRTRCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"RTR\", \"name\": \"Content Router Check\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
 
 	# CHR
-	*/15 * * * * root /opt/traffic_ops/app/bin/checks/ToCHRCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"CHR\"}"  >> /var/log/traffic_ops/extensionCheck.log 2>&1
+	*/15 * * * * root /opt/traffic_ops/checks/ToCHRCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"CHR\"}"  >> /var/log/traffic_ops/extensionCheck.log 2>&1
 
 	# CDU
-	20 * * * * root /opt/traffic_ops/app/bin/checks/ToCDUCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"CDU\"}"  >> /var/log/traffic_ops/extensionCheck.log 2>&1
+	20 * * * * root /opt/traffic_ops/checks/ToCDUCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"CDU\"}"  >> /var/log/traffic_ops/extensionCheck.log 2>&1
 
 	# ORT
-	40 * * * * ssh_key_edge_user /opt/traffic_ops/app/bin/checks/ToORTCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"ORT\"}"  >> /var/log/traffic_ops/extensionCheck.log 2>&1
-	40 * * * * ssh_key_edge_user /opt/traffic_ops/app/bin/checks/ToORTCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"ORT\", \"name\": \"Operational Readiness Test\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
+	40 * * * * ssh_key_edge_user /opt/traffic_ops/checks/ToORTCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"ORT\"}"  >> /var/log/traffic_ops/extensionCheck.log 2>&1
+	40 * * * * ssh_key_edge_user /opt/traffic_ops/checks/ToORTCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"ORT\", \"name\": \"Operational Readiness Test\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1

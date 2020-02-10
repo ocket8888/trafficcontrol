@@ -52,7 +52,7 @@ To run the Golang TO API locally the following represents a typical sequence flo
 
 ### cdn.conf changes
 
-Copy `traffic_ops/app/conf/cdn.conf` to `$HOME/cdn.conf` so you can modify it for development purposes.
+Copy `traffic_ops/conf/cdn.conf` to `$HOME/cdn.conf` so you can modify it for development purposes.
 
 `$HOME/cdn.conf`
 
@@ -88,7 +88,7 @@ By default `/var/log/traffic_ops/error.log` is configured for output, to change 
 
 Go is a compiled language so any local changes will require you to CTRL-C the console and re-run the `traffic_ops_golang` Go binary locally:
 
-`go build && ./traffic_ops_golang -cfg $HOME/cdn.conf -dbcfg ../app/conf/development/database.conf`
+`go build && ./traffic_ops_golang -cfg $HOME/cdn.conf -dbcfg ../conf/development/database.conf`
 
 ## Updating a Minor Version
 

@@ -103,7 +103,7 @@ func main() {
 
 	logConfig(cfg)
 
-	err := auth.LoadPasswordBlacklist("app/conf/invalid_passwords.txt")
+	err := auth.LoadPasswordBlacklist("conf/invalid_passwords.txt")
 	if err != nil {
 		log.Errorf("loading password blacklist: %v\n", err)
 		os.Exit(1)

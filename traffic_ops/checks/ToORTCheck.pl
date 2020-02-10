@@ -16,10 +16,10 @@
 # ORT check extension. Checks how many errors there are running the "ort" script on the cache
 #
 # example cron entry
-# 40 * * * * ssh_key_edge_user /opt/traffic_ops/app/bin/checks/ToORTCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"ORT\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
+# 40 * * * * ssh_key_edge_user /opt/traffic_ops/checks/ToORTCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"ORT\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
 #
 # example cron entry with syslog
-# 40 * * * * ssh_key_edge_user /opt/traffic_ops/app/bin/checks/ToORTCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"ORT\", \"name\": \"Operational Readiness Test\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
+# 40 * * * * ssh_key_edge_user /opt/traffic_ops/checks/ToORTCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"ORT\", \"name\": \"Operational Readiness Test\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
 
 use strict;
 use warnings;

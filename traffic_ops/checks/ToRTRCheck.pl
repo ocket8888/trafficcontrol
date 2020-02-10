@@ -16,10 +16,10 @@
 # RTR check extension. Checks the status of the caches as seen by the Traffic Router
 #
 # example cron entry
-# 20 * * * * root /opt/traffic_ops/app/bin/checks/ToRTRCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"RTR\", \"name\": \"Content Router Check\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
+# 20 * * * * root /opt/traffic_ops/checks/ToRTRCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"RTR\", \"name\": \"Content Router Check\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
 #
 # example cron entry with syslog
-# 20 * * * * root /opt/traffic_ops/app/bin/checks/ToRTRCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"RTR\", \"name\": \"Content Router Check\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
+# 20 * * * * root /opt/traffic_ops/checks/ToRTRCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"RTR\", \"name\": \"Content Router Check\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
 
 use strict;
 use warnings;

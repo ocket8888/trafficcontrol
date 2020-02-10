@@ -17,9 +17,9 @@
 # Plugin for the "FQDN" check.
 #
 # example cron entry
-# 0 * * * * root /opt/traffic_ops/app/bin/checks/ToFQDNCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"FQDN\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
+# 0 * * * * root /opt/traffic_ops/checks/ToFQDNCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"FQDN\"}" >> /var/log/traffic_ops/extensionCheck.log 2>&1
 # example cron entry with syslog
-# 0 * * * * root /opt/traffic_ops/app/bin/checks/ToFQDNCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"FQDN\", \"name\": \"DNS Lookup\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
+# 0 * * * * root /opt/traffic_ops/checks/ToFQDNCheck.pl -c "{\"base_url\": \"https://localhost\", \"check_name\": \"FQDN\", \"name\": \"DNS Lookup\", \"syslog_facility\": \"local0\"}" > /dev/null 2>&1
 
 use strict;
 use warnings;
@@ -236,7 +236,7 @@ sub fqdn_check {
 
    #DEBUG "Net::DNS version: ".Net::DNS->version;
    DEBUG "hostname: ".$hostname." type: ".$type."\n";
-   
+
    if ($reply) {
       foreach my $rr ($reply->answer) {
          DEBUG "hostname: ".$hostname." answer: ".$rr->address;

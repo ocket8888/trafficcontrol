@@ -341,7 +341,7 @@ For the gofmt github hook:
 ./licenses/BSD-go
 
 For the IPv6 Perl Module component:
-@traffic_ops/app/bin/checks/NetPacket/IPv6.pm
+@traffic_ops/checks/NetPacket/IPv6.pm
 ./licenses/ISC-netpacket_ipv6
 
 Several subsections of main.css are under the MIT license, as noted in the file:
@@ -362,7 +362,7 @@ For the seelog component:
 ./licenses/BSD-seelog
 
 The invalid_passwords.txt file is from the Projects/OWASP SecLists Project provided under a MIT license:
-@traffic_ops/app/conf/invalid_passwords.txt
+@traffic_ops/conf/invalid_passwords.txt
 ./licenses/MIT-SecLists
 
 For the go-sqlmock component:
