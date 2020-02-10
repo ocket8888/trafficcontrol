@@ -248,7 +248,7 @@ The integration tests are run using :manpage:`go-test(1)`, with two configuratio
 	Specify the path to a file containing static data for the tests to use. This should almost never be used, because many of the tests depend on the data having a certain content and structure. If not specified, it will attempt to read a file named ``tc-fixtures.json`` in the working directory.
 
 Configuring the Integration Tests
-"""""""""""""""""""""""""""""""""
+---------------------------------
 Configuration is mainly done through the configuration file passed as :option:`--cfg`, but is also available through the following environment variables.
 
 .. envvar:: SESSION_TIMEOUT_IN_SECS
@@ -331,7 +331,7 @@ Configuration is mainly done through the configuration file passed as :option:`-
 	If set, will define the name of a user with the "read-only" :term:`Role` that will be created by the tests\ [#existinguser]_.
 
 Test Configuration File
-'''''''''''''''''''''''
+"""""""""""""""""""""""
 The configuration file for the tests (defined by :option:`--cfg`) is a JSON-encoded object with the following properties.
 
 .. warning:: Many of these configuration options are overridden by variables in the execution environment. Where this is a problem, there is an associated warning. In general, this issue is tracked by :issue:`3975`.
@@ -480,6 +480,8 @@ What's typically meant by "extension" in the context of Traffic Ops is a :ref:`t
 
 Traffic Ops also supports overrides or new definitions for non-standard :ref:`to-api` routes. These are more commonly referred to as "plugins," and they are described in `Go Plugins`_.
 
+.. _to-go-plugins:
+
 Go Plugins
 ----------
 A plugin is defined by a Go source file in the :atc-file:`traffic_ops/traffic_ops_golang/plugin` directory, which is expected to be named :file:`{plugin name}.go`. A plugin is registered to Traffic Ops by a call to :to-godoc:`plugin.AddPlugin` in the source file's special ``init`` function.
@@ -508,29 +510,12 @@ An example "Hello World" plugin that serves the ``/_hello`` request path by just
 
 Legacy Perl Extensions
 ----------------------
-Traffic Ops Extensions are a way to enhance the basic functionality of Traffic Ops in a customizable manner. There are two types of extensions:
+Traffic Ops Extensions are a way to enhance the basic functionality of Traffic Ops in a customizable manner. There is now only one type of extensions:
 
 :ref:`to-check-ext`
 	These allow you to add custom checks to the :menuselection:`Monitor --> Cache Checks` view.
 
-:ref:`to-datasource-ext`
-	These allow you to add statistic sources for the graph views and APIs.
-
-Extensions are managed using the ``$TO_HOME/bin/extensions`` command line script
-
 .. seealso:: For more information see :ref:`admin-to-ext-script`.
-
-
-Extensions at Runtime
-"""""""""""""""""""""
-The search path for :ref:`to-datasource-ext` depends on the configuration of the ``PERL5LIB`` environment variable, which is pre-configured in the Traffic Ops start scripts. All :ref:`to-check-ext` must be located in ``$TO_HOME/bin/checks``
-
-	.. code-block:: bash
-		:caption: Example ``PERL5LIB`` Configuration
-
-		export PERL5LIB=/opt/traffic_ops_extensions/private/lib/Extensions:/opt/traffic_ops/app/lib/Extensions/TrafficStats
-
-To prevent :ref:`to-datasource-ext` namespace collisions within Traffic Ops all :ref:`to-datasource-ext` should follow the package naming convention '``Extensions::<ExtensionName>``'
 
 .. [#integrationdb] The Traffic Ops instance *must* be using the same PostgreSQL database that the tests will use.
 .. [#existinguser] This does not need to match the name of any pre-existing user.

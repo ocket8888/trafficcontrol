@@ -19,7 +19,7 @@ Traffic Ops
 ===========
 Traffic Ops is the tool for administration (configuration and monitoring) of all components in a Traffic Control CDN. :ref:`tp-overview` uses the :ref:`to-api` to manage servers, :term:`Cache Groups`, :term:`Delivery Services`, etc. In many cases, a configuration change requires propagation to several, or even all, :term:`cache servers` and only explicitly after or before the same change propagates to :ref:`tr-overview`. Traffic Ops takes care of this required consistency between the different components and their configuration.
 
-Traffic Ops uses a `PostgreSQL <https://www.postgresql.org/>`_ database to store the configuration information, and a combination of the `Mojolicious framework <http://mojolicio.us/>`_ and `Go <https://golang.org/>`_ to provide the :ref:`to-api`. Not all configuration data is in this database however; for sensitive data like private SSL keys or token-based authentication shared secrets, :ref:`tv-overview` is used as a separate, key/value store, allowing administrators to harden the :ref:`tv-overview` server better from a security perspective (i.e only allow Traffic Ops to access it, verifying authenticity with a certificate). The Traffic Ops server, by design, needs to be accessible from all the other servers in the Traffic Control CDN.
+Traffic Ops uses a `PostgreSQL <https://www.postgresql.org/>`_ database to store the configuration information, and `Go <https://golang.org/>`_ to provide the :ref:`to-api`. Not all configuration data is in this database however; for sensitive data like private SSL keys or token-based authentication shared secrets, :ref:`tv-overview` is used as a separate, key/value store, allowing administrators to harden the :ref:`tv-overview` server better from a security perspective (i.e only allow Traffic Ops to access it, verifying authenticity with a certificate). The Traffic Ops server, by design, needs to be accessible from all the other servers in the Traffic Control CDN.
 
 Traffic Ops generates all the application-specific configuration files for the :term:`cache servers` and other servers. The :term:`cache servers` and other servers check in with Traffic Ops at a regular interval to see if updated configuration files require application. On :term:`cache servers` this is done by the :term:`ORT` script.
 
@@ -35,11 +35,3 @@ Traffic Ops Extensions are a way to enhance the basic functionality of Traffic O
 
 :ref:`to-check-ext`
 	Allow you to add custom checks to the :menuselection:`Monitor --> Cache Checks` view in :ref:`tp-overview`.
-
-:ref:`to-datasource-ext`
-	Allow you to add data sources for the graph views and usage APIs.
-
-
-.. These are listed as "in beta" as far back as TO 1.0, sooo
-.. Configuration Extension
-.. 	Allows you to add custom configuration file generators.

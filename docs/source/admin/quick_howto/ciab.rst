@@ -60,8 +60,7 @@ In a typical scenario, if the steps in `Building`_ have been followed, all that'
 	+---------------------------------+--------------------------------------------------------------+---------------------------------------+-------------------------------------------+
 	| Traffic Monitor                 | Web interface and API on port 80                             | N/A                                   | N/A                                       |
 	+---------------------------------+--------------------------------------------------------------+---------------------------------------+-------------------------------------------+
-	| Traffic Ops                     | Main API endpoints on port 6443, with a direct route to the  | ``TO_ADMIN_USER`` in `variables.env`_ | ``TO_ADMIN_PASSWORD`` in `variables.env`_ |
-	|                                 | Perl API on port 60443\ [3]_                                 |                                       |                                           |
+	| Traffic Ops                     | API endpoints on port 6443                                   | ``TO_ADMIN_USER`` in `variables.env`_ | ``TO_ADMIN_PASSWORD`` in `variables.env`_ |
 	+---------------------------------+--------------------------------------------------------------+---------------------------------------+-------------------------------------------+
 	| Traffic Ops PostgresQL Database | PostgresQL connections accepted on port 5432 (database name: | ``DB_USER`` in `variables.env`_       | ``DB_USER_PASS`` in `variables.env`_      |
 	|                                 | ``DB_NAME`` in `variables.env`_)                             |                                       |                                           |
@@ -99,10 +98,6 @@ variables.env
 	:tab-width: 4
 
 .. note:: While these port settings can be changed without hampering the function of the CDN in a Box system, note that changing a port without also changing the matching port-mapping in :file:`infrastructure/cdn-in-a-box/docker-compose.yml` for the affected service *will* make it unreachable from the host.
-
-.. [1] It is perfectly possible to build and run all containers without Docker Compose, but it's not recommended and not covered in this guide.
-.. [2] Consider ``make -j`` to build quickly, if your computer can handle multiple builds at once.
-.. [3] Please do NOT use the Perl endpoints directly. The CDN will only work properly if everything hits the Go API, which will proxy to the Perl endpoints as needed.
 
 X.509 SSL/TLS Certificates
 ==========================
@@ -433,3 +428,6 @@ There are some *scripted dashboards* can show beautiful charts. You can display 
 * ``https://<grafanaHost>/dashboard/script/traffic_ops_cachegroup.js?which=``. The query parameter `which` in this particular URL should be the **cachegroup**. Take CIAB as an example, it can be filled in with **CDN_in_a_Box_Edge** or **CDN_in_a_Box_Edge**.
 * ``https://<grafanaHost>/dashboard/script/traffic_ops_deliveryservice.js?which=``. The query parameter `which` in this particular URL should be the **xml_id** of the desired Delivery Service.
 * ``https://<grafanaHost>/dashboard/script/traffic_ops_server.js?which=``. The query parameter `which` in this particular URL should be the **hostname** (not **FQDN**). It can be filled in with **edge** or **mid** in CIAB.
+
+.. [1] It is perfectly possible to build and run all containers without Docker Compose, but it's not recommended and not covered in this guide.
+.. [2] Consider ``make -j`` to build quickly, if your computer can handle multiple builds at once.
