@@ -6,9 +6,9 @@
 # to you under the Apache License, Version 2.0 (the
 # "License"); you may not use this file except in compliance
 # with the License.  You may obtain a copy of the License at
-# 
+#
 #   http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing,
 # software distributed under the License is distributed on an
 # "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -140,7 +140,7 @@ init() {
       "config_var":"search_base"
     }
   ],
-  "/opt/traffic_ops/install/data/json/users.json":[
+  "/opt/traffic_ops/install/data/users.json":[
     {
       "Administration username for Traffic Ops":"$ADMIN_USER",
       "config_var":"tmAdminUser"
@@ -157,7 +157,7 @@ init() {
       "config_var":"custom_profiles"
     }
   ],
-  "/opt/traffic_ops/install/data/json/openssl_configuration.json":[
+  "/opt/traffic_ops/install/data/openssl_configuration.json":[
     {
       "Do you want to generate a certificate?":"yes",
       "config_var":"genCert"
@@ -192,7 +192,7 @@ init() {
       "hidden":"1"
     }
   ],
-  "/opt/traffic_ops/install/data/json/profiles.json":[
+  "/opt/traffic_ops/install/data/profiles.json":[
     {
       "Traffic Ops url":"https://$HOSTNAME",
       "config_var":"tm.url"

@@ -21,7 +21,7 @@
 %define TRAFFIC_OPS_LOG_DIR /var/log/traffic_ops
 %define debug_package %{nil}
 
-Summary:          Traffic Ops UI
+Summary:          Traffic Ops
 Name:             traffic_ops
 Version:          %{traffic_control_version}
 Release:          %{build_number}
@@ -33,11 +33,7 @@ URL:              https://github.com/apache/trafficcontrol/
 Vendor:           Apache Software Foundation
 Packager:         daniel_kirkwood at Cable dot Comcast dot com
 AutoReqProv:      no
-Requires:         cpanminus, expat-devel, gcc-c++, golang >= 1.11, libcurl, libpcap-devel, mkisofs, tar
-Requires:         openssl-devel, perl, perl-core, perl-DBD-Pg, perl-DBI, perl-Digest-SHA1
-Requires:         libidn-devel, libcurl-devel, libcap
-Requires:         postgresql96 >= 9.6.2 , postgresql96-devel >= 9.6.2
-Requires:         perl-JSON, perl-libwww-perl, perl-Test-CPAN-Meta, perl-WWW-Curl, perl-TermReadKey, perl-Crypt-ScryptKDF
+Requires:         expat-devel, gcc-c++, golang >= 1.11, libcurl, libpcap-devel, mkisofs, tar, openssl-devel, libidn-devel, libcurl-devel, libcap,postgresql96 >= 9.6.2 , postgresql96-devel >= 9.6.2
 Requires(pre):    /usr/sbin/useradd, /usr/bin/getent
 Requires(postun): /usr/sbin/userdel
 
@@ -56,9 +52,6 @@ Built: %(date) by %{getenv: USER}
 %setup
 
 %build
-    # update version referenced in the source
-    perl -pi.bak -e 's/__VERSION__/%{version}-%{release}/' app/lib/UI/Utils.pm
-
     # copy traffic_ops_golang binary
     godir=src/github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang
     ( mkdir -p "$godir" && \
@@ -95,8 +88,7 @@ Built: %(date) by %{getenv: USER}
     %__rm -rf $RPM_BUILD_ROOT/%{PACKAGEDIR}/{pkg,src,bin}
 
     %__mkdir -p $RPM_BUILD_ROOT/var/www/files
-    %__cp install/data/perl/osversions.cfg $RPM_BUILD_ROOT/var/www/files/.
-    %__cp install/data/json/osversions.json $RPM_BUILD_ROOT/var/www/files/.
+    %__cp install/data/osversions.json $RPM_BUILD_ROOT/var/www/files/.
 
     if [ ! -d $RPM_BUILD_ROOT/%{PACKAGEDIR}/app/public/routing ]; then
         %__mkdir -p $RPM_BUILD_ROOT/%{PACKAGEDIR}/app/public/routing
@@ -153,7 +145,6 @@ Built: %(date) by %{getenv: USER}
     %__chown root:root /etc/logrotate.d/traffic_ops
     %__chown root:root /etc/logrotate.d/traffic_ops_golang
     %__chown root:root /etc/logrotate.d/traffic_ops_access
-    %__chown root:root /etc/logrotate.d/traffic_ops_perl_access
     %__chmod +x /etc/init.d/traffic_ops
     %__chmod +x %{PACKAGEDIR}/install/bin/*
     /sbin/chkconfig --add traffic_ops
@@ -205,16 +196,11 @@ fi
 %defattr(644,root,root,755)
 %attr(755,%{TRAFFIC_OPS_USER},%{TRAFFIC_OPS_GROUP}) %{PACKAGEDIR}/app/bin/*
 %attr(755,%{TRAFFIC_OPS_USER},%{TRAFFIC_OPS_GROUP}) %{PACKAGEDIR}/app/script/*
-%attr(755,%{TRAFFIC_OPS_USER},%{TRAFFIC_OPS_GROUP}) %{PACKAGEDIR}/app/db/*.pl
 %config(noreplace) %attr(750,%{TRAFFIC_OPS_USER},%{TRAFFIC_OPS_GROUP}) /opt/traffic_ops/app/conf
 %config(noreplace) %attr(750,%{TRAFFIC_OPS_USER},%{TRAFFIC_OPS_GROUP}) /opt/traffic_ops/app/db/dbconf.yml
-%config(noreplace)/var/www/files/osversions.cfg
 %config(noreplace)/var/www/files/osversions.json
-%{PACKAGEDIR}/app/cpanfile
 %{PACKAGEDIR}/app/db
-%{PACKAGEDIR}/app/lib
 %{PACKAGEDIR}/app/public
-%{PACKAGEDIR}/app/templates
 %{PACKAGEDIR}/install
 %attr(755, %{TRAFFIC_OPS_USER},%{TRAFFIC_OPS_GROUP}) %{PACKAGEDIR}/app/db/admin
 %attr(755, %{TRAFFIC_OPS_USER},%{TRAFFIC_OPS_GROUP}) %{PACKAGEDIR}/install/bin/convert_profile/convert_profile

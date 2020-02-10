@@ -14,9 +14,8 @@
 # limitations under the License.
 #
 
-use lib qw(/opt/traffic_ops/install/lib /opt/traffic_ops/app/lib /opt/traffic_ops/app/local/lib/perl5);
+use lib qw(/opt/traffic_ops/install/lib);
 
-$ENV{PERL5LIB} = "/opt/traffic_ops/install/lib:/opt/traffic_ops/app/lib:/opt/traffic_ops/app/local/lib/perl5:$ENV{PERL5LIB}";
 $ENV{PATH}     = "/usr/bin:/opt/traffic_ops/go/bin:/usr/local/go/bin:/opt/traffic_ops/install/bin:$ENV{PATH}";
 $ENV{GOPATH} = "/opt/traffic_ops/go";
 
@@ -41,10 +40,10 @@ my $databaseConfFile = "/opt/traffic_ops/app/conf/production/database.conf";
 my $dbConfFile       = "/opt/traffic_ops/app/db/dbconf.yml";
 my $cdnConfFile      = "/opt/traffic_ops/app/conf/cdn.conf";
 my $ldapConfFile     = "/opt/traffic_ops/app/conf/ldap.conf";
-my $usersConfFile    = "/opt/traffic_ops/install/data/json/users.json";
+my $usersConfFile    = "/opt/traffic_ops/install/data/users.json";
 my $profilesConfFile = "/opt/traffic_ops/install/data/profiles/";
-my $opensslConfFile  = "/opt/traffic_ops/install/data/json/openssl_configuration.json";
-my $paramConfFile    = "/opt/traffic_ops/install/data/json/profiles.json";
+my $opensslConfFile  = "/opt/traffic_ops/install/data/openssl_configuration.json";
+my $paramConfFile    = "/opt/traffic_ops/install/data/profiles.json";
 
 my $custom_profile_dir = $profilesConfFile . "custom";
 
@@ -53,16 +52,13 @@ my $parameters;
 
 # location of traffic ops profiles
 my $profileDir       = "/opt/traffic_ops/install/data/profiles/";
-my $post_install_cfg = "/opt/traffic_ops/install/data/json/post_install.json";
+my $post_install_cfg = "/opt/traffic_ops/install/data/post_install.json";
 
 # log file for the installer
 my $logFile = "/var/log/traffic_ops/postinstall.log";
 
 # debug mode
 my $debug = 1;
-
-# log file for cpan output
-my $cpanLogFile = "/var/log/traffic_ops/cpan.log";
 
 # maximum size the uncompressed log file should be before rotating it - rotating it copies the current log
 #  file to the same name appended with .bkp replacing the old backup if any is there

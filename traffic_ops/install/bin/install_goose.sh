@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+set -e
+
 echo "Now installing goose"
 export GOPATH=/opt/traffic_ops/go
 mkdir -p $GOPATH
