@@ -98,5 +98,5 @@ load_data_from() {
     cd -
 }
 
-# First,  load required data at the top level
+# First, load required data at the top level
 load_data_from /traffic_ops_data

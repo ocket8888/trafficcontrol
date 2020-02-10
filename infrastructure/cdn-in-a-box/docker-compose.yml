@@ -26,7 +26,7 @@
 #      docker-compose up -d
 #
 # The Traffic Ops Go API will then be available on https://localhost:6443,
-# the Perl API on https://localhost:60443, and the postgres database on localhost 5432.
+# and the postgres database on localhost 5432.
 #
 # Note that this setup is intended for testing and not for production use.
 
@@ -34,7 +34,7 @@
 version: '2.1'
 
 services:
-  # db is the Traffic Ops database running in postgresql.  Only trafficops and trafficops-perl need to have access to it.
+  # db is the Traffic Ops database running in postgresql.  Only trafficops needs to have access to it.
   # All other components access the database thru the Traffic Ops API
   db:
     build:
@@ -53,9 +53,7 @@ services:
       - variables.env
     # TODO: change to expose: "5432" to limit to containers
 
-  # trafficops runs only the Go version of Traffic Ops in a container.  All Traffic Ops API endpoints that have
-  # been rewritten in Go will be handled here.  All that have not are passed to the trafficops-perl service
-  # defined below
+  # trafficops runs Traffic Ops in a container. All Traffic Ops API endpoints will be handled here.
   trafficops:
     build:
       context: ../..
@@ -65,7 +63,6 @@ services:
     depends_on:
       - db
       - enroller
-      - trafficops-perl
     domainname: infra.ciab.test
     env_file:
       - variables.env
@@ -74,30 +71,6 @@ services:
     volumes:
       - ./dns/set-dns.sh:/usr/local/sbin/set-dns.sh
       - ./dns/insert-self-into-dns.sh:/usr/local/sbin/insert-self-into-dns.sh
-      - shared:/shared
-
-  # trafficops-perl runs the legacy Traffic Ops in Perl using the Mojolicious framework.  This remains
-  # in place until all API endpoints have been rewritten in Go
-  trafficops-perl:
-    build:
-      context: ../..
-      dockerfile: infrastructure/cdn-in-a-box/traffic_ops/Dockerfile
-      args:
-        TRAFFIC_OPS_RPM: infrastructure/cdn-in-a-box/traffic_ops/traffic_ops.rpm
-    depends_on:
-      - db
-      - enroller
-    domainname: infra.ciab.test
-    env_file:
-      - variables.env
-    hostname: trafficops-perl
-    image: trafficops-perl
-    # TODO: change to expose: "60443" to limit to containers
-    volumes:
-      - ./traffic_ops/ca:/ca
-      - ./dns/set-dns.sh:/usr/local/sbin/set-dns.sh
-      - ./dns/insert-self-into-dns.sh:/usr/local/sbin/insert-self-into-dns.sh
-      - ./traffic_ops/set-to-ips-from-dns.sh:/usr/local/sbin/set-to-ips-from-dns.sh
       - shared:/shared
 
   # trafficportal defines the web interface for Traffic Ops.  It uses only the API exposed by Traffic Ops
