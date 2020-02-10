@@ -28,6 +28,7 @@
     source
 	traffic_monitor_build
 	traffic_ops_build
+	traffic_ops_ort_build
 	traffic_portal_build
 	traffic_router_build
 	traffic_stats_build
