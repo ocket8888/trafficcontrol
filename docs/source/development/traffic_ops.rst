@@ -476,7 +476,7 @@ This method is best used when requests are meant to have extensive side-effects,
 
 Extensions
 ==========
-What's typically meant by "extension" in the context of Traffic Ops is a :ref:`to-check-ext` which provides data for server "checks" which can be viewed in Traffic Portal under :menuselection:`Monitor --> Cache Checks`. This type of extension need not know nor even care which implementation it is being used with, as it interacts with Traffic Ops through the :ref:`to-api`. These are described in `Legacy Perl Extensions`_ as their description remains rather Perl-centric, but in principle they can operate normally with modern Traffic Ops instances.
+What's typically meant by "extension" in the context of Traffic Ops is a :ref:`to-check-ext` which provides data for server "checks" which can be viewed in Traffic Portal under :menuselection:`Monitor --> Cache Checks`. These are described in `Legacy Perl Extensions`_ as their description remains rather Perl-centric, but in principle they can operate normally with modern Traffic Ops instances.
 
 Traffic Ops also supports overrides or new definitions for non-standard :ref:`to-api` routes. These are more commonly referred to as "plugins," and they are described in `Go Plugins`_.
 
