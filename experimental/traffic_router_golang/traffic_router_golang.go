@@ -37,7 +37,7 @@ import (
 	"github.com/apache/trafficcontrol/experimental/traffic_router_golang/toutil"
 
 	"github.com/apache/trafficcontrol/lib/log"
-	to "github.com/apache/trafficcontrol/traffic_ops/client"
+	to "github.com/apache/trafficcontrol/clients/go"
 )
 
 const Version = "0.1"

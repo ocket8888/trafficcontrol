@@ -30,7 +30,7 @@ import (
 	"time"
 
 	"github.com/apache/trafficcontrol/lib/log"
-	toclient "github.com/apache/trafficcontrol/traffic_ops/client"
+	toclient "github.com/apache/trafficcontrol/clients/go"
 
 	flag "github.com/ogier/pflag"
 )

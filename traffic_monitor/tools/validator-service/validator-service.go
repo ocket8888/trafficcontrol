@@ -26,7 +26,7 @@ import (
 	"fmt"
 	"github.com/apache/trafficcontrol/lib/tc"
 	"github.com/apache/trafficcontrol/traffic_monitor/tmcheck"
-	to "github.com/apache/trafficcontrol/traffic_ops/client"
+	to "github.com/apache/trafficcontrol/clients/go"
 	"io"
 	"net/http"
 	"sort"

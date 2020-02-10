@@ -38,7 +38,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/tc"
 	"github.com/apache/trafficcontrol/lib/util"
 
-	"github.com/apache/trafficcontrol/traffic_ops/client"
+	"github.com/apache/trafficcontrol/clients/go"
 	log "github.com/cihub/seelog"
 	influx "github.com/influxdata/influxdb/client/v2"
 )

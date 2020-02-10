@@ -20,7 +20,7 @@ FROM golang:1.11 AS enroller-builder
 # enroller source and dependencies
 COPY ./lib/ /go/src/github.com/apache/trafficcontrol/lib/
 COPY ./vendor/ /go/src/github.com/apache/trafficcontrol/vendor/
-COPY ./traffic_ops/client/ /go/src/github.com/apache/trafficcontrol/traffic_ops/client/
+COPY ./clients/go/ /go/src/github.com/apache/trafficcontrol/clients/go/
 COPY ./traffic_ops/vendor/ /go/src/github.com/apache/trafficcontrol/traffic_ops/vendor/
 COPY ./infrastructure/cdn-in-a-box/ /go/src/github.com/apache/trafficcontrol/infrastructure/cdn-in-a-box/
 

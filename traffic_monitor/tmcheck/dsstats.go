@@ -25,7 +25,7 @@ import (
 
 	"github.com/apache/trafficcontrol/lib/tc"
 	"github.com/apache/trafficcontrol/traffic_monitor/dsdata"
-	to "github.com/apache/trafficcontrol/traffic_ops/client"
+	to "github.com/apache/trafficcontrol/clients/go"
 
 	"github.com/json-iterator/go"
 )

@@ -39,7 +39,7 @@ import (
 
 	"github.com/apache/trafficcontrol/lib/log"
 	"github.com/apache/trafficcontrol/lib/tc"
-	toclient "github.com/apache/trafficcontrol/traffic_ops/client"
+	toclient "github.com/apache/trafficcontrol/clients/go"
 	"github.com/apache/trafficcontrol/traffic_ops/ort/atstccfg/config"
 )
 
