@@ -27,7 +27,7 @@ import (
 	"github.com/apache/trafficcontrol/grove/thread"
 	"github.com/apache/trafficcontrol/grove/web"
 
-	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/lib/log"
 )
 
 const CodeConnectFailure = http.StatusBadGateway

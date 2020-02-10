@@ -21,7 +21,7 @@ package v1
 
 import "testing"
 
-import "github.com/apache/trafficcontrol/lib/go-tc"
+import "github.com/apache/trafficcontrol/lib/tc"
 
 // These capabilities are defined during the setup process in todb.go.
 // ANY TIME THOSE ARE CHANGED THIS MUST BE UPDATED.

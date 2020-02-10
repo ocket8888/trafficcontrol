@@ -19,7 +19,7 @@ import (
 	"encoding/json"
 	"strconv"
 
-	tc "github.com/apache/trafficcontrol/lib/go-tc"
+	tc "github.com/apache/trafficcontrol/lib/tc"
 )
 
 // GetUserDeliveryServices gets the delivery services associated with the given user.

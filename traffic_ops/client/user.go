@@ -24,8 +24,8 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/apache/trafficcontrol/lib/go-rfc"
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/rfc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 // Users gets an array of Users.

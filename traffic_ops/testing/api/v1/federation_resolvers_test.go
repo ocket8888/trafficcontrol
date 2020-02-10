@@ -17,8 +17,8 @@ package v1
 
 import "testing"
 
-import "github.com/apache/trafficcontrol/lib/go-tc"
-import "github.com/apache/trafficcontrol/lib/go-util"
+import "github.com/apache/trafficcontrol/lib/tc"
+import "github.com/apache/trafficcontrol/lib/util"
 
 func TestFederationResolvers(t *testing.T) {
 	WithObjs(t, []TCObj{Types, FederationResolvers}, func() {

@@ -229,6 +229,6 @@ pull-request
 godoc
 	A text role that can be used to easily link to the documentation for any Go package, type, or function/method (grouped constants/variables not supported). For example, "``:godoc:`net/http.HandlerFunc```" renders as :godoc:`net/http.HandlerFunc`.
 atc-godoc
-	This is provided for convenience, and is identical to ``:godoc:`` except that it is assumed to be relative to the Apache Traffic Control project. For example, ``:atc-godoc:`lib/go-rfc.MimeType.Quality``` renders as :atc-godoc:`lib/go-rfc.MimeType.Quality`.
+	This is provided for convenience, and is identical to ``:godoc:`` except that it is assumed to be relative to the Apache Traffic Control project. For example, ``:atc-godoc:`lib/rfc.MimeType.Quality``` renders as :atc-godoc:`lib/rfc.MimeType.Quality`.
 to-godoc
 	This is provided for convenience, and is identical to ``:godoc:`` except that it is assumed to be relative to the :atc-godoc:`traffic_ops/traffic_ops_golang` package. For example, ``:to-godoc:`api.APIInfo``` renders as :to-godoc:`api.APIInfo`.

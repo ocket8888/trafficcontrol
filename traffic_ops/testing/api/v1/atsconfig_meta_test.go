@@ -19,7 +19,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 func TestATSConfigMeta(t *testing.T) {

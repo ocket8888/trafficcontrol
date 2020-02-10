@@ -23,7 +23,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 func TestCreateServerHealthPollURL(t *testing.T) {

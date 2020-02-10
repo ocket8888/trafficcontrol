@@ -23,7 +23,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/lib/log"
 	"github.com/apache/trafficcontrol/traffic_ops/ort/atstccfg/config"
 )
 

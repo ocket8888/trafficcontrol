@@ -26,8 +26,8 @@ import "os"
 import "os/exec"
 import "time"
 
-import "github.com/apache/trafficcontrol/lib/go-log"
-import "github.com/apache/trafficcontrol/lib/go-rfc"
+import "github.com/apache/trafficcontrol/lib/log"
+import "github.com/apache/trafficcontrol/lib/rfc"
 
 import "github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
 

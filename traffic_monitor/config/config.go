@@ -23,7 +23,7 @@ import (
 	"io/ioutil"
 	"time"
 
-	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/lib/log"
 
 	"github.com/json-iterator/go"
 )

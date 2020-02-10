@@ -22,7 +22,7 @@ package v1
 import (
 	"testing"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 func TestGetOSVersions(t *testing.T) {

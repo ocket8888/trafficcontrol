@@ -22,8 +22,8 @@ package cfgfile
 import (
 	"errors"
 
-	"github.com/apache/trafficcontrol/lib/go-atscfg"
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/atscfg"
+	"github.com/apache/trafficcontrol/lib/tc"
 	"github.com/apache/trafficcontrol/traffic_ops/ort/atstccfg/config"
 	"github.com/apache/trafficcontrol/traffic_ops/ort/atstccfg/toreq"
 )

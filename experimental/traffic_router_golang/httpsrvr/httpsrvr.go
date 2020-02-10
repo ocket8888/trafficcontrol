@@ -33,8 +33,8 @@ import (
 	"github.com/apache/trafficcontrol/experimental/traffic_router_golang/crconfigregex"
 	"github.com/apache/trafficcontrol/experimental/traffic_router_golang/nextcache"
 
-	"github.com/apache/trafficcontrol/lib/go-log"
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/log"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 // TODO config

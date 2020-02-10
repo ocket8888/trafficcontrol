@@ -24,7 +24,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/lib/log"
 	"github.com/apache/trafficcontrol/traffic_ops/ort/atstccfg/cfgfile"
 	"github.com/apache/trafficcontrol/traffic_ops/ort/atstccfg/config"
 	"github.com/apache/trafficcontrol/traffic_ops/ort/atstccfg/toreq"

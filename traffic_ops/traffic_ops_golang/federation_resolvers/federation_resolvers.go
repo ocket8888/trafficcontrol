@@ -26,9 +26,9 @@ import "encoding/json"
 import "fmt"
 import "net/http"
 
-import "github.com/apache/trafficcontrol/lib/go-rfc"
-import "github.com/apache/trafficcontrol/lib/go-tc"
-import "github.com/apache/trafficcontrol/lib/go-util"
+import "github.com/apache/trafficcontrol/lib/rfc"
+import "github.com/apache/trafficcontrol/lib/tc"
+import "github.com/apache/trafficcontrol/lib/util"
 
 import "github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
 import "github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"

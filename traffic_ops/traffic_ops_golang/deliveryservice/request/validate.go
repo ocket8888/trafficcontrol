@@ -24,9 +24,9 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
-	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
-	"github.com/apache/trafficcontrol/lib/go-util"
+	"github.com/apache/trafficcontrol/lib/tc"
+	"github.com/apache/trafficcontrol/lib/tc/tovalidate"
+	"github.com/apache/trafficcontrol/lib/util"
 
 	"github.com/go-ozzo/ozzo-validation"
 )

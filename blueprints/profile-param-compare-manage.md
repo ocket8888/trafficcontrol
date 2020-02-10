@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-# Profile Parameter Comparison / Management 
+# Profile Parameter Comparison / Management
 
 https://github.com/apache/trafficcontrol/issues/2391
 
@@ -45,7 +45,7 @@ Will entirely new pages/views be necessary?
 Will a new field be added to an existing form?
 How will the user interact with the new UI changes?
 -->
-Enhancement to `https://tp.domain.com/#!/profiles/compare/{{profile_id_1}}/{{profile_id_2}}` as discussed in the "Proposed Change" section. 
+Enhancement to `https://tp.domain.com/#!/profiles/compare/{{profile_id_1}}/{{profile_id_2}}` as discussed in the "Proposed Change" section.
 
 ### Traffic Ops Impact
 <!--
@@ -80,7 +80,7 @@ None
 *How* will this impact the Traffic Ops data model?
 *How* will this impact the Traffic Ops database schema?
 
-What changes to the lib/go-tc structs will be required?
+What changes to the lib/tc structs will be required?
 What new tables and columns will be required?
 How will existing tables and columns be changed?
 What are the column data types and modifiers?
@@ -136,7 +136,7 @@ None
 What new documentation will be required?
 What existing documentation will need to be updated?
 -->
-Currently, there is no documentation capturing the current profile comparison view, however, when this view is redesigned, documentation should be provided. 
+Currently, there is no documentation capturing the current profile comparison view, however, when this view is redesigned, documentation should be provided.
 
 ### Testing Impact
 <!--
@@ -174,7 +174,7 @@ Will these changes require sensitive data that should be encrypted at rest?
 Will these changes require handling of any secrets?
 Will new SQL queries properly use parameter binding?
 -->
-This view will display secure and non-secure parameters, however, the API takes care of obfuscating the values of secure parameters for those with inadequate permissions. 
+This view will display secure and non-secure parameters, however, the API takes care of obfuscating the values of secure parameters for those with inadequate permissions.
 
 Also, the TO API will ensure that only those with the proper permissions can modify profile/parameter relationships.
 

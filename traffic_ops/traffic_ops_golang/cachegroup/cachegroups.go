@@ -27,10 +27,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/apache/trafficcontrol/lib/go-log"
-	"github.com/apache/trafficcontrol/lib/go-tc"
-	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
-	"github.com/apache/trafficcontrol/lib/go-util"
+	"github.com/apache/trafficcontrol/lib/log"
+	"github.com/apache/trafficcontrol/lib/tc"
+	"github.com/apache/trafficcontrol/lib/tc/tovalidate"
+	"github.com/apache/trafficcontrol/lib/util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 
@@ -289,10 +289,10 @@ func (cg *TOCacheGroup) createCacheGroupFallbacks() error {
 func (cg *TOCacheGroup) isValidCacheGroupFallback(fallbackName string) (bool, error) {
 	var isValid bool
 	query := `SELECT(
-SELECT cachegroup.id 
-FROM cachegroup 
-JOIN type on type.id = cachegroup.type 
-WHERE cachegroup.name = $1 
+SELECT cachegroup.id
+FROM cachegroup
+JOIN type on type.id = cachegroup.type
+WHERE cachegroup.name = $1
 AND (type.name = 'EDGE_LOC')
 ) IS NOT NULL;`
 
@@ -307,9 +307,9 @@ AND (type.name = 'EDGE_LOC')
 func (cg *TOCacheGroup) isAllowedToFallback(cacheGroupType int) (bool, error) {
 	var isValid bool
 	query := `SELECT(
-SELECT type.name 
-FROM type 
-WHERE type.id = $1 
+SELECT type.name
+FROM type
+WHERE type.id = $1
 AND (type.name = 'EDGE_LOC')
 ) IS NOT NULL;`
 

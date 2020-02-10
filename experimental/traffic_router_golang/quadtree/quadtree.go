@@ -23,7 +23,7 @@ package quadtree
 import (
 	"math"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 type ObjT tc.CacheGroupName

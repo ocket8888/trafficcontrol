@@ -24,13 +24,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/apache/trafficcontrol/lib/go-atscfg"
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/atscfg"
+	"github.com/apache/trafficcontrol/lib/tc"
 	"github.com/apache/trafficcontrol/traffic_ops/ort/atstccfg/config"
 	"github.com/apache/trafficcontrol/traffic_ops/ort/atstccfg/toreq"
 )
 
-const ServerCacheDotConfigIncludeInactiveDSes = false // TODO move to lib/go-atscfg
+const ServerCacheDotConfigIncludeInactiveDSes = false // TODO move to lib/atscfg
 
 func GetConfigFileServerCacheDotConfig(cfg config.TCCfg, serverNameOrID string) (string, error) {
 	// TODO TOAPI add /servers?cdn=1 query param

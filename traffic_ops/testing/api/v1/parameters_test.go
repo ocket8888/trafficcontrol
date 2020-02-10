@@ -19,7 +19,7 @@ import (
 	"sync"
 	"testing"
 
-	tc "github.com/apache/trafficcontrol/lib/go-tc"
+	tc "github.com/apache/trafficcontrol/lib/tc"
 )
 
 func TestParameters(t *testing.T) {

@@ -23,8 +23,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/apache/trafficcontrol/lib/go-log"
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/log"
+	"github.com/apache/trafficcontrol/lib/tc"
 	influx "github.com/influxdata/influxdb/client/v2"
 )
 

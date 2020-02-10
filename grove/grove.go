@@ -34,7 +34,7 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/sys/unix"
 
-	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/lib/log"
 
 	"github.com/apache/trafficcontrol/grove/cache"
 	"github.com/apache/trafficcontrol/grove/config"

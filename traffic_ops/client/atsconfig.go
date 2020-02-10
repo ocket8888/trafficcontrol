@@ -18,7 +18,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 func (to *Session) GetATSServerConfigList(serverID int) (tc.ATSConfigMetaData, ReqInf, error) {

@@ -20,7 +20,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 const queryParamFormat = "?profileId=%d&parameterId=%d"

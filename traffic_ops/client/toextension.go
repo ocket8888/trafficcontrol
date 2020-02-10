@@ -18,7 +18,7 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 const API_TO_EXTENSION = apiBase + "/to_extensions"

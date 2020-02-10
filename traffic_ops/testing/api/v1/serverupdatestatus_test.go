@@ -21,8 +21,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
-	"github.com/apache/trafficcontrol/lib/go-util"
+	"github.com/apache/trafficcontrol/lib/tc"
+	"github.com/apache/trafficcontrol/lib/util"
 )
 
 func TestServerUpdateStatus(t *testing.T) {

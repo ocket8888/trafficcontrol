@@ -16,7 +16,7 @@
 package v1
 
 import (
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 // TrafficControl - maps to the tc-fixtures.json file

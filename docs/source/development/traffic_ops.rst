@@ -338,7 +338,7 @@ The configuration file for the tests (defined by :option:`--cfg`) is a JSON-enco
 
 :default: An object containing sub-objects relating to default configuration settings for connecting to external resources during testing
 
-	:logLocations: An object containing key/value pairs where the keys are log levels and each associated value is the file location to which logs of that level will be written. The allowed values respect the `reserved special names used by the github.com/apache/trafficcontrol/lib/go-log package <https://godoc.org/github.com/apache/trafficcontrol/lib/go-log#pkg-constants>`_. Omitted keys are treated as though their values were ``null``, in which case that level is written to `/dev/null`. The allowed keys are:
+	:logLocations: An object containing key/value pairs where the keys are log levels and each associated value is the file location to which logs of that level will be written. The allowed values respect the reserved special names: :atc-godoc:`lib/log.pkg-constants`. Omitted keys are treated as though their values were ``null``, in which case that level is written to `/dev/null`. The allowed keys are:
 
 		- debug
 		- error

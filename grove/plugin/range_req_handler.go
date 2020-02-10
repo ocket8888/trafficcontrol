@@ -24,7 +24,7 @@ import (
 	"strings"
 
 	"github.com/apache/trafficcontrol/grove/web"
-	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/lib/log"
 )
 
 type byteRange struct {

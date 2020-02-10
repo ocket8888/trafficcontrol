@@ -26,8 +26,8 @@ import "net/http"
 import "strconv"
 import "time"
 
-import "github.com/apache/trafficcontrol/lib/go-tc"
-import "github.com/apache/trafficcontrol/lib/go-log"
+import "github.com/apache/trafficcontrol/lib/tc"
+import "github.com/apache/trafficcontrol/lib/log"
 import "github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
 
 const userReadQuery = `

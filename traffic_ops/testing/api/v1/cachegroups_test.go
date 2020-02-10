@@ -20,7 +20,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 func TestCacheGroups(t *testing.T) {

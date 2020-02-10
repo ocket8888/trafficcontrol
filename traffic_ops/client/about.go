@@ -18,6 +18,9 @@ package client
 import (
 	"encoding/json"
 	"net/http"
+	"fmt"
+
+	tc "github.com/apache/trafficcontrol/lib/tc"
 )
 
 const (

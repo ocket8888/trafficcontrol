@@ -24,7 +24,7 @@ Location and Dependencies
 =========================
 The ``compare`` tool is written in Go, and can be found from within the Traffic Control repository at ``traffic_ops/testing/compare/``. The main file of interest is ``compare.go``, which contains the main routine and logic for checking endpoints. To build the executable, run ``go build .`` from within the ``traffic_ops/testing/compare/`` directory. Alternatively, run the file without storing a built binary by using :samp:`go run {path to compare.go}`. In order to build/run the :program:`compare` tool, the following dependencies should be satisfied, probably via ``go get``:
 
-* github.com/apache/trafficcontrol/lib/go-tc\ [1]_
+* github.com/apache/trafficcontrol/lib/tc\ [1]_
 * github.com/kelseyhightower/envconfig
 * golang.org/x/net/publicsuffix
 

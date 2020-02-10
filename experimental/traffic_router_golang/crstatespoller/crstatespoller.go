@@ -31,7 +31,7 @@ import (
 	"github.com/apache/trafficcontrol/experimental/traffic_router_golang/crstates"
 	"github.com/apache/trafficcontrol/experimental/traffic_router_golang/fetch"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 func updateAvailableServers(crcThs crconfig.Ths, crsThs crstates.Ths, as availableservers.AvailableServers) {

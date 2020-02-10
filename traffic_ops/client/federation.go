@@ -22,7 +22,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 func (to *Session) Federations() ([]tc.AllDeliveryServiceFederationsMapping, ReqInf, error) {

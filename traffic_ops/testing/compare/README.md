@@ -23,7 +23,7 @@ The `compare` tool is used to compare the output of a set of [Traffic Ops API](h
 
 Dependencies
 ------------
--   github.com/apache/trafficcontrol/lib/go-tc[1]
+-   github.com/apache/trafficcontrol/lib/tc[1]
 -   github.com/kelseyhightower/envconfig
 -   golang.org/x/net/publicsuffix
 

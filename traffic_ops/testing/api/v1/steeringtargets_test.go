@@ -19,7 +19,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/apache/trafficcontrol/lib/go-util"
+	"github.com/apache/trafficcontrol/lib/util"
 	"github.com/apache/trafficcontrol/traffic_ops/v1-client"
 )
 

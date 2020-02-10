@@ -28,7 +28,7 @@ import (
 	"reflect"
 	"strings"
 
-	log "github.com/apache/trafficcontrol/lib/go-log"
+	log "github.com/apache/trafficcontrol/lib/log"
 	"github.com/kelseyhightower/envconfig"
 )
 

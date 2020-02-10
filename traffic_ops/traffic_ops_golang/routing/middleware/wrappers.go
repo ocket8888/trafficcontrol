@@ -30,10 +30,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/apache/trafficcontrol/lib/go-log"
-	"github.com/apache/trafficcontrol/lib/go-rfc"
-	"github.com/apache/trafficcontrol/lib/go-tc"
-	"github.com/apache/trafficcontrol/lib/go-util"
+	"github.com/apache/trafficcontrol/lib/log"
+	"github.com/apache/trafficcontrol/lib/rfc"
+	"github.com/apache/trafficcontrol/lib/tc"
+	"github.com/apache/trafficcontrol/lib/util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/about"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tocookie"
@@ -145,14 +145,14 @@ func WrapPanicRecover(h http.HandlerFunc) http.HandlerFunc {
 // AccessLogTimeFormat is the time format of the access log, as used by time.Time.Format.
 const AccessLogTimeFormat = "02/Jan/2006:15:04:05 -0700"
 
-// GetWrapAccessLog returns a Middleware which writes to the Access Log (which is the lib/go-log EventLog) after the HandlerFunc finishes.
+// GetWrapAccessLog returns a Middleware which writes to the Access Log (which is the lib/log EventLog) after the HandlerFunc finishes.
 func GetWrapAccessLog(secret string) Middleware {
 	return func(h http.HandlerFunc) http.HandlerFunc {
 		return WrapAccessLog(secret, h)
 	}
 }
 
-// WrapAccessLog takes the cookie secret and a http.Handler, and returns a HandlerFunc which writes to the Access Log (which is the lib/go-log EventLog) after the HandlerFunc finishes.
+// WrapAccessLog takes the cookie secret and a http.Handler, and returns a HandlerFunc which writes to the Access Log (which is the lib/log EventLog) after the HandlerFunc finishes.
 // This is not a Middleware, because it needs the secret as a parameter. For a Middleware, see GetWrapAccessLog.
 func WrapAccessLog(secret string, h http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

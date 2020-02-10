@@ -34,7 +34,7 @@ import (
 	"github.com/apache/trafficcontrol/experimental/traffic_router_golang/fetch"
 	"github.com/apache/trafficcontrol/experimental/traffic_router_golang/nextcache"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 func valid(new *tc.CRConfig, old *tc.CRConfig) error {

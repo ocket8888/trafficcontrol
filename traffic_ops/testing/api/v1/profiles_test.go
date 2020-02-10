@@ -19,8 +19,8 @@ import (
 	"strings"
 	"testing"
 
-	tc "github.com/apache/trafficcontrol/lib/go-tc"
-	"github.com/apache/trafficcontrol/lib/go-util"
+	tc "github.com/apache/trafficcontrol/lib/tc"
+	"github.com/apache/trafficcontrol/lib/util"
 )
 
 func TestProfiles(t *testing.T) {

@@ -19,7 +19,7 @@
 
 #### `./swaggerdocs` overview
 
-This directory contains the Go structs that glue together the Swagger 2.0 metadata that will generate the Traffic Ops API documentation using the [go-swagger](https://github.com/go-swagger/go-swagger) meta tags.  The Traffic Ops API documentation is maintained by modifying the Go files in this directory and the Go structs that they reference from here **trafficcontrol/lib/go-tc/*.go**.  These combination of these two areas of .go files will produce Swagger documentation for the Traffic Ops Go API's.
+This directory contains the Go structs that glue together the Swagger 2.0 metadata that will generate the Traffic Ops API documentation using the [go-swagger](https://github.com/go-swagger/go-swagger) meta tags.  The Traffic Ops API documentation is maintained by modifying the Go files in this directory and the Go structs that they reference from here **trafficcontrol/lib/tc/*.go**.  These combination of these two areas of .go files will produce Swagger documentation for the Traffic Ops Go API's.
 
 ### Setup
 
@@ -31,7 +31,7 @@ This directory contains the Go structs that glue together the Swagger 2.0 metada
 
 ### Generating your Swagger Spec File
 
-The **gen_swaggerspec.sh** script will scan all the Go files in the swaggerdocs directory and extract out all of the swagger meta tags that are embedded as comments.  The output of the **gen_swaggerspec.sh** script will be the **swaggerspec/swagger.json** spec file. 
+The **gen_swaggerspec.sh** script will scan all the Go files in the swaggerdocs directory and extract out all of the swagger meta tags that are embedded as comments.  The output of the **gen_swaggerspec.sh** script will be the **swaggerspec/swagger.json** spec file.
 
 While the Docker services are running, just re-run **gen_swaggerspec.sh** and hit refresh on the page to see the Swagger doc updates in real time.
 
@@ -39,7 +39,7 @@ While the Docker services are running, just re-run **gen_swaggerspec.sh** and hi
 
 Once your `swaggerspec/swagger.json` file has been generated you will want to render it to verify it's contents with the HTTP web rendering services.
 
-The `docker-compose.yml` will start two rendering services, a custom http service for hosting the `swaggerspec/swagger.json` and the Swagger UI.  
+The `docker-compose.yml` will start two rendering services, a custom http service for hosting the `swaggerspec/swagger.json` and the Swagger UI.
 
 To start the Swagger UI services (and build them if not already built) just run:
 

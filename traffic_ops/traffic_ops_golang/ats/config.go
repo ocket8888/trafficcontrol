@@ -3,7 +3,7 @@ package ats
 import (
 	"database/sql"
 	"errors"
-	"github.com/apache/trafficcontrol/lib/go-atscfg"
+	"github.com/apache/trafficcontrol/lib/atscfg"
 )
 
 /*

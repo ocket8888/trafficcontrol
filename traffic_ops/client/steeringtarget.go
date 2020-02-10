@@ -21,7 +21,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 func (to *Session) CreateSteeringTarget(st tc.SteeringTargetNullable) (tc.Alerts, ReqInf, error) {

@@ -21,7 +21,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 	toclient "github.com/apache/trafficcontrol/traffic_ops/v1-client"
 )
 

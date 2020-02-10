@@ -25,9 +25,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/apache/trafficcontrol/lib/go-log"
-	"github.com/apache/trafficcontrol/lib/go-tc"
-	"github.com/apache/trafficcontrol/lib/go-util"
+	"github.com/apache/trafficcontrol/lib/log"
+	"github.com/apache/trafficcontrol/lib/tc"
+	"github.com/apache/trafficcontrol/lib/util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/plugin"
@@ -104,8 +104,8 @@ func createCheckExt(toExt tc.TOExtensionNullable, tx *sqlx.Tx) (int, error, erro
 	scc := ""
 	if err := tx.Tx.QueryRow(`
 	SELECT id, servercheck_column_name
-	FROM to_extension 
-	WHERE type in 
+	FROM to_extension
+	WHERE type in
 		(SELECT id FROM type WHERE name = 'CHECK_EXTENSION_OPEN_SLOT')
 	ORDER BY servercheck_column_name
 	LIMIT 1`).Scan(&id, &scc); err != nil {

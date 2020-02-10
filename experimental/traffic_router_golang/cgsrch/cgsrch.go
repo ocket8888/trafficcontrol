@@ -26,7 +26,7 @@ import (
 
 	"github.com/apache/trafficcontrol/experimental/traffic_router_golang/quadtree"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 // CGSearcher is the interface that wraps the Nearest method.

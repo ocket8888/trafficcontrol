@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 )
 
 func TestCacheGroupParameters(t *testing.T) {

@@ -68,7 +68,7 @@ If new endpoints are required, will corresponding client methods be added?
 *How* will this impact the Traffic Ops data model?
 *How* will this impact the Traffic Ops database schema?
 
-What changes to the lib/go-tc structs will be required?
+What changes to the lib/tc structs will be required?
 What new tables and columns will be required?
 How will existing tables and columns be changed?
 What are the column data types and modifiers?

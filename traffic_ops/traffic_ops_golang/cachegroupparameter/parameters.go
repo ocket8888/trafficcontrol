@@ -31,8 +31,8 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
-	"github.com/apache/trafficcontrol/lib/go-util"
+	"github.com/apache/trafficcontrol/lib/tc"
+	"github.com/apache/trafficcontrol/lib/util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
@@ -317,14 +317,14 @@ func AddCacheGroupParameters(w http.ResponseWriter, r *http.Request) {
 }
 
 func selectAllQuery() string {
-	return `SELECT cgp.cachegroup, cgp.parameter, cgp.last_updated, cg.name 
-				FROM cachegroup_parameter AS cgp 
+	return `SELECT cgp.cachegroup, cgp.parameter, cgp.last_updated, cg.name
+				FROM cachegroup_parameter AS cgp
 				JOIN cachegroup AS cg ON cg.id = cachegroup`
 }
 
 func insertQuery() string {
-	return `INSERT INTO cachegroup_parameter 
-		(cachegroup, 
-		parameter) 
+	return `INSERT INTO cachegroup_parameter
+		(cachegroup,
+		parameter)
 		VALUES `
 }

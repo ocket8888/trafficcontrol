@@ -96,12 +96,12 @@ Traffic Control implements [Semantic Versioning](https://semver.org). When addin
 
 The structs with no version in the name are the latest version.
 
-Most structs do not have versioning. If you are adding a field to a struct with no existing versioning. see `lib/go-tc/deliveryservices.go` for an example.
+Most structs do not have versioning. If you are adding a field to a struct with no existing versioning. see `lib/tc/deliveryservices.go` for an example.
 
-1. In `lib/go-tc`, rename the old struct to be the previous minor version.
-    - For example, if you are adding a field to Delivery Service and existing minor version is 1.4 (so your new minor version is 1.5), in `lib/go-tc/deliveryservices.go` rename `type DeliveryServiceNullable struct` to `type DeliveryServiceNullableV14 struct`.
+1. In `lib/tc`, rename the old struct to be the previous minor version.
+    - For example, if you are adding a field to Delivery Service and existing minor version is 1.4 (so your new minor version is 1.5), in `lib/tc/deliveryservices.go` rename `type DeliveryServiceNullable struct` to `type DeliveryServiceNullableV14 struct`.
 
-2. In `lib/go-tc`, create a new struct with an unversioned name, and anonymously embed the previous struct (that you just renamed), along with your new field.
+2. In `lib/tc`, create a new struct with an unversioned name, and anonymously embed the previous struct (that you just renamed), along with your new field.
     - For example:
 ```go
 type DeliveryServiceNullable struct {
@@ -110,7 +110,7 @@ type DeliveryServiceNullable struct {
 }
 ```
 
-3. In `lib/go-tc`, change the struct's type alias to the new minor version.
+3. In `lib/tc`, change the struct's type alias to the new minor version.
     - For example:
 ```go
 type DeliveryServiceNullableV15 DeliveryServiceNullable

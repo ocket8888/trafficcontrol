@@ -34,7 +34,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 	to "github.com/apache/trafficcontrol/traffic_ops/client"
 
 	"github.com/apache/trafficcontrol/grove/config"

@@ -24,7 +24,7 @@ import (
 	"github.com/apache/trafficcontrol/grove/cacheobj"
 	"github.com/apache/trafficcontrol/grove/lru"
 
-	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/lib/log"
 
 	bolt "github.com/coreos/bbolt"
 )

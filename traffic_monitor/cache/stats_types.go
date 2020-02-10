@@ -22,7 +22,7 @@ package cache
 import (
 	"io"
 
-	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/tc"
 	"github.com/apache/trafficcontrol/traffic_monitor/todata"
 )
 
