@@ -115,9 +115,13 @@ func (cr ConversionRule) Apply(param Parameter) (Parameter, bool) {
 func parseArgs() InputConfigParams {
 	inputConfig := InputConfigParams{}
 	flag.StringVar(&inputConfig.InProfile, "input_profile", "", "Path of input profile")
+	flag.StringVar(&inputConfig.InProfile, "i", "", "Path of input profile")
 	flag.StringVar(&inputConfig.Rules, "rules", "", "Path to conversion rules")
+	flag.StringVar(&inputConfig.Rules, "r", "", "Path to conversion rules")
 	flag.StringVar(&inputConfig.OutFile, "out", "", "Path to write output file to. If not given, uses stdout")
+	flag.StringVar(&inputConfig.OutFile, "o", "", "Path to write output file to. If not given, uses stdout")
 	flag.BoolVar(&inputConfig.Force, "force", false, "Ignore parameter value, making all recommended changes")
+	flag.BoolVar(&inputConfig.Force, "f", false, "Ignore parameter value, making all recommended changes")
 	flag.Parse()
 
 	if inputConfig.InProfile == "" {
