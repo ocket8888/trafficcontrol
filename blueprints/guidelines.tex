@@ -318,8 +318,6 @@ The decision to pass data in the request body or query string is mainly up to th
 		\item \code{newer\_than}
 		\item \code{offset}
 		\item \code{older\_than}
-		\item \code{page\_size}
-		\item \code{page}
 		\item \code{reverse}
 		\item \code{sort\_by}
 	\end{itemize}
@@ -365,19 +363,12 @@ available by other means.
 \hline
 \textbf{Parameter} & \textbf{Meaning}\\
 \hline
-\code{page\_size} & An unsigned integer that defines the number of objects that\\
-                  & will appear in a single "page"\\
-\hline
-\code{page}       & An unsigned integer that defines the page that will be returned.\\
-                  & The minimum value is "1"\\
-\hline
 \code{offset}     & An unsigned integer that defines an offset from the first result\\
                   & at which the returned results will start. The minimum value is\\
                   & "0".\\
 \hline
 \code{limit}      & An unsigned integer that sets an upper limit on the number of\\
-                  & results returned. The minimum value is "0", which means\\
-                  & "no limit"\\
+                  & results returned. The minimum value is "0".\\
 \hline
 \code{reverse}    & A boolean value which MUST be recognized as "truthy" by\\
                   & having the value \code{true}, but endpoints MAY also consider \code{1},\\
