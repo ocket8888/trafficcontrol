@@ -18,11 +18,25 @@
 \section{Guidelines}
 This section lays out guidelines to be considered by API endpoint authors. What follows are not \emph{strictly} hard-and-fast rules, but
 there should be a very convincing argument accompanying endpoints that do not follow them.
-\subsection{Response Format}
-All valid API responses will be in the form of some serialized object. The main data that represents the result of the clients request
-MUST appear in the \code{response} property of that object. If a warning, error message, success message, or informational message
-is to be issued by the server, then they MUST appear in the \code{alerts} property of the response.\\
-Equally unacceptable API responses are shown in Listings \ref{code:badresponseexample:success-as-response} and \ref{code:badresponseexample:extra-field}.
+
+\subsection{Response Bodies}
+All valid API responses will be in the form of some serialized object. The main
+data that represents the result of the clients request MUST appear in the
+\code{response} property of that object. If a warning, error message, success
+message, or informational message is to be issued by the server, then they MUST
+appear in the \code{alerts} property of the response. Some endpoints may return
+ancillary statistics such as the total number of objects when pagination occurs
+(see Section \ref{sec:pagination}), which should be placed in the \code{summary}
+property of the response.\\
+
+\subsubsection{Response}
+The \code{response} property of a serialized response object MUST only contain
+object representations as requested by the client. In particular, it MUST NOT
+contain admonitions, success messages, informative messages, or statistic
+summaries beyond the scope requested by the client.\\
+Equally unacceptable API responses are shown in Listings
+\ref{code:badresponseexample:success-as-response} and
+\ref{code:badresponseexample:extra-field}.
 
 \begin{codelisting}
 \captionof{listing}{Success message as response object}
@@ -80,6 +94,39 @@ Alerts should be presented as an array containing objects which each conform to 
 	to fail. The best example of this is deprecation warnings, which should appear on all API routes that have been deprecated.
 \end{itemize}
 
+\subsubsection{Summary}
+The \code{summary} object is used to provide summary statistics about object
+collections. In general the use of \code{summary} is left to be defined by API
+endpoints (subject to some restrictions). However, its use is not appropriate in
+cases where the user is specifically requesting summary statistics, but should
+rather be used to provide supporting information - pre-calculated - about a set
+of objects or data that the client \emph{has} requested.\\
+Endpoints MUST use the following, reserved properties of \code{summary} for
+their described purposes (when use of \code{summary} is appropriate) rather than
+defining new \code{summary} or \code{response} properties to suit the same
+purpose:
+
+\begin{itemize}
+	\item \code{count} Count contains an unsigned integer that defines the total
+		number of results that could possibly be returned given the
+		non-pagination query parameters supplied by the client (see Section
+		\ref{sec:pagination}).
+	\item \code{max} For collections of numeric data points (possibly with other
+		associated data e.g. timestamps), this can be used to specify the
+		maximum value within the collection specified by the non-pagination
+		query parameters supplied by the client. Its type MUST be numeric and
+		MUST match the type of the data points it describes.
+	\item \code{mean} For collections of numeric data points (possibly with
+		other associated data e.g. timestamps), this can be used to specify the
+		arithmetic mean of the values within the collection specified by the
+		non-pagination query parameters supplied by the client. Its type MUST be
+		numeric and MUST match the type of the data points it describes.
+	\item \code{min} For collections of numeric data points (possibly with other
+		associated data e.g. timestamps), this can be used to specify the
+		minimum value within the collection specified by the non-pagination
+		query parameters supplied by the client. Its type MUST be numeric and
+		MUST match the type of the data points it describes.
+\end{itemize}
 
 \subsection{HTTP Request Methods}
 \href{https://tools.ietf.org/html/rfc2616#section-9}{RFC 2616 Section 9} defines the semantics of HTTP/1.1 request methods. Authors should conform
@@ -270,7 +317,7 @@ Traffic Ops endpoints MUST return dates and times in \href{https://tools.ietf.or
 Endpoint MAY provide ways for the client to specify alternate representations, but these SHOULD be restricted to only Unix epoch timestamps
 in nanoseconds.
 
-\subsection{Pagination and Sorting}
+\subsection{Pagination and Sorting\label{sec:pagination}}
 All endpoints that involve retrieving representations of objects (i.e. GET requests for collection objects e.g. Cache Servers) MUST implement
 sorting and pagination controls. Sorting controls SHOULD be capable of sorting results in either ascending or descending order by any property
 of the objects the endpoint returns.\\
@@ -311,9 +358,10 @@ available by other means.
 Endpoints MAY return errors when a client request gives these parameters improper or invalid values, but MUST at least provide a warning.
 When ambiguity or errors in pagination controls render pagination, sorting, offsetting and/or limiting impossible, the handler MUST NOT
 perform \emph{\textbf{any}} of those operations.\\
-When limiting, pagination, or offsetting is performed, the response SHOULD include an \code{info}-level Alert that indicates the total
-number of available objects that could be returned. If this is done, the entire Text of the Alert must be in the format \code{total:\emph{N}}
-where \code{N} is an unsigned integer that indicates the total number.\\
+When limiting, pagination, or offsetting is performed, the response MUST include
+the \code{count} property of the response's \code{summary} property, indicating
+the total number of available objects - satisfying all object-property filtering
+query parameters given - that could be returned.\\
 Endpoints MUST accept any top-level property that appears on the serialized objects it returns as a valid value for \code{sort\_by},
 \emph{except} for properties that are themselves collections (array, set, object etc.). Such values MUST be acceptable in the same "case"
 as they appear in the serialization, and endpoints SHOULD NOT accept case transformation or aliases for properties.\\
