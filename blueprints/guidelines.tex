@@ -223,15 +223,16 @@ This is also the default "client failure" response code for any other request, a
 The response body MUST include an entry in the \code{alerts} array that describes to the client what was wrong with the request.
 
 \subsubsection{401 Unauthorized\label{sec:401}}
-This MUST be the response code when a client without valid authorization information in the HTTP headers (i.e. a "mojolicious" cookie) requests a resource
+This MUST be the response code when a client without valid authorization information in the HTTP headers (refer to Section \ref{sec:auth}) requests a resource
 which cannot be accessed without first authorizing. Which should be everything except \code{/ping} and endpoints that provide authorization.
 
 \subsubsection{403 Forbidden\label{sec:403}}
 This SHOULD be used whenever the client is logged-in, but still does not have access to the resource they are requesting. It MAY also be used when they
 have \emph{some} access to the resource, but not with the specific request method they used (the other acceptable option is \code{405 Method Not Allowed},
 in which case the Accept HTTP header should also be sent enumerating the allowed methods).\\
-This can pertain to restricted access on the basis of Role, User Capability/Permissions, as well as Tenancy.\\
-The response body SHOULD contain an Alert describing on what basis access was denied.
+This can pertain to restricted access on the basis of Role, User Permissions, as well as Tenancy.\\
+The response body MUST NOT disclose any information regarding why the user was
+denied access.
 
 \subsubsection{404 Not Found\label{sec:404}}
 This MUST be the returned status code when the client requests a path that does not exist on the server. This also MAY be returned when the user provides
