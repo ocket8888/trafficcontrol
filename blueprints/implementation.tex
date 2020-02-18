@@ -1,0 +1,51 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\section{Implementation Details}
+This section outlines requirements and guidelines specific to the
+implementation of tops discussed in any of the preceeding sections.
+
+\subsection{ETags\label{sec:etags}}
+Most Data Model objects will at some point generate Entity Tags (ETags) that
+allow clients to identify unique representations of the same object. To ensure
+ETags are generated which are guaranteed to be useful, all Entity Tags for
+Data Model objects (as described in Section \ref{sec:data-model}) MUST follow
+the format in Listing \ref{code:etag-format}, wherein Unicode code point 0xWXYZ
+is encoded as \code{\%xWXYZ} (with leading zeros skipped).
+
+\begin{codelisting}
+\captionof{listing}{Unsorted Foos Response}
+\label{code:etag-format}
+\begin{minted}[tabsize=2]{abnf}
+ETAG = TIMESTAMP ":" OBJECT_TYPE [":" IDENTIFIER]
+TIMESTAMP = DIGIT *(DIGIT)
+DIGIT = %x30-39
+ALPHA = %x41-5A / %x61-7A
+ALPHANUM = DIGIT / ALPHA / "_"
+OBJECT_TYPE = ALPHANUM *(ALPHANUM)
+CHAR = ALPHANUM / %x20-2F / %x3B-40 / %x5B-60 / %7B-7E / %A0-2A9
+\end{minted}
+\end{codelisting}
+
+In this format, TIMESTAMP is the number of nanoseconds since the Unix epoch at
+which the object was last modified. OBJECT\_TYPE is the name of the type of
+Data Model object the requested resource is, case-folded to UPPERCASE and using
+underscores instead of spaces e.g. "Delivery Service" becomes
+"DELIVERY_SERVICE". IDENTIFIER is the object's identifier, when applicable.\\
+For collections, ETags should be generated using the TIMESTAMP value calculated
+for the most recently updated object in the collection, and the optional part
+of the ETag containing the IDENTIFIER should be left out.
