@@ -146,18 +146,23 @@ representation to Traffic Ops expects that if they then GET a representation of 
 the two retrieved representations should be identical. Effectively, the \code{last\_updated} field that is common to objects in the Traffic Ops API
 violates this, but the other properties of objects - which can actually be defined - generally obey this restriction. In general, fulfilling this
 restriction means that handlers will need to require the entirety of an object be defined in the request body.\\
-This is the method of choice for modifying objects when PATCH cannot be implemented. When an object is modified, the response body MUST contain a
-representation of the object after modification.\\
+When an object is modified, the response body MUST contain a representation of
+the object after modification.\\
 While RFC 2616 states that servers MAY create objects for the passed representations if they do not already exist, Traffic Ops API endpoint authors
-MUST instead use POST handlers for object creation.
+MUST instead use POST handlers for object creation.\\
+All endpoints that support the PUT request method MUST also support the
+If-Not-Modified-Since HTTP header.
 
 \subsubsection{PATCH}
 At the time of this writing, no Traffic Ops API endpoints handle the PATCH request method. PATCH requests that the server's stored data be mutated
 in some way using data provided in the request body. Unlike PUT, PATCH is not \emph{idempotent}, which essentially means that it can be used to
 change only part of a stored object. When an object is modified, the response body MUST contain a representation of the object after modification,
 and that representation SHOULD fully describe the modified object, even the parts that were not modified.\\
-Handlers that implement PATCH in the Traffic Ops API MUST use conditional requests to ensure that race conditions are not a problem, e.g. using
-ETag and If-Match, or If-Not-Modified-Since.\\
+Handlers that implement PATCH in the Traffic Ops API MUST use conditional
+requests to ensure that race conditions are not a problem, specifically they
+MUST support using ETag and If-Match, and SHOULD also support
+If-Not-Modified-Since.\\
+All Traffic Ops API endpoints that support PUT MUST also support PATCH.
 Clients SHOULD use PATCH requests rather than PUT requests for modifying existing resources whenever it is supported.
 
 \subsubsection{DELETE}
