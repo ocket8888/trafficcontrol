@@ -236,11 +236,13 @@ The response body MUST NOT disclose any information regarding why the user was
 denied access.
 
 \subsubsection{404 Not Found\label{sec:404}}
-This MUST be the returned status code when the client requests a path that does not exist on the server. This also MAY be returned when the user provides
-identifying information for a requested object that does not actually identify an object. Finally, endpoints MAY choose to use this instead of
-\code{403 Forbidden} when a specifically requested object is forbidden to the client based on their Role, User Capabilities/Permissions and/or Tenancy, in
-order to hide the existence of such objects from the client. However, note that this is not entirely effective and can be detrimental to the user experience,
-and so authors SHOULD use \code{403 Forbidden} when possible in that case.
+This MUST be the returned status code when the client requests a path that does
+not exist on the server. Endpoints MAY choose to use this instead of
+\code{403 Forbidden} when a specifically requested object is forbidden to the
+client based on their Role, User Permissions and/or Tenancy, in order to hide
+the existence of such objects from the client. However, note that this is not
+entirely effective and can be detrimental to the user experience, and so
+authors SHOULD use \code{403 Forbidden} when possible in that case.
 
 \subsubsection{409 Conflict}
 This SHOULD be used when the request cannot be completed because the current state of the server is fundamentally incompatible with the request. For example,
