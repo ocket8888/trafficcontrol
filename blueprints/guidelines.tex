@@ -336,7 +336,8 @@ The allowable values of an identifier may be restricted on a per-object or
 per-endpoint basis, but in particular all string identifier MUST NOT contain
 characters un-encodable by UTF-8, newline or line-feed characters, tab or
 vertical tab characters, esoteric "control" characters that may be defined as
-"non-printable" (e.g. "bell", Unicode 0x0007), or colons (":").
+"non-printable" (e.g. "bell", Unicode 0x0007), or colons (":")\footnote{For
+exhaustive restrictions, see Listing \ref{code:etag-format}}.
 
 \subsection{Duplicate Endpoints\label{sec:duplicate-endpoints}}
 No two endpoints should serve the same purpose. While it's fine to overlap a bit, an endpoint like \code{/foo\_bars} should not exist solely to
