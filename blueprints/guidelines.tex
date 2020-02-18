@@ -409,6 +409,8 @@ To sort this response first by the \code{fizz} property and then by the \code{te
 \code{GET /api/3.0/foos?sort\_by=fizz,test HTTP/1.1}. The order in which the properties appear defines their respective
 priorities. The response to this request, then, will be as shown in Listing \ref{code:sorted-foos}.
 
+\newpage{}
+
 \begin{codelisting}
 \captionof{listing}{Unsorted Foos Response}
 \label{code:unsorted-foos}
@@ -435,8 +437,6 @@ Transfer-Encoding: chunked
 }
 \end{minted}
 \end{codelisting}
-
-\newpage{}
 
 \begin{codelisting}
 \captionof{listing}{Sorted Foos Response}

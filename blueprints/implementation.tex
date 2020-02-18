@@ -31,13 +31,13 @@ is encoded as \code{\%xWXYZ} (with leading zeros skipped).
 \captionof{listing}{Unsorted Foos Response}
 \label{code:etag-format}
 \begin{minted}[tabsize=2]{abnf}
-ETAG = TIMESTAMP ":" OBJECT_TYPE [":" IDENTIFIER]
-TIMESTAMP = DIGIT *(DIGIT)
-DIGIT = %x30-39
-ALPHA = %x41-5A / %x61-7A
-ALPHANUM = DIGIT / ALPHA / "_"
+ETAG        = TIMESTAMP ":" OBJECT_TYPE [":" IDENTIFIER]
+TIMESTAMP   = DIGIT *(DIGIT)
+DIGIT       = %x30-39
+ALPHA       = %x41-5A / %x61-7A
+ALPHANUM    = DIGIT / ALPHA / "_"
 OBJECT_TYPE = ALPHANUM *(ALPHANUM)
-CHAR = ALPHANUM / %x20-2F / %x3B-40 / %x5B-60 / %7B-7E / %A0-2A9
+CHAR        = ALPHANUM / %x20-2F / %x3B-40 / %x5B-60 / %7B-7E / %A0-2A9
 \end{minted}
 \end{codelisting}
 
@@ -45,7 +45,7 @@ In this format, TIMESTAMP is the number of nanoseconds since the Unix epoch at
 which the object was last modified. OBJECT\_TYPE is the name of the type of
 Data Model object the requested resource is, case-folded to UPPERCASE and using
 underscores instead of spaces e.g. "Delivery Service" becomes
-"DELIVERY_SERVICE". IDENTIFIER is the object's identifier, when applicable.\\
+"DELIVERY\_SERVICE". IDENTIFIER is the object's identifier, when applicable.\\
 For collections, ETags should be generated using the TIMESTAMP value calculated
 for the most recently updated object in the collection, and the optional part
 of the ETag containing the IDENTIFIER should be left out.
