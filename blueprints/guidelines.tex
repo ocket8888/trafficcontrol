@@ -187,7 +187,33 @@ the newly created object may be requested.
 \subsubsection{202 Accepted}
 \code{202 Accepted} SHOULD be used when the server is performing some task asynchronously (e.g. refreshing DNSSEC keys) but the status of that task
 cannot be ascertained at the current time. Ideally in this case, when the task completes - either successfully or by failing - the Traffic Ops changelog
-should be updated to indicate that status, along with information to uniquely identify the task (e.g. username and date/time when the task started).
+should be updated to indicate that status, along with information to uniquely identify the task (e.g. username and date/time when the task started).\\
+Endpoints that create asynchronous jobs SHOULD provide a URI to which the
+client may send GET requests to obtain a representation of the job's current
+state in the Location HTTP header. They MAY also provide an \code{info}-level
+Alert that provides the same or similar information in a more human-friendly
+manner.\\
+The responses to such GET requests are subject to the same restrictions as any
+other API endpoint, but have the added restriction that the \code{response}
+objects sent MUST have the \code{status} property, which is a string limited to
+one of the following values and having the associated semantics:
+
+\begin{itemize}
+	\item WAITING - This means the asynchronous task is still awaiting
+		execution.
+	\item PENDING - This means the job has been started but is not yet
+		completed.
+	\item SUCCEEDED - This means that the asynchronous job has completed and
+		encountered no errors.
+	\item FAILED - The task encountered errors and was unable to continue, and
+		thus has been terminated.
+\end{itemize}
+
+Note that the response code of the response carrying this information MUST NOT
+depend on the value of \code{status}. In particular, a response that
+successfully reports the status of a FAILED asynchronous task is still
+successfully servicing a client's GET request, and therefore MUST have the
+"200 OK" response status code.
 
 \subsubsection{400 Bad Request\label{sec:400}}
 In general this is used when there's something syntactically wrong with the client's request. For example, Traffic Ops MUST respond with this code
