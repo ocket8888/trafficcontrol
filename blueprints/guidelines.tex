@@ -291,6 +291,18 @@ be provided if no number of days is given in the query string parameters, and th
 use double "curly-braces" (\code{\{} and \code{\}}) to call out variable components of the request path in documentation and references. Request path parameters
 MUST NOT be used for data that is optional to the request (somewhat obviously). Note that all endpoints dealing with the manipulation of Data Model objects as
 described in Section \ref{sec:data-model} MUST support the GET HTTP request method.\\
+When accepting data in the request body of requests, the endpoint MUST properly
+document the object representations (properties and their types) it accepts and
+MUST reject semantically invalid data with a "400 Bad Request" response as per
+Section \ref{sec:400}. For example, if an endpoint specifies it accepts a
+representation of a Foo object, assuming Foo objects possess only the Bar
+property which is an arbitrary string, then the endpoint MUST accept
+\code{\{"bar": "testquest"\}} as semantically valid\footnote{The data may be
+rejected for other reasons, e.g. if a Foo with such a Bar property already
+exists and Bars must be unique among all Foos.} and MUST reject
+\code{\{"bar": "testquest", "someOtherProperty": 10\}} as semantically invalid.
+This is in contrast to previous API versions which would silently ignore
+unrecognized properties of request body objects.\\
 The decision to pass data in the request body or query string is mainly up to the author, but some helpful tips:
 
 \begin{itemize}
