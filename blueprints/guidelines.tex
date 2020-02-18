@@ -73,7 +73,12 @@ represented as an empty string - e.g. \code{\{"bar":""\}} not \code{\{"bar":null
 zero itself - e.g. \code{\{"bar":0\}} not \code{\{"bar":null\}} or \code{\{\}}. Note that "null" values \emph{are allowed} when
 appropriate, but "null" values represent the \emph{absence} of a value rather than the "zero-value" of a property. If a property is
 \emph{missing} from an object representation it indicates the absence of that property, and because of that there must be a \emph{very
-convincing} argument if and when that is the case.
+convincing} argument if and when that is the case.\\
+As a special case, endpoints that report statistics including minimums,
+maximums and arithmetic means of data sets MUST use the property names
+\code{min}, \code{max}, and \code{mean}, respectively, to express those
+concepts. These SHOULD be properties of \code{response} directly whenever that
+makes sense.
 
 \subsubsection{Alerts}
 Alerts should be presented as an array containing objects which each conform to the object definition laid out by
@@ -111,21 +116,6 @@ purpose:
 		number of results that could possibly be returned given the
 		non-pagination query parameters supplied by the client (see Section
 		\ref{sec:pagination}).
-	\item \code{max} For collections of numeric data points (possibly with other
-		associated data e.g. timestamps), this can be used to specify the
-		maximum value within the collection specified by the non-pagination
-		query parameters supplied by the client. Its type MUST be numeric and
-		MUST match the type of the data points it describes.
-	\item \code{mean} For collections of numeric data points (possibly with
-		other associated data e.g. timestamps), this can be used to specify the
-		arithmetic mean of the values within the collection specified by the
-		non-pagination query parameters supplied by the client. Its type MUST be
-		numeric and MUST match the type of the data points it describes.
-	\item \code{min} For collections of numeric data points (possibly with other
-		associated data e.g. timestamps), this can be used to specify the
-		minimum value within the collection specified by the non-pagination
-		query parameters supplied by the client. Its type MUST be numeric and
-		MUST match the type of the data points it describes.
 \end{itemize}
 
 \subsection{HTTP Request Methods}
@@ -159,7 +149,7 @@ restriction means that handlers will need to require the entirety of an object b
 This is the method of choice for modifying objects when PATCH cannot be implemented. When an object is modified, the response body MUST contain a
 representation of the object after modification.\\
 While RFC 2616 states that servers MAY create objects for the passed representations if they do not already exist, Traffic Ops API endpoint authors
-should instead use POST handlers for object creation.
+MUST instead use POST handlers for object creation.
 
 \subsubsection{PATCH}
 At the time of this writing, no Traffic Ops API endpoints handle the PATCH request method. PATCH requests that the server's stored data be mutated
