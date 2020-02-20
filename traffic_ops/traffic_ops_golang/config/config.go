@@ -98,7 +98,6 @@ type ConfigTrafficOpsGolang struct {
 	RiakPort                 *uint                      `json:"riak_port"`
 	WhitelistedOAuthUrls     []string                   `json:"whitelisted_oauth_urls"`
 	OAuthClientSecret        string                     `json:"oauth_client_secret"`
-	RoutingBlacklist         `json:"routing_blacklist"`
 
 	// CRConfigUseRequestHost is whether to use the client request host header in the CRConfig. If false, uses the tm.url parameter.
 	// This defaults to false. Traffic Ops used to always use the host header, setting this true will resume that legacy behavior.
@@ -108,14 +107,6 @@ type ConfigTrafficOpsGolang struct {
 	// CRConfigEmulateOldPath is whether to emulate the legacy CRConfig request path when generating a new CRConfig. This primarily exists in the event a tool relies on the legacy path '/tools/write_crconfig'.
 	// Deprecated: will be removed in the next major version.
 	CRConfigEmulateOldPath bool `json:"crconfig_emulate_old_path"`
-}
-
-// RoutingBlacklist contains the list of route IDs that will be handled by TO-Perl, a list of route IDs that are disabled,
-// and whether or not to ignore unknown routes.
-type RoutingBlacklist struct {
-	IgnoreUnknownRoutes bool  `json:"ignore_unknown_routes"`
-	PerlRoutes          []int `json:"perl_routes"`
-	DisabledRoutes      []int `json:"disabled_routes"`
 }
 
 // ConfigTO contains information to identify Traffic Ops in a network sense.
@@ -415,33 +406,7 @@ func ParseConfig(cfg Config) (Config, error) {
 		return Config{}, fmt.Errorf(errStr)
 	}
 
-	if err := ValidateRoutingBlacklist(cfg.RoutingBlacklist); err != nil {
-		return Config{}, err
-	}
-
 	return cfg, nil
-}
-
-func ValidateRoutingBlacklist(blacklist RoutingBlacklist) error {
-	seenPerlIDs := make(map[int]struct{}, len(blacklist.PerlRoutes))
-	for _, id := range blacklist.PerlRoutes {
-		if _, found := seenPerlIDs[id]; !found {
-			seenPerlIDs[id] = struct{}{}
-		} else {
-			return fmt.Errorf("route ID %d is listed multiple times in perl_routes", id)
-		}
-	}
-	seenDisabledIDs := make(map[int]struct{}, len(blacklist.DisabledRoutes))
-	for _, id := range blacklist.DisabledRoutes {
-		if _, foundInPerl := seenPerlIDs[id]; foundInPerl {
-			return fmt.Errorf("route ID %d cannot be listed in both perl_routes and disabled_routes", id)
-		} else if _, found := seenDisabledIDs[id]; !found {
-			seenDisabledIDs[id] = struct{}{}
-		} else {
-			return fmt.Errorf("route ID %d is listed multiple times in disabled_routes", id)
-		}
-	}
-	return nil
 }
 
 func GetLDAPConfig(LDAPConfPath string) (bool, *ConfigLDAP, error) {
