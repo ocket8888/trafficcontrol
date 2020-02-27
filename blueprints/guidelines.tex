@@ -387,8 +387,10 @@ available by other means.
                   & results returned. The minimum value is "0".\\
 \hline
 \code{reverse}    & A boolean value which MUST be recognized as "truthy" by\\
-                  & having the value \code{true}, but endpoints MAY also consider \code{1},\\
-                  & \code{yes}, and case-insensitive variants of those values as "truthy"\\
+                  & having the value \code{true}, but endpoints MAY also\\
+                  & consider \code{1}, \code{yes}, and case-insensitive\\
+                  & variants of those values as "truthy". The default sort\\
+                  & ordering MUST be "ascending" (e.g. 1 appears before 2).\\
 \hline
 \code{sort\_by}   & An arbitrary string which MUST be the name of a property of\\
                   & the returned objects by which results will be sorted\\
