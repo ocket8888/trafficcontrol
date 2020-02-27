@@ -212,7 +212,9 @@ Note that the response code of the response carrying this information MUST NOT
 depend on the value of \code{status}. In particular, a response that
 successfully reports the status of a FAILED asynchronous task is still
 successfully servicing a client's GET request, and therefore MUST have the
-"200 OK" response status code.\\
+"200 OK" response status code. However, a response encoding a FAILED
+\code{status} MUST be accompanied by one or more error-level Alerts that explain
+(to the greatest degree of detail allowable securely) why the job failed.\\
 These responses MUST also include the \code{startTime} and \code{endTime}
 properties which indicate, respectively, the time at which the asynchronous job
 started and the time at which it concluded. A job that has not started MUST have
