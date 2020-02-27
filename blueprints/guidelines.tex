@@ -393,7 +393,7 @@ available by other means.
                   & variants of those values as "truthy". The default sort\\
                   & ordering MUST be "ascending" (e.g. 1 appears before 2).\\
 \hline
-\code{sortBy}     & An arbitrary string which MUST be the name of a property
+\code{sortBy}     & An arbitrary string which MUST be the name of a property\\
                   & of the returned objects by which results will be sorted\\
 \hline
 \end{tabular}
@@ -424,7 +424,7 @@ For example, suppose the fictional \code{/foos} endpoints returns Foo objects.
 Given the client requests this endpoint with \code{GET /api/3.0/foos HTTP/1.1},
 suppose the response resembles Listing \ref{code:unsorted-foos}.\\
 To sort this response first by the \code{fizz} property and then by the
-\code{test} property, the client might make the request
+\code{test} property, the client might make the request\\
 \code{GET /api/3.0/foos?sortBy=fizz,test HTTP/1.1}. The order in which the
 properties appear defines their respective priorities. The response to this
 request, then, will be as shown in Listing \ref{code:sorted-foos}.
@@ -556,7 +556,10 @@ API version 1.x, \code{/foos} and \code{/foos.json} are both equally valid ways
 to access the \code{/foos} endpoint handlers - this is no longer allowed!
 
 \subsection{Relationships as Objects}
-Relationships SHOULD NOT be represented through the API as objects in their own right. For example, instead of an endpoint like
-\code{/delivery\_service\_servers} used to manipulate assignments of Cache Servers to Delivery Services, a Delivery Service itself
-has Servers as a property. Thus assignments are manipulated by manipulating that property. So the only endpoints necessary for fully
-defining and dealing with such relationships are \code{/delivery\_services} and \code{/servers}.
+Relationships SHOULD NOT be represented through the API as objects in their own
+right. For example, instead of an endpoint like\\
+\code{/delivery\_service\_servers} used to manipulate assignments of Cache
+Servers to Delivery Services, a Delivery Service itself has Servers as a
+property. Thus assignments are manipulated by manipulating that property. So the
+only endpoints necessary for fully defining and dealing with such relationships
+are \code{/delivery\_services} and \code{/servers}.
