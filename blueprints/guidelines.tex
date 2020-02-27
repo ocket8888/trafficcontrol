@@ -490,11 +490,15 @@ is implemented, it MUST be made available using the query parameters in Table \r
 \hline
 \code{newer\_than} & A timestamp to be used as the lower limit on an object's age.\\
                    & Objects older than this MUST NOT appear in the response\\
-                   & body.\\
+                   & body. That is, the response will be the set of all\\
+                   & objects in the collection with a modification date that\\
+                   & is greater than \emph{or equal to} this value.\\
 \hline
 \code{older\_than} & A timestamp to be used as the upper limit an object's age.\\
                    & Objects newer than this MUST NOT appear in the response\\
-                   & body.\\
+                   & body. That is, the response will be the set of all\\
+                   & objects in the collection with a modification date that\\
+                   & is less than \emph{or equal to} this value.\\
 \hline
 \end{tabular}
 \end{table}
