@@ -200,8 +200,6 @@ objects sent MUST have the \code{status} property, which is a string limited to
 one of the following values and having the associated semantics:
 
 \begin{itemize}
-	\item WAITING - This means the asynchronous task is still awaiting
-		execution.
 	\item PENDING - This means the job has been started but is not yet
 		completed.
 	\item SUCCEEDED - This means that the asynchronous job has completed and
@@ -214,7 +212,13 @@ Note that the response code of the response carrying this information MUST NOT
 depend on the value of \code{status}. In particular, a response that
 successfully reports the status of a FAILED asynchronous task is still
 successfully servicing a client's GET request, and therefore MUST have the
-"200 OK" response status code.
+"200 OK" response status code.\\
+These responses MUST also include the \code{startTime} and \code{endTime}
+properties which indicate, respectively, the time at which the asynchronous job
+started and the time at which it concluded. A job that has not started MUST have
+a Null-valued \code{startTime} and likewise a job that has yet to conclude MUST
+have a Null-value \code{endTime}\footnote{See Section \ref{sec:datetime} for
+date/time representation formats/requirements.}.
 
 \subsubsection{400 Bad Request\label{sec:400}}
 In general this is used when there's something syntactically wrong with the client's request. For example, Traffic Ops MUST respond with this code
