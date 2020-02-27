@@ -509,12 +509,18 @@ Endpoints MAY return errors when a client request gives these parameters imprope
 When ambiguity or errors in age filtering controls render age filtering impossible, the handler MUST NOT perform age filtering.
 
 \subsection{Tenancy\label{sec:tenancy}}
-When a client requests access to a set of stored objects that are "tenantable" inevitably some of them will be inaccessible to the user
-on the basis of their Tenant. Traffic Ops endpoint handlers that respond to requests for such object representations (i.e. GET requests)
-SHOULD filter their results implicitly according to the requesting Tenant's access. Any request that would modify, create, or destroy an
-object to which the requesting Tenant has access MUST NOT be fulfilled by the server (obviously) and in that case the response status code
-SHOULD be \code{403 Forbidden} as described in Section \ref{sec:403}, but MAY also be \code{404 Not Found} as described in Section \ref{sec:404}
-or \code{400 Bad Request} as described in \ref{sec:400} depending on the circumstances.
+When a client requests access to a set of stored objects that are "tenantable"
+inevitably some of them will be inaccessible to the user on the basis of their
+Tenant. Traffic Ops endpoint handlers that respond to requests for such object
+representations (i.e. GET requests) MUST filter their results implicitly
+according to the requesting Tenant's access. Any request that would modify,
+create, or destroy an object to which the requesting Tenant does not have access
+MUST NOT be fulfilled by the server (obviously) and in that case the response
+status code MUST be \code{403 Forbidden} as described in Section \ref{sec:403}.
+Furthermore, if a request for a representation of a Tenant-inaccessible object
+is made \emph{explicitly for said object} (e.g. \code{GET /foos/\{\{ID\}\}}
+rather than \code{GET /foos}) the response status code MUST be
+\code{403 Forbidden}.
 
 \subsection{Naming Conventions}
 The names of properties of objects as they appear in said objects' serializations ought to conform to "camelCase" naming. Initialisms,
