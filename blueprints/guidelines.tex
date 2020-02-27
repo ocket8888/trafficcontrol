@@ -143,7 +143,7 @@ PUT is used to replace existing data with new data that is provided in the reque
 \href{https://tools.ietf.org/html/rfc2616#section-9.1.2}{RFC 2616 Section 9.1.2} lists PUT as an "idempotent" request method, which means that
 subsequent identical requests should ensure the same state is maintained on the server. What this means is that a client that PUTs an object
 representation to Traffic Ops expects that if they then GET a representation of that object, do the same PUT again and GET another representation,
-the two retrieved representations should be identical. Effectively, the \code{last\_updated} field that is common to objects in the Traffic Ops API
+the two retrieved representations should be identical. Effectively, the \code{lastUpdated} field that is common to objects in the Traffic Ops API
 violates this, but the other properties of objects - which can actually be defined - generally obey this restriction. In general, fulfilling this
 restriction means that handlers will need to require the entirety of an object be defined in the request body.\\
 When an object is modified, the response body MUST contain a representation of
@@ -293,7 +293,8 @@ All endpoints must be properly documented. For guidelines for writing API docume
 \href{https://traffic-control-cdn.readthedocs.io/en/latest/development/documentation_guidelines.html#documenting-api-routes}{that section of the official ATC documentation}.
 
 \subsection{Passing Request Data}
-Request data may be passed in the request body or as a\\ \code{application/x-www-form-urlencoded}-encoded query string in the request URI, or as a part of the
+Request data may be passed in the request body or as a\\
+\code{application/x-www-form-urlencoded}-encoded query string in the request URI, or as a part of the
 request path. Request data MUST NOT be passed through a portion of the request path unless it uniquely identifies a resource with which the client may
 interact. For example, \code{/foos/\{\{ID\}\}} is an acceptable path for dealing with the particular "Foo" object that has some identifier \code{ID} (subject
 to the restrictions in Section \ref{sec:duplicate-endpoints}), but \code{logs/\{\{Number of Days\}\}/days} is unacceptable because reasonable default behavior can
@@ -324,11 +325,11 @@ The decision to pass data in the request body or query string is mainly up to th
 	than their prescribed functions.
 	\begin{itemize}
 		\item \code{limit}
-		\item \code{newer\_than}
+		\item \code{newerThan}
 		\item \code{offset}
-		\item \code{older\_than}
+		\item \code{olderThan}
 		\item \code{reverse}
-		\item \code{sort\_by}
+		\item \code{sortBy}
 	\end{itemize}
 \end{itemize}
 
@@ -392,8 +393,8 @@ available by other means.
                   & variants of those values as "truthy". The default sort\\
                   & ordering MUST be "ascending" (e.g. 1 appears before 2).\\
 \hline
-\code{sort\_by}   & An arbitrary string which MUST be the name of a property of\\
-                  & the returned objects by which results will be sorted\\
+\code{sortBy}     & An arbitrary string which MUST be the name of a property
+                  & of the returned objects by which results will be sorted\\
 \hline
 \end{tabular}
 \end{table}
@@ -405,19 +406,28 @@ When limiting, pagination, or offsetting is performed, the response MUST include
 the \code{count} property of the response's \code{summary} property, indicating
 the total number of available objects - satisfying all object-property filtering
 query parameters given - that could be returned.\\
-Endpoints MUST accept any top-level property that appears on the serialized objects it returns as a valid value for \code{sort\_by},
-\emph{except} for properties that are themselves collections (array, set, object etc.). Such values MUST be acceptable in the same "case"
-as they appear in the serialization, and endpoints SHOULD NOT accept case transformation or aliases for properties.\\
+Endpoints MUST accept any top-level property that appears on the serialized
+objects it returns as a valid value for \code{sortBy}, \emph{except} for
+properties that are themselves collections (array, set, object etc.). Such
+values MUST be acceptable in the same "case" as they appear in the
+serialization, and endpoints SHOULD NOT accept case transformation or aliases
+for properties.\\
 
 \subsubsection{Multiple Sorting}
-Traffic Ops API endpoints MUST accept single values for \code{sort\_by}, but MAY also accept a priority list of properties by which to sort.
-If implemented, this list MUST be recognized as comma-separated values of the \code{sort\_by} parameter. Multiple of the same value appearing
-in the definition of \code{sort\_by} constitutes an ambiguity and must be handled accordingly.\\
-For example, suppose the fictional \code{/foos} endpoints returns Foo objects. Given the client requests this endpoint with
-\code{GET /api/3.0/foos HTTP/1.1}, suppose the response resembles Listing \ref{code:unsorted-foos}.\\
-To sort this response first by the \code{fizz} property and then by the \code{test} property, the client might make the request\\
-\code{GET /api/3.0/foos?sort\_by=fizz,test HTTP/1.1}. The order in which the properties appear defines their respective
-priorities. The response to this request, then, will be as shown in Listing \ref{code:sorted-foos}.
+Traffic Ops API endpoints that implement sorting and pagination MUST accept
+single values for \code{sortBy}, but MAY also accept a priority list of
+properties by which to sort. If implemented, this list MUST be recognized as
+comma-separated values of the \code{sortBy} parameter. Multiple of the same
+value appearing in the definition of \code{sortBy} constitutes an ambiguity and
+must be handled accordingly.\\
+For example, suppose the fictional \code{/foos} endpoints returns Foo objects.
+Given the client requests this endpoint with \code{GET /api/3.0/foos HTTP/1.1},
+suppose the response resembles Listing \ref{code:unsorted-foos}.\\
+To sort this response first by the \code{fizz} property and then by the
+\code{test} property, the client might make the request
+\code{GET /api/3.0/foos?sortBy=fizz,test HTTP/1.1}. The order in which the
+properties appear defines their respective priorities. The response to this
+request, then, will be as shown in Listing \ref{code:sorted-foos}.
 
 \newpage{}
 
@@ -488,17 +498,17 @@ is implemented, it MUST be made available using the query parameters in Table \r
 \hline
 \textbf{Parameter} & \textbf{Meaning}\\
 \hline
-\code{newer\_than} & A timestamp to be used as the lower limit on an object's age.\\
-                   & Objects older than this MUST NOT appear in the response\\
-                   & body. That is, the response will be the set of all\\
-                   & objects in the collection with a modification date that\\
-                   & is greater than \emph{or equal to} this value.\\
+\code{newerThan} & A timestamp to be used as the lower limit on an object's age.\\
+                 & Objects older than this MUST NOT appear in the response\\
+                 & body. That is, the response will be the set of all\\
+                 & objects in the collection with a modification date that\\
+                 & is greater than \emph{or equal to} this value.\\
 \hline
-\code{older\_than} & A timestamp to be used as the upper limit an object's age.\\
-                   & Objects newer than this MUST NOT appear in the response\\
-                   & body. That is, the response will be the set of all\\
-                   & objects in the collection with a modification date that\\
-                   & is less than \emph{or equal to} this value.\\
+\code{olderThan} & A timestamp to be used as the upper limit an object's age.\\
+                 & Objects newer than this MUST NOT appear in the response\\
+                 & body. That is, the response will be the set of all\\
+                 & objects in the collection with a modification date that\\
+                 & is less than \emph{or equal to} this value.\\
 \hline
 \end{tabular}
 \end{table}
@@ -523,20 +533,27 @@ rather than \code{GET /foos}) the response status code MUST be
 \code{403 Forbidden}.
 
 \subsection{Naming Conventions}
-The names of properties of objects as they appear in said objects' serializations ought to conform to "camelCase" naming. Initialisms,
-abbreviations, and acronyms that appear in property names should be capitalized unless they are at the very beginning of the name. For
-example, \code{myIPAddress} and \code{someProperty} are both well-formed property names, while \code{IPAddress}, \code{someproperty} and
-\code{SomeProperty} are not.\\
-Query parameters that follow "camelCase" naming are assumed to be filters that act on the properties of objects, so query parameters with
-any other function shouldn't use "camelCase". Instead, query parameters with special functions should use "snake\_case" to distinguish them.\\
-API endpoints themselves should have a name that conveys their purpose. For example, \code{/cdns} is an endpoint that deals with manipulating,
-creating, destroying, or retrieving representations of CDNs. Request paths should use "snake\_case" to separate words whenever necessary, and
-should never include the action being performed by the handler; instead that is decided by the request \emph{method}. For example,
-\code{/myObject/delete} is a poor request path name for both of those reasons. Furthermore, when an endpoint deals with an object type of
-which there are typically multiple, the request path should be plural, e.g. \code{/cdns} is better than \code{/cdn}.\\
-API endpoints MAY support trailing slashes (\code{/}) in the request path, but MUST NOT include suffixes that indicate a particular endcoding
-("file extensions"); that's what the Content-Type header is for. For example, in API version 1.x, \code{/foos} and \code{/foos.json} are both
-equally valid ways to access the \code{/foos} endpoint handlers - this is no longer allowed!
+The names of properties of objects as they appear in said objects'
+serializations ought to conform to "camelCase" naming. Initialisms,
+abbreviations, and acronyms that appear in property names should be capitalized
+unless they are at the very beginning of the name. For example,
+\code{myIPAddress} and \code{someProperty} are both well-formed property names,
+while \code{IPAddress}, \code{someproperty} and \code{SomeProperty} are not.\\
+Query MUST also follow "camelCase" naming.\\
+API endpoints themselves should have a name that conveys their purpose. For
+example, \code{/cdns} is an endpoint that deals with manipulating, creating,
+destroying, or retrieving representations of CDNs. Request paths MUST use
+"snake\_case" to separate words whenever necessary, and MUST never include the
+action being performed by the handler; instead that is decided by the request
+\emph{method}. For example, \code{/myObject/delete} is a poor request path name
+for both of those reasons. Furthermore, when an endpoint deals with an object
+type of which there are typically multiple, the request path should be plural,
+e.g. \code{/cdns} is better than \code{/cdn}.\\
+API endpoints MAY support trailing slashes (\code{/}) in the request path, but
+MUST NOT include suffixes that indicate a particular endcoding
+("file extensions"); that's what the Content-Type header is for. For example, in
+API version 1.x, \code{/foos} and \code{/foos.json} are both equally valid ways
+to access the \code{/foos} endpoint handlers - this is no longer allowed!
 
 \subsection{Relationships as Objects}
 Relationships SHOULD NOT be represented through the API as objects in their own right. For example, instead of an endpoint like
