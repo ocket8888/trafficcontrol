@@ -151,7 +151,7 @@ the object after modification.\\
 While RFC 2616 states that servers MAY create objects for the passed representations if they do not already exist, Traffic Ops API endpoint authors
 MUST instead use POST handlers for object creation.\\
 All endpoints that support the PUT request method MUST also support the
-If-Not-Modified-Since HTTP header.
+If-Unmodified-Since HTTP header.
 
 \subsubsection{PATCH}
 At the time of this writing, no Traffic Ops API endpoints handle the PATCH request method. PATCH requests that the server's stored data be mutated
