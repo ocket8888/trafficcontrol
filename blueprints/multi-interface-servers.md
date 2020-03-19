@@ -529,15 +529,19 @@ If desired, the markup used for that sample may be found in
 
 Additionally, the properties of servers no longer present on a server object
 will need to be removed from table columns (and `interfaces` should not be
-added).
+added). However, if possible, it may make sense to include the ip addresses of
+the one interface designated as the service address in the servers tables.
+
+Also, Traffic Portal's iso generation form will need modification when using the
+'Copy Server Attributes From" dropdown to copy the properties of the one interface
+designated as the service address.
 
 ### Traffic Monitor Impact
 Traffic Monitor will need to update its parsing of `/monitoring` payloads to
 account for the new structure, and will need to poll all listed interfaces for
 health (instead of just one per cache server as was done previously).
 
-The cache
-server should be marked unavailable - or "down" - if and only if the interface
+The cache server should be marked unavailable - or "down" - if and only if the interface
 proving the service addresses is considered unhealthy.
 
 ## Documentation Impact
