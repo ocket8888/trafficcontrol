@@ -95,6 +95,42 @@ components required to service distributed requests for content, as well as the
 configuration options for the methods of content delivery and the content
 delivered therein.
 
+\begin{codelisting}
+\captionof{listing}{CDN Object as a TypeScript Interface}
+\label{code:datamodel:cdn}
+\begin{minted}[tabsize=2]{typescript}
+/**
+ * A CDN represents a full stack of hardware, components and configuration
+ * required to delivery content.
+*/
+interface CDN {
+	/** The numeric IDs of the CDN's cache servers */
+	cacheServers: Set<bigint>;
+	/** The names of all of the Delivery Services within the CDN */
+	deliveryServices: Set<string>;
+	/** Whether or not DNSSEC is enabled on the CDN's domain */
+	dnssecEnabled: boolean;
+	/** The CDN's domain. Must be a valid DNS label. */
+	domain: string;
+	/** The numeric IDs of the CDN's infrastructure servers */
+	infrastructureServers: Set<bigint>;
+	/** The Name of a CDN uniquely identifies it. */
+	name: string;
+	/** The numeric IDs of the CDN's origins */
+	origins: Set<bigint>;
+	/** The numeric IDs of the Traffic Monitor instances within the CDN */
+	trafficMonitors: Set<bigint>;
+	/** The numeric IDs of the Traffic Router instances within the CDN */
+	trafficRouters: Set<bigint>;
+	/**
+	 * The numeric IDs of the Traffic Stats instances within the CDN.
+	 * @todo Currently TS is a singleton; is there any desire/reason to change?
+	*/
+	trafficStatsServers: Set<bigint>;
+}
+\end{minted}
+\end{codelisting}
+
 \subsubsection{Cache Servers}
 A CDN's collection of Cache Servers is represented as set of Cache Server IDs.
 
@@ -178,12 +214,6 @@ of Capability Names.
 The CDN to which a Cache Server belongs is represented by its Name, which
 uniquely identifies it.
 
-\subsubsection{Delivery Services}
-The Delivery Services for which a Cache Service is tasked with serving content
-are represented by a set of Delivery Service names. Note that such assignments
-do not mean that a Cache Server is capable of serving such content, which truly
-depends on whether or not each Delivery Service is Primed and Active.
-
 \subsubsection{Domain}
 This is the "domain" part of the Cache Server's Fully Qualified Domain Name
 (FQDN) as a string. For example, a Cache Server with an FQDN of
@@ -199,13 +229,21 @@ content, represented as a set of file paths as strings to said devices. These
 devices MUST be accessible for full read and write operations to the user as
 whom the caching proxy software runs on the Cache Server.
 
+\subsubsection{Health Polling Format}
+The format of statistics reported by the Cache Server, as a string that names
+the format. Formats supported natively by Traffic Monitor are (currently)
+\code{astats}, \code{astats-dsnames}, and \code{stats\_over\_http}. If this
+field is Null-typed (or an empty string), the default format
+(\code{stats\_over\_http}) is used by Traffic Monitor.
+
 \subsubsection{Health Polling Path}
 This is a string that names a special request path recognized by the Cache
 Server's caching proxy software which will result in the retrieval of statistics
 rather than content. This MUST NOT be allowed to be an empty string. It MAY
 contain a query string or even document fragment.\\
-The only health-and-statistics-gathering implementation truly supported by ATC
-is the special "astats" Traffic Server plugin.
+The only health-and-statistics-gathering implementations truly supported by ATC
+are the special "astats" Traffic Server plugin and the official ATS
+\code{stats\_over\_http} plugin.
 
 \subsubsection{Host Name}
 This is the "host" part of the Cache Server's Fully Qualified Domain Name (FQDN)
@@ -239,19 +277,67 @@ A Cache Server's "ID" is an unsigned integer that uniquely identifies it among
 all Cache Servers. It serves no purpose beyond unique identification of the
 Cache Server.
 
-\subsubsection{IPv4 Address}
-The Cache Server's IPv4 address. If it is a "null"-type then the Cache Server is
-assumed to only operate in IPv6.\\
-Note that if both a Cache Server's IPv4 Address and IPv6 Address are "null"-type
-then clients cannot and will not be routed to them for DNS-routed Delivery
-Services.
+\subsubsection{Interfaces}
+Interfaces is a set of objects that represent the network interfaces used by a
+Cache Server. This set MUST NOT ever be empty. An Interface's properties are
+herein listed.
 
-\subsubsection{IPv6 Address}
-The Cache Server's IPv6 address. If it is a "null"-type then the Cache Server is
-assumed to only operate in IPv6.\\
-Note that if both a Cache Server's IPv4 Address and IPv6 Address are "null"-type
-then clients cannot and will not be routed to them for DNS-routed Delivery
-Services.
+\paragraph{IP Addresses}
+A network interface's IP Addresses are represented as a set of objects containing
+the various properties of an IP Address. A network interface MUST always have at
+least one IP Address object in this set. Their properties are herein listed.\\
+Note that there is no structural distinction made between different IP
+versions.
+
+\indent{}\subparagraph{Address}
+Address is the actual IP Address being described. This may be represented
+internally - by either clients or the server - as an actual network address
+type, but MUST be represented in API payloads as a string type - even if the
+representation encoding supports native network address types.
+
+\indent{}\subparagraph{Gateway}
+Gateway is the IP Address of the network gateway used to access this IP
+Address. This may be represented internally - by either clients or the server -
+as an actual network address type, but MUST be represented in API payloads as a
+string type - even if the representation encoding supports native network
+address types.\\
+This MUST NOT ever be allowed to be represented as an empty string. However, if
+it is a "null"-type, then the implication is that no network gateway is used to
+access the IP Address.
+
+\indent{}\subparagraph{Service Address}
+Service Address is a boolean that describes whether or not an IP Address is one
+on which a Cache Server provides its service. Only one such IP Address is
+allowed to exist for a given Cache Server per IP version. That is, a Cache
+Server may have one IPv4 Service Address and one IPv6 Service Address, but is
+not permitted to have two or more IPv4 Service Addresses.
+
+\paragraph{Max Bandwidth}
+This unsigned integer describes the maximum bandwidth - in kb/s - that is
+allowed for this interface to be considered "healthy" by Traffic Monitors.\\
+This has no effect if this Interface's Monitor value is not True.\\
+The value \code{0} has the meaning "no limit".
+
+\paragraph{Monitor}
+A boolean that describes whether or not this interface should be monitored by
+Traffic Monitor. Note that multiple Interfaces that have True Monitor values
+is incompatible with a Health Polling Format value of "astats" or
+"astats-dsnames".
+
+\paragraph{MTU}
+MTU is an unsigned integer that gives the Interface's Maximum Transmission
+Unit. It is recommended that UIs built on the API provide the values 9000
+and 1500 for selection only, as other values are very rarely correct. However,
+the API itself places no such restrictions on the value, which can be any
+unsigned integer or a "null"-type.\\
+If the value is a "null"-type, then it is assumed that the interface's MTU is
+not known or is not relevant for the Cache Server's operation (common on
+non-Service-Address-containing Interfaces).
+
+\paragraph{Name}
+The string containing a network interface's Name MUST NOT be allowed to be
+empty. It should name the actual network interface device on the Cache Server.
+For example, two common Names are "eth0" and "bond0".
 
 \subsubsection{Loadavg Threshold}
 A Cache Server's "Loadavg Threshold" is a floating-point number - which MUST be
@@ -297,16 +383,16 @@ by the Cache Server have expired and are no longer in effect.
 The Cache Server's "Status" is a string constant, which MUST always be one of
 
 \begin{itemize}
+	\item \code{ADMIN\_DOWN} - The Cache Server is considered unhealthy and its
+	thresholds and connectivity state are not monitored. Its existence is not
+	disclosed to Traffic Router(s).
+	\item \code{OFFLINE} - The Cache Server is considered unhealthy regardless
+	of any thresholds or connectivity state.
 	\item \code{ONLINE} - The Cache Server will always be considered healthy
 	regardless of any thresholds or connectivity state.
 	\item \code{REPORTED} - The Cache Server's health is presented to the
 	Traffic Router(s) as it is reported by its various thresholds, as determined
 	by the Traffic Monitor(s).
-	\item \code{OFFLINE} - The Cache Server is considered unhealthy regardless
-	of any thresholds or connectivity state.
-	\item \code{ADMIN\_DOWN} - The Cache Server is considered unhealthy and its
-	thresholds and connectivity state are not monitored. Its existence is not
-	disclosed to Traffic Router(s).
 \end{itemize}
 
 \subsubsection{Tags}
@@ -389,11 +475,6 @@ string content restricted to one of the values:
 	\item \code{NO\_CACHE} The Delivery Service's content is proxied through
 	Cache Servers without ever being actually cached.
 \end{itemize}
-
-%TODO - STEERING doesn't have this?
-\paragraph{Cache Servers}
-A Delivery Service's assigned Cache Servers are expressed as a set of Cache
-Server IDs.
 
 \paragraph{CDN}
 The CDN to which a Delivery Service belongs is expressed as a string that is the
@@ -493,8 +574,6 @@ After creation, Routing Type is a read-only property.
 	\item \code{STATIC}
 \end{itemize}
 
-\paragraph{Skip Mid Tier}
-
 \paragraph{Status}
 The "Status" of a Delivery Service is a string constant that expresses its
 ability to serve content at the present moment in time. It may have one of three
@@ -530,6 +609,10 @@ only uppercase characters.
 \paragraph{Tenant}
 The Tenant to which a Delivery Service belongs is represented by a string that
 is that Tenant's unique Name.
+
+\paragraph{Topology}
+The Topology used by a Delivery Service is represented by a string that is the
+Topology's unique Name.
 
 \paragraph{Vanity Hostnames}
 "Vanity Hostnames" is a set of strings that are Fully Qualified Domain Names
@@ -593,10 +676,85 @@ the Traffic Router for this Delivery Service's routing, in seconds.
 \subsection{Tenants}
 
 
+\subsection{Topologies}
+
 
 \subsection{Traffic Monitors}
+A Traffic Monitor is a service that communicates with Traffic Ops over HTTP and
+is responsible for collecting health and statistics information from Cache
+Servers to determine if they are fit to service content.
 
+\subsubsection{CDN}
+The CDN to which a Traffic Monitor belongs is represented by its Name, which
+uniquely identifies it. The Monitor will monitor all Cache Servers that are in
+its CDN.
 
+\subsubsection{Config Polling Interval}
+Config Polling Interval is an unsigned integer that defines an interval - in
+milliseconds - on which the Monitor should poll Traffic Ops for its
+configuration changes. This MUST NOT be \code{0}.
+
+\subsubsection{Domain}
+This is the "domain" part of the Traffic Monitor's Fully Qualified Domain Name
+(FQDN) as a string. For example, a Traffic Monitor with an FQDN of
+\code{github.com} has a Domain of \code{com} and a Traffic Monitor with an FQDN
+of \code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.
+
+\subsubsection{Event Count}
+This unsigned integer defines the number of "events" of which the Monitor will
+keep track internally.\\
+The value \code{0} means "no limit".
+
+\subsubsection{Health Polling Interval}
+This unsigned integer defines an interval - in milliseconds - on which to poll
+Cache Server health. This MUST NOT be \code{0}.
+
+\subsubsection{Heartbeat Polling Interval}
+This unsigned integer defines an interval - in milliseconds - on which to poll
+Cache Server "heartbeats". This poll is not meant to determine health, but
+rather whether or not the Cache Server(s) may be reached over the network at
+all. This MUST NOT be \code{0}.
+
+\subsubsection{Host Name}
+This is the "host" part of the Traffic Monitor's Fully Qualified Domain Name
+(FQDN) as a string. For example, a Traffic Monitor with an FQDN of
+\code{github.com} has a Host Name of \code{github}, and a Traffic Monitor with an
+FQDN of \code{trafficcontrol.apache.org} has a Host Name of
+\code{trafficcontrol}.\\
+This field does NOT need to be unique, though operators are encouraged to make
+this - or at least the concatenation \code{\emph{Host Name}.{Domain}} - unique
+for ease of operation.
+
+\subsubsection{ID}
+A Traffic Monitor's "ID" is an unsigned integer that uniquely identifies it
+among all Traffic Monitors. It serves no purpose beyond unique identification of
+the Traffic Monitor.
+
+\subsubsection{Notes}
+This section is an arbitrary string containing miscellaneous, human-friendly
+information about the Traffic Monitor. Other ATC components SHOULD NOT parse
+this for specific information fields, or expect it to be in a particular
+format.
+
+\subsubsection{Physical Location}
+The Physical Location at which a Traffic Monitor resides is represented by a
+string containing its Name.
+
+\subsubsection{Tags}
+A Traffic Monitor's "Tags" are represented as a set of Tag Names.
+
+\subsubsection{Thread Count}
+Thread Count is an unsigned integer that determines the number of threads used
+to concurrently poll Cache Servers. It is recommended that UIs built on the
+Traffic Ops API set this to \code{0} by default and caution users against
+changing it. The value \code{0} will cause Traffic Monitor to choose a value
+for itself\footnote{A recommendation for Traffic Monitor engineers: a
+reasonable default value would be the number of available CPU cores.}.
+
+\subsubsection{Time Pad}
+This is an unsigned integer that defines a set number of milliseconds to add
+to request timers to help spread requests out for Traffic Control systems that
+use a large number of Traffic Monitors.
 
 \subsection{Traffic Portals}
 
@@ -604,6 +762,41 @@ the Traffic Router for this Delivery Service's routing, in seconds.
 
 \subsection{Traffic Routers}
 
+\subsubsection{CDN}
+The CDN to which a Cache Server belongs is represented by its Name, which
+uniquely identifies it.
+
+\subsubsection{Domain}
+This is the "domain" part of the Cache Server's Fully Qualified Domain Name
+(FQDN) as a string. For example, a Cache Server with an FQDN of
+\code{github.com} has a Domain of \code{com} and a Cache Server with an FQDN of
+\code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.
+
+\subsubsection{Host Name}
+This is the "host" part of the Cache Server's Fully Qualified Domain Name (FQDN)
+as a string. For example, a Cache Server with an FQDN of \code{github.com} has a
+Host Name of \code{github}, and a Cache Server with an FQDN of
+\code{trafficcontrol.apache.org} has a Host Name of \code{trafficcontrol}.\\
+This field does NOT need to be unique, though operators are encouraged to make
+this - or at least the concatenation \code{\emph{Host Name}.{Domain}} - unique
+for ease of operation.
+
+\subsubsection{ID}
+A Cache Server's "ID" is an unsigned integer that uniquely identifies it among
+all Cache Servers. It serves no purpose beyond unique identification of the
+Cache Server.
+
+\subsubsection{Notes}
+This section is an arbitrary string containing miscellaneous, human-friendly
+information about the Cache Server. Other ATC components SHOULD NOT parse this
+for specific information fields, or expect it to be in a particular format.
+
+\subsubsection{Physical Location}
+The Physical Location at which a Cache Server resides is represented by a string
+containing its Name.
+
+\subsubsection{Tags}
+A Cache Server's "Tags" are represented as a set of Tag Names.
 
 
 \subsection{Traffic Stats Servers}
