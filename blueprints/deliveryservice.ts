@@ -391,8 +391,6 @@ interface DNSDeliveryService extends NonStaticDeliveryService {
 	 * the address of a cache server.
 	*/
 	routingType: 'DNS';
-	/** Determines whether or not the Mid caching tier is skipped */
-	skipMidTier: boolean;
 }
 
 /**
