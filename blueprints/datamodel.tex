@@ -195,12 +195,6 @@ Stats Server IDs.
 Cache servers are the Mid-and-Edge-tier HTTP caching proxies ultimately
 responsible for caching and serving content for a Delivery Service.
 
-\subsubsection{Bandwidth Threshold}
-The "Bandwidth Threshold" of a Cache Server is the maximum used bandwidth which
-can be considered "healthy" for the Cache Server. It is suggested that clients
-presenting controls to create/register a new Cache Server present the most
-common value within the server's Cache Group as the default.
-
 \subsubsection{Cache Group}
 The Cache Group to which the Cache Server belongs is represented as a string
 that uniquely names it.
@@ -222,31 +216,6 @@ This is the "domain" part of the Cache Server's Fully Qualified Domain Name
 In other words, this is every part of the Cache Server's Fully Qualified Domain
 Name that isn't part of its Host Name as defined in Section
 \ref{sec:server:hostname}.
-
-\subsubsection{Hard Disks}
-A collection of Hard Disk Drives (HDDs)\footnote{This designation is meant to
-contrast with "RAM Drives" where a block device maps to a section of main
-memory. In practice, Hard Disks may be any block device, include Solid-State
-Drives rather than actually HDDs.} available to the Cache Server for caching
-content, represented as a set of file paths as strings to said devices. These
-devices MUST be accessible for full read and write operations to the user as
-whom the caching proxy software runs on the Cache Server.
-
-\subsubsection{Health Polling Format}
-The format of statistics reported by the Cache Server, as a string that names
-the format. Formats supported natively by Traffic Monitor are (currently)
-\code{astats}, \code{astats-dsnames}, and \code{stats\_over\_http}. If this
-field is Null-typed (or an empty string), the default format
-(\code{stats\_over\_http}) is used by Traffic Monitor.
-
-\subsubsection{Health Polling Path}
-This is a string that names a special request path recognized by the Cache
-Server's caching proxy software which will result in the retrieval of statistics
-rather than content. This MUST NOT be allowed to be an empty string. It MAY
-contain a query string or even document fragment.\\
-The only health-and-statistics-gathering implementations truly supported by ATC
-are the special "astats" Traffic Server plugin and the official ATS
-\code{stats\_over\_http} plugin.
 
 \subsubsection{Host Name\label{sec:server:hostname}}
 This is the "host" part of the Cache Server's Fully Qualified Domain Name (FQDN)
@@ -348,19 +317,6 @@ containing its Name.
 \subsubsection{Profile}
 The Profile used by a Cache Server is represented by a string containing its
 Name.
-
-\subsubsection{Query Time Threshold}
-A Cache Server's "Query Time Threshold" is an unsigned integer number of
-milliseconds after which a Traffic Monitor polling it for health will consider
-it unhealthy, even if it successfully returns healthy metrics. The value "0" has
-the meaning "no threshold" (however, Traffic Monitor polling timeouts still
-apply).
-
-\subsubsection{RAM Disks}
-A collection of RAM Disk Drives available to the Cache Server for caching
-content, represented as a set of file paths as strings to said devices. These
-devices MUST be accessible for full read and write operations to the user as
-whom the caching proxy software runs on the Cache Server.
 
 \subsubsection{Revalidation Pending}
 This boolean represents whether or not the Cache Server has content revalidation
@@ -650,6 +606,30 @@ the Traffic Router for this Delivery Service's routing, in seconds.
 
 \subsection{Profiles and Parameters}
 
+
+\subsubsection{Bandwidth Threshold}
+The "Bandwidth Threshold" of a Cache Server is the maximum used bandwidth which
+can be considered "healthy" for the Cache Server. It is suggested that clients
+presenting controls to create/register a new Cache Server present the most
+common value within the server's Cache Group as the default.
+
+\subsubsection{Hard Disks}
+A collection of Hard Disk Drives (HDDs)\footnote{This designation is meant to
+contrast with "RAM Drives" where a block device maps to a section of main
+memory. In practice, Hard Disks may be any block device, include Solid-State
+Drives rather than actually HDDs.} available to the Cache Server for caching
+content, represented as a set of file paths as strings to said devices. These
+devices MUST be accessible for full read and write operations to the user as
+whom the caching proxy software runs on the Cache Server.
+
+\subsubsection{Health Polling Path}
+This is a string that names a special request path recognized by the Cache
+Server's caching proxy software which will result in the retrieval of statistics
+rather than content. This MUST NOT be allowed to be an empty string. It MAY
+contain a query string or even document fragment.\\
+The only health-and-statistics-gathering implementation truly supported by ATC
+is the special "astats" Traffic Server plugin.
+
 \subsubsection{Loadavg Threshold}
 A Cache Server's "Loadavg Threshold" is a floating-point number that represents
 the one-minute "loadavg" above which the Cache Server will be considered
@@ -660,6 +640,18 @@ For more information consult the
 and/or the
 \href{https://linux.die.net/man/5/proc}{\code{/proc(5)} manual page}.
 
+\subsubsection{Query Time Threshold}
+A Cache Server's "Query Time Threshold" is an unsigned integer number of
+milliseconds after which a Traffic Monitor polling it for health will consider
+it unhealthy, even if it successfully returns healthy metrics. The value "0" has
+the meaning "no threshold" (however, Traffic Monitor polling timeouts still
+apply).
+
+\subsubsection{RAM Disks}
+A collection of RAM Disk Drives available to the Cache Server for caching
+content, represented as a set of file paths as strings to said devices. These
+devices MUST be accessible for full read and write operations to the user as
+whom the caching proxy software runs on the Cache Server.
 
 \subsection{Physical Locations}
 
