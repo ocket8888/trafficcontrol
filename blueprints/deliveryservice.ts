@@ -286,9 +286,10 @@ interface NonSteeringDeliveryService extends NonStaticDeliveryService {
 	 * Sets the maximum allowed connections to the Delivery Service's Origin.
 	 *
 	 * Typically this means "from the Mid-tier" but also possibly Edge-tier
-	 * if the Mid-tier is being skipped. ([[HTTPDeliveryService.skipMidTier]])
+	 * if the used Topology is such that Mid-tier Cache Servers are not used.
+	 * The value "null" has the special meaning "no limit".
 	*/
-	maxOriginConnections: int;
+	maxOriginConnections: int | null;
 	/**
 	 * These are the routingTypes that are considered "Non-Steering" and
 	 * "Non-Static".
