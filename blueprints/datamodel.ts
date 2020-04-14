@@ -281,6 +281,7 @@ interface CacheGroup {
 	latitude: number;
 	longitude: number;
 	cacheServers: Set<bigint>;
+	type: 'EDGE' | 'MID';
 }
 
 /**
