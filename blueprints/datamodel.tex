@@ -336,12 +336,6 @@ The string containing a network interface's Name MUST NOT be allowed to be
 empty. It should name the actual network interface device on the Cache Server.
 For example, two common Names are "eth0" and "bond0".
 
-\subsubsection{Loadavg Threshold}
-A Cache Server's "Loadavg Threshold" is a floating-point number - which MUST be
-greater than 0 - that represents the loadavg above which the Cache Server will
-be considered unhealthy. For more information consult the
-\href{https://linux.die.net/man/3/getloadavg}{\code{getloadavg} manual page}.
-
 \subsubsection{Notes}
 This section is an arbitrary string containing miscellaneous, human-friendly
 information about the Cache Server. Other ATC components SHOULD NOT parse this
@@ -656,6 +650,15 @@ the Traffic Router for this Delivery Service's routing, in seconds.
 
 \subsection{Profiles and Parameters}
 
+\subsubsection{Loadavg Threshold}
+A Cache Server's "Loadavg Threshold" is a floating-point number that represents
+the one-minute "loadavg" above which the Cache Server will be considered
+unhealthy. Note that it may be zero, in which case the Cache Server will always
+be considered unhealthy for the reason of exceeding this threshold.\\
+For more information consult the
+\href{https://linux.die.net/man/3/getloadavg}{\code{getloadavg(3)} manual page},
+and/or the
+\href{https://linux.die.net/man/5/proc}{\code{/proc(5)} manual page}.
 
 
 \subsection{Physical Locations}
