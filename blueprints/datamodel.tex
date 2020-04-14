@@ -214,11 +214,14 @@ of Capability Names.
 The CDN to which a Cache Server belongs is represented by its Name, which
 uniquely identifies it.
 
-\subsubsection{Domain}
+\subsubsection{Domain\label{sec:server:domain}}
 This is the "domain" part of the Cache Server's Fully Qualified Domain Name
 (FQDN) as a string. For example, a Cache Server with an FQDN of
 \code{github.com} has a Domain of \code{com} and a Cache Server with an FQDN of
-\code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.
+\code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.\\
+In other words, this is every part of the Cache Server's Fully Qualified Domain
+Name that isn't part of its Host Name as defined in Section
+\ref{sec:server:hostname}.
 
 \subsubsection{Hard Disks}
 A collection of Hard Disk Drives (HDDs)\footnote{This designation is meant to
@@ -245,11 +248,13 @@ The only health-and-statistics-gathering implementations truly supported by ATC
 are the special "astats" Traffic Server plugin and the official ATS
 \code{stats\_over\_http} plugin.
 
-\subsubsection{Host Name}
+\subsubsection{Host Name\label{sec:server:hostname}}
 This is the "host" part of the Cache Server's Fully Qualified Domain Name (FQDN)
 as a string. For example, a Cache Server with an FQDN of \code{github.com} has a
 Host Name of \code{github}, and a Cache Server with an FQDN of
 \code{trafficcontrol.apache.org} has a Host Name of \code{trafficcontrol}.\\
+In other words, a Cache Server's Host Name is the only part of its FQDN that
+is not part of its Domain as defined in Section \ref{sec:server:domain}.\\
 This field does NOT need to be unique, though operators are encouraged to make
 this - or at least the concatenation \code{\emph{Host Name}.{Domain}} - unique
 for ease of operation.
