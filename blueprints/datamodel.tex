@@ -261,21 +261,13 @@ for ease of operation.
 
 \subsubsection{HTTP Port}
 An unsigned number that designates the port on which this Cache Server listens
-for incoming HTTP requests. If this is a "null"-type then the Cache Server is
-assumed to be incapable of serving unsecured HTTP requests.\\
-Note that if both HTTP Port and HTTPS Port are "null"-type, then ATC
-infrastructure will assume the Cache Server is incapable of serving traffic, and
-treat it accordingly - despite that most clients will attempt to send requests
-to the default 80 and 443 ports unless otherwise instructed.
+for incoming HTTP requests. Note that this may be zero, which will cause the
+Cache Server to be incapable of serving HTTP traffic.
 
 \subsubsection{HTTPS Port}
 An unsigned number that designates the port on which this Cache Server listens
-for incoming HTTPS requests. If this is a "null"-type then the Cache Server is
-assumed to be incapable of serving secured HTTPS requests.\\
-Note that if both HTTP Port and HTTPS Port are "null"-type, then ATC
-infrastructure will assume the Cache Server is incapable of serving traffic, and
-treat it accordingly - despite that most clients will attempt to send requests
-to the default 80 and 443 ports unless otherwise instructed.
+for incoming HTTPS requests. Note that this may be zero, which will cause the
+Cache Server to be incapable of serving HTTPS traffic.
 
 \subsubsection{ID}
 A Cache Server's "ID" is an unsigned integer that uniquely identifies it among
