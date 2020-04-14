@@ -282,8 +282,6 @@ enum Protocol {
 interface NonSteeringDeliveryService extends NonStaticDeliveryService {
 	/** Defines how the Delivery Service's content may be cached */
 	caching: CachingType;
-	/** All of the IDs of the Cache Servers assigned to this Delivery Service */
-	cacheServers: Set<int>;
 	/**
 	 * Sets the maximum allowed connections to the Delivery Service's Origin.
 	 *
