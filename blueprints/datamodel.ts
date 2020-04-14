@@ -246,44 +246,21 @@ interface CacheServer extends BaseServer {
 	cacheGroup: string;
 	/** What we today call "Server Capabilities" */
 	capabilities: Set<string>;
-	/**
-	 * A collection of the Names of the Delivery Services to which the server is
-	 * assigned.
-	*/
-	deliveryServices: Set<string>;
 	/** A set of filepaths to HDD block devices to use for caching content */
-	hardDisks: Set<string>;
-	/** Defines the path to astats, essentially */
-	healthPollingPath: string;
 	/**
 	 * The port on which the server listens for incoming HTTP requests.
 	 *
 	 * If it's 'null', the assumption is that the server doesn't do HTTP.
 	*/
-	httpPort: int | null;
+	httpPort: bigint;
 	/**
 	 * The port on which the server listens for incoming HTTPS requests.
 	 *
 	 * If it's 'null', the assumption is that the server doesn't do HTTPS.
 	*/
-	httpsPort: int | null;
-	/**
-	 * Sets the maximum healthy 'loadavg'.
-	 *
-	 * '0' means "no limit".
-	*/
-	loadavgThreshold: number;
+	httpsPort: bigint;
 	/** The Name of the Profile in use by the cache server */
 	profile: string;
-	/**
-	 * Sets the number of milliseconds after which a health poll will be
-	 * declared "failed".
-	 *
-	 * '0' means "no limit" (though TM polling timeouts still apply).
-	*/
-	queryTimeThreshold: int;
-	/** A set of filepaths to RAM block devices to use for caching content */
-	ramDisks: Set<string>;
 	/** Whether or not the server has pending revalidations */
 	revalidationPending: boolean;
 	/** Server's status */
@@ -297,6 +274,13 @@ interface CacheServer extends BaseServer {
 	type: 'EDGE' | 'MID';
 	/** Whether or not the server has pending updates */
 	updatePending: boolean;
+}
+
+interface CacheGroup {
+	name: string;
+	latitude: number;
+	longitude: number;
+	cacheServers: Set<bigint>;
 }
 
 /**
