@@ -611,7 +611,10 @@ the Traffic Router for this Delivery Service's routing, in seconds.
 The "Bandwidth Threshold" of a Cache Server is the maximum used bandwidth which
 can be considered "healthy" for the Cache Server. It is suggested that clients
 presenting controls to create/register a new Cache Server present the most
-common value within the server's Cache Group as the default.
+common value within the server's Cache Group as the default. Note that the value
+may be zero, in which case the Cache Server will always be considered unhealthy
+for the reason of exceeding this threshold.\\
+If this value is null-typed, it has the meaning "no limit".
 
 \subsubsection{Hard Disks}
 A collection of Hard Disk Drives (HDDs)\footnote{This designation is meant to
@@ -635,6 +638,7 @@ A Cache Server's "Loadavg Threshold" is a floating-point number that represents
 the one-minute "loadavg" above which the Cache Server will be considered
 unhealthy. Note that it may be zero, in which case the Cache Server will always
 be considered unhealthy for the reason of exceeding this threshold.\\
+If this is null-typed, it has the special meaning "no limit".\\
 For more information consult the
 \href{https://linux.die.net/man/3/getloadavg}{\code{getloadavg(3)} manual page},
 and/or the
@@ -643,9 +647,11 @@ and/or the
 \subsubsection{Query Time Threshold}
 A Cache Server's "Query Time Threshold" is an unsigned integer number of
 milliseconds after which a Traffic Monitor polling it for health will consider
-it unhealthy, even if it successfully returns healthy metrics. The value "0" has
-the meaning "no threshold" (however, Traffic Monitor polling timeouts still
-apply).
+it unhealthy, even if it successfully returns healthy metrics. Note that it may
+be zero, in which case the Cache Server(s) using this Profile will always be
+considered unhealthy for the reason of exceeding this threshold.\\
+If this value is null-typed, it has the special meaning "no threshold"
+(however, Traffic Monitor polling timeouts still apply).
 
 \subsubsection{RAM Disks}
 A collection of RAM Disk Drives available to the Cache Server for caching
