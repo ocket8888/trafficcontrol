@@ -692,17 +692,80 @@ content, represented as a set of file paths as strings to said devices. These
 devices MUST be accessible for full read and write operations to the user as
 whom the caching proxy software runs on the Cache Server.
 
+\subsubsection{Tags}
+The Tags associated with a Profile are represented by a set of strings that are
+Tag Names.
+
 \subsection{Physical Locations}
 
 
 
-\subsection{Roles and Permissions\label{sec:roles-and-perms}}
+\subsection{Roles\label{sec:roles-and-perms}}
+A Role controls what a User can and can't do through the API by declaring the
+User's Permissions. The Permissions required by the different API endpoints,
+request methods of endpoints, and particular modes of operations of the methods
+of those endpoints are declared by the endpoints themselves.
 
+\subsubsection{Description}
+A Role's Description is a string containing a human-readable description of
+what the Role is for and what, in general terms, it is capable of accomplishing
+through the API.\\
+This may be an empty string, but clients of the API are encouraged to attempt
+to promote the idea of useful descriptions as much as possible, to avoid
+creating a clutter of Roles that no one understands and/or a swathe of Roles
+which no one can determine are safe to delete.
 
+\subsubsection{Name}
+A Role's Name is a string that uniquely identifies it - and as such MUST NOT be
+empty - and may only contain alphanumeric characters, spaces, and periods.
+
+\subsubsection{Permissions}
+The Permissions allowed to a Role are represented as a set of strings which are
+the Permission's names.\\
+The Permissions that exist - and therefore may be on a Role - are a finite set
+and if it is attempted to add a Permission which does not exist to a Role,
+the attempt will result in an error from Traffic Ops, and will not be
+successful. This set of available Permissions is defined by the Permissions
+each individual endpoint declares are required for part or all of their
+operation, and therefore cannot (and should not) be enumerated
+here\footnote{As a special case, the \ref{sec:profile:param:secure} section of
+the Data Model describes a Permission that will always exist for as long as
+that property of a Profile's Parameter(s) exists.}.
 
 \subsection{Tags}
+Tags may be used to group "taggable" objects for logical or administrative
+purposes.\\
+While plug-ins and other third-party code such as custom configuration
+management systems may glean some semantic meaning from a Tag's Name or
+presence on an object, Traffic Control components - \emph{including Traffic Ops
+and its API} - MUST NOT infer any special meaning from any Tag's Name or
+presence on an object, nor attach any semantic value to a Tag's presence on an
+object, a Tag's Name, or any pattern of Tag Name.\\
+What is known as a "taggable" object is simply any object with a "Tags"
+property that contains a set of Tag Names which are the tags associated with
+said object. Thus, any object types added to the API at any point in the future
+may be "taggable", but for the data model herein outlined the following objects
+those that are "taggable":
 
+\begin{itemize}
+	\item Cache Groups
+	\item Cache Servers
+	\item Delivery Services
+	\item Infrastructure Servers
+	\item Origins
+	\item Physical Locations
+	\item Profiles
+	\item Tenants
+	\item Topologies
+	\item Users
+\end{itemize}
 
+\subsubsection{Name}
+Name is the only property of a Tag, and is therefore a unique identifier for
+a Tag. It is a string that ought to give some indication of what the Tag is for
+but ultimately any meaning for the Tag is left to system administrators to
+define and maintain.\\
+This string MUST NOT be empty and MUST only contain alphanumeric characters.
 
 \subsection{Tenants}
 
