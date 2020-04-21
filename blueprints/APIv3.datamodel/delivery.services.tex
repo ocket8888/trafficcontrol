@@ -1,0 +1,259 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Delivery Services}
+Delivery Services are, at their most basic, an association between a source of
+content and a set of Cache Servers and configuration options used to distribute
+that content.
+
+\subsubsection{Common Properties}
+Herein described are the properties common to all Delivery Service objects. The
+Routing Type of a Delivery Service encapsulates the methods by which clients
+may request content routing, and depending on its value the Delivery Service
+takes on a set of additional properties. Put simply, these are all different
+types of objects that are closely related.\\
+This section details all of the properties that are common to \emph{all} types
+of Delivery Services.
+
+\paragraph{Anonymous Blocking}
+A Delivery Service that has "Anonymous Blocking" tells Traffic Router to block
+requests from anonymized IP addresses. Whether or not and how well that can
+actually be done is dependent on the configuration of each Traffic Router
+itself, and if this Delivery Service is DNS-routed the only IP address Traffic
+Routers will be capable of checking for anonymization (e.g. known proxy/VPN/TOR
+exit node) will be the downstream router requesting the name resolution and thus
+is likely much less effective.
+
+\paragraph{Bypass Destination}
+This is a string that describes the network location to which clients will be
+directed if the traffic served by this Delivery Service exceeds its allowed
+maximums. This MUST always be represented as a string - even if the
+representation format supports IP Addresses as a native type - and its
+interpretation is dependent on the Delivery Service's Routing Type.\\
+If the Delivery Service's Routing Type is \code{HTTP}, then this is interpreted
+- and validated by the API - as a Fully Qualified Domain Name (FQDN) optionally
+followed by a colon and port number that defines an HTTP server to which client
+requests will be directed.\\
+If the Delivery Service's Routing Type is \code{DNS} or \code{STATIC}, then if
+this is a valid IPv4 address it is assumed to be one and will be presented as an
+AA record. If not, and it's a valid IPv6 address, then it is assumed to one and
+will be presented as an AAAA record. Finally, it may be an FQDN in which case it
+will be presented as a CNAME record. If none of these formats can be validated,
+then it MUST be rejected by the API.\\
+If the Delivery Service's Routing Type is \code{STEERING}, then this MUST be the
+Name of an existing Delivery Service - though it need not name one of this
+Delivery Service's Targets.
+
+\paragraph{Deep Caching}
+A boolean value that describes whether or not "Deep Caching" may be used for
+this Delivery Service.
+
+\paragraph{Caching}
+Caching describes how Delivery Service content is cached - if at all. It is a
+string content restricted to one of the values:
+
+\begin{itemize}
+	\item \code{CACHE} The Delivery Service's content will be cached normally.
+	\item \code{RAM\_ONLY} The Delivery Service's content will only be cached
+	in RAM block devices.
+	\item \code{NO\_CACHE} The Delivery Service's content is proxied through
+	Cache Servers without ever being actually cached.
+\end{itemize}
+
+\paragraph{CDN}
+The CDN to which a Delivery Service belongs is expressed as a string that is the
+Name used to uniquely identify it.
+
+%TODO: use-case for check path?
+
+\paragraph{Denied Access Redirect}
+This is a string that describes the network location to which clients will be
+directed if they are denied access on the basis of Anonymous Blocking and/or
+Geographic Limiting settings. This MUST always be represented as a string - even
+if the representation format supports IP Addresses as a native type - and its
+interpretation is dependent on the Delivery Service's Routing Type.
+
+%TODO: steering and static won't have this?
+\paragraph{DSCP}
+Sets the
+\href{https://tools.ietf.org/html/rfc2474}{Differentiated Services Code Point}
+which will be marked on the Delivery Service's traffic. This is an unsigned
+integer with a maximum value of 64.
+
+%TODO: Necessary?
+%\paragraph{ECS}
+
+\paragraph{Geographic Limiting}
+This property describes limitations to the availability of this Delivery
+Service's content on the basis of the requesting client's geographic location.
+It is a set of strings, each of which is an
+\href{https://www.iso.org/obp/ui/#search/code/}{ISO 3166-1} alpha-2 country
+code, optionally with ISO 3166-2 subdivisional alphabetic code. This is a "white
+list" of countries/subdivisions wherein content is to be made
+available\footnote{This property is meant to inform Traffic Router; Cache
+Servers cannot be relied upon to approve or deny access on a geographic basis.
+Thus, if routing is bypassed, restricted content is totally accessible to
+requesting clients.}.\\
+Content is \emph{always} available to clients whose IP addresses are found
+within the Traffic Routers' Coverage Zone File(s). With that in mind, when this
+property is an empty set it means that no geographic regions are "whitelisted"
+and thus \emph{only} clients whose IP addresses are found within a Coverage Zone
+File will be granted access to content. When this property has a "Null" type,
+there is no geographic restriction placed on the Delivery Service's content
+access.
+
+%TODO: steering and static won't have this?
+\paragraph{Maximum Origin Connections}
+This is an unsigned integer which determines the maximum number of connections
+that any \emph{one} Cache Server may open to the Delivery Service's Origin.\\
+If this is null-typed, it has the special meaning "no limit".
+
+%TODO: use-case for header-rewrite text?
+
+\paragraph{Miss Location}
+
+\paragraph{Name}
+A Delivery Service's "Name" is a string that uniquely identifies it among all
+Delivery Services. It MUST only contain alphanumerics, hyphens, underscores and
+spaces, and MUST NOT begin with a non-alphanumeric character nor end with a
+non-alphanumeric character. This is used to generate part of the default request
+hostnames by replacing all non-alphanumeric characters with a hyphen.
+
+\paragraph{Notes}
+This section is an arbitrary string containing miscellaneous, human-friendly
+information about the Delivery Service. Other ATC components SHOULD NOT parse
+this for specific information fields, or expect it to be in a particular format.
+
+%TODO: MSO use-case?
+\paragraph{Origin}
+
+\paragraph{Query String Handling}
+
+\begin{itemize}
+	\item \code{DROP}
+	\item \code{IGNORE}
+	\item \code{USE}
+\end{itemize}
+
+\paragraph{Range Request Handling}
+\begin{itemize}
+	\item \code{NO\_CACHE}
+	\item \code{WHOLE\_OBJECT}
+	\item \code{CACHE}
+\end{itemize}
+
+%TODO Raw-Remap use-case?
+%TODO Regex-Remap use-case?
+
+\paragraph{Required Capabilities}
+
+\paragraph{Routing Name}
+
+%TODO: ANY_MAP use-case?
+\paragraph{Routing Type}
+After creation, Routing Type is a read-only property.
+\begin{itemize}
+	\item \code{HTTP}
+	\item \code{DNS}
+	\item \code{STEERING}
+	\item \code{STATIC}
+\end{itemize}
+
+\paragraph{Status}
+The "Status" of a Delivery Service is a string constant that expresses its
+ability to serve content at the present moment in time. It may have one of three
+values:
+
+\begin{itemize}
+	\item \code{ACTIVE} A Delivery Service that is "active" is one that is
+	functionally in service, and fully capable of delivering content. This means
+	that its configuration is deployed to Cache Servers and it is available for
+	routing traffic.
+	\item \code{PRIMED} A Delivery Service that is "primed" has had its
+	configuration distributed to the various servers required to serve its
+	content. However, the content itself is still inaccessible\footnote{The
+	content is not available through normal routing. This does not, though,
+	guarantee that Cache Servers do not already have the content stored and/or
+	are incapable of serving it if routing is bypassed.}.
+	\item \code{INACTIVE} A Delivery Service that is "inactive" is not available
+	for routing and has not had its configuration distributed to its assigned
+	Cache Servers.
+\end{itemize}
+
+\paragraph{Supported Protocols}
+This is a set of strings that name protocols served by the Delivery Service.
+Note that this is the method used to retrieve content from the caching system,
+not the method used for routing. The only protocols officially supported by ATC
+are "HTTP" and "HTTPS".\\
+This set is case-insensitive, such that if a Delivery Service is created with a
+Supported Protocols set containing "HTTP" the resulting set is equivalent to
+what would result from creating it with a Supported Protocols set containing
+"http". Representations produced by the Traffic Ops API MUST always use
+only uppercase characters.
+
+\paragraph{Tags}
+The Tags associated with a Delivery Service are represented by a set of strings
+that are Tag Names.
+
+\paragraph{Tenant}
+The Tenant to which a Delivery Service belongs is represented by a string that
+is that Tenant's unique Name.
+
+\paragraph{Topology}
+The Topology used by a Delivery Service is represented by a string that is the
+Topology's unique Name.
+
+\paragraph{Vanity Hostnames}
+"Vanity Hostnames" is a set of strings that are Fully Qualified Domain Names
+(FQDN) which may be used as alternates to the standard
+\code{\emph{Routing Name}.\emph{Name}.\emph{CDN Domain}} FQDN when requesting
+content from the Delivery Service.\\
+No two Delivery Services may be allowed to share any single Vanity Hostname.\\
+Note that Traffic Ops - and in fact Traffic Control in general - cannot and
+does not guarantee that these vanity names will work, only that Traffic Router
+will respond to them as equivalents to a normal Delivery Service FQDN when
+content is requested through it. In general, because Vanity Hostnames are
+typically outside of the CDN's Domain (which is the only domain for which
+Traffic Router must be authoritative), this requires the DNS servers that are
+authoritative for each Vanity Hostname's Domain to contain records that will
+point to Traffic Router for resolution of these names.
+
+\subsubsection{DNS-Routed Properties}
+
+\paragraph{Bypass TTL}
+An unsigned integer that defines the Time-To-Live (TTL) of DNS responses from
+the Traffic Router for this Delivery Service's Bypass Destination, in seconds.
+
+\paragraph{DNS TTL}
+An unsigned integer that defines the Time-To-Live (TTL) of DNS responses from
+the Traffic Router for this Delivery Service's routing, in seconds.
+
+\paragraph{Max Records}
+
+\subsubsection{HTTP-Routed Properties}
+
+\paragraph{Additional Response Headers}
+
+\paragraph{Consistent Hashing Regular Expression}
+
+\paragraph{Logged Request Headers}
+
+\paragraph{Significant Query Parameters}
+
+\subsubsection{Steering-Routed Properties}
+
+\paragraph{Targets}

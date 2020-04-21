@@ -1,0 +1,112 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{CDNs}
+A CDN is a full collection of caching and infrastructural servers and ATC
+components required to service distributed requests for content, as well as the
+configuration options for the methods of content delivery and the content
+delivered therein.
+
+\begin{codelisting}
+\captionof{listing}{CDN Object as a TypeScript Interface}
+\label{code:datamodel:cdn}
+\begin{minted}[tabsize=2]{typescript}
+/**
+ * A CDN represents a full stack of hardware, components and configuration
+ * required to delivery content.
+*/
+interface CDN {
+	/** The numeric IDs of the CDN's cache servers */
+	cacheServers: Set<bigint>;
+	/** The names of all of the Delivery Services within the CDN */
+	deliveryServices: Set<string>;
+	/** Whether or not DNSSEC is enabled on the CDN's domain */
+	dnssecEnabled: boolean;
+	/** The CDN's domain. Must be a valid DNS label. */
+	domain: string;
+	/** The numeric IDs of the CDN's infrastructure servers */
+	infrastructureServers: Set<bigint>;
+	/** The Name of a CDN uniquely identifies it. */
+	name: string;
+	/** The numeric IDs of the CDN's origins */
+	origins: Set<bigint>;
+	/** The numeric IDs of the Traffic Monitor instances within the CDN */
+	trafficMonitors: Set<bigint>;
+	/** The numeric IDs of the Traffic Router instances within the CDN */
+	trafficRouters: Set<bigint>;
+	/**
+	 * The numeric IDs of the Traffic Stats instances within the CDN.
+	 * @todo Currently TS is a singleton; is there any desire/reason to change?
+	*/
+	trafficStatsServers: Set<bigint>;
+}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{Cache Servers}
+A CDN's collection of Cache Servers is represented as set of Cache Server IDs.
+
+\subsubsection{Delivery Services}
+A CDN's collection of Delivery Services is represented as a set of Delivery
+Service Names.
+
+\subsubsection{DNSSEC Enabled}
+A CDN that has "DNSSEC Enabled" is capable of supporting DNSSEC configurations
+on its constituent Delivery Services. This does \emph{not} mean that all DNS
+requests through ATC for this CDN's Domain will be secured with DNSSEC.\\
+This is a boolean concept and as such is represented by boolean values.
+
+% TODO: is this necessary? or is this more of a Delivery Service thing?
+% TODO: this is no longer a CDNs property as per WG discussion, but does it now
+% need its own model definition, or is that unnecessary?
+% \subsubsection{DNSSEC Keys}
+% An array/list of the Zone-Signing and Key-Signing Keys of this CDN. The
+% Zone-Signing Key will appear first, followed immediately by the Key-Signing Key
+
+\subsubsection{Domain}
+The Top-Level Domain used by the CDN, represented as a string. This MUST be a
+uniquely valued property across all CDNs, and MUST not be an invalid DNS label
+as defined by
+\href{https://tools.ietf.org/html/rfc1035#section-2.3.1}{Section 2.3.1 of RFC1035}.
+
+\subsubsection{Infrastructure Servers}
+A CDN's collection of Infrastructure Servers is represented as a set of
+Infrastructure Server IDs.
+
+\subsubsection{Name}
+A CDN's "Name" is a string that uniquely identifies it among all CDNs. It MUST
+NOT be allowed to contain "special characters" - meaning anything other than
+alphanumeric characters, spaces, hyphens, colons and underscores. It further
+MUST NOT be allowed to begin with a non-alphanumeric character nor end with a
+space.
+
+\subsubsection{Origins}
+A CDN's collection of Origins is represented by a set of Origin IDs.
+
+\subsubsection{Traffic Monitors}
+A CDN's collection of Traffic Monitors is represented by a set of Traffic
+Monitor IDs. Note that while a functioning CDN must contain at least one Traffic
+Monitor, no such restriction is placed on CDN objects in general.
+
+\subsubsection{Traffic Routers}
+A CDN's collection of Traffic Routers is represented by a set of Traffic Router
+IDs. Note that while a functioning CDN must contain at least one Traffic Router,
+no such restriction is placed on CDN objects in general.
+
+\subsubsection{Traffic Stats Servers}
+A CDN's collection of Traffic Stats Servers is represented by a set of Traffic
+Stats Server IDs.
