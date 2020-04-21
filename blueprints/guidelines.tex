@@ -99,7 +99,7 @@ Alerts should be presented as an array containing objects which each conform to 
 	to fail. The best example of this is deprecation warnings, which should appear on all API routes that have been deprecated.
 \end{itemize}
 
-\subsubsection{Summary}
+\subsubsection{Summary\label{sec:summary-object}}
 The \code{summary} object is used to provide summary statistics about object
 collections. In general the use of \code{summary} is left to be defined by API
 endpoints (subject to some restrictions). However, its use is not appropriate in
@@ -485,7 +485,7 @@ Transfer-Encoding: chunked
 \end{minted}
 \end{codelisting}
 
-\subsection{Age Filtering}
+\subsection{Age Filtering\label{sec:age-filtering}}
 Whenever object age is a property of that object (which is quite often in the form of \code{lastModified}), Traffic Ops endpoint
 handlers that respond to requests for object representations (i.e. GET requests) SHOULD support filtering by age. If age filtering
 is implemented, it MUST be made available using the query parameters in Table \ref{tbl:age-filtering-qparams}.
