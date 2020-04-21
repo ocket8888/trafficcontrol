@@ -637,8 +637,11 @@ the Traffic Router for this Delivery Service's routing, in seconds.
 
 
 
-\subsection{Profiles and Parameters}
-
+\subsection{Profiles}
+A Profile is a set of configuration options which may be associated with one or
+more Cache Servers. It contains configuration options that are typically common
+to a great number of Cache Servers within a CDN, and can therefore be changed
+on an arbitrary number of Cache Servers simultaneously.
 
 \subsubsection{Bandwidth Threshold}
 The "Bandwidth Threshold" of a Cache Server is the maximum used bandwidth which
@@ -648,6 +651,12 @@ common value within the server's Cache Group as the default. Note that the value
 may be zero, in which case the Cache Server will always be considered unhealthy
 for the reason of exceeding this threshold.\\
 If this value is null-typed, it has the meaning "no limit".
+
+\subsubsection{Description}
+Description is a human-readable string that ideally describes what the Profile
+is for and to what servers it ought to be limited in its assignment.\\
+This may be an empty string, but clients of the API are encouraged to promote
+its sensible use as much as possible.
 
 \subsubsection{Hard Disks}
 A collection of Hard Disk Drives (HDDs)\footnote{This designation is meant to
@@ -676,6 +685,59 @@ For more information consult the
 \href{https://linux.die.net/man/3/getloadavg}{\code{getloadavg(3)} manual page},
 and/or the
 \href{https://linux.die.net/man/5/proc}{\code{/proc(5)} manual page}.
+
+\subsubsection{Name}
+A Profile's Name is a string that uniquely identifies it among all Profiles.\\
+It MUST NOT be empty and MUST only contain alphanumeric characters,
+underscores, and hyphens.
+
+\subsubsection{Parameters}
+A Profile's principle job is to contain Parameters. Each Parameter represents
+some arbitrary piece of configuration related to a Cache Server's operation.
+These are mainly used by the configuration file generation process to help
+create caching-proxy-server-implementation-specific configuration files, but in
+practice may represent other miscellaneous configuration options.\\
+Each Parameter is an object, the properties of which are herein described.
+
+\paragraph{Configuration File}
+A Parameter's Configuration File is a string that typically names the
+configuration file to which configuration is added by this Parameter. This
+is merely the \emph{name} of the file, and not its full \emph{file path}, for
+example a configuration file for Apache Traffic Server that typically is placed
+at \code{/etc/trafficserver/records.config} would be named in a Configuration
+File property of a Parameter as simply \code{records.config}. The location of
+the file on the Cache Server is implementation-specific, and the configuration
+file generation system is responsible for knowing where that is.\\
+This string MUST NOT be empty - even if it configures something that is not
+contained within an actual configuration file it ought to have a Configuration
+File value that describes what it configures.\\
+The combination of a Parameter's Configuration File and its Name must be unique
+among a Profile's Parameters.
+
+\paragraph{Name}
+The Name of a Parameter is a string describes the specific configuration option
+that the Parameter configures. Typically this is the name of the configuration
+field within a configuration file generated for the Cache Server(s) using this
+Profile.\\
+This string MUST NOT be empty.\\
+The combination of a Parameter's Configuration File and its Name must be unique
+among a Profile's Parameters.
+
+\paragraph{Secure\label{sec:profile:param:secure}}
+Secure is a boolean value which - if \code{true} - will cause its Value to be
+obscured for users without the \code{secure-parameters} Permission, and such
+users will be unable to edit the Parameter in any way - or even remove it from
+the Profile (even if they have all other required Permissions). However, a
+Profile can be replaced on a Cache Server even if it has Secure Parameters.
+
+\paragraph{Value}
+A Parameter's Value is a string, but it may be semantically interpreted by
+configuration management systems in arbitrary ways. For this reason it is very
+important that clients of the API ensure that users are empowered to enter
+semantically correct values for Parameters based on whatever configuration
+management system is in use, to the highest degree possible - because the API
+can make no such guarantees and performs no such checks.\\
+This string MUST NOT be empty.
 
 \subsubsection{Query Time Threshold}
 A Cache Server's "Query Time Threshold" is an unsigned integer number of
