@@ -212,6 +212,10 @@ range representing East and the negative range representing West.
 A Cache Group is uniquely identified by its Name, which is a string that MUST
 NOT be empty.
 
+\subsubsection{Tags}
+The Tags associated with a Cache Group is represented by a set of strings that
+are Tag Names.
+
 \subsubsection{Type}
 Cache Groups can only contain one Type of Cache Server, which is herein
 reflected by the string constant value of said Type.
@@ -585,6 +589,10 @@ Supported Protocols set containing "HTTP" the resulting set is equivalent to
 what would result from creating it with a Supported Protocols set containing
 "http". Representations produced by the Traffic Ops API MUST always use
 only uppercase characters.
+
+\paragraph{Tags}
+The Tags associated with a Delivery Service are represented by a set of strings
+that are Tag Names.
 
 \paragraph{Tenant}
 The Tenant to which a Delivery Service belongs is represented by a string that
