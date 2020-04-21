@@ -1,0 +1,70 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Users\label{sec:users}}
+A user represents a person who may be authenticated with the Traffic Ops API and
+their ability to interact with Traffic Ops Data Model objects. A User object
+also contains "meta" information such as their email address.
+
+\subsubsection{Address}
+This is a text field with no defined structure, but semantically it represents a
+user's real-world, physical address. If it is not an empty value, it is assumed
+to contain enough information to send a letter through normal postage to the
+user.\\
+Addresses may consist of alphanumeric characters, hyphens, periods, spaces, and
+newlines, but may not end with a space or newline.
+
+\subsubsection{Email}
+A user's email address, which is used for initial registration and password
+recovery. A User object is not guaranteed to have an Email because the initial,
+default User will not have one. However, UIs based on the Traffic Ops API are
+encouraged to require that new users have one, as otherwise they will be unable
+to recover their account if their password is forgotten.\\
+Emails are unique among all Users, unless they are "Null"-valued.\\
+Representation formats that do not support email addresses natively as a type
+MUST represent this a string.
+
+\subsubsection{Full Name}
+A user's "full" name, as it would appear on a letter mailed to them, as a
+string. This field, if not empty, is presumed to be the user's name as it would
+appear on normal postage. This field MUST NOT be allowed to contain
+non-alphabetic characters.
+
+\subsubsection{Phone Number}
+A string which, if not empty, is presumed to be a telephone number at which the
+user may be contacted. It MUST only be allowed to contain numerics and hyphens,
+and must neither start nor end with a hyphen.
+
+\subsubsection{Role}
+A user's permissions are encapsulated by their Role, which is represented as a
+map containing two keys, "name" that maps to the Role's Name as a string and
+"permissions" which maps to a set of Permission Names as strings.
+
+\subsubsection{Tags}
+The Tags associated with a User are represented by a set of strings that are
+Tag Names.\\
+Note that Tags \emph{cannot be used to control a User's access to or ability to
+interact with \textbf{anything}}. These are controlled entirely by a User's
+Tenant and Role.
+
+\subsubsection{Tenant}
+The scope of a user's permissions is expressed as a string that is the Name of
+the Tenant to which the user belongs.
+
+\subsubsection{Username}
+A user's "Username" is a string that is used to uniquely identify them among all
+Users. It is only allowed to contain alphanumeric characters.
