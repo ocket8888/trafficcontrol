@@ -30,6 +30,14 @@ may be zero, in which case the Cache Server will always be considered unhealthy
 for the reason of exceeding this threshold.\\
 If this value is null-typed, it has the meaning "no limit".
 
+\subsubsection{CDN}
+Profiles are scoped to a CDN, because a CDN is defined as all of the
+configuration and infrastructure necessary to serve content for its constituent
+Delivery Services. So being able to share that configuration across CDNs breaks
+this encapsulation.\\
+Therefore a Profile belongs to a CDN which is identified by this string which
+is the CDN's Name.
+
 \subsubsection{Description}
 Description is a human-readable string that ideally describes what the Profile
 is for and to what servers it ought to be limited in its assignment.\\
@@ -135,3 +143,16 @@ whom the caching proxy software runs on the Cache Server.
 \subsubsection{Tags}
 The Tags associated with a Profile are represented by a set of strings that are
 Tag Names.
+
+\subsubsection{Type}
+The Type of a Profile determines which kind of Cache Server may use it. Only
+Cache Servers with the same Type as a Profile may use that Profile. This helps
+prevent accidental misconfiguration in a sea of Parameters.\\
+A Profile's Type is a string restricted to one of the following values:
+
+\begin{itemize}
+	\item \code{EDGE} - This Profile may only be used by Edge-tier Cache
+		Servers which act as reverse proxies.
+	\item \code{MID} - This Profile may only be used by Mid-tier Cache Servers
+		which acts as forward proxies.
+\end{itemize}
