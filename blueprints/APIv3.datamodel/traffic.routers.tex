@@ -1,0 +1,52 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Traffic Routers}
+
+\subsubsection{CDN}
+The CDN to which a Traffic Router belongs is represented by its Name, which
+uniquely identifies it. The Traffic Router MUST be an/the authoritative DNS
+server for the Domain of the CDN to which it belongs.
+
+\subsubsection{Domain}
+This is the "domain" part of the Cache Server's Fully Qualified Domain Name
+(FQDN) as a string. For example, a Cache Server with an FQDN of
+\code{github.com} has a Domain of \code{com} and a Cache Server with an FQDN of
+\code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.
+
+\subsubsection{Host Name}
+This is the "host" part of the Cache Server's Fully Qualified Domain Name (FQDN)
+as a string. For example, a Cache Server with an FQDN of \code{github.com} has a
+Host Name of \code{github}, and a Cache Server with an FQDN of
+\code{trafficcontrol.apache.org} has a Host Name of \code{trafficcontrol}.\\
+This field does NOT need to be unique, though operators are encouraged to make
+this - or at least the concatenation \code{\emph{Host Name}.{Domain}} - unique
+for ease of operation.
+
+\subsubsection{ID}
+A Cache Server's "ID" is an unsigned integer that uniquely identifies it among
+all Cache Servers. It serves no purpose beyond unique identification of the
+Cache Server.
+
+\subsubsection{Notes}
+This section is an arbitrary string containing miscellaneous, human-friendly
+information about the Cache Server. Other ATC components SHOULD NOT parse this
+for specific information fields, or expect it to be in a particular format.
+
+\subsubsection{Physical Location}
+The Physical Location at which a Cache Server resides is represented by a string
+containing its Name.

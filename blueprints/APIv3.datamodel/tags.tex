@@ -1,0 +1,51 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Tags}
+Tags may be used to group "taggable" objects for logical or administrative
+purposes.\\
+While plug-ins and other third-party code such as custom configuration
+management systems may glean some semantic meaning from a Tag's Name or
+presence on an object, Traffic Control components - \emph{including Traffic Ops
+and its API} - MUST NOT infer any special meaning from any Tag's Name or
+presence on an object, nor attach any semantic value to a Tag's presence on an
+object, a Tag's Name, or any pattern of Tag Name.\\
+What is known as a "taggable" object is simply any object with a "Tags"
+property that contains a set of Tag Names which are the tags associated with
+said object. Thus, any object types added to the API at any point in the future
+may be "taggable", but for the data model herein outlined the following objects
+those that are "taggable":
+
+\begin{itemize}
+	\item Cache Groups
+	\item Cache Servers
+	\item Delivery Services
+	\item Infrastructure Servers
+	\item Origins
+	\item Physical Locations
+	\item Profiles
+	\item Tenants
+	\item Topologies
+	\item Users
+\end{itemize}
+
+\subsubsection{Name}
+Name is the only property of a Tag, and is therefore a unique identifier for
+a Tag. It is a string that ought to give some indication of what the Tag is for
+but ultimately any meaning for the Tag is left to system administrators to
+define and maintain.\\
+This string MUST NOT be empty and MUST only contain alphanumeric characters.
