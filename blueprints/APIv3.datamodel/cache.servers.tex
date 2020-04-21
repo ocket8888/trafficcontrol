@@ -1,0 +1,185 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Cache Servers}
+Cache servers are the Mid-and-Edge-tier HTTP caching proxies ultimately
+responsible for caching and serving content for a Delivery Service.
+
+\subsubsection{Cache Group}
+The Cache Group to which the Cache Server belongs is represented as a string
+that uniquely names it.
+
+\subsubsection{Capabilities}
+A Cache Server's "Capabilities" express a Cache Server's ability to serve
+certain kinds of traffic. They are represented on Cache Server objects as a set
+of Capability Names.
+
+\subsubsection{CDN}
+The CDN to which a Cache Server belongs is represented by its Name, which
+uniquely identifies it.
+
+\subsubsection{Domain\label{sec:server:domain}}
+This is the "domain" part of the Cache Server's Fully Qualified Domain Name
+(FQDN) as a string. For example, a Cache Server with an FQDN of
+\code{github.com} has a Domain of \code{com} and a Cache Server with an FQDN of
+\code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.\\
+In other words, this is every part of the Cache Server's Fully Qualified Domain
+Name that isn't part of its Host Name as defined in Section
+\ref{sec:server:hostname}.
+
+\subsubsection{Host Name\label{sec:server:hostname}}
+This is the "host" part of the Cache Server's Fully Qualified Domain Name (FQDN)
+as a string. For example, a Cache Server with an FQDN of \code{github.com} has a
+Host Name of \code{github}, and a Cache Server with an FQDN of
+\code{trafficcontrol.apache.org} has a Host Name of \code{trafficcontrol}.\\
+In other words, a Cache Server's Host Name is the only part of its FQDN that
+is not part of its Domain as defined in Section \ref{sec:server:domain}.\\
+This field does NOT need to be unique, though operators are encouraged to make
+this - or at least the concatenation \code{\emph{Host Name}.{Domain}} - unique
+for ease of operation.
+
+\subsubsection{HTTP Port}
+An unsigned number that designates the port on which this Cache Server listens
+for incoming HTTP requests. Note that this may be zero, which will cause the
+Cache Server to be incapable of serving HTTP traffic.
+
+\subsubsection{HTTPS Port}
+An unsigned number that designates the port on which this Cache Server listens
+for incoming HTTPS requests. Note that this may be zero, which will cause the
+Cache Server to be incapable of serving HTTPS traffic.
+
+\subsubsection{ID}
+A Cache Server's "ID" is an unsigned integer that uniquely identifies it among
+all Cache Servers. It serves no purpose beyond unique identification of the
+Cache Server.
+
+\subsubsection{Interfaces}
+Interfaces is a set of objects that represent the network interfaces used by a
+Cache Server. This set MUST NOT ever be empty. An Interface's properties are
+herein listed.
+
+\paragraph{IP Addresses}
+A network interface's IP Addresses are represented as a set of objects containing
+the various properties of an IP Address. A network interface MUST always have at
+least one IP Address object in this set. Their properties are herein listed.\\
+Note that there is no structural distinction made between different IP
+versions.
+
+\indent{}\subparagraph{Address}
+Address is the actual IP Address being described. This may be represented
+internally - by either clients or the server - as an actual network address
+type, but MUST be represented in API payloads as a string type - even if the
+representation encoding supports native network address types.
+
+\indent{}\subparagraph{Gateway}
+Gateway is the IP Address of the network gateway used to access this IP
+Address. This may be represented internally - by either clients or the server -
+as an actual network address type, but MUST be represented in API payloads as a
+string type - even if the representation encoding supports native network
+address types.\\
+This MUST NOT ever be allowed to be represented as an empty string. However, if
+it is a "null"-type, then the implication is that no network gateway is used to
+access the IP Address.
+
+\indent{}\subparagraph{Service Address}
+Service Address is a boolean that describes whether or not an IP Address is one
+on which a Cache Server provides its service. Only one such IP Address is
+allowed to exist for a given Cache Server per IP version. That is, a Cache
+Server may have one IPv4 Service Address and one IPv6 Service Address, but is
+not permitted to have two or more IPv4 Service Addresses.
+
+\paragraph{Max Bandwidth}
+This unsigned integer describes the maximum bandwidth - in kb/s - that is
+allowed for this interface to be considered "healthy" by Traffic Monitors.\\
+This has no effect if this Interface's Monitor value is not True.\\
+The value \code{0} has the meaning "no limit".
+
+\paragraph{Monitor}
+A boolean that describes whether or not this interface should be monitored by
+Traffic Monitor. Note that multiple Interfaces that have True Monitor values
+is incompatible with a Health Polling Format value of "astats" or
+"astats-dsnames".
+
+\paragraph{MTU}
+MTU is an unsigned integer that gives the Interface's Maximum Transmission
+Unit. It is recommended that UIs built on the API provide the values 9000
+and 1500 for selection only, as other values are very rarely correct. However,
+the API itself places no such restrictions on the value, which can be any
+unsigned integer or a "null"-type.\\
+If the value is a "null"-type, then it is assumed that the interface's MTU is
+not known or is not relevant for the Cache Server's operation (common on
+non-Service-Address-containing Interfaces).
+
+\paragraph{Name}
+The string containing a network interface's Name MUST NOT be allowed to be
+empty. It should name the actual network interface device on the Cache Server.
+For example, two common Names are "eth0" and "bond0".
+
+\subsubsection{Notes}
+This section is an arbitrary string containing miscellaneous, human-friendly
+information about the Cache Server. Other ATC components SHOULD NOT parse this
+for specific information fields, or expect it to be in a particular format.
+
+\subsubsection{Physical Location}
+The Physical Location at which a Cache Server resides is represented by a string
+containing its Name.
+
+\subsubsection{Profile}
+The Profile used by a Cache Server is represented by a string containing its
+Name.
+
+\subsubsection{Revalidation Pending}
+This boolean represents whether or not the Cache Server has content revalidation
+requests yet to satisfy. When a new Content Revalidation Request is created on
+one or more Delivery Services to which this Cache Server is assigned, this will
+be set to "true" and updated to "false" when the operation has been completed.
+Being "false" does not mean that the content invalidation request(s) performed
+by the Cache Server have expired and are no longer in effect.
+
+\subsubsection{Status}
+The Cache Server's "Status" is a string constant, which MUST always be one of
+
+\begin{itemize}
+	\item \code{ADMIN\_DOWN} - The Cache Server is considered unhealthy and its
+	thresholds and connectivity state are not monitored. Its existence is not
+	disclosed to Traffic Router(s).
+	\item \code{OFFLINE} - The Cache Server is considered unhealthy regardless
+	of any thresholds or connectivity state.
+	\item \code{ONLINE} - The Cache Server will always be considered healthy
+	regardless of any thresholds or connectivity state.
+	\item \code{REPORTED} - The Cache Server's health is presented to the
+	Traffic Router(s) as it is reported by its various thresholds, as determined
+	by the Traffic Monitor(s).
+\end{itemize}
+
+\subsubsection{Tags}
+A Cache Server's "Tags" are represented as a set of Tag Names.
+
+\subsubsection{Type}
+A Cache Server's "Type" is a string constant, which MUST always be one of
+
+\begin{itemize}
+	\item \code{EDGE} - This is an Edge-tier Cache Server which acts as a
+	reverse proxy.
+	\item \code{MID} - This is a Mid-tier Cache Server which acts as a forward
+	proxy.
+\end{itemize}
+
+\subsubsection{Updates Pending}
+This boolean represents whether or not the Cache Server has configuration
+updates pending. When such updates are applied, this will be set to "false" by
+the Cache Server's ORT/ATSTCCFG instance.
