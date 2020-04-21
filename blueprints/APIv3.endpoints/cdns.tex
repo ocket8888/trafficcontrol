@@ -1,0 +1,141 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{\code{/cdns}}
+This endpoint deals with manipulations and representations of the group of CDN
+objects configured in Traffic Ops.
+
+\subsubsection{GET}
+Retrieves CDN representations.
+\begin{description}
+	\item[Required Permissions] \code{cdns-read}
+	\item[Response Type] Array
+\end{description}
+
+\paragraph{Request Structure}
+This method of this endpoint implements the Age Filtering and Sorting and
+Pagination query parameters as outlined in Sections \ref{sec:age-filtering} and
+\ref{sec:pagination}, respectively. It further provides the following query
+parameters:
+
+\begin{table}
+	\centering
+	\caption{\code{/cdns} Query Parameters}
+	\begin{tabularx}{\linewidth}{|l|X|}
+		\hline
+		\textbf{Parameter} & \textbf{Description}\\
+		\hline
+		dnssecEnabled & Filters results to only contain CDNs with this DNSSEC
+			Enabled setting - must represent a boolean (\code{true} or
+			\code{false}). If this cannot parse to a boolean, it will cause the
+			endpoint to return \emph{all} CDNs and emit a warning about the bad
+			value for this parameter.\\
+		\hline
+		domain & Filters results to only contain CDNs that have this Domain\\
+		\hline
+		name & Filters results to only contain CDNs that have this Name\\
+		\hline
+		omit & This can be either a single property name (e.g.
+			\code{omit=cacheServers}) or a comma-delimited array of property
+			names (e.g. \code{omit=trafficMonitors,trafficRouters}). The named
+			propert(y/ies) will be stripped from the output objects; that is,
+			the returned objects will be missing these properties from their
+			representations. The properties that can be omitted in this way
+			are:
+			\begin{itemize}
+				\item Cache Servers
+				\item Delivery Services
+				\item Infrastructure Servers
+				\item Origins
+				\item Traffic Monitors
+				\item Traffic Routers
+				\item Traffic Stats Servers
+			\end{itemize}
+			If this parameter is provided and cannot be parsed as either a
+			single property name or a comma-delimited list thereof, or if an
+			attempt is made to omit a property other than those allowable, a
+			400 Bad Request error response will be returned.\\
+		\hline
+	\end{tabularx}
+\end{table}
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}{http}
+GET /api/4.0/cdns?name=CDN-in-a-Box HTTP/1.1
+Host: trafficops.infra.ciab.test
+Accept: application/json, */*;q=0.9
+Cookie: mojolicious=...
+
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is an array of representations of CDN objects, each representation
+extended with the \code{lastUpdated} property containing the Date/Time at which
+the CDN object was last modified.\\
+This method of this endpoint also implements the \code{count} property of the
+top-level \code{summary} object as described in Section
+\ref{sec:summary-object}.
+
+\newpage{}
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 200 OK
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Wed, 14 Nov 2018 20:46:57 GMT
+Content-Length: 237
+
+{ "response": [
+	{
+		"cacheServers": [ 1, 2 ],
+		"deliveryServices": [ "Demo1" ],
+		"dnssecEnabled": false,
+		"domain": "mycdn.ciab.test",
+		"infrastructureServers": [ 1, 2, 3 ],
+		"lastUpdated": "2018-11-14T18:21:14Z",
+		"name": "CDN-in-a-Box",
+		"origins": [ 1 ],
+		"trafficMonitors": [ 1 ],
+		"trafficRouters": [ 1 ],
+		"trafficStatsServers": [ 1 ]
+	}
+],
+"summary": {
+	"count": 2
+}}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{POST}
+Creates a new CDN.
+\begin{description}
+	\item[Required Permissions] \code{cdns-create}
+	\item[Response Type] Array
+\end{description}
+
+\subsection{\code{/cdns/\{\{CDN Name\}\}}}
+This endpoint deals with manipulation and representation of a single CDN object
+identified by its Name.\\
+For all methods of this endpoint, if the part of the path composed of
+\code{CDN Name} is not the name of a CDN that exists in Traffic Ops, a 404 Not
+Found error response will be returned in accordance with Section \ref{sec:404}.
+
+\subsection{\code{/cdns/\{\{CDN Name\}\}/snapshot}}
