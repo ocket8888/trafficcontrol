@@ -607,7 +607,15 @@ Topology's unique Name.
 (FQDN) which may be used as alternates to the standard
 \code{\emph{Routing Name}.\emph{Name}.\emph{CDN Domain}} FQDN when requesting
 content from the Delivery Service.\\
-No two Delivery Services may be allowed to share any single Vanity Hostname.
+No two Delivery Services may be allowed to share any single Vanity Hostname.\\
+Note that Traffic Ops - and in fact Traffic Control in general - cannot and
+does not guarantee that these vanity names will work, only that Traffic Router
+will respond to them as equivalents to a normal Delivery Service FQDN when
+content is requested through it. In general, because Vanity Hostnames are
+typically outside of the CDN's Domain (which is the only domain for which
+Traffic Router must be authoritative), this requires the DNS servers that are
+authoritative for each Vanity Hostname's Domain to contain records that will
+point to Traffic Router for resolution of these names.
 
 \subsubsection{DNS-Routed Properties}
 
