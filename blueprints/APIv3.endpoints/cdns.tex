@@ -29,12 +29,12 @@ Retrieves CDN representations.
 \paragraph{Request Structure}
 This method of this endpoint implements the Age Filtering and Sorting and
 Pagination query parameters as outlined in Sections \ref{sec:age-filtering} and
-\ref{sec:pagination}, respectively. It further provides the following query
-parameters:
+\ref{sec:pagination}, respectively. It further provides the query parameters in
+Table \ref{tbl:cdns:get:qparams}
 
-\begin{table}
+\begin{table}[h]
 	\centering
-	\caption{\code{/cdns} Query Parameters}
+	\caption{GET \code{/cdns} Query Parameters\label{tbl:cdns:get:qparams}}
 	\begin{tabularx}{\linewidth}{|l|X|}
 		\hline
 		\textbf{Parameter} & \textbf{Description}\\
@@ -42,7 +42,7 @@ parameters:
 		dnssecEnabled & Filters results to only contain CDNs with this DNSSEC
 			Enabled setting - must represent a boolean (\code{true} or
 			\code{false}). If this cannot parse to a boolean, it will cause the
-			endpoint to return \emph{all} CDNs and emit a warning about the bad
+			endpoint to ignore the filter and emit a warning about the bad
 			value for this parameter.\\
 		\hline
 		domain & Filters results to only contain CDNs that have this Domain\\
@@ -91,8 +91,6 @@ the CDN object was last modified.\\
 This method of this endpoint also implements the \code{count} property of the
 top-level \code{summary} object as described in Section
 \ref{sec:summary-object}.
-
-\newpage{}
 
 \begin{codelisting}
 \captionof{listing}{Response Example}
