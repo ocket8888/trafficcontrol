@@ -16,8 +16,10 @@
 % under the License.
 
 \section{Endpoint Specifications}
-
-\input{APIv3.endpoints/cdns}
+Herein are specified the Traffic Ops API endpoints. They in general refer to
+Section \ref{sec:data-model} for most payloads, but often extend those objects
+with Last Updated properties that contain the Dates/Times at which the objects
+were last updated.
 
 \subsection{\code{/cache\_groups}}
 
@@ -26,6 +28,8 @@
 \subsection{\code{/cache\_servers}}
 
 \subsection{\code{/cache\_servers/\{\{Cache Server ID\}\}}}
+
+\input{APIv3.endpoints/cdns}
 
 \subsection{\code{/delivery\_services}}
 
@@ -45,9 +49,7 @@
 
 \subsection{\code{/physical\_locations/\{\{Physical Location Name\}\}}}
 
-\subsection{\code{/profiles}}
-
-\subsection{\code{/profiles/\{\{Profile Name\}\}}}
+\input{APIv3.endpoints/profiles}
 
 \subsection{\code{/roles}}
 

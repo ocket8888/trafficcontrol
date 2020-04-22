@@ -1,0 +1,159 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{\code{/profiles}}
+This endpoint deals with manipulations and representations of the group of
+Profile objects configured in Traffic Ops.
+
+\subsubsection{GET}
+Retrieves representations of Profile objects.
+\begin{description}
+	\item[Required Permissions] \code{profile-read}
+	\item[Response Type] Array
+\end{description}
+
+\paragraph{Request Structure}
+This method of this endpoint implements the Age Filtering and Sorting and
+Pagination query parameters as outlined in Sections \ref{sec:age-filtering} and
+\ref{sec:pagination}, respectively. It further provides the query parameters in
+Table \ref{tbl:profiles:get:qparams}.
+
+\begin{table}[h]
+\centering
+\caption{GET \code{/profiles} Query Parameters\label{tbl:profiles:get:qparams}}
+\begin{tabularx}{\linewidth}{|l|X|}
+	\hline
+	\textbf{Parameter} & \textbf{Description}\\
+	cdn & Filters results to only contain Profiles within the CDN that has this
+		Name. If the CDN in question does not exist, it causes the endpoint to
+		ignore the filter and emit a \code{warning}-level Alert indicating the
+		issue.\\
+	\hline
+	name & Filters results to only contain Profiles with this Name\\
+	\hline
+	tags & This can be either a single Tag Name (e.g. \code{tags=Foo}) or a
+		comma-delimited list of Tag Names (e.g. \code{tags=Foo,Bar}). The
+		response will be filtered to contain only those Profiles that are
+		"tagged" with \emph{all} passed Tags. If at least one Tag named does
+		not exist, it causes the endpoint to ignore the \emph{entire} filter
+		and emit a \code{warning}-level Alert indicating the issue.\\
+	\hline
+	omit & This can be a property name which will be stripped from the returned
+		objects; that is, the returned objects will be missing these properties
+		from their representations. The properties that can be omitted in this
+		way are limited to:
+		\begin{itemize}
+			\item Parameters
+		\end{itemize}
+		If this parameter is provided and cannot be parsed as either a
+		single property name or a comma-delimited list thereof (though at the
+		time of this writing only one is supported so the latter wouldn't make
+		much sense in any case), or if an attempt is made to omit a property
+		other than those allowable, a 400 Bad Request error response will be
+		returned.\\
+	\hline
+	type & Filters results to only contain Profiles of this Type, which must be
+		one of the valid Profile Type values defined in Section
+		\ref{sec:profile:type}. If the passed Type is not a valid Profile Type
+		value, the filter is ignored and the endpoint will return a
+		\code{warning}-level Alert indicating the issue.\\
+	\hline
+\end{tabularx}
+\end{table}
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}{http}
+GET /api/4.0/profiles?name=CDN-in-a-Box_EDGE HTTP/1.1
+Host: trafficops.infra.ciab.test
+Accept: application/json, */*;q=0.9
+Cookie: mojolicious=...
+
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is an array of representation of Profile objects, each
+representation extended with the \code{lastUpdated} property containing the
+Date/Time at which the Profile object was last modified.\\
+This method of this endpoint also implements the \code{count} property of the
+top-level \code{summary} object as described in section
+\ref{sec:summary-object}.
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 200 OK
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Wed, 22 Apr 2020 00:10:15 GMT
+Content-Length: 1255
+
+{ "response": [{
+	"bandwidthThreshold": 1750000,
+	"cdn": "CDN-in-a-Box",
+	"description": "Edge Cache - Apache Traffic Server",
+	"hardDisks": [ "/var/trafficserver/cache" ],
+	"healthConnectionTimeout": 2000,
+	"healthPollingPath": "/_stats",
+	"historyCount": 30,
+	"loadavgThreshold": 25,
+	"name": "ATS_EDGE_TIER_CACHE",
+	"queryTimeThreshold": 1000,
+	"ramDisks": [],
+	"tags": [],
+	"type": "EDGE",
+	"parameters": [
+		{
+			"configurationFile": "records.config",
+			"name": "CONFIG proxy.config.http.server_ports",
+			"secure": false,
+			"value": "STRING 80 80:ipv6 443:proto=http:ssl 443:ipv6:proto=http:ssl"
+		},
+		{
+			"configurationFile": "records.config",
+			"name": "CONFIG proxy.config.http.enable_http_stats",
+			"secure": false,
+			"value": "INT 1"
+		},
+		{
+			"configurationFile": "records.config",
+			"name": "CONFIG proxy.config.reverse_proxy.enabled",
+			"secure": false,
+			"value": "INT 1"
+		},
+		{
+			"configurationFile": "plugin.config",
+			"name": "system_stats.so",
+			"secure": false,
+			"value": ""
+		},
+		{
+			"configurationFile": "plugin.config",
+			"name": "stats_over_http.so",
+			"secure": false,
+			"value": ""
+		}
+	]
+}],
+"summary": {
+	"count": 2
+}}
+\end{minted}
+\end{codelisting}
+
+\subsection{\code{/profiles/\{\{Profile Name\}\}}}
