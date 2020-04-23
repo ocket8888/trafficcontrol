@@ -156,4 +156,22 @@ Content-Length: 1255
 \end{minted}
 \end{codelisting}
 
+\subsubsection{POST}
+Creates one or more new Profiles.
+\begin{description}
+	\item[Required Permissions] \code{profiles-write}
+	\item[Response Type] Array or Object\footnote{Matches request structure.}
+\end{description}
+
+\paragraph{Request Structure}
+The payload of a request using this method of this endpoint must either be a
+representation of a single Profile (including any desired Parameters), or a
+representation of a set of Profiles.\\
+If any of the passed Profiles are found to be invalid, or if they collide with
+existing Profiles, the entire request is invalid. This means that no Profiles
+would be created in this case, and the appropriate error response will be
+returned.
+
+\paragraph{Response Structure}
+
 \subsection{\code{/profiles/\{\{Profile Name\}\}}}
