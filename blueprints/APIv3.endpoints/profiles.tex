@@ -22,7 +22,10 @@ Profile objects configured in Traffic Ops.
 \subsubsection{GET}
 Retrieves representations of Profile objects.
 \begin{description}
-	\item[Required Permissions] \code{profile-read}
+	\item[Required Permissions] \code{profile-read}\footnote{Additionally, if
+		the requesting user does not have the \code{secure-parameters}
+		Permission, the Values of Parameters that are Secure will be obscured in
+		the response payload. Specifically, they will appear as \code{*****}.}
 	\item[Response Type] Array
 \end{description}
 
@@ -92,7 +95,7 @@ representation extended with the \code{lastUpdated} property containing the
 Date/Time at which the Profile object was last modified.\\
 This method of this endpoint also implements the \code{count} property of the
 top-level \code{summary} object as described in section
-\ref{sec:summary-object}.
+\ref{sec:summary-object}.\\
 
 \begin{codelisting}
 \captionof{listing}{Response Example}
@@ -111,6 +114,7 @@ Content-Length: 1255
 	"healthConnectionTimeout": 2000,
 	"healthPollingPath": "/_stats",
 	"historyCount": 30,
+	"lastUpdated": "2020-04-22T00:10:15Z"
 	"loadavgThreshold": 25,
 	"name": "ATS_EDGE_TIER_CACHE",
 	"queryTimeThreshold": 1000,
@@ -160,7 +164,7 @@ Content-Length: 1255
 Creates one or more new Profiles.
 \begin{description}
 	\item[Required Permissions] \code{profiles-write}
-	\item[Response Type] Array or Object\footnote{Matches request structure.}
+	\item[Response Type] Array\footnote{Irrespective of request structure.}
 \end{description}
 
 \paragraph{Request Structure}
@@ -170,8 +174,164 @@ representation of a set of Profiles.\\
 If any of the passed Profiles are found to be invalid, or if they collide with
 existing Profiles, the entire request is invalid. This means that no Profiles
 would be created in this case, and the appropriate error response will be
-returned.
+returned.\\
+If the requesting user does not have the \code{secure-parameters} Permission,
+no Profiles may be created having Secure Parameters.
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}[tabsize=2]{http}
+POST /api/4.0/profiles HTTP/1.1
+Host: trafficops.infra.ciab.test
+Accept: application/json, */*;q=0.9
+Cookie: mojolicious=...
+Content-Type: application/json
+Transfer-Encoding: chunked
+
+{
+	"bandwidthThreshold": null,
+	"cdn": "CDN-in-a-Box",
+	"description": "A Profile for edge-tier servers running Nginx",
+	"hardDisks": [ "/var/cache/cache.data" ],
+	"healthConnectionTimeout": 2000,
+	"healthPollingPath": "/_plugin/nginx_atc_stats",
+	"historyCount": 30,
+	"loadavgThreshold": null,
+	"name": "NginX Edge",
+	"parameters": [
+		{
+			"configurationFile": "proxy.conf",
+			"name": "proxy_set_header",
+			"secure": false,
+			"value": "X-Real-IP: $remote_addr;"
+		}
+	],
+	"queryTimeThreshold": null,
+	"ramDisks": [],
+	"tags": [],
+	"type": "EDGE"
+}
+\end{minted}
+\end{codelisting}
 
 \paragraph{Response Structure}
+The response is an array of representations of the created Profiles, each one
+augmented with the \code{lastUpdated} property containing the
+Date/Time at which the Profile object was last modified.
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 201 Created
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Wed, 22 Apr 2020 00:10:15 GMT
+Transfer-Encoding: chunked
+
+[
+	{
+		"bandwidthThreshold": null,
+		"cdn": "CDN-in-a-Box",
+		"description": "A Profile for edge-tier servers running Nginx",
+		"hardDisks": [ "/var/cache/cache.data" ],
+		"healthConnectionTimeout": 2000,
+		"healthPollingPath": "/_plugin/nginx_atc_stats",
+		"historyCount": 30,
+		"lastUpdated": "2020-04-22T00:10:15.0Z",
+		"loadavgThreshold": null,
+		"name": "NginX Edge",
+		"parameters": [
+			{
+				"configurationFile": "proxy.conf",
+				"name": "proxy_set_header",
+				"secure": false,
+				"value": "X-Real-IP: $remote_addr;"
+			}
+		],
+		"queryTimeThreshold": null,
+		"ramDisks": [],
+		"tags": [],
+		"type": "EDGE"
+	}
+]
+\end{minted}
+\end{codelisting}
 
 \subsection{\code{/profiles/\{\{Profile Name\}\}}}
+
+\subsection{\code{/profiles/\{\{Profile Name\}\}/parameters}}
+Deals with representations and manipulation of the Parameters of a specific
+Profile.
+
+\subsubsection{GET}
+
+\subsubsection{POST}
+Adds new Parameters to the Profile.
+
+\begin{description}
+	\item[Required Permissions] \code{profiles-write}
+	\item[Response Type] Array
+\end{description}
+
+\paragraph{Request Structure}
+The request may be either a single representation of a new Parameter to be added
+to the Profile, or an array of such representations.\\
+If any of the passed Parameters are found to be invalid, or if they collide with
+the existing Parameters of the specified Profile, the entire request is invalid.
+This means that no Parameters would be added in this case, and the appropriate
+error response will be returned.\\
+If the requesting user does not have the \code{secure-parameters} Permission,
+no Secure Parameters may be added.
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}[tabsize=2]{http}
+POST /api/4.0/profiles/ATS_EDGE_TIER_CACHE/parameters HTTP/1.1
+Host: trafficops.infra.ciab.test
+Accept: application/json, */*;q=0.9
+Cookie: mojolicious=...
+Content-Type: application/json
+Transfer-Encoding: chunked
+
+{
+	"configurationFile": "somefile.txt",
+	"name": "foo",
+	"secure": false,
+	"value": "bar"
+}
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is a set of representations of Parameters that have been added to
+the Profile.
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 201 Created
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Wed, 22 Apr 2020 00:10:15 GMT
+Transfer-Encoding: chunked
+
+[
+	{
+		"configurationFile": "somefile.txt",
+		"name": "foo",
+		"secure": false,
+		"value": "bar"
+	}
+]
+\end{minted}
+\end{codelisting}
+
+\subsubsection{DELETE}
+Removes Parameters from a Profile.
+
+\begin{description}
+	\item[Required Permissions] \code{profiles-write}
+	\item[Response Type] Array
+\end{description}
+
+\paragraph{Request Structure}
