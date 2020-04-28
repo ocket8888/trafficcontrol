@@ -421,11 +421,11 @@ comma-separated values of the \code{sortBy} parameter. Multiple of the same
 value appearing in the definition of \code{sortBy} constitutes an ambiguity and
 must be handled accordingly.\\
 For example, suppose the fictional \code{/foos} endpoints returns Foo objects.
-Given the client requests this endpoint with \code{GET /api/3.0/foos HTTP/1.1},
+Given the client requests this endpoint with \code{GET /api/4.0/foos HTTP/1.1},
 suppose the response resembles Listing \ref{code:unsorted-foos}.\\
 To sort this response first by the \code{fizz} property and then by the
 \code{test} property, the client might make the request\\
-\code{GET /api/3.0/foos?sortBy=fizz,test HTTP/1.1}. The order in which the
+\code{GET /api/4.0/foos?sortBy=fizz,test HTTP/1.1}. The order in which the
 properties appear defines their respective priorities. The response to this
 request, then, will be as shown in Listing \ref{code:sorted-foos}.
 
