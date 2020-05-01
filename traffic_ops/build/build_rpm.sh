@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+set -ex;
+
 #----------------------------------------
 function importFunctions() {
 	if [[ "$NO_FOLLOW_LINKS" == true ]]; then
