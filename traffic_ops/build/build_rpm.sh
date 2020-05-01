@@ -60,7 +60,7 @@ function initBuildArea() {
 		echo 'DEBUG_BUILD is enabled, building without optimization or inlining...';
 		go_build+=(-gcflags 'all=-N -l');
 	fi;
-	"${go_build[@]}" -ldflags "-X main.version=traffic_ops-${TC_VERSION}-${BUILD_NUMBER}.${RHEL_VERSION} -B 0x$(git rev-parse HEAD)" || \
+	"${go_build[@]}" -ldflags "main.version=traffic_ops-${TC_VERSION}-${BUILD_NUMBER}.${RHEL_VERSION} -B 0x$(git rev-parse HEAD) -X" || \
                 { echo "Could not build traffic_ops_golang binary"; exit 1; }
 	popd
 
