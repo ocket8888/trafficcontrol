@@ -17,7 +17,11 @@
 
 #----------------------------------------
 function importFunctions() {
-	local script=$(readlink -f "$0")
+	if [[ "$NO_FOLLOW_LINKS" == true ]]; then
+		local script="$0";
+	else
+		local script=$(readlink -f "$0");
+	fi
 	local scriptdir=$(dirname "$script")
 	export TO_DIR=$(dirname "$scriptdir")
 	export TC_DIR=$(dirname "$TO_DIR")
