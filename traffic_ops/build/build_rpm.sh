@@ -16,6 +16,8 @@ trap 'exit_code=$?; [ $exit_code -ne 0 ] && echo "Error on line ${LINENO} of ${0
 set -o errexit -o nounset -o pipefail;
 set -o xtrace
 
+set -ex;
+
 #----------------------------------------
 importFunctions() {
 	local script scriptdir
