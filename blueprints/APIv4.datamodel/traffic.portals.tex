@@ -1,0 +1,51 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Traffic Portals}
+A Traffic Portal represents a running instance of a Traffic Portal UI.
+
+\subsubsection{IPv4 Address}
+This string contains a valid IPv4 Address at which the UI is served. If it is
+"null"-typed, then it is assumed that there is no static IPv4 Address at which
+the Traffic Portal instance may be reached - or it does not communicate over
+IPv4 at all.
+
+\subsubsection{IPv6 Address}
+This string contains a valid IPv6 Address at which the UI is served. If it is
+"null"-typed, then it is assumed that there is no static IPv6 Address at which
+the Traffic Portal instance may be reached - or it does not communicate over
+IPv6 at all.
+
+\subsubsection{Notes}
+This string contains arbitrary text for containing miscellaneous information.
+
+\subsubsection{Tags}
+The Tags associated with a Traffic Portal are represented by a set of strings
+that are Tag Names.
+
+\subsubsection{URL}
+This string is a full URL at which the UI is served, including scheme (e.g.
+\code{http://}) and optionally port (e.g. \code{80}), e.g.
+\code{https://trafficportal.infra.ciab.test:443}.\\
+If the port is omitted, it will be guessed based on the protocol indicated by
+the schema, e.g. \code{80} for \code{http://}, which indicates the HTTP
+protocol. The only valid schemes are \code{https://} and \code{http://}.\\
+This property uniquely identifies a Traffic Portal, and must therefore
+obviously be unique\footnote{This allows multiple Traffic Portals - or other
+services - to be running at the same static IP address(es) as long as they
+are not literally the same network location (port, host, or protocol could
+differ).}.
