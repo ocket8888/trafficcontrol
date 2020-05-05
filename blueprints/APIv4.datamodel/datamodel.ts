@@ -113,6 +113,8 @@ interface PhysicalLocation {
 	 * Location's "point-of-contact".
 	*/
 	email: string;
+	/** A uniquely identifying string that names the location. */
+	name: string;
 	/** Arbitrary text for miscellaneous purposes */
 	notes: string;
 	/**
