@@ -114,7 +114,7 @@ Content-Length: 1255
 	"healthConnectionTimeout": 2000,
 	"healthPollingPath": "/_stats",
 	"historyCount": 30,
-	"lastUpdated": "2020-04-22T00:10:15Z"
+	"lastUpdated": "2020-04-22T00:10:15Z",
 	"loadavgThreshold": 25,
 	"name": "ATS_EDGE_TIER_CACHE",
 	"queryTimeThreshold": 1000,
@@ -215,7 +215,7 @@ Transfer-Encoding: chunked
 \end{codelisting}
 
 \paragraph{Response Structure}
-The response is an array of representations of the created Profiles, each one
+The response is a set of representations of the created Profiles, each one
 augmented with the \code{lastUpdated} property containing the
 Date/Time at which the Profile object was last modified.
 
@@ -228,7 +228,7 @@ Server: Traffic Ops/5.0
 Date: Wed, 22 Apr 2020 00:10:15 GMT
 Transfer-Encoding: chunked
 
-[
+{ "response": [
 	{
 		"bandwidthThreshold": null,
 		"cdn": "CDN-in-a-Box",
@@ -253,7 +253,7 @@ Transfer-Encoding: chunked
 		"tags": [],
 		"type": "EDGE"
 	}
-]
+]}
 \end{minted}
 \end{codelisting}
 
@@ -274,12 +274,12 @@ Adds new Parameters to the Profile.
 \end{description}
 
 \paragraph{Request Structure}
-The request may be either a single representation of a new Parameter to be added
-to the Profile, or an array of such representations.\\
-If any of the passed Parameters are found to be invalid, or if they collide with
-the existing Parameters of the specified Profile, the entire request is invalid.
-This means that no Parameters would be added in this case, and the appropriate
-error response will be returned.\\
+The request may be either a single representation of a new Parameter to be
+added to the Profile, or an array of such representations.\\
+If any of the passed Parameters are found to be invalid, or if they collide
+with the existing Parameters of the specified Profile, the entire request is
+invalid. This means that no Parameters would be added in this case, and the
+appropriate error response will be returned.\\
 If the requesting user does not have the \code{secure-parameters} Permission,
 no Secure Parameters may be added.
 
@@ -315,14 +315,14 @@ Server: Traffic Ops/5.0
 Date: Wed, 22 Apr 2020 00:10:15 GMT
 Transfer-Encoding: chunked
 
-[
+{ "response": [
 	{
 		"configurationFile": "somefile.txt",
 		"name": "foo",
 		"secure": false,
 		"value": "bar"
 	}
-]
+]}
 \end{minted}
 \end{codelisting}
 
@@ -335,3 +335,62 @@ Removes Parameters from a Profile.
 \end{description}
 
 \paragraph{Request Structure}
+The request may consist of either a single "Parameter Identifier" representation,
+or a set thereof. A "Parameter Identifier" is an object with the following
+properties.
+
+\begin{description}
+	\item[configurationFile] The value of a Parameter's Configuration File.
+	\item[name] The value of a Parameter's Name.
+\end{description}
+
+These two properties together are sufficient to uniquely identify a Parameter
+assigned to a Profile.\\
+Note, however, that if the identified Parameter is "Secure", then the requesting
+user must also have the \code{secure-parameters} Permission in order for the
+request to be successful.\\
+If even one of a set of submitted Parameters does not exist on the Profile, or
+if at least one was "Secure" but the requesting user does not have the required
+Permissions, then the entire payload is invalid and an appropriate error
+response is returned.
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}[tabsize=2]{http}
+DELETE /api/4.0/profiles/ATS_EDGE_TIER_CACHE/parameters HTTP/1.1
+Content-Type: application/json
+Accept: application/json, */*;q=0.9
+Host: trafficops.infra.ciab.test
+Cookie: mojolicious=...
+Transfer-Encoding: chunked
+
+{
+	"configurationFile": "records.config",
+	"name": "CONFIG proxy.config.http.enable_http_stats"
+}
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is a set of representations of the removed Parameters.
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 200 OK
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Wed, 22 Apr 2020 00:10:15 GMT
+Transfer-Encoding: chunked
+
+{ "response": [
+	{
+		"configurationFile": "records.config",
+		"name": "CONFIG proxy.config.http.enable_http_stats",
+		"secure": false,
+		"value": "INT 1"
+	}
+]}
+
+\end{minted}
+\end{codelisting}
