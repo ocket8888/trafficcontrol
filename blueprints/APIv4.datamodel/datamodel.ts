@@ -307,11 +307,28 @@ interface CacheGroup {
  * Infrastructures are arbitrary servers that aren't ATC components; think
  * INFLUX, GRAFANA, etc.
 */
-interface InfrastructureServer extends BaseServer {
+interface InfrastructureServer {
+	/** The Name of the CDN to which the server belongs, if there is one. */
+	cdn: string | null;
+	/**
+	 * The "domain" part of the server's
+	 * <abbr title="Fully Qualified Domain Name">FQDN</abbr>
+	*/
+	domain: string;
+	/** The server's hostname - *not* necessarily unique */
+	hostName: string;
+	/** Still numeric IDs because we want a single, unique identifier */
+	id: int;
+	/** arbitrary text for miscellaneous purposes */
+	notes: string;
+	/** The Name of the Physical Location in which the server resides */
+	physicalLocation: string | null;
+	/** The Names of Tags given to this server */
+	tags: Set<string>;
 	/**
 	 * The port on which the server's service listens for connections, e.g. 80.
 	*/
-	servicePort: int;
+	servicePort: int | null;
 	/**
 	 * The protocol the server uses, e.g. 'HTTP'.
 	 *
