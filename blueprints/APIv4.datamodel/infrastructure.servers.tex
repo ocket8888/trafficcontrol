@@ -1,0 +1,77 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+\subsection{Infrastructure Servers}
+Infrastructure servers are arbitrary servers that aren't ATC components. This
+is intended primarily for record-keeping purposes for organizations with large
+support infrastructure for their CDNs, as no out-of-the-box functionality is
+provided by ATC for these servers.
+
+\subsubsection{CDN}
+This is a string that is the Name of the CDN to which the Infrastructure Server
+belongs, if any. If this is "null"-typed, then it is understood that the server
+does not operate in a way that is limited in scope to a single CDN.
+
+\subsubsection{Domain}
+The "domain" part of the Infrastructure Server's Fully Qualified Domain Name
+(FQDN) as a string. For example, an Infrastructure Server with an FQDN of
+\code{github.com} has a Domain of \code{com} and an Infrastructure Server with
+an FQDN of \code{trafficcontrol.apache.org} has a Domain of
+\code{apache.org}.\\
+In other words, this is every part of the Infrastructure Server's FQDN that
+isn't part of its Host Name.
+
+\subsubsection{Host Name}
+This is the "host" part of the Infrastructure Server's Fully Qualified Domain
+Name (FQDN) as a string. For example, an Infrastructure Server with an FQDN of
+\code{github.com} has a Host Name of \code{github}, and an Infrastructure
+Server with an FQDN of \code{trafficcontrol.apache.org} has a Host Name of
+\code{trafficcontrol}.\\
+In other words, an Infrastructure Server's Host Name is the only part of its
+FQDN that is not part of its Domain.\\
+This field does NOT need to be unique, though operators are encouraged to make
+this - or at least the concatenation \code{\emph{Host Name}.\emph{Domain}} -
+unique for ease of operation.
+
+\subsubsection{ID}
+An integral, unique identifier for the Infrastructure Server. It carries no
+meaning or significance beyond being a unique identifier.
+
+\subsubsection{Notes}
+This is a string of arbitrary text for miscellaneous purposes.
+
+\subsubsection{Physical Location}
+This string gives the Name of a Physical Location within which this
+Infrastructure Server resides. If this is "null"-typed value, then it is
+understood that the Infrastructure Server has no well-defined and/or
+meaningful Physical Location.
+
+\subsubsection{Tags}
+The Tags on an Infrastructure Server are represented by a set of Tag Names as
+strings.
+
+\subsubsection{Service Port}
+This unsigned integer is the network port on which the server's primary service
+listens for connections, e.g. \code{80} for HTTP servers.\\
+This value may not exceed 65535. If this value is "null"-typed, then it is
+understood that the service provided by this server may not be reached on any
+particular network port (reliably or at all).
+
+\subsubsection{Service Protocol}
+This string of alphanumeric characters defines the protocol used by the
+Infrastructure Server's primary service, e.g. \code{"HTTP"} for HTTP servers.\\
+If this is "null"-typed, then it is understood that the server's primary service
+is not offered using any particular protocol (reliably or at all).
