@@ -26,8 +26,8 @@ done
 
 source to-access.sh
 
-set-dns.sh
-insert-self-into-dns.sh
+/usr/local/sbin/set-dns.sh
+/usr/local/sbin/insert-self-into-dns.sh
 
 TO_URL="https://$TO_FQDN:$TO_PORT"
 while ! to-ping 2>/dev/null; do
