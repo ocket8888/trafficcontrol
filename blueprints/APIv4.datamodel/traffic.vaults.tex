@@ -1,0 +1,47 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Traffic Vaults}
+A Traffic Vault is a service for storing "secrets" - which is a general term
+mainly used to encompass encryption private keys. URL signing keys, URI
+signature keys, SSL keys, and DNSSEC keys are all stored within Traffic Vaults.
+
+% \subsubsection{Domain\label{sec:server:domain}}
+% This is the "domain" part of the Traffic Vault's Fully Qualified Domain Name
+% (FQDN) as a string. For example, a Traffic Vault with an FQDN of
+% \code{github.com} has a Domain of \code{com} and a Traffic Vault with an FQDN of
+% \code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.\\
+% In other words, this is every part of the Traffic Vault's Fully Qualified Domain
+% Name that isn't part of its Host Name as defined in Section
+% \ref{sec:server:hostname}.
+
+% \subsubsection{Host Name\label{sec:server:hostname}}
+% This is the "host" part of the Traffic Vault's Fully Qualified Domain Name
+% (FQDN) as a string. For example, a Traffic Vault with an FQDN of
+% \code{github.com} has a Host Name of \code{github}, and a Traffic Vault with an
+% FQDN of \code{trafficcontrol.apache.org} has a Host Name of
+% \code{trafficcontrol}.\\
+% In other words, a Traffic Vault's Host Name is the only part of its FQDN that
+% is not part of its Domain as defined in Section \ref{sec:server:domain}.\\
+% This field does NOT need to be unique, though operators are encouraged to make
+% this - or at least the concatenation \code{\emph{Host Name}.\emph{Domain}}
+% - unique for ease of operation.
+
+\subsubsection{FQDN}
+A Traffic Vault's FQDN is a string that is a valid DNS name that uniquely
+identifies it among Traffic Vaults. It is also the DNS name at which its service
+may be requested.
