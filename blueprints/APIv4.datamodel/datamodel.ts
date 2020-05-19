@@ -668,7 +668,7 @@ interface Origin {
 	*/
 	url: URL;
 	/** Still numeric IDs because we want a single, unique identifier */
-	id: int;
+	// id: int; //TODO: necessary?
 	/**
 	 * The Origin's IPv4 address.
 	 *
