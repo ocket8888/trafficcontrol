@@ -35,12 +35,20 @@ This string is a valid IP (v6) address at which the Origin may be found, or
 "null"-typed to indicate there is no static IPv6 Address where the Origin may be
 relied on to be.
 
+\subsubsection{Latitude}
+A floating-point number on the interval $[-90, 90]$ that indicates the
+geographic latitude at which the Origin resides (used for routing purposes). If
+this is "null"-typed, then it is assumed that the Origin's geophysical location
+is unknown or irrelevant and its Longitude MUST also be "null"-typed.
+
+\subsubsection{Longitude}
+A floating-point number on the interval $[-180, 180]$ that indicates the
+geographic longitude at which the Origin resides (used for routing purposes). If
+this is "null"-typed, then it is assumed that the Origin's geophysical location
+is unknown or irrelevant and its Latitude MUST also be "null"-typed.
+
 \subsubsection{Notes}
 This is a free text field used to record miscellaneous notes about the Origin.
-
-\subsubsection{Physical Location}
-The Physical Location at which an Origin resides is represented by a string that
-is its Name.
 
 \subsubsection{Tags}
 The Tags associated with an Origin - or, with which it is "tagged" - are a set
