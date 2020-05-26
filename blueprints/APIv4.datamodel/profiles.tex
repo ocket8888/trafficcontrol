@@ -53,6 +53,12 @@ content, represented as a set of file paths as strings to said devices. These
 devices MUST be accessible for full read and write operations to the user as
 whom the caching proxy software runs on the Cache Server.
 
+\subsubsection{History Count}
+This unsigned integer determines the amount of health and statistics polls
+Traffic Monitor shall maintain for each Cache Server it monitors that uses this
+Profile. A "null"-typed value indicates that Traffic Monitor will use its
+default - which is not defined by the Traffic Ops API.
+
 \subsubsection{Health Polling Path}
 This is a string that names a special request path recognized by the Cache
 Server's caching proxy software which will result in the retrieval of statistics
