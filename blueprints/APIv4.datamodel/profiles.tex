@@ -61,6 +61,13 @@ contain a query string or even document fragment.\\
 The only health-and-statistics-gathering implementation truly supported by ATC
 is the special "astats" Traffic Server plugin.
 
+\subsubsection{Health Polling Format}
+This string names the format in which statistics are retrieved from the Cache
+Servers using this Profile. The allowed values are defined by Traffic Monitor,
+and MUST NOT be checked by the Traffic Ops API as a part of validation. The
+string may not be empty, but if it is "null"-valued, Traffic Monitor MUST treat
+it as the default format - which is defined to be "stats\_over\_http".
+
 \subsubsection{Loadavg Threshold}
 A Cache Server's "Loadavg Threshold" is a floating-point number that represents
 the one-minute "loadavg" above which the Cache Server will be considered
