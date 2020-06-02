@@ -623,10 +623,9 @@ interface TrafficRouter extends BaseServer {
 		*/
 		cacheMaintenanceInterval: int;
 		/**
-		 * An integer that defines the initial size of the Guava cache, default
-		 * is 10000.
-		 * @todo Should this be configurable in TO, or only server-side? Also,
-		 * what are the units?
+		 * An integer that defines the initial size of the Guava cache, used by
+		 * the zone manager. default is 10000.
+		 * @todo Should this be configurable in TO, or only server-side?
 		*/
 		dynamicInitialCapacity: int;
 		/**
