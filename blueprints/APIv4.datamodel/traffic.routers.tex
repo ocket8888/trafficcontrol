@@ -19,6 +19,10 @@
 Traffic Routers are Traffic Router instances. They contain all of the server
 information as well as configuration for the Traffic Router service.
 
+\subsubsection{API Port}
+This unsigned integer defines the port on which Traffic Router serves its HTTP
+API. This MUST be less than $2^{16}$ ($65,536$).
+
 \subsubsection{Cache Control Max Age}
 This unsigned integer is the value - in seconds - used for the "max-age"
 parameter of the Cache-Control HTTP header in HTTP responses to the client. If
@@ -188,8 +192,8 @@ pre-configured default interval - which is not defined by the Traffic Ops API.
 
 \subsubsection{TTLs}
 This property is a map of record types (in lower-case) to unsigned integers that
-are the Time-to-Live values that Traffic Router will use for the named DNS
-record type.\\
+are the Time-to-Live values - in seconds - that Traffic Router will use for the named
+DNS record type.\\
 The meaningful keys in this map are (but are not limited to for the forseeable
 future):
 
@@ -201,3 +205,50 @@ future):
 	\item ns
 	\item soa
 \end{itemize}
+
+\subsubsection{Zones}
+The Zones of a Traffic Router is a property that is itself an object having
+properties which express configuration options for DNS zone management.
+
+\paragraph{Cache Maintenance Interval}
+This unsigned integer defines an interval - in seconds - on which Traffic Router
+will check for zones that need to be re-signed or if dynamic zones need to be
+expired from its cache.
+
+\paragraph{Dynamic Initial Capacity}
+This unsigned integer defines an initial size to be used by the Traffic Router's
+zone manager's cache. If this is "null"-typed, Traffic Router is instructed to
+use its pre-configured default value, which is not defined by the Traffic Ops
+API\footnote{At the time of this writing the default size is $10,000$.}.
+
+\paragraph{Dynamic Response Expiration}
+This unsigned integer defines how long - in seconds - Traffic Router will allow
+a dynamic zone to remain in cache after its last access. If it is "null"-typed,
+Traffic Router is instructed to use its pre-configured default duration, which
+is not defined by the Traffic Ops API\footnote{At the time of this writing the
+default duration is $3,600$.}.
+
+\paragrahp{Initialization Timeout}
+This unsigned integer sets a cap - in minutes - on the amount of time Traffic
+Router will spend initializing its dynamic zone manager. Larger numbers impact
+startup time, but allow for more zones to be pre-computed. If it is "null"-typed
+Traffic Router is instructed to use its pre-configured default timeout, which is
+not defined by the Traffic Ops API\footnote{At the time of this writing the
+default timeout is $10$.}.
+
+\paragraph{Thread Count}
+This unsigned integer sets a number of concurrent threads for the Traffic
+Router's zone manager to operate on. The value 0 is not allowed. If this is
+"null"-typed, the number of threads is calculated based on the number of
+allowed/available CPU cores as defined by Thread Multiplier.
+
+\paragraph{Thread Multiplier}
+This floating point number is multiplied by the number of available CPU cores on
+the Traffic Router to calculate the number of threads the zone manager will use,
+rounded down to the nearest integer. For example, a value of $1.0$ will instruct
+Traffic Router to use a thread for every available CPU core.\\
+This has no effect if Thread Count is not "null"-typed. The value MUST be
+greater than zero. If this is "null"-typed (and Thread Count is not), Traffic
+Router will use its pre-configured default multiplier, which is not defined by
+the Traffic Ops API\footnote{At the time of this writing, the default multiplier
+is $0.75$.}.
