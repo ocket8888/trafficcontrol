@@ -1,0 +1,43 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Topologies}
+A Topology is a interconnected tree of Cache Groups that defines the flow of
+content for a Delivery Service.
+
+\subsubsection{Description}
+A Topology's Description is a short string (no actual length limit) that
+describes the Topology.
+
+\subsubsection{Name}
+This string uniquely identifies a Topology. It MUST only contain alphanumeric
+characters and hyphens/dashes (-).
+
+\subsubsection{Nodes}
+A Topology's Nodes are an array of the Cache Groups and their relationships.
+Each Node is itself an object.
+
+\paragraph{Cache Group}
+The Cache Group to which a Node refers is identified by this string, which is
+its Name.
+
+\paragraph{Parents}
+The Parents of this Node are identified as an array of unsigned integers which
+are the indexes in the Topology's Nodes array at which they occur. The maximum
+number of parents is two, where the first element in the Parents array is
+commonly referred to as the "primary parent" and the second one is referred to
+as the "secondary parent".
