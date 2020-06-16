@@ -185,6 +185,10 @@ An unsigned integer number of seconds which will be used as the value for the
 An unsigned integer number of seconds which will be used as the value for the
 "retry" field the Traffic Router DNS Server will respond with on SOA records.
 
+\subsubsection{Secure API Port}
+This unsigned integer defines the port on which Traffic Router serves its HTTPS
+API. This MUST be less than $2^{16}$ ($65,536$).
+
 \subsubsection{Steering Polling Interval}
 An unsigned integer number of seconds on which Traffic Router will check for new
 steering mappings. A "null"-typed value instructs Traffic Router to use its
