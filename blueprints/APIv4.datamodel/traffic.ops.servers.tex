@@ -1,0 +1,55 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Traffic Ops Servers}
+A Traffic Ops server is a server on which a Traffic Ops instance is running. It
+contains information regarding its configuration as well as server properties.
+
+\subsubsection{Domain}
+The "domain" part of the Traffic Ops Server's Fully Qualified Domain Name (FQDN)
+as a string. For example, a Traffic Ops Server with an FQDN of \code{github.com}
+has a Domain of \code{com} and a Traffic Ops Server with an FQDN of
+\code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.\\
+In other words, this is every part of the Traffic Ops Server's FQDN that isn't
+part of its Host Name.
+
+\subsubsection{Host Name}
+This is the "host" part of the Traffic Ops Server's Fully Qualified Domain Name
+(FQDN) as a string. For example, a Traffic Ops Server with an FQDN of
+\code{github.com} has a Host Name of \code{github}, and a Traffic Ops Server
+with an FQDN of \code{trafficcontrol.apache.org} has a Host Name of
+\code{trafficcontrol}.\\
+In other words, a Traffic Ops Server's Host Name is the only part of its FQDN
+that is not part of its Domain.\\
+This field does NOT need to be unique, though operators are encouraged to make
+this - or at least the concatenation \code{\emph{Host Name}.\emph{Domain}} -
+unique for ease of operation.
+
+\subsubsection{ID}
+An integral, unique identifier for the Traffic Ops Server. It carries no meaning
+or significance beyond being a unique identifier.
+
+\subsubsection{Notes}
+This is a string of arbitrary text for miscellaneous purposes.
+
+\subsubsection{Online}
+This boolean value indicates whether or not the Traffic Ops Server is online
+and/or currently serving its main service.
+
+\subsubsection{Port}
+This unsigned integer defines the Port on which the Traffic Ops Server is
+listening. This MUST NOT be equal to or greater than $2^{16}$ ($65,536$).
