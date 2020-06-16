@@ -19,37 +19,6 @@
 Traffic Stats Servers are instances of Traffic Stats and contain information
 relating to their network connection information as well as configuration.
 
-\subsubsection{All Graph URL}
-This string is a URL that is the location of a Grafana dashboard that aggregates
-Delivery Service-level statistics. If it is "null"-typed, then components will
-assume that such a dashboard is unavailable (either because no connected Grafana
-instance exists or because it simply does not provide the dashboard).
-
-\subsubsection{Cache Group Graph URL}
-This string is a URL that is the location of a Grafana dashboard that provides
-statistics for one or more Cache Groups (chosen via a 'which' query string
-parameter). If it is "null"-typed, then components will assume that such a
-dashboard is unavailable (either because no connected Grafana instance exists or
-because it simply does not provide the dashboard).
-
-\subsubsection{Cache Server Graph URL}
-This string is a URL that is the location of a Grafana dashboard that provides
-statistics for one or more Cache Servers (chosen via a 'which' query string
-parameter). If it is "null"-typed, then components will assume that such a
-dashboard is unavailable (either because no connected Grafana instance exists or
-because it simply does not provide the dashboard).
-
-\subsubsection{CDN}
-This is a string that is the Name of the CDN to which the Traffic Stats Server
-belongs.
-
-\subsubsection{Delivery Service Graph URL}
-This string is a URL that is the location of a Grafana dashboard that provides
-statistics for one or more Delivery Services (chosen via a 'which' query string
-parameter). If it is "null"-typed, then components will assume that such a
-dashboard is unavailable (either because no connected Grafana instance exists or
-because it simply does not provide the dashboard).
-
 \subsubsection{Domain}
 The "domain" part of the Traffic Stats Server's Fully Qualified Domain Name
 (FQDN) as a string. For example, a Traffic Stats Server with an FQDN of
@@ -82,10 +51,3 @@ This string gives the Name of a Physical Location within which this Traffic
 Stats Server resides. If this is "null"-typed value, then it is understood that
 the Traffic Stats Server has no well-defined and/or meaningful Physical
 Location.
-
-\subsubsection{Visual Status Panel 1}
-This string is a URL that is the location of a Grafana dashboard that provides
-CDN-level statistics, and in particular provides some kind of visual "status"
-identifier for a CDN or CDNs. If it is "null"-typed, then components will assume
-that such a dashboard is unavailable (either because no connected Grafana
-instance exists or because it simply does not provide the dashboard).
