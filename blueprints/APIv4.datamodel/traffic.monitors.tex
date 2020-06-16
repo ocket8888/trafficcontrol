@@ -72,6 +72,13 @@ information about the Traffic Monitor. Other ATC components SHOULD NOT parse
 this for specific information fields, or expect it to be in a particular
 format.
 
+\subsubsection{Online}
+This boolean value indicates whether or not the Traffic Monitor is online and
+polling Cache Servers. An "offline" (Online is false) Traffic Monitor is not
+considered in peer-polling and quorums, is not queried for available Cache
+Servers by Traffic Routers, and Traffic Stats Servers do not collect statistics
+from offline Traffic Monitors.
+
 \subsubsection{Physical Location}
 The Physical Location at which a Traffic Monitor resides is represented by a
 string containing its Name.
