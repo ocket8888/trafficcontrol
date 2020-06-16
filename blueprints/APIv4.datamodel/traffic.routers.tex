@@ -213,7 +213,9 @@ properties which express configuration options for DNS zone management.
 \paragraph{Cache Maintenance Interval}
 This unsigned integer defines an interval - in seconds - on which Traffic Router
 will check for zones that need to be re-signed or if dynamic zones need to be
-expired from its cache.
+expired from its cache. If it "null"-typed, Traffic Router is instructed to use
+its pre-configured default interval, which is not defined by the Traffic Ops
+API.
 
 \paragraph{Dynamic Initial Capacity}
 This unsigned integer defines an initial size to be used by the Traffic Router's
