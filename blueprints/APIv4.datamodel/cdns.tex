@@ -65,13 +65,6 @@ on its constituent Delivery Services. This does \emph{not} mean that all DNS
 requests through ATC for this CDN's Domain will be secured with DNSSEC.\\
 This is a boolean concept and as such is represented by boolean values.
 
-% TODO: is this necessary? or is this more of a Delivery Service thing?
-% TODO: this is no longer a CDNs property as per WG discussion, but does it now
-% need its own model definition, or is that unnecessary?
-% \subsubsection{DNSSEC Keys}
-% An array/list of the Zone-Signing and Key-Signing Keys of this CDN. The
-% Zone-Signing Key will appear first, followed immediately by the Key-Signing Key
-
 \subsubsection{Domain}
 The Top-Level Domain used by the CDN, represented as a string. This MUST be a
 uniquely valued property across all CDNs, and MUST not be an invalid DNS label
