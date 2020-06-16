@@ -59,6 +59,13 @@ Traffic Monitor shall maintain for each Cache Server it monitors that uses this
 Profile. A "null"-typed value indicates that Traffic Monitor will use its
 default - which is not defined by the Traffic Ops API.
 
+\subsubsection{Health Connection Timeout}
+This is an unsigned integer number of milliseconds Traffic Monitor will wait
+before giving up on a request for health polling information for Cache Servers
+using this Profile. If it is "null"-typed, Traffic Monitor is instructed to use
+its pre-configured default timeout, which is not defined by the Traffic Ops API.
+A value of zero indicates that there should be no such timeout.
+
 \subsubsection{Health Polling Path}
 This is a string that names a special request path recognized by the Cache
 Server's caching proxy software which will result in the retrieval of statistics
