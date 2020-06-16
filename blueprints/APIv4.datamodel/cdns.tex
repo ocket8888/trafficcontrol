@@ -48,11 +48,6 @@ interface CDN {
 	trafficMonitors: Set<bigint>;
 	/** The numeric IDs of the Traffic Router instances within the CDN */
 	trafficRouters: Set<bigint>;
-	/**
-	 * The numeric IDs of the Traffic Stats instances within the CDN.
-	 * @todo Currently TS is a singleton; is there any desire/reason to change?
-	*/
-	trafficStatsServers: Set<bigint>;
 }
 \end{minted}
 \end{codelisting}
@@ -106,7 +101,3 @@ Monitor, no such restriction is placed on CDN objects in general.
 A CDN's collection of Traffic Routers is represented by a set of Traffic Router
 IDs. Note that while a functioning CDN must contain at least one Traffic Router,
 no such restriction is placed on CDN objects in general.
-
-\subsubsection{Traffic Stats Servers}
-A CDN's collection of Traffic Stats Servers is represented by a set of Traffic
-Stats Server IDs.
