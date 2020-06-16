@@ -1,0 +1,77 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Invalidation Jobs}
+Invalidation Jobs - also called "content invalidation jobs", "revalidations",
+"content revalidation jobs", "revalidation jobs", or even just "jobs" - are, at
+their most basic, periods of time during which specific content should not be
+served from cache but instead considered cache-invalid and fetched from
+upstream. These objects are limited in scope to within a particular Delivery
+Service, but are not strictly "Tenantable", as such.
+
+\begin{codelisting}
+\captionof{listing}{Invalidation Job Object as a Typescript Interface}
+\label{code:datamodel:invalidation-job}
+\begin{minted}[tabsize=2]{typescript}
+/**
+ * InvalidationJob objects represent - broadly speaking - periods of time during
+ * which specific content will be fetch from upstream instead of served from
+ * cache.
+ */
+interface InvalidationJob {
+	assetPattern: RegExp;
+	createdBy: string;
+	deliveryService: string;
+	id: bigint;
+	startTime: Date;
+	timeToLive: bigint;
+}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{Asset Pattern}
+This is a regular expression that defines the content paths which will be
+"invalidated". It MUST begin with \code{/} since all valid request paths begin
+with \code{/}. Example: \code{/.*\textbackslash{}.jpg}.
+
+\subsubsection{Created By}
+The User that created the Invalidation Job may be referenced by this string
+which is their Username\footnote{This Username will be visible to Users with the
+appropriate Permission(s) to see Invalidation Jobs, regardless of Tenancy;
+Invalidation Jobs are not "Tenantantable".}.
+
+\subsubsection{Delivery Service}
+The Delivery Service within which the Invalidation Job operates is given by this
+string which is its Name\footnote{This Name will be visible to Users with the
+appropriate Permissions(s) to see Invalidation Jobs, regardless of Tenancy;
+Invalidation Jobs are not "Tenantable". However, new Invalidation Jobs can only
+be created for Delivery Services within the requesting User's Tenancy.}.
+
+\subsubsection{ID}
+ID is an unsigned integer that uniquely identifies an Invalidation Job. There is
+no semantic meaning to this property other than unique identification.
+
+\subsubsection{Start Time}
+This is the date and time at which the Invalidation Job is set to begin. Upon
+creation, this MUST be in the future.
+
+\subsubsection{Time to Live}
+This unsigned integer number of hours for which the Invalidation Job should
+remain "active" - that is, this defines the window within which the specified
+content will not be served from cache.\\
+This may not be zero ($0$). This has an upper bound at creation time defined by
+the Max Revalidation Days property of the Global Configuration object.
