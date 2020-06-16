@@ -64,7 +64,7 @@ This is an unsigned integer number of milliseconds Traffic Monitor will wait
 before giving up on a request for health polling information for Cache Servers
 using this Profile. If it is "null"-typed, Traffic Monitor is instructed to use
 its pre-configured default timeout, which is not defined by the Traffic Ops API.
-A value of zero indicates that there should be no such timeout.
+This value MUST NOT be zero ($0$).
 
 \subsubsection{Health Polling Path}
 This is a string that names a special request path recognized by the Cache
