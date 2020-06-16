@@ -48,3 +48,12 @@ may be requested.
 
 \subsubsection{Notes}
 A string of arbitrary text for miscellaneous purposes.
+
+\subsubsection{Online}
+This boolean value indicates whether or not the Traffic Vault is online and
+capable of storing/retrieving secrets. Traffic Ops will not use an "offline"
+(Online is false) Traffic Vault to either store or retrieve stored
+secrets\footnote{This means that it's possible - depending on implementation -
+for an offline Traffic Vault to become out-of-sync with its peers. Operators
+should take steps to ensure that Traffic Vaults brought online have up-to-date
+secrets to serve to Traffic Ops.}.
