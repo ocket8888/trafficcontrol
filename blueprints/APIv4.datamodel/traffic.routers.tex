@@ -101,10 +101,10 @@ zone, Traffic Router will simply re-use the existing signed zone instead of
 signing the same, new zone.
 
 \subsubsection{Domain}
-This is the "domain" part of the Cache Server's Fully Qualified Domain Name
-(FQDN) as a string. For example, a Cache Server with an FQDN of
-\code{github.com} has a Domain of \code{com} and a Cache Server with an FQDN of
-\code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.
+This is the "domain" part of the Traffic Router's Fully Qualified Domain Name
+(FQDN) as a string. For example, a Traffic Router with an FQDN of
+\code{github.com} has a Domain of \code{com} and a Traffic Router with an FQDN
+of \code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.
 
 \subsubsection{Dynamic Zone Cache Priming}
 This property is an object whose properties are configuration options for
@@ -138,27 +138,28 @@ value will instruct Traffic Router to use its pre-configured default value -
 which is not defined by the Traffic Ops API.
 
 \subsubsection{Host Name}
-This is the "host" part of the Cache Server's Fully Qualified Domain Name (FQDN)
-as a string. For example, a Cache Server with an FQDN of \code{github.com} has a
-Host Name of \code{github}, and a Cache Server with an FQDN of
-\code{trafficcontrol.apache.org} has a Host Name of \code{trafficcontrol}.\\
+This is the "host" part of the Traffic Router's Fully Qualified Domain Name
+(FQDN) as a string. For example, a Traffic Router with an FQDN of
+\code{github.com} has a Host Name of \code{github}, and a Traffic Router with an
+FQDN of \code{trafficcontrol.apache.org} has a Host Name of
+\code{trafficcontrol}.\\
 This field does NOT need to be unique, though operators are encouraged to make
 this - or at least the concatenation \code{\emph{Host Name}.{Domain}} - unique
 for ease of operation.
 
 \subsubsection{ID}
-A Cache Server's "ID" is an unsigned integer that uniquely identifies it among
-all Cache Servers. It serves no purpose beyond unique identification of the
-Cache Server.
+A Traffic Router's "ID" is an unsigned integer that uniquely identifies it among
+all Traffic Routers. It serves no purpose beyond unique identification of the
+Traffic Router.
 
 \subsubsection{Notes}
 This section is an arbitrary string containing miscellaneous, human-friendly
-information about the Cache Server. Other ATC components SHOULD NOT parse this
+information about the Traffic Router. Other ATC components SHOULD NOT parse this
 for specific information fields, or expect it to be in a particular format.
 
 \subsubsection{Physical Location}
-The Physical Location at which a Cache Server resides is represented by a string
-containing its Name.
+The Physical Location at which a Traffic Router resides is represented by a
+string containing its Name.
 
 \subsubsection{SOA}
 This property is an object that contains configuration information for the
