@@ -1,0 +1,114 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Global Configuration}
+The Global Configuration singleton object contains information pertaining to the
+configuration of the Traffic Control system as a whole - most notably it stores
+Traffic Ops API access information and provides information for geographically
+locating clients of Apache Traffic Control CDNs.
+
+\begin{codelisting}
+\captionof{listing}{Global Configuration Object as a Typescript Interface}
+\label{code:datamodel:global-configuration}
+\begin{minted}[tabsize=2]{typescript}
+/**
+ * GlobalConfiguration is the singleton object that stores global configuration
+ * for a Traffic Control system.
+ */
+interface GlobalConfiguration {
+	/** The default latitude to use for CDN clients when geolocation fails */
+	defaultGeoMissLatitude: number;
+	/** The default longitude to use for CDN clients when geolocation fails */
+	defaultGeoMissLongitude: number;
+	/** The location of an IPv4 geolocation database */
+	geolocationIPv4PollingURL: URL;
+	/** The location of an IPv6 geolocation database */
+	geolocationIPv6PollingURL: URL;
+	/** A URL at which information about the ATC system may be found */
+	informationURL: URL | null;
+	/** The name of the ATC instance */
+	instanceName: string;
+	/** The maximum duration - in days - of content invalidation jobs */
+	maxRevalidationDays: bigint | null; // >= 0
+	/** A URL for a reverse proxy to the Traffic Ops instance(s) */
+	reverseProxyURL: URL & {search: "", pathname: "/"} | null;
+	/** The name of the tool that serves the Traffic Ops API */
+	toolName: string;
+	/** The canonical URL used to make requests to the Traffic Ops API */
+	trafficOpsURL: URL & {search: "", pathname: "/"};
+}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{Default Geo Miss Latitude}
+This floating point number is the default latitude to use when choosing a
+geographically appropriate location for a client and detecting the client's
+location (either via a Coverage Zone or database lookup) has failed. It MUST be
+on the interval [-90, 90] - with the positive range representing North and the
+negative range representing South.
+
+\subsubsection{Default Geo Miss Longitude}
+This floating point number is the default longitude to use when choosing a
+geographically appropriate location for a client and detecting the client's
+location (either via a Coverage Zone or database lookup) has failed. It MUST be
+on the interval [-180, 180] - with the positive range representing East and the
+negative range representing West.
+
+\subsubsection{Geolocation IPv4 Polling URL}
+This string is a URL at which a database (Neustar or MaxMind) for converting
+IPv4 addresses to geographic locations may be requested. This is primarily used
+by Traffic Router.
+
+\subsubsection{Geolocation IPv6 Polling URL}
+This string is a URL at which a database (Neustar or MaxMind) for converting
+IPv6 addresses to geographic locations may be requested. This is primarily used
+by Traffic Router.
+
+\subsubsection{Information URL}
+This string is a URL at which information about the Apache Traffic Control
+system may be found for new users and/or clients. It has no specific semantics,
+and may be "null"-typed to indicate that no such URL is available.
+
+\subsubsection{Instance Name}
+This string names the Apache Traffic Control instance, e.g. "my CDN for image
+macros". It is used in certain user interface displays and email communications.
+
+\subsubsection{Max Revalidation Days}
+This unsigned integer indicates the maximum time for which an Invalidation Job
+may use as a duration, in days. If this is "null"-typed, then there is no
+upper bound placed on the duration of Invalidation Jobs.\footnote{Note that a
+value of zero ($0$) will cause all Invalidation Jobs to be rejected on creation,
+as there will be no valid duration.}
+
+\subsubsection{Reverse Proxy URL}
+If Traffic Ops uses a reverse proxy to help with caching/load balancing, then a
+URL at which it may be requested will be found in this string. It SHOULD be an
+HTTPS URL, and MUST NOT include any path besides \code{/}, nor may it include
+any query string or document fragment parts.\\
+If this is "null"-typed, then no such proxy exists.
+
+\subsubsection{Tool Name}
+This string is the name of the tool that serves the Traffic Ops API (and so is
+usually "Traffic Ops") as it appears in certain user interface displays and
+email communications.
+
+\subsubsection{Traffic Ops URL}
+This string is the canonical URL used to access Traffic Ops, including any port.
+It SHOULD be an HTTPS URL, and MUST NOT include any path besides \code{/}, nor
+may it include any query string or document fragment parts. This MUST NOT be a
+URL of a reverse proxy for Traffic Ops, as that should appear as the Reverse
+Proxy URL.
