@@ -19,6 +19,60 @@
 Traffic Routers are Traffic Router instances. They contain all of the server
 information as well as configuration for the Traffic Router service.
 
+\begin{codelisting}
+\captionof{listing}{Traffic Router Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface TrafficRouter {
+	apiPort: bigint;
+	cacheControlMaxAge: bigint;
+	cdn: string;
+	coverageZonePollingInterval: bigint;
+	deepCoverageZonePollingInterval: bigint;
+	dnssec: {
+		allowExpiredKeys: boolean;
+		effectiveMultiplier: bigint | null;
+		fetchInterval: bigint | null;
+		fetchRetries: bigint | null;
+		fetchTimeout: bigint | null;
+		fetchWait: bigint | null;
+		generationMultiplier: bigint | null;
+		zoneComparisons: boolean;
+	};
+	domain: string;
+	dynamicZoneCachePriming: {
+		prime: boolean;
+		primingLimit: bigint | null;
+	}
+	edns0ClientSubnetEnabled: boolean;
+	forcedDiversity: boolean;
+	geolocationPollingInterval: bigint | null;
+	hostName: string;
+	id: bigint;
+	notes: string;
+	online: boolean;
+	physicalLocation: string;
+	soa: {
+		admin: string | null;
+		expire: bigint;
+		minimum: bigint;
+		refresh: bigint;
+		retry: bigint;
+	}
+	secureAPIPort: bigint;
+	steeringPollingInterval: bigint | null;
+	ttls: Map<string, bigint>;
+	zones: {
+		cacheMaintenanceInterval: bigint | null;
+		dynamicInitialCapacity: bigint | null;
+		dynamicResponseExpiration: bigint | null;
+		initializationTimeout: bigint | null;
+		threadCount: bigint | null;
+		threadMultiplier: number| null ;
+	}
+}
+\end{minted}
+\end{codelisting}
+
 \subsubsection{API Port}
 This unsigned integer defines the port on which Traffic Router serves its HTTP
 API. This MUST be less than $2^{16}$ ($65,536$).
@@ -203,8 +257,8 @@ pre-configured default interval - which is not defined by the Traffic Ops API.
 
 \subsubsection{TTLs}
 This property is a map of record types (in lower-case) to unsigned integers that
-are the Time-to-Live values - in seconds - that Traffic Router will use for the named
-DNS record type.\\
+are the Time-to-Live values - in seconds - that Traffic Router will use for the
+named DNS record type.\\
 The meaningful keys in this map are (but are not limited to for the forseeable
 future):
 
