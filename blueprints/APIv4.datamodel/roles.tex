@@ -21,6 +21,17 @@ User's Permissions. The Permissions required by the different API endpoints,
 request methods of endpoints, and particular modes of operations of the methods
 of those endpoints are declared by the endpoints themselves.
 
+\begin{codelisting}
+\captionof{listing}{Role Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface Role {
+	description: string;
+	name: string;
+	permissions: Set<string>;
+}
+\end{minted}
+\end{codelisting}
+
 \subsubsection{Description}
 A Role's Description is a string containing a human-readable description of
 what the Role is for and what, in general terms, it is capable of accomplishing

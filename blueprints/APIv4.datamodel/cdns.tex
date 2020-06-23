@@ -25,28 +25,15 @@ delivered therein.
 \captionof{listing}{CDN Object as a TypeScript Interface}
 \label{code:datamodel:cdn}
 \begin{minted}[tabsize=2]{typescript}
-/**
- * A CDN represents a full stack of hardware, components and configuration
- * required to delivery content.
-*/
 interface CDN {
-	/** The numeric IDs of the CDN's cache servers */
 	cacheServers: Set<bigint>;
-	/** The names of all of the Delivery Services within the CDN */
 	deliveryServices: Set<string>;
-	/** Whether or not DNSSEC is enabled on the CDN's domain */
 	dnssecEnabled: boolean;
-	/** The CDN's domain. Must be a valid DNS label. */
 	domain: string;
-	/** The numeric IDs of the CDN's infrastructure servers */
 	infrastructureServers: Set<bigint>;
-	/** The Name of a CDN uniquely identifies it. */
 	name: string;
-	/** The numeric IDs of the CDN's origins */
 	origins: Set<bigint>;
-	/** The numeric IDs of the Traffic Monitor instances within the CDN */
 	trafficMonitors: Set<bigint>;
-	/** The numeric IDs of the Traffic Router instances within the CDN */
 	trafficRouters: Set<bigint>;
 }
 \end{minted}

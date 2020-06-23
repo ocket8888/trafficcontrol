@@ -21,6 +21,21 @@ where component hardware is stored.\\
 Mainly this contains metadata for support purposes, but it can also be used
 to provide some routing fallback behavior.
 
+\begin{codelisting}
+\captionof{listing}{Physical Location Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface PhysicalLocation {
+	address: string;
+	email: string;
+	name: string;
+	notes: string;
+	phoneNumber: string;
+	pointOfContactName: string;
+	tags: Set<string>;
+}
+\end{minted}
+\end{codelisting}
+
 \subsubsection{Address}
 This is a text field with no defined structure, but semantically it represents
 a Physical Location's real-world, physical address. If it is not an empty

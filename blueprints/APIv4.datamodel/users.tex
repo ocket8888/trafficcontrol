@@ -20,6 +20,22 @@ A user represents a person who may be authenticated with the Traffic Ops API and
 their ability to interact with Traffic Ops Data Model objects. A User object
 also contains "meta" information such as their email address.
 
+\begin{codelisting}
+\captionof{listing}{User Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface User {
+	address: string;
+	email: string | null;
+	fullName: string;
+	phoneNumber: string;
+	role: string;
+	tags: Set<string>;
+	tenant: string;
+	username: string;
+}
+\end{minted}
+\end{codelisting}
+
 \subsubsection{Address}
 This is a text field with no defined structure, but semantically it represents a
 user's real-world, physical address. If it is not an empty value, it is assumed

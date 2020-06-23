@@ -19,6 +19,45 @@
 Cache servers are the Mid-and-Edge-tier HTTP caching proxies ultimately
 responsible for caching and serving content for a Delivery Service.
 
+\begin{codelisting}
+\captionof{listing}{Cache Server Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface IPAddress {
+	address: string;
+	gateway: string | null;
+	serviceAddress: boolean;
+}
+
+interface Interface {
+	ipAddresses: Array<IPAddress> & {0: IPAddress};
+	maxBandwidth: bigint;
+	monitor: boolean;
+	mtu: bigint | null;
+	name: string;
+}
+
+interface CacheServer {
+	cacheGroup: string;
+	capabilities: Set<string>;
+	cdn: string;
+	domain: string;
+	hostName: string;
+	httpPort: bigint;
+	httpsPort: bigint;
+	id: bigint;
+	interfaces: Array<Interface> & {0: Interface};
+	notes: string;
+	physicalLocation: string;
+	profile: string;
+	revalidationPending: boolean;
+	status: "ADMIN_DOWN" | "OFFLINE" | "ONLINE" | "REPORTED";
+	tags: Set<string>;
+	type: 'EDGE' | 'MID';
+	updatePending: boolean;
+}
+\end{minted}
+\end{codelisting}
+
 \subsubsection{Cache Group}
 The Cache Group to which the Cache Server belongs is represented as a string
 that uniquely names it.

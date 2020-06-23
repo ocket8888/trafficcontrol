@@ -20,6 +20,26 @@ A Traffic Monitor is a service that communicates with Traffic Ops over HTTP and
 is responsible for collecting health and statistics information from Cache
 Servers to determine if they are fit to service content.
 
+\begin{codelisting}
+\captionof{listing}{Traffic Monitor Object as a TypeScript Interface}
+interface TrafficMonitor extends BaseServer {
+	cdn: string;
+	configPollingInterval: bigint;
+	domain: string;
+	eventCount: int;
+	healthPollingInterval: bigint;
+	heartbeatPollingInterval: bigint;
+	hostName: string;
+	id: bigint;
+	notes: string;
+	online: boolean;
+	physicalLocation: string;
+	tags: Set<string>;
+	threadCount: bigint;
+	timePad: bigint;
+}
+\end{codelisting}
+
 \subsubsection{CDN}
 The CDN to which a Traffic Monitor belongs is represented by its Name, which
 uniquely identifies it. The Monitor will monitor all Cache Servers that are in

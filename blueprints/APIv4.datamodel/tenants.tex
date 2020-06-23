@@ -29,6 +29,17 @@ more commonly, the "root" Tenant. It is the special Tenant which is the only
 one allowed to not have a Parent, and all tenantable objects fall within its
 Tenancy. This Tenant is always Active, and has the name \code{root}.
 
+\begin{codelisting}
+\captionof{listing}{Tenant Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface Tenant {
+	active: boolean;
+	name: string;
+	parent: string | null;
+}
+\end{minted}
+\end{codelisting}
+
 \subsubsection{Active}
 Active is a boolean concept that describes whether or not a Tenant's group of
 users are allowed to actively manipulate resources. Resources within an
