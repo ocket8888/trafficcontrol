@@ -20,10 +20,21 @@ Origins are sources of content for the CDN to serve. They are typically external
 to the CDN's infrastructure and in many cases may in fact not be administered by
 the same organization as the CDN.
 
-%TODO: necessary?
-% \subsubsection{ID}
-% An Origin's ID is an unsigned integer that identifies it uniquely. It serves no
-% other purpose than to uniquely identify an Origin.
+\begin{codelisting}
+\captionof{listing}{Origin Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface Origin {
+	ipv4Address: string | null;
+	ipv6Address: string | null;
+	latitude: number | null;
+	longitude: number | null;
+	notes: string;
+	tags: Set<string>;
+	tenant: string;
+	url: URL;
+}
+\end{minted}
+\end{codelisting}
 
 \subsubsection{IPv4 Address}
 This string is a valid IP (v4) address at which the Origin may be found, or

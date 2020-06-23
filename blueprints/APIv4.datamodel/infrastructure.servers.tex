@@ -20,6 +20,24 @@ is intended primarily for record-keeping purposes for organizations with large
 support infrastructure for their CDNs, as no out-of-the-box functionality is
 provided by ATC for these servers.
 
+\begin{codelisting}
+\captionof{listing}{Infrastructure Server Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface InfrastructureServer {
+	cdn: string | null;
+	domain: string;
+	hostName: string;
+	id: bigint;
+	notes: string;
+	online: boolean;
+	physicalLocation: string | null;
+	tags: Set<string>;
+	servicePort: int | null;
+	serviceProtocol: string | null;
+}
+\end{minted}
+\end{codelisting}
+
 \subsubsection{CDN}
 This is a string that is the Name of the CDN to which the Infrastructure Server
 belongs, if any. If this is "null"-typed, then it is understood that the server

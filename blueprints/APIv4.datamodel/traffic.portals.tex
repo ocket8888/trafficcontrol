@@ -18,6 +18,20 @@
 \subsection{Traffic Portals}
 A Traffic Portal represents a running instance of a Traffic Portal UI.
 
+\begin{codelisting}
+\captionof{listing}{Traffic Portal Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface TrafficPortal {
+	ipv4Address: string | null;
+	ipv6Address: string | null;
+	notes: string;
+	online: boolean;
+	tags: Set<string>;
+	url: URL;
+}
+\end{minted}
+\end{codelisting}
+
 \subsubsection{IPv4 Address}
 This string contains a valid IPv4 Address at which the UI is served. If it is
 "null"-typed, then it is assumed that there is no static IPv4 Address at which

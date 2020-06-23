@@ -24,6 +24,20 @@ based on geographic location the geographic location actually used for
 comparisons is that for the Cache Group that contains it, not the geographic
 location of the Cache Server itself.
 
+\begin{codelisting}
+\captionof{listing}{Cache Group Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface CacheGroup {
+	cacheServers: Set<bigint>;
+	latitude: number;
+	longitude: number;
+	name: string;
+	tags: Set<string>;
+	type: 'EDGE' | 'MID';
+}
+\end{minted}
+\end{codelisting}
+
 \subsubsection{Cache Servers}
 All of the Cache Servers within a Cache Group are represented by a set of their
 numeric IDs.
