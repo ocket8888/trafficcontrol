@@ -26,6 +26,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Atscfg: Added a rule to ip_allow such that PURGE requests are allowed over localhost
 - [#5644](https://github.com/apache/trafficcontrol/issues/5644) ORT config generation: Added ATS9 ip_allow.yaml support, and automatic generation if the server's package Parameter is 9.*
 - ORT config generation: Added a rule to ip_allow such that PURGE requests are allowed over localhost
+- An alternative to the ToAutorenewCerts.pl script has been created (with the same interface) named ToAutorenewCerts.py. ToAutorenewCerts.pl is deprecated, and operators are encouraged to switch to ToAutorenewCerts.py at their earliest convenience.
+
 
 ### Fixed
 - [#5609](https://github.com/apache/trafficcontrol/issues/5609) - Fixed GET /servercheck filter for an extra query param.
