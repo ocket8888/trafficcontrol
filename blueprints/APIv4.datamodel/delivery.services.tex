@@ -143,14 +143,20 @@ this for specific information fields, or expect it to be in a particular format.
 
 %TODO: MSO use-case?
 \paragraph{Origin}
+A Delivery Service's Origin of content is represented by an unsigned integer
+that is the ID the Origin.
 
 \paragraph{Query String Handling}
+Query String Handling is a string with one of three possible values that
+describe how the cache layers should handle query strings in requested URLs.
 
-\begin{itemize}
-	\item \code{DROP}
-	\item \code{IGNORE}
-	\item \code{USE}
-\end{itemize}
+\begin{description}
+	\item[\code{DROP}] The first cache layer encountered (EDGE-tier Cache
+	Servers) will totally ignore all query strings, they will not be used in the
+	cache key, and will not be passed upstream in requests.
+	\item[\code{IGNORE}]
+	\item[\code{USE}]
+\end{description}
 
 \paragraph{Range Request Handling}
 \begin{itemize}
