@@ -1,12 +1,5 @@
 package tc
 
-import (
-	"encoding/json"
-	"fmt"
-	"strconv"
-	"strings"
-)
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,6 +18,13 @@ import (
  * specific language governing permissions and limitations
  * under the License.
  */
+
+import (
+	"encoding/json"
+	"fmt"
+	"strconv"
+	"strings"
+)
 
 // ThresholdPrefix is the prefix of all Names of Parameters used to define
 // monitoring thresholds.
