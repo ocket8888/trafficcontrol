@@ -39,6 +39,16 @@ is possible to use them to express arbitrary concepts, but operators must be
 careful to only assign Capabilities to Cache Servers when it is known that they
 actually posses those Capabilities.
 
+\begin{codelisting}
+\captionof{listing}{Capability Object as a Typescript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface Capability {
+	Description: string;
+	Name: string;
+}
+\end{minted}
+\end{codelisting}
+
 \subsubsection{Description}
 This string contains arbitrary text which ideally describes the capacity
 encapsulated and expressed by the Capability, as well as the reason for its
