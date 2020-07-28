@@ -25,7 +25,7 @@ also contains "meta" information such as their email address.
 \begin{minted}[tabsize=2]{typescript}
 interface User {
 	address: string;
-	email: string | null;
+	email: string;
 	fullName: string;
 	phoneNumber: string;
 	role: string;
@@ -46,11 +46,9 @@ newlines, but may not end with a space or newline.
 
 \subsubsection{Email}
 A user's email address, which is used for initial registration and password
-recovery. A User object is not guaranteed to have an Email because the initial,
-default User will not have one. However, UIs based on the Traffic Ops API are
-encouraged to require that new users have one, as otherwise they will be unable
-to recover their account if their password is forgotten.\\
-Emails are unique among all Users, unless they are "Null"-valued.\\
+recovery. A User object is not guaranteed to have a non-empty Email because the
+initial, default User will not have one. However, as Emails are unique among all
+users, all subsequently created Users \emph{should} have non-empty Emails.\\
 Representation formats that do not support email addresses natively as a type
 MUST represent this a string.
 
