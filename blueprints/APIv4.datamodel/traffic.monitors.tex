@@ -22,7 +22,8 @@ Servers to determine if they are fit to service content.
 
 \begin{codelisting}
 \captionof{listing}{Traffic Monitor Object as a TypeScript Interface}
-interface TrafficMonitor extends BaseServer {
+\begin{minted}[tabsize=2]{typescript}
+interface TrafficMonitor {
 	cdn: string;
 	configPollingInterval: bigint;
 	domain: string;
@@ -38,6 +39,7 @@ interface TrafficMonitor extends BaseServer {
 	threadCount: bigint;
 	timePad: bigint;
 }
+\end{minted}
 \end{codelisting}
 
 \subsubsection{CDN}
