@@ -21,6 +21,36 @@ more Cache Servers. It contains configuration options that are typically common
 to a great number of Cache Servers within a CDN, and can therefore be changed
 on an arbitrary number of Cache Servers simultaneously.
 
+\begin{codelisting}
+\captionof{listing}{Profile Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface Parameter {
+	configurationFile: Exclude<string, "">;
+	name: Exclude<string, "">;
+	secure: boolean;
+	value: Exclude<string, "">;
+}
+
+interface Profile {
+	bandwidthThreshold: bigint | null;
+	cdn: string;
+	description: string;
+	hardDisks: Set<string>;
+	historyCount: bigint | null;
+	healthConnectionTimeout: bigint | null;
+	healthPollingPath: Exclude<string, "">;
+	healthPollingFormat: string | null;
+	loadavgThreshold: number | null;
+	name: Exclude<string, "">;
+	parameters: Set<Parameter>;
+	queryTimeThreshold: bigint | null;
+	ramDisks: Set<string>;
+	tags: Set<string>;
+	type: "EDGE" | "MID";
+}
+\end{minted}
+\end{codelisting}
+
 \subsubsection{Bandwidth Threshold}
 The "Bandwidth Threshold" of a Cache Server is the maximum used bandwidth which
 can be considered "healthy" for the Cache Server. It is suggested that clients
