@@ -27,11 +27,6 @@ Service, but are not strictly "Tenantable", as such.
 \captionof{listing}{Invalidation Job Object as a Typescript Interface}
 \label{code:datamodel:invalidation-job}
 \begin{minted}[tabsize=2]{typescript}
-/**
- * InvalidationJob objects represent - broadly speaking - periods of time during
- * which specific content will be fetch from upstream instead of served from
- * cache.
- */
 interface InvalidationJob {
 	assetPattern: RegExp;
 	createdBy: string;
@@ -67,7 +62,10 @@ no semantic meaning to this property other than unique identification.
 
 \subsubsection{Start Time}
 This is the date and time at which the Invalidation Job is set to begin. Upon
-creation, this MUST be in the future.
+creation, this MUST be at most one hour before the current time\footnote{This is
+done to account for potential differences between what time the server thinks it
+is and what time the client thinks it is - it is neither the intention nor,
+indeed, possible that a content invalidation job begin before it is submitted.}.
 
 \subsubsection{Time to Live}
 This unsigned integer number of hours for which the Invalidation Job should
