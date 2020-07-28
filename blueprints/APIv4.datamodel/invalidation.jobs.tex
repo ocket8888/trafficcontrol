@@ -33,6 +33,7 @@ interface InvalidationJob {
 	deliveryService: string;
 	id: bigint;
 	startTime: Date;
+	tenant: string;
 	timeToLive: bigint;
 }
 \end{minted}
@@ -51,10 +52,7 @@ Invalidation Jobs are not "Tenantantable".}.
 
 \subsubsection{Delivery Service}
 The Delivery Service within which the Invalidation Job operates is given by this
-string which is its Name\footnote{This Name will be visible to Users with the
-appropriate Permissions(s) to see Invalidation Jobs, regardless of Tenancy;
-Invalidation Jobs are not "Tenantable". However, new Invalidation Jobs can only
-be created for Delivery Services within the requesting User's Tenancy.}.
+string which is its Name.
 
 \subsubsection{ID}
 ID is an unsigned integer that uniquely identifies an Invalidation Job. There is
@@ -66,6 +64,11 @@ creation, this MUST be at most one hour before the current time\footnote{This is
 done to account for potential differences between what time the server thinks it
 is and what time the client thinks it is - it is neither the intention nor,
 indeed, possible that a content invalidation job begin before it is submitted.}.
+
+\subsubsection{Tenant}
+The Tenant of an Invalidation Job is a string which is the Name of the Tenant to which it belongs. The Delivery Service to which the Invalidation Job applies
+MUST fall within the Tenancy of this Tenant\footnote{This is enforced upon
+creation by the API.}.
 
 \subsubsection{Time to Live}
 This unsigned integer number of hours for which the Invalidation Job should
