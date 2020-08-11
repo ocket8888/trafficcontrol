@@ -1,0 +1,208 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Profiles}
+A Profile is a set of configuration options which may be associated with one or
+more Cache Servers. It contains configuration options that are typically common
+to a great number of Cache Servers within a CDN, and can therefore be changed
+on an arbitrary number of Cache Servers simultaneously.
+
+\begin{codelisting}
+\captionof{listing}{Profile Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface Parameter {
+	configurationFile: Exclude<string, "">;
+	name: Exclude<string, "">;
+	secure: boolean;
+	value: Exclude<string, "">;
+}
+
+interface Profile {
+	bandwidthThreshold: bigint | null;
+	cdn: string;
+	description: string;
+	hardDisks: Set<string>;
+	historyCount: bigint | null;
+	healthConnectionTimeout: bigint | null;
+	healthPollingPath: Exclude<string, "">;
+	healthPollingFormat: string | null;
+	loadavgThreshold: number | null;
+	name: Exclude<string, "">;
+	parameters: Set<Parameter>;
+	queryTimeThreshold: bigint | null;
+	ramDisks: Set<string>;
+	tags: Set<string>;
+	type: "EDGE" | "MID";
+}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{Bandwidth Threshold}
+The "Bandwidth Threshold" of a Cache Server is the maximum used bandwidth which
+can be considered "healthy" for the Cache Server. It is suggested that clients
+presenting controls to create/register a new Cache Server present the most
+common value within the server's Cache Group as the default. Note that the value
+may be zero, in which case the Cache Server will always be considered unhealthy
+for the reason of exceeding this threshold.\\
+If this value is null-typed, it has the meaning "no limit".
+
+\subsubsection{CDN}
+Profiles are scoped to a CDN, because a CDN is defined as all of the
+configuration and infrastructure necessary to serve content for its constituent
+Delivery Services. So being able to share that configuration across CDNs breaks
+this encapsulation.\\
+Therefore a Profile belongs to a CDN which is identified by this string which
+is the CDN's Name.
+
+\subsubsection{Description}
+Description is a human-readable string that ideally describes what the Profile
+is for and to what servers it ought to be limited in its assignment.\\
+This may be an empty string, but clients of the API are encouraged to promote
+its sensible use as much as possible.
+
+\subsubsection{Hard Disks}
+A collection of Hard Disk Drives (HDDs)\footnote{This designation is meant to
+contrast with "RAM Drives" where a block device maps to a section of main
+memory. In practice, Hard Disks may be any block device, include Solid-State
+Drives rather than actually HDDs.} available to the Cache Server for caching
+content, represented as a set of file paths as strings to said devices. These
+devices MUST be accessible for full read and write operations to the user as
+whom the caching proxy software runs on the Cache Server.
+
+\subsubsection{History Count}
+This unsigned integer determines the amount of health and statistics polls
+Traffic Monitor shall maintain for each Cache Server it monitors that uses this
+Profile. A "null"-typed value indicates that Traffic Monitor will use its
+default - which is not defined by the Traffic Ops API.
+
+\subsubsection{Health Connection Timeout}
+This is an unsigned integer number of milliseconds Traffic Monitor will wait
+before giving up on a request for health polling information for Cache Servers
+using this Profile. If it is "null"-typed, Traffic Monitor is instructed to use
+its pre-configured default timeout, which is not defined by the Traffic Ops API.
+This value MUST NOT be zero ($0$).
+
+\subsubsection{Health Polling Path}
+This is a string that names a special request path recognized by the Cache
+Server's caching proxy software which will result in the retrieval of statistics
+rather than content. This MUST NOT be allowed to be an empty string. It MAY
+contain a query string or even document fragment.\\
+The only health-and-statistics-gathering implementation truly supported by ATC
+is the special "astats" Traffic Server plugin.
+
+\subsubsection{Health Polling Format}
+This string names the format in which statistics are retrieved from the Cache
+Servers using this Profile. The allowed values are defined by Traffic Monitor,
+and MUST NOT be checked by the Traffic Ops API as a part of validation. The
+string may not be empty, but if it is "null"-valued, Traffic Monitor MUST treat
+it as the default format - which is defined to be "stats\_over\_http".
+
+\subsubsection{Loadavg Threshold}
+A Cache Server's "Loadavg Threshold" is a floating-point number that represents
+the one-minute "loadavg" above which the Cache Server will be considered
+unhealthy. Note that it may be zero, in which case the Cache Server will always
+be considered unhealthy for the reason of exceeding this threshold.\\
+If this is null-typed, it has the special meaning "no limit".\\
+For more information consult the
+\href{https://linux.die.net/man/3/getloadavg}{\code{getloadavg(3)} manual page},
+and/or the
+\href{https://linux.die.net/man/5/proc}{\code{/proc(5)} manual page}.
+
+\subsubsection{Name}
+A Profile's Name is a string that uniquely identifies it among all Profiles.\\
+It MUST NOT be empty and MUST only contain alphanumeric characters,
+underscores, and hyphens.
+
+\subsubsection{Parameters}
+A Profile's principle job is to contain Parameters. Each Parameter represents
+some arbitrary piece of configuration related to a Cache Server's operation.
+These are mainly used by the configuration file generation process to help
+create caching-proxy-server-implementation-specific configuration files, but in
+practice may represent other miscellaneous configuration options.\\
+Each Parameter is an object, the properties of which are herein described.
+
+\paragraph{Configuration File}
+A Parameter's Configuration File is a string that typically names the
+configuration file to which configuration is added by this Parameter. This
+is merely the \emph{name} of the file, and not its full \emph{file path}, for
+example a configuration file for Apache Traffic Server that typically is placed
+at \code{/etc/trafficserver/records.config} would be named in a Configuration
+File property of a Parameter as simply \code{records.config}. The location of
+the file on the Cache Server is implementation-specific, and the configuration
+file generation system is responsible for knowing where that is.\\
+This string MUST NOT be empty - even if it configures something that is not
+contained within an actual configuration file it ought to have a Configuration
+File value that describes what it configures.\\
+The combination of a Parameter's Configuration File and its Name must be unique
+among a Profile's Parameters.
+
+\paragraph{Name}
+The Name of a Parameter is a string describes the specific configuration option
+that the Parameter configures. Typically this is the name of the configuration
+field within a configuration file generated for the Cache Server(s) using this
+Profile.\\
+This string MUST NOT be empty.\\
+The combination of a Parameter's Configuration File and its Name must be unique
+among a Profile's Parameters.
+
+\paragraph{Secure\label{sec:profile:param:secure}}
+Secure is a boolean value which - if \code{true} - will cause its Value to be
+obscured for users without the \code{secure-parameters} Permission, and such
+users will be unable to edit the Parameter in any way - or even remove it from
+the Profile (even if they have all other required Permissions). However, a
+Profile can be replaced on a Cache Server even if it has Secure Parameters.
+
+\paragraph{Value}
+A Parameter's Value is a string, but it may be semantically interpreted by
+configuration management systems in arbitrary ways. For this reason it is very
+important that clients of the API ensure that users are empowered to enter
+semantically correct values for Parameters based on whatever configuration
+management system is in use, to the highest degree possible - because the API
+can make no such guarantees and performs no such checks.\\
+This string MUST NOT be empty.
+
+\subsubsection{Query Time Threshold}
+A Cache Server's "Query Time Threshold" is an unsigned integer number of
+milliseconds after which a Traffic Monitor polling it for health will consider
+it unhealthy, even if it successfully returns healthy metrics. Note that it may
+be zero, in which case the Cache Server(s) using this Profile will always be
+considered unhealthy for the reason of exceeding this threshold.\\
+If this value is null-typed, it has the special meaning "no threshold"
+(however, Traffic Monitor polling timeouts still apply).
+
+\subsubsection{RAM Disks}
+A collection of RAM Disk Drives available to the Cache Server for caching
+content, represented as a set of file paths as strings to said devices. These
+devices MUST be accessible for full read and write operations to the user as
+whom the caching proxy software runs on the Cache Server.
+
+\subsubsection{Tags}
+The Tags associated with a Profile are represented by a set of strings that are
+Tag Names.
+
+\subsubsection{Type\label{sec:profile:type}}
+The Type of a Profile determines which kind of Cache Server may use it. Only
+Cache Servers with the same Type as a Profile may use that Profile. This helps
+prevent accidental misconfiguration in a sea of Parameters.\\
+A Profile's Type is a string restricted to one of the following values:
+
+\begin{itemize}
+	\item \code{EDGE} - This Profile may only be used by Edge-tier Cache
+		Servers which act as reverse proxies.
+	\item \code{MID} - This Profile may only be used by Mid-tier Cache Servers
+		which acts as forward proxies.
+\end{itemize}

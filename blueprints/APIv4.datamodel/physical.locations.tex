@@ -1,0 +1,74 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Physical Location}
+Physical Locations are exactly what they sound like, a real, physical place
+where component hardware is stored.\\
+Mainly this contains metadata for support purposes, but it can also be used
+to provide some routing fallback behavior.
+
+\begin{codelisting}
+\captionof{listing}{Physical Location Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface PhysicalLocation {
+	address: string;
+	email: string;
+	name: string;
+	notes: string;
+	phoneNumber: string;
+	pointOfContactName: string;
+	tags: Set<string>;
+}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{Address}
+This is a text field with no defined structure, but semantically it represents
+a Physical Location's real-world, physical address. If it is not an empty
+value, it is assumed to contain enough information to send a letter through
+normal postage to the Physical Location (though the site may not actually be
+capable of receiving mail).\\
+Addresses may consist of alphanumeric characters, hyphens, periods, spaces, and
+newlines, but may neither begin nor end with a space or newline.
+
+\subsubsection{Email}
+A string that contains an email address (unless it is an empty string) which is
+used for communicating with the Physical Location's "Point of Contact".
+
+\subsubsection{Name}
+A string that uniquely identifies the Physical Location. It MUST only contain
+alphanumeric characters and spaces, but may neither begin nor end with a space.
+
+\subsubsection{Notes}
+This string has no defined structure or semantic meaning and is used to contain
+miscellaneous information.
+
+\subsubsection{Phone Number}
+A string which, if not empty, is presumed to be a telephone number at which the
+Physical Location's "Point of Contact" may be contacted.\\
+It may only contain numerics and hyphens, and may neither start nor end with a
+hyphen.
+
+\subsubsection{Point of Contact Name}
+A string which, if not empty, is presumed to be the proper name of the
+designated "Point of Contact" for the Physical Location.\\
+This may contain alphabetic character, periods, hyphens, spaces, commas, and
+apostrophes, but may neither begin nor end with a hyphen or a space.
+
+\subsubsection{Tags}
+The Tags that are applied to a Physical Location are represented by a set of
+strings that are those Tags' Names.

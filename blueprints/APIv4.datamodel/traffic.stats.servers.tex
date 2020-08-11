@@ -1,0 +1,61 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Traffic Stats Servers}
+Traffic Stats Servers are instances of Traffic Stats and contain information
+relating to their network connection information as well as configuration.
+
+\subsubsection{Database Servers}
+The databases used by Traffic Stats to store statistics are given as a set of
+unsigned integers that are Infrastructure Server IDs.
+
+\subsubsection{Domain}
+The "domain" part of the Traffic Stats Server's Fully Qualified Domain Name
+(FQDN) as a string. For example, a Traffic Stats Server with an FQDN of
+\code{github.com} has a Domain of \code{com} and a Traffic Stats Server with an
+FQDN of \code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.\\
+In other words, this is every part of the Traffic Stats Server's FQDN that
+isn't part of its Host Name.
+
+\subsubsection{Host Name}
+This is the "host" part of the Traffic Stats Server's Fully Qualified Domain
+Name (FQDN) as a string. For example, a Traffic Stats Server with an FQDN of
+\code{github.com} has a Host Name of \code{github}, and a Traffic Stats Server
+with an FQDN of \code{trafficcontrol.apache.org} has a Host Name of
+\code{trafficcontrol}.\\
+In other words, a Traffic Stats Server's Host Name is the only part of its FQDN
+that is not part of its Domain.\\
+This field does NOT need to be unique, though operators are encouraged to make
+this - or at least the concatenation \code{\emph{Host Name}.\emph{Domain}} -
+unique for ease of operation.
+
+\subsubsection{ID}
+An integral, unique identifier for the Traffic Stats Server. It carries no
+meaning or significance beyond being a unique identifier.
+
+\subsubsection{Notes}
+This is a string of arbitrary text for miscellaneous purposes.
+
+\subsubsection{Online}
+This boolean value indicates whether or not the Traffic Stats server is online
+and collecting statistics.
+
+\subsubsection{Physical Location}
+This string gives the Name of a Physical Location within which this Traffic
+Stats Server resides. If this is "null"-typed value, then it is understood that
+the Traffic Stats Server has no well-defined and/or meaningful Physical
+Location.

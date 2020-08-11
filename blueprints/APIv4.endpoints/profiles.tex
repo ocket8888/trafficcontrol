@@ -1,0 +1,396 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{\code{/profiles}}
+This endpoint deals with manipulations and representations of the group of
+Profile objects configured in Traffic Ops.
+
+\subsubsection{GET}
+Retrieves representations of Profile objects.
+\begin{description}
+	\item[Required Permissions] \code{profile-read}\footnote{Additionally, if
+		the requesting user does not have the \code{secure-parameters}
+		Permission, the Values of Parameters that are Secure will be obscured in
+		the response payload. Specifically, they will appear as \code{*****}.}
+	\item[Response Type] Array
+\end{description}
+
+\paragraph{Request Structure}
+This method of this endpoint implements the Age Filtering and Sorting and
+Pagination query parameters as outlined in Sections \ref{sec:age-filtering} and
+\ref{sec:pagination}, respectively. It further provides the query parameters in
+Table \ref{tbl:profiles:get:qparams}.
+
+\begin{table}[h]
+\centering
+\caption{GET \code{/profiles} Query Parameters\label{tbl:profiles:get:qparams}}
+\begin{tabularx}{\linewidth}{|l|X|}
+	\hline
+	\textbf{Parameter} & \textbf{Description}\\
+	cdn & Filters results to only contain Profiles within the CDN that has this
+		Name. If the CDN in question does not exist, it causes the endpoint to
+		ignore the filter and emit a \code{warning}-level Alert indicating the
+		issue.\\
+	\hline
+	name & Filters results to only contain Profiles with this Name\\
+	\hline
+	tags & This can be either a single Tag Name (e.g. \code{tags=Foo}) or a
+		comma-delimited list of Tag Names (e.g. \code{tags=Foo,Bar}). The
+		response will be filtered to contain only those Profiles that are
+		"tagged" with \emph{all} passed Tags. If at least one Tag named does
+		not exist, it causes the endpoint to ignore the \emph{entire} filter
+		and emit a \code{warning}-level Alert indicating the issue.\\
+	\hline
+	omit & This can be a property name which will be stripped from the returned
+		objects; that is, the returned objects will be missing these properties
+		from their representations. The properties that can be omitted in this
+		way are limited to:
+		\begin{itemize}
+			\item Parameters
+		\end{itemize}
+		If this parameter is provided and cannot be parsed as either a
+		single property name or a comma-delimited list thereof (though at the
+		time of this writing only one is supported so the latter wouldn't make
+		much sense in any case), or if an attempt is made to omit a property
+		other than those allowable, a 400 Bad Request error response will be
+		returned.\\
+	\hline
+	type & Filters results to only contain Profiles of this Type, which must be
+		one of the valid Profile Type values defined in Section
+		\ref{sec:profile:type}. If the passed Type is not a valid Profile Type
+		value, the filter is ignored and the endpoint will return a
+		\code{warning}-level Alert indicating the issue.\\
+	\hline
+\end{tabularx}
+\end{table}
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}{http}
+GET /api/4.0/profiles?name=CDN-in-a-Box_EDGE HTTP/1.1
+Host: trafficops.infra.ciab.test
+Accept: application/json, */*;q=0.9
+Cookie: mojolicious=...
+
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is an array of representation of Profile objects, each
+representation extended with the \code{lastUpdated} property containing the
+Date/Time at which the Profile object was last modified.\\
+This method of this endpoint also implements the \code{count} property of the
+top-level \code{summary} object as described in section
+\ref{sec:summary-object}.\\
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 200 OK
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Wed, 22 Apr 2020 00:10:15 GMT
+Content-Length: 1255
+
+{ "response": [{
+	"bandwidthThreshold": 1750000,
+	"cdn": "CDN-in-a-Box",
+	"description": "Edge Cache - Apache Traffic Server",
+	"hardDisks": [ "/var/trafficserver/cache" ],
+	"healthConnectionTimeout": 2000,
+	"healthPollingPath": "/_stats",
+	"historyCount": 30,
+	"lastUpdated": "2020-04-22T00:10:15Z",
+	"loadavgThreshold": 25,
+	"name": "ATS_EDGE_TIER_CACHE",
+	"queryTimeThreshold": 1000,
+	"ramDisks": [],
+	"tags": [],
+	"type": "EDGE",
+	"parameters": [
+		{
+			"configurationFile": "records.config",
+			"name": "CONFIG proxy.config.http.server_ports",
+			"secure": false,
+			"value": "STRING 80 80:ipv6 443:proto=http:ssl 443:ipv6:proto=http:ssl"
+		},
+		{
+			"configurationFile": "records.config",
+			"name": "CONFIG proxy.config.http.enable_http_stats",
+			"secure": false,
+			"value": "INT 1"
+		},
+		{
+			"configurationFile": "records.config",
+			"name": "CONFIG proxy.config.reverse_proxy.enabled",
+			"secure": false,
+			"value": "INT 1"
+		},
+		{
+			"configurationFile": "plugin.config",
+			"name": "system_stats.so",
+			"secure": false,
+			"value": ""
+		},
+		{
+			"configurationFile": "plugin.config",
+			"name": "stats_over_http.so",
+			"secure": false,
+			"value": ""
+		}
+	]
+}],
+"summary": {
+	"count": 2
+}}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{POST}
+Creates one or more new Profiles.
+\begin{description}
+	\item[Required Permissions] \code{profiles-write}
+	\item[Response Type] Array\footnote{Irrespective of request structure.}
+\end{description}
+
+\paragraph{Request Structure}
+The payload of a request using this method of this endpoint must either be a
+representation of a single Profile (including any desired Parameters), or a
+representation of a set of Profiles.\\
+If any of the passed Profiles are found to be invalid, or if they collide with
+existing Profiles, the entire request is invalid. This means that no Profiles
+would be created in this case, and the appropriate error response will be
+returned.\\
+If the requesting user does not have the \code{secure-parameters} Permission,
+no Profiles may be created having Secure Parameters.
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}[tabsize=2]{http}
+POST /api/4.0/profiles HTTP/1.1
+Host: trafficops.infra.ciab.test
+Accept: application/json, */*;q=0.9
+Cookie: mojolicious=...
+Content-Type: application/json
+Transfer-Encoding: chunked
+
+{
+	"bandwidthThreshold": null,
+	"cdn": "CDN-in-a-Box",
+	"description": "A Profile for edge-tier servers running Nginx",
+	"hardDisks": [ "/var/cache/cache.data" ],
+	"healthConnectionTimeout": 2000,
+	"healthPollingPath": "/_plugin/nginx_atc_stats",
+	"historyCount": 30,
+	"loadavgThreshold": null,
+	"name": "NginX Edge",
+	"parameters": [
+		{
+			"configurationFile": "proxy.conf",
+			"name": "proxy_set_header",
+			"secure": false,
+			"value": "X-Real-IP: $remote_addr;"
+		}
+	],
+	"queryTimeThreshold": null,
+	"ramDisks": [],
+	"tags": [],
+	"type": "EDGE"
+}
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is a set of representations of the created Profiles, each one
+augmented with the \code{lastUpdated} property containing the
+Date/Time at which the Profile object was last modified.
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 201 Created
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Wed, 22 Apr 2020 00:10:15 GMT
+Transfer-Encoding: chunked
+
+{ "response": [
+	{
+		"bandwidthThreshold": null,
+		"cdn": "CDN-in-a-Box",
+		"description": "A Profile for edge-tier servers running Nginx",
+		"hardDisks": [ "/var/cache/cache.data" ],
+		"healthConnectionTimeout": 2000,
+		"healthPollingPath": "/_plugin/nginx_atc_stats",
+		"historyCount": 30,
+		"lastUpdated": "2020-04-22T00:10:15.0Z",
+		"loadavgThreshold": null,
+		"name": "NginX Edge",
+		"parameters": [
+			{
+				"configurationFile": "proxy.conf",
+				"name": "proxy_set_header",
+				"secure": false,
+				"value": "X-Real-IP: $remote_addr;"
+			}
+		],
+		"queryTimeThreshold": null,
+		"ramDisks": [],
+		"tags": [],
+		"type": "EDGE"
+	}
+]}
+\end{minted}
+\end{codelisting}
+
+\subsection{\code{/profiles/\{\{Profile Name\}\}}}
+
+\subsection{\code{/profiles/\{\{Profile Name\}\}/parameters}}
+Deals with representations and manipulation of the Parameters of a specific
+Profile.
+
+\subsubsection{GET}
+
+\subsubsection{POST}
+Adds new Parameters to the Profile.
+
+\begin{description}
+	\item[Required Permissions] \code{profiles-write}
+	\item[Response Type] Array
+\end{description}
+
+\paragraph{Request Structure}
+The request may be either a single representation of a new Parameter to be
+added to the Profile, or an array of such representations.\\
+If any of the passed Parameters are found to be invalid, or if they collide
+with the existing Parameters of the specified Profile, the entire request is
+invalid. This means that no Parameters would be added in this case, and the
+appropriate error response will be returned.\\
+If the requesting user does not have the \code{secure-parameters} Permission,
+no Secure Parameters may be added.
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}[tabsize=2]{http}
+POST /api/4.0/profiles/ATS_EDGE_TIER_CACHE/parameters HTTP/1.1
+Host: trafficops.infra.ciab.test
+Accept: application/json, */*;q=0.9
+Cookie: mojolicious=...
+Content-Type: application/json
+Transfer-Encoding: chunked
+
+{
+	"configurationFile": "somefile.txt",
+	"name": "foo",
+	"secure": false,
+	"value": "bar"
+}
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is a set of representations of Parameters that have been added to
+the Profile.
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 201 Created
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Wed, 22 Apr 2020 00:10:15 GMT
+Transfer-Encoding: chunked
+
+{ "response": [
+	{
+		"configurationFile": "somefile.txt",
+		"name": "foo",
+		"secure": false,
+		"value": "bar"
+	}
+]}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{DELETE}
+Removes Parameters from a Profile.
+
+\begin{description}
+	\item[Required Permissions] \code{profiles-write}
+	\item[Response Type] Array
+\end{description}
+
+\paragraph{Request Structure}
+The request may consist of either a single "Parameter Identifier" representation,
+or a set thereof. A "Parameter Identifier" is an object with the following
+properties.
+
+\begin{description}
+	\item[configurationFile] The value of a Parameter's Configuration File.
+	\item[name] The value of a Parameter's Name.
+\end{description}
+
+These two properties together are sufficient to uniquely identify a Parameter
+assigned to a Profile.\\
+Note, however, that if the identified Parameter is "Secure", then the requesting
+user must also have the \code{secure-parameters} Permission in order for the
+request to be successful.\\
+If even one of a set of submitted Parameters does not exist on the Profile, or
+if at least one was "Secure" but the requesting user does not have the required
+Permissions, then the entire payload is invalid and an appropriate error
+response is returned.
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}[tabsize=2]{http}
+DELETE /api/4.0/profiles/ATS_EDGE_TIER_CACHE/parameters HTTP/1.1
+Content-Type: application/json
+Accept: application/json, */*;q=0.9
+Host: trafficops.infra.ciab.test
+Cookie: mojolicious=...
+Transfer-Encoding: chunked
+
+{
+	"configurationFile": "records.config",
+	"name": "CONFIG proxy.config.http.enable_http_stats"
+}
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is a set of representations of the removed Parameters.
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 200 OK
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Wed, 22 Apr 2020 00:10:15 GMT
+Transfer-Encoding: chunked
+
+{ "response": [
+	{
+		"configurationFile": "records.config",
+		"name": "CONFIG proxy.config.http.enable_http_stats",
+		"secure": false,
+		"value": "INT 1"
+	}
+]}
+
+\end{minted}
+\end{codelisting}

@@ -1,0 +1,294 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{\code{/tags}}
+This endpoint deals with creating Tags and retrieving representations thereof.
+
+\subsubsection{GET}
+Retrieves Tag representations.
+\begin{description}
+	\item[Required Permissions] \code{tags-read}\footnote{This Permission only
+	applies to this endpoint, the Tags applied to Taggable objects presented by
+	other endpoints will be visible regardless of whether the user has this
+	Permission.}
+	\item[Response Type] Set
+\end{description}
+
+\paragraph{Request Structure}
+This method of this endpoint implements the Age Filtering and Sorting and
+Pagination query parameters as outlined in Sections \ref{sec:age-filtering} and
+\ref{sec:pagination}, respectively. It provides no additional query string
+parameters.
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}{http}
+GET /api/4.0/tags?limit=1 HTTP/1.1
+Host: trafficops.infra.ciab.test
+Accept: application/json, */*;q=0.9
+Cookie: mojolicious=...
+
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is an array of representations of Tags, each representation
+extended with the \code{lastUpdated} property containing the Date/Time at which
+the Tag was last modified.\\
+This method of this endpoint also implements the \code{count} property of the
+top-level \code{summary} object as described in Section
+\ref{sec:summary-object}.
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 200 OK
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Tue, 23 Jun 2020 20:46:57 GMT
+Transfer-Encoding: chunked
+
+{ "response": [
+	{
+		"name": "Foo",
+		"lastUpdated": "2020-06-23T20:45:00.000Z"
+	}
+],
+"summary": {
+	"count": 347
+}}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{POST}
+Creates a new Tag or Tags.
+\begin{description}
+	\item[Required Permissions] \code{tags-write}
+	\item[Response Type] Set
+\end{description}
+
+\paragraph{Request Structure}
+This method of this endpoint provides no query string parameters.\\
+The request body of a POST request to \code{/tags} is either a representation of
+a Tag, or an array thereof.
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}[tabsize=2]{http}
+POST /api/4.0/tags HTTP/1.1
+Host: trafficops.infra.ciab.test
+Accept: application/json, */*;q=0.9
+Cookie: mojolicious=...
+Content-Type: application-json
+Content-Length: 52
+
+[
+	{
+		"name": "Test"
+	},
+	{
+		"name": "Quest"
+	}
+]
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is a set - always, even if the request body contained only a single
+object - of representations of the Tag objects created.
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 201 Created
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Tue, 23 Jun 2020 20:46:57 GMT
+Location: /api/4.0/tags?newerThan=2020-06-23T20:46:56.999Z&olderThan=2020-06-23T20:46:57.001Z
+Transfer-Encoding: chunked
+
+{ "alerts": [{
+	"level": "success",
+	"text": "Created 2 tags"
+}],
+"response": [
+	{
+		"name": "Test"
+	},
+	{
+		"name": "Quest"
+	}
+]}
+\end{minted}
+\end{codelisting}
+
+
+\subsection{\code{/tags/\{\{Tag Name\}\}}}
+This endpoint deals with manipulations and representations of singular tags.
+
+\subsubsection{GET}
+Retrieves a Tag's representation.
+\begin{description}
+	\item[Required Permissions] \code{tags-read}\footnote{This Permission only
+	applies to this endpoint, the Tags applied to Taggable objects presented by
+	other endpoints will be visible regardless of whether the user has this
+	Permission.}
+	\item[Response Type] Object
+\end{description}
+
+\paragraph{Request Structure}
+The single route parameter \code{Tag Name} must be the name of an existing
+Tag.\\
+This method of this endpoint provides no query string parameters.
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}{http}
+GET /api/4.0/tags/Test HTTP/1.1
+Host: trafficops.infra.ciab.test
+Accept: application/json, */*;q=0.9
+Cookie: mojolicious=...
+
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is a representation of the requested Tag, augmented with the
+\code{lastUpdated} property containing the Date/Time at which the Tag was last
+modified.
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 200 OK
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Tue, 23 Jun 2020 20:46:57 GMT
+Transfer-Encoding: chunked
+
+{ "response":
+	{
+		"name": "Test",
+		"lastUpdated": "2020-06-23T20:45:00.000Z"
+	}
+}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{PUT}
+Edits a Tag.
+\begin{description}
+	\item[Required Permissions] \code{tags-write}
+	\item[Response Type] Set
+\end{description}
+
+\paragraph{Request Structure}
+The single route parameter \code{Tag Name} must be the name of an existing
+Tag.\\
+This method of this endpoint provides no query string parameters.\\
+The request body of a PUT request to \code{/tags/\{\{Tag Name\}\}} is a
+representation of a Tag.
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}[tabsize=2]{http}
+PUT /api/4.0/tags HTTP/1.1
+Host: trafficops.infra.ciab.test
+Accept: application/json, */*;q=0.9
+Cookie: mojolicious=...
+Content-Type: application-json
+Content-Length: 20
+
+{
+	"name": "Bar"
+}
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is a representation of the edited Tag, augmented with the
+\code{lastUpdated} property containing the Date/Time at which the Tag was last
+modified.
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 200 OK
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Tue, 23 Jun 2020 20:46:57 GMT
+Transfer-Encoding: chunked
+
+{ "alerts": [{
+	"level": "success",
+	"text": "Edited Tag 'Test', name changed to 'Bar'"
+}]
+"response":
+	{
+		"name": "Bar",
+		"lastUpdated": "2020-06-23T20:46:57.000Z"
+	}
+}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{DELETE}
+Deletes a Tag.
+\begin{description}
+	\item[Required Permissions] \code{tags-write}
+	\item[Response Type] Object
+\end{description}
+
+\paragraph{Request Structure}
+The single route parameter \code{Tag Name} must be the name of an existing
+Tag.\\
+This method of this endpoint provides no query string parameters.
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}{http}
+DELETE /api/4.0/tags/Bar HTTP/1.1
+Host: trafficops.infra.ciab.test
+Accept: application/json, */*;q=0.9
+Cookie: mojolicious=...
+
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is a representation of the deleted Tag.
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 200 OK
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Tue, 23 Jun 2020 20:46:57 GMT
+Transfer-Encoding: chunked
+
+{ "alerts": [{
+	"level": "success",
+	"text": "Deleted Tag 'Bar'"
+}],
+"response":
+	{
+		"name": "Bar"
+	}
+}
+\end{minted}
+\end{codelisting}

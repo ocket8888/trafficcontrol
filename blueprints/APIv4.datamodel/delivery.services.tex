@@ -1,0 +1,515 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Delivery Services}
+Delivery Services are, at their most basic, an association between a source of
+content and a set of Cache Servers and configuration options used to distribute
+that content.
+
+\begin{codelisting}
+\captionof{listing}{Delivery Service as a Typescript Type}
+\begin{minted}[tabsize=2]{typescript}
+type DeliveryService = DNSDeliveryService |
+	DNSMSODeliveryService |
+	HTTPDeliveryService |
+	HTTPMSODeliveryService |
+	SteeringDeliveryService |
+	SteeringMSODeliveryService |
+	StaticDeliveryService;
+\end{minted}
+\end{codelisting}
+
+\subsubsection{Common Properties}
+Herein described are the properties common to all Delivery Service objects. The
+Routing Type of a Delivery Service encapsulates the methods by which clients
+may request content routing, and depending on its value the Delivery Service
+takes on a set of additional properties. Put simply, these are all different
+types of objects that are closely related.\\
+This section details all of the properties that are common to \emph{all} types
+of Delivery Services.
+
+\begin{codelisting}
+\captionof{listing}{Delivery Service Object as a Typescript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface BaseDeliveryService {
+	anonymousBlocking: boolean;
+	bypassDestination: string | null;
+	cdn: string;
+	deniedAccessRedirect: string | null;
+	dnsTTL: bigint | null;
+	edns0ClientSubnetEnabled: boolean;
+	geographicLimiting: Set<string> | null;
+	maximumRecords: bigint | null;
+	missLocation: {
+		latitude: number;
+		longitude: number;
+	} | null;
+	name: string;
+	notes: string;
+	routingName: string;
+	routingType: 'HTTP' | 'DNS' | 'STEERING' | 'STATIC';
+	status: 'ACTIVE' | 'PRIMED' | 'INACTIVE';
+	tags: Set<string>;
+	tenant: string;
+	vanityHostnames: string;
+}
+\end{minted}
+\end{codelisting}
+
+\paragraph{Anonymous Blocking}
+A Delivery Service that has "Anonymous Blocking" tells Traffic Router to block
+requests from anonymized IP addresses. Whether or not and how well that can
+actually be done is dependent on the configuration of each Traffic Router
+itself, and if this Delivery Service is DNS-routed the only IP address Traffic
+Routers will be capable of checking for anonymization (e.g. known proxy/VPN/TOR
+exit node) will be the downstream router requesting the name resolution and thus
+is likely much less effective.
+
+\paragraph{Bypass Destination}
+This is a string that describes the network location to which clients will be
+directed if the traffic served by this Delivery Service exceeds its allowed
+maximums. This MUST always be represented as a string - even if the
+representation format supports IP Addresses as a native type - and its
+interpretation is dependent on the Delivery Service's Routing Type.\\
+If the Delivery Service's Routing Type is \code{HTTP}, then this is interpreted
+- and validated by the API - as a Fully Qualified Domain Name (FQDN) optionally
+followed by a colon and port number that defines an HTTP server to which client
+requests will be directed.\\
+If the Delivery Service's Routing Type is \code{DNS} or \code{STATIC}, then if
+this is a valid IPv4 address it is assumed to be one and will be presented as an
+AA record. If not, and it's a valid IPv6 address, then it is assumed to one and
+will be presented as an AAAA record. Finally, it may be an FQDN in which case it
+will be presented as a CNAME record. If none of these formats can be validated,
+then it MUST be rejected by the API.\\
+If the Delivery Service's Routing Type is \code{STEERING}, then this MUST be the
+Name of an existing Delivery Service - though it need not name one of this
+Delivery Service's Targets.
+
+\paragraph{CDN}
+The CDN to which a Delivery Service belongs is expressed as a string that is the
+Name used to uniquely identify it.
+
+%TODO: use-case for check path?
+
+\paragraph{Deep Caching}
+A boolean value that describes whether or not "Deep Caching" may be used for
+this Delivery Service.
+
+\paragraph{Denied Access Redirect}
+This is a string that describes the network location to which clients will be
+directed if they are denied access on the basis of Anonymous Blocking and/or
+Geographic Limiting settings. This MUST always be represented as a string - even
+if the representation format supports IP Addresses as a native type - and its
+interpretation is dependent on the Delivery Service's Routing Type.
+
+\paragraph{DNS TTL}
+An unsigned integer that defines the Time-To-Live (TTL) of DNS responses from
+the Traffic Router for this Delivery Service's routing, in seconds.
+If this is null-typed, the Traffic Router serving this Delivery Service's
+traffic will use its pre-configured default TTL for whatever type of record was
+requested.
+
+\paragraph{EDNS0 Client Subnet Enabled}
+A boolean that describes whether or not the EDNS0 DNS extension mechanism
+described in \href{RFC2671}{https://tools.ietf.org/html/rfc2671} should be made
+available to clients.\\
+Note that the ability of a Traffic Router to actually implement this setting
+depends on its own EDNS0 Client Subnet enabled value.
+
+%TODO: Necessary?
+%\paragraph{ECS}
+
+\paragraph{Geographic Limiting}
+This property describes limitations to the availability of this Delivery
+Service's content on the basis of the requesting client's geographic location.
+It is a set of strings, each of which is an
+\href{https://www.iso.org/obp/ui/#search/code/}{ISO 3166-1} alpha-2 country
+code, optionally with ISO 3166-2 subdivisional alphabetic code. This is a "white
+list" of countries/subdivisions wherein content is to be made
+available\footnote{This property is meant to inform Traffic Router; Cache
+Servers cannot be relied upon to approve or deny access on a geographic basis.
+Thus, if routing is bypassed, restricted content is totally accessible to
+requesting clients.}.\\
+Content is \emph{always} available to clients whose IP addresses are found
+within the Traffic Routers' Coverage Zone File(s). With that in mind, when this
+property is an empty set it means that no geographic regions are "whitelisted"
+and thus \emph{only} clients whose IP addresses are found within a Coverage Zone
+File will be granted access to content. When this property has a "Null" type,
+there is no geographic restriction placed on the Delivery Service's content
+access.
+
+%TODO: use-case for header-rewrite text?
+
+\paragraph{Maximum Records}
+This unsigned integer sets the maximum number of records returned in DNS
+responses. It MUST be greater than zero, or null-typed, which indicates that
+there should be no limit placed on the maximum returned records.
+
+\paragraph{Miss Location}
+This is an object with two properties, latitude and longitude, which are
+floating-point numbers that define a pair of geographic coordinates to be used as
+a fallback in the event that attempts to find a geographic location for a client
+based on Coverage Zone Files and IP address look-up have failed. If this is
+null-typed, then there is no configured miss location and Traffic Router will
+use its pre-configured default fallback location. \footnote{The Miss Location of
+a Delivery Service is uneditable by users that do not have the
+\code{delivery-service-miss-location} Permission (as well as any other
+Permission(s) required by the endpoint used for editing).}
+
+\paragraph{Name}
+A Delivery Service's "Name" is a string that uniquely identifies it among all
+Delivery Services. It MUST only contain alphanumerics, hyphens, underscores and
+spaces, and MUST NOT begin with a non-alphanumeric character nor end with a
+non-alphanumeric character. This is used to generate part of the default request
+hostnames by replacing all non-alphanumeric characters with a hyphen.
+
+\paragraph{Notes}
+This section is an arbitrary string containing miscellaneous, human-friendly
+information about the Delivery Service. Other ATC components SHOULD NOT parse
+this for specific information fields, or expect it to be in a particular format.
+
+%TODO Raw-Remap use-case?
+%TODO Regex-Remap use-case?
+
+\paragraph{Routing Name}
+The lowest-level DNS label (e.g. in \code{traffic-control-cdn.readthedocs.io}
+the lowest-level DNS label is \code{traffic-control-cdn}) used to route to a
+Delivery Service is set by this string. UIs currently default this value to
+"cdn", but it may be changed for vanity purposes. It MAY NOT be an empty string
+and MUST be a valid DNS label.
+
+%TODO: ANY_MAP use-case?
+\paragraph{Routing Type}
+After creation, Routing Type is a read-only property. It's a string that
+describes the type of routing used to serve content for the Delivery Service.
+Each of these routing types has its own section below.
+\begin{itemize}
+	\item \code{HTTP}
+	\item \code{DNS}
+	\item \code{STEERING}
+	\item \code{STATIC}
+\end{itemize}
+
+\paragraph{Status}
+The "Status" of a Delivery Service is a string constant that expresses its
+ability to serve content at the present moment in time. It may have one of three
+values:
+
+\begin{itemize}
+	\item \code{ACTIVE} A Delivery Service that is "active" is one that is
+	functionally in service, and fully capable of delivering content. This means
+	that its configuration is deployed to Cache Servers and it is available for
+	routing traffic.
+	\item \code{PRIMED} A Delivery Service that is "primed" has had its
+	configuration distributed to the various servers required to serve its
+	content. However, the content itself is still inaccessible\footnote{The
+	content is not available through normal routing. This does not, though,
+	guarantee that Cache Servers do not already have the content stored and/or
+	are incapable of serving it if routing is bypassed.}.
+	\item \code{INACTIVE} A Delivery Service that is "inactive" is not available
+	for routing and has not had its configuration distributed to its assigned
+	Cache Servers.
+\end{itemize}
+
+\paragraph{Supported Protocols}
+This is a set of strings that name protocols served by the Delivery Service.
+Note that this is the method used to retrieve content from the caching system,
+not the method used for routing. The only protocols officially supported by ATC
+are "HTTP" and "HTTPS".\\
+This set is case-insensitive, such that if a Delivery Service is created with a
+Supported Protocols set containing "HTTP" the resulting set is equivalent to
+what would result from creating it with a Supported Protocols set containing
+"http". Representations produced by the Traffic Ops API MUST always use
+only uppercase characters.
+
+\paragraph{Tags}
+The Tags associated with a Delivery Service are represented by a set of strings
+that are Tag Names.
+
+\paragraph{Tenant}
+The Tenant to which a Delivery Service belongs is represented by a string that
+is that Tenant's unique Name.
+
+\paragraph{Vanity Hostnames}
+"Vanity Hostnames" is a set of strings that are Fully Qualified Domain Names
+(FQDN) which may be used as alternates to the standard
+\code{\emph{Routing Name}.\emph{Name}.\emph{CDN Domain}} FQDN when requesting
+content from the Delivery Service.\\
+No two Delivery Services may be allowed to share any single Vanity Hostname.\\
+Note that Traffic Ops - and in fact Traffic Control in general - cannot and
+does not guarantee that these vanity names will work, only that Traffic Router
+will respond to them as equivalents to a normal Delivery Service FQDN when
+content is requested through it. In general, because Vanity Hostnames are
+typically outside of the CDN's Domain (which is the only domain for which
+Traffic Router must be authoritative), this requires the DNS servers that are
+authoritative for each Vanity Hostname's Domain to contain records that will
+point to Traffic Router for resolution of these names.
+
+\subsubsection{DNS-Routed Properties}
+A DNS-Routed Delivery Service is defined primarily by having a Routing Type of
+"DNS". These Delivery Services direct clients to content by responding to DNS
+queries for Delivery Service hostnames with records indicating the network
+addresses of cache servers.
+
+\begin{codelisting}
+\captionof{listing}{DNS-Routed Delivery Service as a Typescript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface DNSDeliveryService extends BaseDeliveryService {
+	bypassTTL: bigint | null;
+	caching: 'CACHE' | 'RAM_ONLY' | 'NO_CACHE';
+	dscp: bigint;
+	maximumOriginConnections: bigint | null;
+	origin: bigint | Set<bigint>;
+	queryStringHandling: 'DROP' | 'IGNORE' | 'USE';
+	rangeRequestHandling: 'NO_CACHE' | 'WHOLE_OBJECT' | 'CACHE';
+	requiredCapabilities: Set<string>;
+	routingType: 'DNS';
+	topology: string;
+}
+\end{minted}
+\end{codelisting}
+
+\paragraph{Bypass TTL}
+An unsigned integer that defines the Time-To-Live (TTL) of DNS responses from
+the Traffic Router for this Delivery Service's Bypass Destination, in seconds.
+If this is null-typed, the Traffic Router serving this Delivery Service's
+traffic will use its pre-configured default TTL for whatever type of record was
+requested.
+
+\paragraph{Caching}
+Caching describes how Delivery Service content is cached - if at all. It is a
+string content restricted to one of the values:
+
+\begin{itemize}
+	\item \code{CACHE} The Delivery Service's content will be cached normally.
+	\item \code{RAM\_ONLY} The Delivery Service's content will only be cached
+	in RAM block devices.
+	\item \code{NO\_CACHE} The Delivery Service's content is proxied through
+	Cache Servers without ever being actually cached.
+\end{itemize}
+
+\paragraph{DSCP}
+Sets the
+\href{https://tools.ietf.org/html/rfc2474}{Differentiated Services Code Point}
+which will be marked on the Delivery Service's traffic. This is an unsigned
+integer with a maximum value of 64.
+
+\paragraph{Maximum Origin Connections}
+This is an unsigned integer which determines the maximum number of connections
+that any \emph{one} Cache Server may open to the Delivery Service's Origin.\\
+If this is null-typed, it has the special meaning "no limit".
+
+\paragraph{Origin}
+In normal cases, the Origin whose content is served by this Delivery Service is
+identified by an unsigned integer that is its ID. However, in the event that
+the Delivery Service is a Multi-Site Origin Delivery Service, it will have a
+set of such identifiers indicating all Origins used by the Delivery Service.
+More detail about Multi-Site Origin Delivery Services can be found in
+\ref{sec:mso-props}.
+
+\paragraph{Query String Handling}
+Query String Handling is a string with one of three possible values that
+describe how the cache layers should handle query strings in requested URLs.
+
+\begin{description}
+	\item[\code{DROP}] The first cache layer encountered (EDGE-tier Cache
+	Servers) will totally ignore all query strings, they will not be used in the
+	cache key, and will not be passed upstream in requests.
+	\item[\code{IGNORE}] The first cache layer encountered (EDGE-tier Cache
+	Servers) will not use query strings as part of the cache key, but will pass
+	them upstream in requests.
+	\item[\code{USE}] The first cache layer encountered (EDGE-tier Cache
+	Servers) will use query strings in the cache key and will pass them upstream
+	in requests.
+\end{description}
+
+\paragraph{Range Request Handling}
+Range Request Handling is a string with one of three possible values that
+describe how cache servers should handle HTTP Range requests.
+
+\begin{description}
+	\item[\code{NO\_CACHE}] Range requests will not be cached, and requests for
+	ranges will always be proxied upstream all the way to the origin.
+	\item[\code{WHOLE\_OBJECT}] When a request for a range of an object is
+	received, the entire object is fetched from upstream and cached, and
+	subsequent range requests will be served by taking ranges of the cached
+	object.
+	\item[\code{CACHE}] Range requests will be cached as normal requests, each
+	unique range representing a unique, cached object - this includes ranges
+	that may overlap.
+\end{description}
+
+\paragraph{Required Capabilities}
+The Capabilities required by a Delivery Service for cache servers to serve its
+content are given by a set of strings that are the names of those Capabilities.
+
+\paragraph{Topology}
+The Topology used by a Delivery Service is represented by a string that is the
+Topology's unique Name.
+
+\subsubsection{HTTP-Routed Properties}
+An HTTP-Routed Delivery Service is defined primarily by having a Routing Type of
+"HTTP". These Delivery Services direct clients to content by responding to DNS
+queries for Delivery Service hostnames with records indicating its own network
+address, then replying to subsequent HTTP requests for Delivery Service content
+with HTTP 302 Found responses directing clients to cache servers.
+
+\begin{codelisting}
+\captionof{listing}{HTTP-Routed Delivery Service as a Typescript Interface}
+\begin{minted}[tabsize=2]{typescript}
+	additionalResponseHeaders: Map<string, string>;
+	caching: 'CACHE' | 'RAM_ONLY' | 'NO_CACHE';
+	consistentHashingRegularExpression: RegExp | null;
+	dscp: bigint;
+	loggedRequestHeaders: Set<string>;
+	maximumOriginConnections: bigint | null;
+	origin: bigint | Set<bigint>;
+	queryStringHandling: 'DROP' | 'IGNORE' | 'USE';
+	rangeRequestHandling: 'NO_CACHE' | 'WHOLE_OBJECT' | 'CACHE';
+	requiredCapabilities: Set<string>;
+	routingType: 'HTTP';
+	significantQueryParameters: Set<bigint> | null;
+	topology: string;
+\end{minted}
+\end{codelisting}
+
+\paragraph{Additional Response Headers}
+Any additional HTTP headers desired to appear in HTTP responses from Traffic
+Router are indicated here as header names mapped to their desired values.
+
+\paragraph{Caching}
+Caching describes how Delivery Service content is cached - if at all. It is a
+string content restricted to one of the values:
+
+\begin{itemize}
+	\item \code{CACHE} The Delivery Service's content will be cached normally.
+	\item \code{RAM\_ONLY} The Delivery Service's content will only be cached
+	in RAM block devices.
+	\item \code{NO\_CACHE} The Delivery Service's content is proxied through
+	Cache Servers without ever being actually cached.
+\end{itemize}
+
+\paragraph{Consistent Hashing Regular Expression}
+When Traffic Router performs consistent hashing on client HTTP requests to find
+a cache server to which to redirect, it will use this regular expression - if it
+is not null-typed - to extract the parts of the request path to use as the
+hashing key.
+
+\paragraph{DSCP}
+Sets the
+\href{https://tools.ietf.org/html/rfc2474}{Differentiated Services Code Point}
+which will be marked on the Delivery Service's traffic. This is an unsigned
+integer with a maximum value of 64.
+
+\paragraph{Logged Request Headers}
+Any HTTP headers in client requests that should appear in Traffic Router logs
+are identified in this set of string by header name.
+
+\paragraph{Maximum Origin Connections}
+This is an unsigned integer which determines the maximum number of connections
+that any \emph{one} Cache Server may open to the Delivery Service's Origin.\\
+If this is null-typed, it has the special meaning "no limit".
+
+\paragraph{Origin}
+In normal cases, the Origin whose content is served by this Delivery Service is
+identified by an unsigned integer that is its ID. However, in the event that
+the Delivery Service is a Multi-Site Origin Delivery Service, it will have a
+set of such identifiers indicating all Origins used by the Delivery Service.
+More detail about Multi-Site Origin Delivery Services can be found in
+\ref{sec:mso-props}.
+
+\paragraph{Query String Handling}
+Query String Handling is a string with one of three possible values that
+describe how the cache layers should handle query strings in requested URLs.
+
+\begin{description}
+	\item[\code{DROP}] The first cache layer encountered (EDGE-tier Cache
+	Servers) will totally ignore all query strings, they will not be used in the
+	cache key, and will not be passed upstream in requests.
+	\item[\code{IGNORE}] The first cache layer encountered (EDGE-tier Cache
+	Servers) will not use query strings as part of the cache key, but will pass
+	them upstream in requests.
+	\item[\code{USE}] The first cache layer encountered (EDGE-tier Cache
+	Servers) will use query strings in the cache key and will pass them upstream
+	in requests.
+\end{description}
+
+\paragraph{Range Request Handling}
+Range Request Handling is a string with one of three possible values that
+describe how cache servers should handle HTTP Range requests.
+
+\begin{description}
+	\item[\code{NO\_CACHE}] Range requests will not be cached, and requests for
+	ranges will always be proxied upstream all the way to the origin.
+	\item[\code{WHOLE\_OBJECT}] When a request for a range of an object is
+	received, the entire object is fetched from upstream and cached, and
+	subsequent range requests will be served by taking ranges of the cached
+	object.
+	\item[\code{CACHE}] Range requests will be cached as normal requests, each
+	unique range representing a unique, cached object - this includes ranges
+	that may overlap.
+\end{description}
+
+\paragraph{Required Capabilities}
+The Capabilities required by a Delivery Service for cache servers to serve its
+content are given by a set of strings that are the names of those Capabilities.
+
+\paragraph{Significant Query Parameters}
+If this is not null-typed, then client HTTP request paths are modified prior to
+consistent hashing by parsing any query string that's present in the request
+path as an application/x-www-form-urlencoded set of parameter-value pairs, and
+stripping all pairs that don't have keys present in this set of strings.
+
+\paragraph{Topology}
+The Topology used by a Delivery Service is represented by a string that is the
+Topology's unique Name.
+
+\subsubsection{Static-Routed Properties}
+\begin{codelisting}
+\captionof{listing}{Static-Routed Delivery Service as a Typescript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface StaticDeliveryService extends BaseDeliveryService {
+	origin: string;
+	routingType: 'STATIC';
+}
+\end{minted}
+\end{codelisting}
+
+\paragraph{Origin}
+
+\subsubsection{Steering-Routed Properties}
+\begin{codelisting}
+\captionof{listing}{Steering-Routing Delivery Service as a Typescript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface SteeringDeliveryService extends BaseDeliveryService {
+	origin: bigint | Set<bigint>;
+	routingType: 'STEERING';
+	targets: Set<{
+		target: string;
+		type: 'STEERING_WEIGHT' |
+			'STEERING_ORDER' |
+			'STEERING_GEO_WEIGHT' |
+			'STEERING_GEO_ORDER';
+		value: bigint;
+	}>;
+}
+\end{minted}
+\end{codelisting}
+
+\paragraph{Targets}
+
+\subsubsection{Multi-Site Origin Properties\label{sec:mso-props}}

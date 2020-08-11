@@ -1,0 +1,321 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Traffic Routers}
+Traffic Routers are Traffic Router instances. They contain all of the server
+information as well as configuration for the Traffic Router service.
+
+\begin{codelisting}
+\captionof{listing}{Traffic Router Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface TrafficRouter {
+	apiPort: bigint;
+	cacheControlMaxAge: bigint;
+	cdn: string;
+	coverageZonePollingInterval: bigint;
+	deepCoverageZonePollingInterval: bigint;
+	dnssec: {
+		allowExpiredKeys: boolean;
+		effectiveMultiplier: bigint | null;
+		fetchInterval: bigint | null;
+		fetchRetries: bigint | null;
+		fetchTimeout: bigint | null;
+		fetchWait: bigint | null;
+		generationMultiplier: bigint | null;
+		zoneComparisons: boolean;
+	};
+	domain: string;
+	dynamicZoneCachePriming: {
+		prime: boolean;
+		primingLimit: bigint | null;
+	}
+	edns0ClientSubnetEnabled: boolean;
+	forcedDiversity: boolean;
+	geolocationPollingInterval: bigint | null;
+	hostName: string;
+	id: bigint;
+	notes: string;
+	online: boolean;
+	physicalLocation: string;
+	soa: {
+		admin: string | null;
+		expire: bigint;
+		minimum: bigint;
+		refresh: bigint;
+		retry: bigint;
+	}
+	secureAPIPort: bigint;
+	steeringPollingInterval: bigint | null;
+	ttls: Map<string, bigint>;
+	zones: {
+		cacheMaintenanceInterval: bigint | null;
+		dynamicInitialCapacity: bigint | null;
+		dynamicResponseExpiration: bigint | null;
+		initializationTimeout: bigint | null;
+		threadCount: bigint | null;
+		threadMultiplier: number| null ;
+	}
+}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{API Port}
+This unsigned integer defines the port on which Traffic Router serves its HTTP
+API. This MUST be less than $2^{16}$ ($65,536$).
+
+\subsubsection{Cache Control Max Age}
+This unsigned integer is the value - in seconds - used for the "max-age"
+parameter of the Cache-Control HTTP header in HTTP responses to the client. If
+it is "null"-typed then Traffic Router will use its default setting - which is
+defined by Traffic Router and not by the Traffic Ops API.
+
+\subsubsection{CDN}
+The CDN to which a Traffic Router belongs is represented by its Name, which
+uniquely identifies it. The Traffic Router MUST be an/the authoritative DNS
+server for the Domain of the CDN to which it belongs.
+
+\subsubsection{Coverage Zone Polling Interval}
+This unsigned integer is the interval - in milliseconds - on which Traffic
+Router will poll for an updated Coverage Zone File. A "null"-typed value causes
+Traffic Router to use its default interval duration, which is not defined by the
+Traffic Ops API.
+
+\subsubsection{Deep Coverage Zone Polling Interval}
+This unsigned integer is the interval - in milliseconds - on which Traffic
+Router will poll for an updated Deep Coverage Zone File. A "null"-typed value
+causes Traffic Router to use its default interval duration, which is not defined
+by the Traffic Ops API.
+
+\subsubsection{DNSSEC}
+This property is an object, the properties of which are configuration options
+for DNSSEC-related behavior.
+
+\paragraph{Allow Expired Keys}
+A boolean which, when true, will allow Traffic Router to use expired DNSSEC keys
+to sign zones.
+
+\paragraph{Effective Multiplier}
+An integer that is used when creating an effective date for a new DNSSEC key
+set. New keys are generated with an effective date that is the effective
+multiplier multiplied by the Time to Live less than the old key's expiration
+date. A "null"-typed value instructs Traffic Router to use its pre-configured
+default value, which is not defined by the Traffic Ops API\footnote{At the time
+of this writing, the default value is 2.}.
+
+\paragraph{Fetch Interval}
+An unsigned integer that defines the interval - in seconds - on which Traffic
+Router will check the Traffic Ops API for new DNSSEC keys. A "null"-typed value
+instructs Traffic Router to use its pre-configured default value - which is not
+defined by the Traffic Ops API.
+
+\paragraph{Fetch Retries}
+An unsigned integer that defines the number of times Traffic Router will attempt
+to load DNSSEC keys before giving up. A "null"-typed value instructs Traffic
+Router to use its pre-configured default number of retries - which is not
+defined by the Traffic Ops API\footnote{The default value at the time of this
+writing is 5.}.
+
+\paragraph{Fetch Timeout}
+An unsigned integer that defines the timeout - in milliseconds - for requests to
+the DNSSEC key management endpoint(s) of the Traffic Ops API. A "null"-typed
+value indicates that Traffic Router should not time-out such requests.
+
+\paragraph{Fetch Wait}
+An unsigned integer that defines the number of milliseconds Traffic Router will
+wait between attempts to load DNSSEC keys ("retries"). A "null"-typed value
+instructs Traffic Router to use its pre-configured default value - which is not
+defined by the Traffic Ops API.
+
+\paragraph{Generation Multiplier}
+An unsigned integer used to determine when new DNSSEC keys need to be generated.
+Keys are re-generated if expiration is less than the Generation Multiplier
+multiplied by the Time to Live. A "null"-typed value instructs Traffic Router to
+use its pre-configured default multiplier - which is not defined by the Traffic
+Ops API\footnote{The default value at the time of this writing is 10.}.
+
+\paragraph{Zone Comparisons}
+A boolean which, when true - and DNSSEC is enabled on the CDN to which this
+Traffic Router belongs - allows Traffic Router to compare existing zones with
+newly generated zones. If the newly generated zone is the same as the existing
+zone, Traffic Router will simply re-use the existing signed zone instead of
+signing the same, new zone.
+
+\subsubsection{Domain}
+This is the "domain" part of the Traffic Router's Fully Qualified Domain Name
+(FQDN) as a string. For example, a Traffic Router with an FQDN of
+\code{github.com} has a Domain of \code{com} and a Traffic Router with an FQDN
+of \code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.
+
+\subsubsection{Dynamic Zone Cache Priming}
+This property is an object whose properties are configuration options for
+"Dynamic Zone Cache Priming".
+
+\paragraph{Prime}
+A boolean which, if true, will allow Traffic Router to prime the dynamic zone
+cache.
+
+\paragraph{Priming Limit}
+An unsigned integer used to limit the number of permutations to prime when
+"Dynamic Zone Cache Priming". A "null"-typed value instructs Traffic Router to
+use its pre-configured default, which is not defined by the Traffic Ops
+API\footnote{The default value is 500 at the time of this writing.}.
+
+\subsubsection{EDNS0 Client Subnet Enabled}
+A boolean that sets whether or not the EDNS0 DNS extension mechanism described
+in \href{https://tools.ietf.org/html/rfc2671}{RFC2671} should be made available
+to clients.
+
+\subsubsection{Forced Diversity}
+A boolean which, when true, causes Traffic Router to diversify the list of Cache
+Servers returned in responses to requests for STEERING-type Delivery Services'
+content by including more unique Edge-Tier Cache Servers in the response to the
+client's request.
+
+\subsubsection{Geolocation Polling Interval}
+An unsigned integer number of milliseconds that Traffic Router will use as an
+interval on which to poll for an geographic IP mapping database. A "null"-typed
+value will instruct Traffic Router to use its pre-configured default value -
+which is not defined by the Traffic Ops API.
+
+\subsubsection{Host Name}
+This is the "host" part of the Traffic Router's Fully Qualified Domain Name
+(FQDN) as a string. For example, a Traffic Router with an FQDN of
+\code{github.com} has a Host Name of \code{github}, and a Traffic Router with an
+FQDN of \code{trafficcontrol.apache.org} has a Host Name of
+\code{trafficcontrol}.\\
+This field does NOT need to be unique, though operators are encouraged to make
+this - or at least the concatenation \code{\emph{Host Name}.{Domain}} - unique
+for ease of operation.
+
+\subsubsection{ID}
+A Traffic Router's "ID" is an unsigned integer that uniquely identifies it among
+all Traffic Routers. It serves no purpose beyond unique identification of the
+Traffic Router.
+
+\subsubsection{Notes}
+This section is an arbitrary string containing miscellaneous, human-friendly
+information about the Traffic Router. Other ATC components SHOULD NOT parse this
+for specific information fields, or expect it to be in a particular format.
+
+\subsubsection{Online}
+This boolean value indicates if this Traffic Router is online and capable of
+routing clients to Cache Servers etc. An "offline" (Online is false) Traffic
+Router is excluded from responses to Traffic Ops API endpoints that serve as
+proxies for the Traffic Router API in some capacity.
+
+\subsubsection{Physical Location}
+The Physical Location at which a Traffic Router resides is represented by a
+string containing its Name.
+
+\subsubsection{SOA}
+This property is an object that contains configuration information for the
+"Start of Authority" (SOA) records served by the Traffic Router.
+
+\paragraph{Admin}
+An email address for the administrator of the DNS zones for which Traffic Router
+is authoritative. This string may be "null"-typed to indicate such an address is
+unavailable.
+
+\paragraph{Expire}
+An unsigned integer number of seconds which will be used in the "expire" field
+the Traffic Router DNS Server will respond with on SOA records.
+
+\paragraph{Minimum}
+An unsigned integer number of seconds which will be used as the value for the
+"minimum" field the Traffic Router DNS Server will respond with on SOA records.
+
+\paragraph{Refresh}
+An unsigned integer number of seconds which will be used as the value for the
+"refresh" field the Traffic Router DNS Server will respond with on SOA records.
+
+\paragraph{Retry}
+An unsigned integer number of seconds which will be used as the value for the
+"retry" field the Traffic Router DNS Server will respond with on SOA records.
+
+\subsubsection{Secure API Port}
+This unsigned integer defines the port on which Traffic Router serves its HTTPS
+API. This MUST be less than $2^{16}$ ($65,536$).
+
+\subsubsection{Steering Polling Interval}
+An unsigned integer number of seconds on which Traffic Router will check for new
+steering mappings. A "null"-typed value instructs Traffic Router to use its
+pre-configured default interval - which is not defined by the Traffic Ops API.
+
+\subsubsection{TTLs}
+This property is a map of record types (in lower-case) to unsigned integers that
+are the Time-to-Live values - in seconds - that Traffic Router will use for the
+named DNS record type.\\
+The meaningful keys in this map are (but are not limited to for the forseeable
+future):
+
+\begin{itemize}
+	\item a
+	\item aaaa
+	\item dnskey
+	\item ds
+	\item ns
+	\item soa
+\end{itemize}
+
+\subsubsection{Zones}
+The Zones of a Traffic Router is a property that is itself an object having
+properties which express configuration options for DNS zone management.
+
+\paragraph{Cache Maintenance Interval}
+This unsigned integer defines an interval - in seconds - on which Traffic Router
+will check for zones that need to be re-signed or if dynamic zones need to be
+expired from its cache. If it "null"-typed, Traffic Router is instructed to use
+its pre-configured default interval, which is not defined by the Traffic Ops
+API.
+
+\paragraph{Dynamic Initial Capacity}
+This unsigned integer defines an initial size to be used by the Traffic Router's
+zone manager's cache. If this is "null"-typed, Traffic Router is instructed to
+use its pre-configured default value, which is not defined by the Traffic Ops
+API\footnote{At the time of this writing the default size is $10,000$.}.
+
+\paragraph{Dynamic Response Expiration}
+This unsigned integer defines how long - in seconds - Traffic Router will allow
+a dynamic zone to remain in cache after its last access. If it is "null"-typed,
+Traffic Router is instructed to use its pre-configured default duration, which
+is not defined by the Traffic Ops API\footnote{At the time of this writing the
+default duration is $3,600$.}.
+
+\paragraph{Initialization Timeout}
+This unsigned integer sets a cap - in minutes - on the amount of time Traffic
+Router will spend initializing its dynamic zone manager. Larger numbers impact
+startup time, but allow for more zones to be pre-computed. If it is "null"-typed
+Traffic Router is instructed to use its pre-configured default timeout, which is
+not defined by the Traffic Ops API\footnote{At the time of this writing the
+default timeout is $10$.}.
+
+\paragraph{Thread Count}
+This unsigned integer sets a number of concurrent threads for the Traffic
+Router's zone manager to operate on. The value 0 is not allowed. If this is
+"null"-typed, the number of threads is calculated based on the number of
+allowed/available CPU cores as defined by Thread Multiplier.
+
+\paragraph{Thread Multiplier}
+This floating point number is multiplied by the number of available CPU cores on
+the Traffic Router to calculate the number of threads the zone manager will use,
+rounded down to the nearest integer. For example, a value of $1.0$ will instruct
+Traffic Router to use a thread for every available CPU core.\\
+This has no effect if Thread Count is not "null"-typed. The value MUST be
+greater than zero. If this is "null"-typed (and Thread Count is not), Traffic
+Router will use its pre-configured default multiplier, which is not defined by
+the Traffic Ops API\footnote{At the time of this writing, the default multiplier
+is $0.75$.}.

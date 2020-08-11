@@ -1,0 +1,113 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\section{Data Model\label{sec:data-model}}
+This section defines the various objects that may be interacted with through the
+Traffic Ops API and their respective properties.\\
+An object's properties may principally be of several different types:
+
+\begin{itemize}
+	\item Integers. Integers may be signed or unsigned, to signify whether or
+	not they are capable of being less than zero. Representation formats which
+	are incapable of distinguishing integral and floating-point numbers (e.g.
+	JSON) or of separately describing signed and unsigned types (e.g. JSON
+	again) MUST represent these as numbers. In particular, they MUST NOT be
+	represented as string types. Furthermore, they MUST NOT be represented with
+	a non-zero decimal component and generally SHOULD NOT be represented with a
+	decimal part at all, if possible. Unsigned quantities MUST NOT include a
+	sign (even \code{+}, were it supported by the format).
+
+	\item Floating-point numbers. Floating point numbers are guaranteed to have
+	a precision of at least 64-bits, but clients SHOULD NOT treat
+	representations with a greater apparent precision as if they were more
+	precise than 64 bits can offer. Endpoints MUST NOT implement Not-a-Number
+	nor either positive or negative Infinity values as floating-point numbers,
+	even if the representation format supports them.
+
+	\item Strings. Strings SHOULD always be encoded (along with the rest of the
+	representation, if possible) in UTF-8.
+
+	\item Dates/times. As discussed in section \ref{sec:datetime}, these may be
+	expressed as either strings in RFC3339 format or as a signed integer number
+	of nanoseconds since the Unix epoch if the representation format does not
+	support date/time types natively (e.g. JSON).
+
+	\item Booleans. Boolean concepts MUST be represented as boolean data types
+	in representations that do support them. For example, in JSON,
+	\code{\{"foo":true\}} is acceptable but \code{\{"foo":"true"\}},
+	\code{\{"foo":1\}} and especially \code{\{"foo":"1"\}} are all unacceptable.
+	In representation formats that do not support boolean types, they may be
+	represented as the number zero for "false" and the number one for "true" as
+	unsigned integers.
+
+	\item Collections. There are several collection types used to model ATC
+	data. Commonly, they all may contain arbitrary data types, but SHOULD NOT
+	contain data of more than one type in any representation format.
+
+	\begin{itemize}
+		\item Sets. A set is an unordered collection of unique items. The
+		contents of a set are not guaranteed to be in any particular order, and
+		clients SHOULD NOT expect anything else\footnote{Endpoint authors are,
+		however, encouraged to order these consistently for ease of use,
+		testing, and debugging. This order need not - and indeed SHOULD NOT be
+		documented.} (unless the endpoint provides sorting functionality
+		expressly), and in particular SHOULD NOT conclude that a difference in
+		ordering indicates that data has changed. If a representation format is
+		not capable of expressing set types (e.g. JSON), then sets may be
+		expressed as a list array or other more generic collection, but MUST
+		NEVER contain duplicates.
+
+		\item Lists/Arrays. A list/array is an \emph{ordered} collection of
+		data, and as such the ordering MUST be consistent in representations, as
+		well as meaningful.
+
+		\item Maps. A map may be used to associate any non-collection type "key"
+		with a "value" of arbitrary type. Maps MUST NOT contain duplicate keys
+		in any representation format. If a representation format is not capable
+		of representing maps (e.g. JSON), then they may be represented as
+		objects where the keys are coerced to property names and their values
+		the respective values of those properties.
+	\end{itemize}
+\end{itemize}
+
+With the "fallback" behavior described for each type above, note that valid
+representation formats MUST be capable of representing at least floating-point
+values, string values, array/lists of such primitive values, and either nested
+object structures or maps.
+
+\input{APIv4.datamodel/cdns}
+\input{APIv4.datamodel/cache.groups}
+\input{APIv4.datamodel/cache.servers}
+\input{APIv4.datamodel/capabilities}
+\input{APIv4.datamodel/delivery.services}
+\input{APIv4.datamodel/global.configuration}
+\input{APIv4.datamodel/infrastructure.servers}
+\input{APIv4.datamodel/invalidation.jobs}
+\input{APIv4.datamodel/origins}
+\input{APIv4.datamodel/profiles}
+\input{APIv4.datamodel/physical.locations}
+\input{APIv4.datamodel/roles}
+\input{APIv4.datamodel/tags}
+\input{APIv4.datamodel/tenants}
+\input{APIv4.datamodel/topologies}
+\input{APIv4.datamodel/traffic.monitors}
+\input{APIv4.datamodel/traffic.ops.servers}
+\input{APIv4.datamodel/traffic.portals}
+\input{APIv4.datamodel/traffic.routers}
+\input{APIv4.datamodel/traffic.stats.servers}
+\input{APIv4.datamodel/traffic.vaults}
+\input{APIv4.datamodel/users}

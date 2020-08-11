@@ -1,0 +1,59 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Roles\label{sec:roles-and-perms}}
+A Role controls what a User can and can't do through the API by declaring the
+User's Permissions. The Permissions required by the different API endpoints,
+request methods of endpoints, and particular modes of operations of the methods
+of those endpoints are declared by the endpoints themselves.
+
+\begin{codelisting}
+\captionof{listing}{Role Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface Role {
+	description: string;
+	name: string;
+	permissions: Set<string>;
+}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{Description}
+A Role's Description is a string containing a human-readable description of
+what the Role is for and what, in general terms, it is capable of accomplishing
+through the API.\\
+This may be an empty string, but clients of the API are encouraged to attempt
+to promote the idea of useful descriptions as much as possible, to avoid
+creating a clutter of Roles that no one understands and/or a swathe of Roles
+which no one can determine are safe to delete.
+
+\subsubsection{Name}
+A Role's Name is a string that uniquely identifies it - and as such MUST NOT be
+empty - and may only contain alphanumeric characters, spaces, and periods.
+
+\subsubsection{Permissions}
+The Permissions allowed to a Role are represented as a set of strings which are
+the Permission's names.\\
+The Permissions that exist - and therefore may be on a Role - are a finite set
+and if it is attempted to add a Permission which does not exist to a Role,
+the attempt will result in an error from Traffic Ops, and will not be
+successful. This set of available Permissions is defined by the Permissions
+each individual endpoint declares are required for part or all of their
+operation, and therefore cannot (and should not) be enumerated
+here\footnote{As a special case, section\ref{sec:profile:param:secure} of the
+Data Model describes a Permission that will always exist for as long as that
+property of a Profile's Parameter(s) exists.}.

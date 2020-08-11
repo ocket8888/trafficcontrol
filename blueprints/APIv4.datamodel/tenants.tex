@@ -1,0 +1,81 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Tenants}
+A Tenant is ultimately a set of users with permissions to access a set of
+resources. This concept differs from a Role or Permission in that it is not
+a specific action being controlled, but rather any set of actions performed on
+specific objects - \emph{not} specific types of objects.\\
+Object types that are scoped to Tenants are called "tenantable" and the types
+of objects that are "tenantable" are cataloged in Section
+\ref{sec:tenantable}. Note that a Tenant falls within its own Tenancy, as well
+as the Tenancy of all of its ancestors.\\
+Traffic Ops comes with one Tenant that is defined to be the "highest-level" or,
+more commonly, the "root" Tenant. It is the special Tenant which is the only
+one allowed to not have a Parent, and all tenantable objects fall within its
+Tenancy. This Tenant is always Active, and has the name \code{root}.
+
+\begin{codelisting}
+\captionof{listing}{Tenant Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface Tenant {
+	active: boolean;
+	name: string;
+	parent: string | null;
+}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{Active}
+Active is a boolean concept that describes whether or not a Tenant's group of
+users are allowed to actively manipulate resources. Resources within an
+inactive Tenant continue to function in the ways in which they are configured,
+but members of the inactive Tenant are incapable of manipulating that
+configuration until they are once again "active".\\
+When a Tenant is inactive, \emph{all} users within that Tenancy are inactive.
+For example, if a Tenant A exists and user 1 is within that Tenant then if
+Tenant A becomes inactive user 1 may no longer manipulate the objects that
+fall within the A Tenancy (including A itself). If Tenant A has a child Tenant
+B and some user 2 is within that Tenancy, then when A becomes inactive all of
+the users in B are also affected in that they cannot manipulate any resources
+that fall within the A Tenancy (including all resources that fall within the
+B Tenancy). Thus the Active property of a Tenant is only considered when
+determining if a Tenant is active or inactive if all of that Tenant's
+ancestor Tenants are themselves active; otherwise the inactive state of an
+ancestor overrides the active/inactive state of the descendant.\\
+The "root" Tenant is never allowed to become inactive.
+
+\subsubsection{Name}
+The Name of a Tenant is a string that uniquely identifies it. A Tenant Name
+MUST contain only alphanumeric characters, underscores, and hyphens.
+
+\subsubsection{Parent}
+A Tenant's Parent is a string which is the Name of the Tenant from which this
+Tenant directly descends.\\
+The Parent of a Tenant is not allowed to be either the Tenant itself, or any
+descendant of that Tenant - a "descendant" being any Tenant which either has
+this Tenant as its direct Parent, or has as its direct Parent a descendant of
+the Tenant.\\
+A tenantable object is said to fall within the Tenancy of a Tenant if it is
+either assigned to the Tenant or some descendant thereof. For example, if a
+Delivery Service X is within the B Tenant, and the B Tenant's Parent is the A
+Tenant, and the A Tenant's Parent is the "root" Tenant, then X falls within the
+Tenancy of "root", A, and B. However, if the B Tenancy is the Parent of the C
+Tenant, then X is \emph{not} within the C Tenancy.\\
+Only the "root" Tenant is permitted to have a "null"-typed Parent. In
+particular, the "root" Tenant is defined to be the only Tenant which has a
+"null"-typed Parent.

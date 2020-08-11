@@ -1,0 +1,65 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Capabilities}
+A Capability expresses the capacity of a Cache Server to serve a specific kind
+of traffic. They are similar to Tags in that they are applied to group objects
+into logical groupings and no special meaning may be inferred from their Name
+or from patterns of their Names\footnote{Including by Traffic Ops and the
+Traffic Ops API.}. However, a Capability differs from a Tag in that the
+presence or absence of a Capability on an object \emph{does} have semantic
+meaning.\\
+In particular, a Delivery Service has Required Capabilities that define the
+kinds of traffic a Cache Server must be able to handle in order to serve
+content for that Delivery Service. This requirement is enforced by ensuring
+that only Cache Servers that have \emph{all} of a Delivery Service's Required
+Capabilities within their own Capabilities set are selected via parentage at
+the Cache Server configuration generation step, as well as by Traffic Router
+when selecting Edge-Tier Cache Servers to which to direct clients requesting
+the Delivery Service's content.\\
+Note that while Capabilities are enforced by routing and Cache Server parentage
+it is not possible to enforce that a Cache Server actually \emph{has} the
+Capabilities that are within its Capabilities set, and in fact a Capability's
+Name has no semantic meaning that could be checked in any case. In this way it
+is possible to use them to express arbitrary concepts, but operators must be
+careful to only assign Capabilities to Cache Servers when it is known that they
+actually posses those Capabilities.
+
+\begin{codelisting}
+\captionof{listing}{Capability Object as a Typescript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface Capability {
+	Description: string;
+	Name: string;
+}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{Description}
+This string contains arbitrary text which ideally describes the capacity
+encapsulated and expressed by the Capability, as well as the reason for its
+existence.
+
+\subsubsection{Name}
+A Capability's Name is a string that uniquely identifies it, and ideally
+conveys the capacity it expresses, e.g. a Capability Named \code{400GB\_RAM} may
+express that a Cache Server has/must have a minimum of 400GB of RAM device
+block storage to be used for caching.\\
+A Capability Name MUST consist only of alphanumeric characters, hyphens, and
+underscores.
+
+

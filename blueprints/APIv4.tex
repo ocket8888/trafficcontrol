@@ -1,0 +1,66 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\documentclass{article}
+
+\newcommand{\version}{0.10}
+
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage[newfloat]{minted}
+\usepackage{xcolor}
+\usepackage{tabularx}
+
+\newenvironment{codelisting}{\captionsetup{type=listing}}{}
+\SetupFloatingEnvironment{listing}{name=Listing}
+
+\definecolor{inlinecodecolor}{HTML}{800000}
+\newcommand{\code}[1]{\texttt{\color{inlinecodecolor}#1}}
+
+\begin{document}
+\title{%
+Traffic Ops API\\
+\large Guidelines and v4.0 Blueprint\\
+\normalsize Draft Version \version{}}
+\author{The Traffic Ops Working Group}
+\maketitle{}
+\newpage{}
+\abstract{This document is intended to serve as a blueprint to be followed when
+implementing the 4.0 version of the Traffic Ops API, as well as a set of
+guidelines to be followed when implementing the API routes herein defined and
+any subsequently added API endpoints. Plugin developers may also find the
+guidelines useful, though obviously any code not directly contributed to the
+project is outside of this document's purview.\\
+For Traffic Ops API version 4.0, several changes to the API model were discussed
+including, but not limited to, switching from a REST structure to GraphQL,
+breaking the API apart into multiple separate microservices or even separate
+APIs, and doing away with cookie-based authentication. These ideas have not been
+adopted and the discussions regarding them tabled for a later date in favor of
+making the already sweeping changes herein outlined no more disruptive than they
+absolutely need to be and easing the transition of clients.}
+\newpage{}
+\tableofcontents{}
+\newpage{}
+
+\input{guidelines}
+\input{authentication}
+\input{datamodel}
+\input{tenantableobjects}
+\input{endpoints}
+
+\end{document}

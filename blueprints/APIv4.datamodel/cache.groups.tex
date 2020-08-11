@@ -1,0 +1,72 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Cache Groups}
+A Cache Group is exactly what it sounds like it is: a group of Cache Servers.
+Typically a Cache Group is representative of the available Cache Servers within a
+specific geographical location. Despite that Cache Servers have their own
+Physical Locations, when Cache Servers are chosen to serve content to a client
+based on geographic location the geographic location actually used for
+comparisons is that for the Cache Group that contains it, not the geographic
+location of the Cache Server itself.
+
+\begin{codelisting}
+\captionof{listing}{Cache Group Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface CacheGroup {
+	cacheServers: Set<bigint>;
+	latitude: number;
+	longitude: number;
+	name: string;
+	tags: Set<string>;
+	type: 'EDGE' | 'MID';
+}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{Cache Servers}
+All of the Cache Servers within a Cache Group are represented by a set of their
+numeric IDs.
+
+\subsubsection{Latitude}
+A Cache Group's Latitude is a floating-point number that simply represents a
+Cache Group's geographic latitude on the range [-90, 90] - with the positive
+range representing North and the negative range representing South.
+
+\subsubsection{Longitude}
+A Cache Group's Longitude is a floating-point number that simply represents a
+Cache Group's geographic longitude on the range [-180, 180] - with the positive
+range representing East and the negative range representing West.
+
+\subsubsection{Name}
+A Cache Group is uniquely identified by its Name, which is a string that MUST
+NOT be empty.
+
+\subsubsection{Tags}
+The Tags associated with a Cache Group is represented by a set of strings that
+are Tag Names.
+
+\subsubsection{Type}
+Cache Groups can only contain one Type of Cache Server, which is herein
+reflected by the string constant value of said Type.
+
+\begin{itemize}
+	\item \code{EDGE} - This Cache Group may only contain Cache Servers that
+		are of the \code{EDGE} Type.
+	\item \code{MID} - This Cache Group may only contain Cache Servers that are
+		of the \code{MID} Type.
+\end{itemize}

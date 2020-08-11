@@ -1,0 +1,122 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{Traffic Monitors}
+A Traffic Monitor is a service that communicates with Traffic Ops over HTTP and
+is responsible for collecting health and statistics information from Cache
+Servers to determine if they are fit to service content.
+
+\begin{codelisting}
+\captionof{listing}{Traffic Monitor Object as a TypeScript Interface}
+\begin{minted}[tabsize=2]{typescript}
+interface TrafficMonitor {
+	cdn: string;
+	configPollingInterval: bigint;
+	domain: string;
+	eventCount: int;
+	healthPollingInterval: bigint;
+	heartbeatPollingInterval: bigint;
+	hostName: string;
+	id: bigint;
+	notes: string;
+	online: boolean;
+	physicalLocation: string;
+	tags: Set<string>;
+	threadCount: bigint;
+	timePad: bigint;
+}
+\end{minted}
+\end{codelisting}
+
+\subsubsection{CDN}
+The CDN to which a Traffic Monitor belongs is represented by its Name, which
+uniquely identifies it. The Monitor will monitor all Cache Servers that are in
+its CDN.
+
+\subsubsection{Config Polling Interval}
+Config Polling Interval is an unsigned integer that defines an interval - in
+milliseconds - on which the Monitor should poll Traffic Ops for its
+configuration changes. This MUST NOT be \code{0}.
+
+\subsubsection{Domain}
+This is the "domain" part of the Traffic Monitor's Fully Qualified Domain Name
+(FQDN) as a string. For example, a Traffic Monitor with an FQDN of
+\code{github.com} has a Domain of \code{com} and a Traffic Monitor with an FQDN
+of \code{trafficcontrol.apache.org} has a Domain of \code{apache.org}.
+
+\subsubsection{Event Count}
+This unsigned integer defines the number of "events" of which the Monitor will
+keep track internally.\\
+The value \code{0} means "no limit".
+
+\subsubsection{Health Polling Interval}
+This unsigned integer defines an interval - in milliseconds - on which to poll
+Cache Server health. This MUST NOT be \code{0}.
+
+\subsubsection{Heartbeat Polling Interval}
+This unsigned integer defines an interval - in milliseconds - on which to poll
+Cache Server "heartbeats". This poll is not meant to determine health, but
+rather whether or not the Cache Server(s) may be reached over the network at
+all. This MUST NOT be \code{0}.
+
+\subsubsection{Host Name}
+This is the "host" part of the Traffic Monitor's Fully Qualified Domain Name
+(FQDN) as a string. For example, a Traffic Monitor with an FQDN of
+\code{github.com} has a Host Name of \code{github}, and a Traffic Monitor with an
+FQDN of \code{trafficcontrol.apache.org} has a Host Name of
+\code{trafficcontrol}.\\
+This field does NOT need to be unique, though operators are encouraged to make
+this - or at least the concatenation \code{\emph{Host Name}.{Domain}} - unique
+for ease of operation.
+
+\subsubsection{ID}
+A Traffic Monitor's "ID" is an unsigned integer that uniquely identifies it
+among all Traffic Monitors. It serves no purpose beyond unique identification of
+the Traffic Monitor.
+
+\subsubsection{Notes}
+This section is an arbitrary string containing miscellaneous, human-friendly
+information about the Traffic Monitor. Other ATC components SHOULD NOT parse
+this for specific information fields, or expect it to be in a particular
+format.
+
+\subsubsection{Online}
+This boolean value indicates whether or not the Traffic Monitor is online and
+polling Cache Servers. An "offline" (Online is false) Traffic Monitor is not
+considered in peer-polling and quorums, is not queried for available Cache
+Servers by Traffic Routers, and Traffic Stats Servers do not collect statistics
+from offline Traffic Monitors.
+
+\subsubsection{Physical Location}
+The Physical Location at which a Traffic Monitor resides is represented by a
+string containing its Name.
+
+\subsubsection{Tags}
+A Traffic Monitor's "Tags" are represented as a set of Tag Names.
+
+\subsubsection{Thread Count}
+Thread Count is an unsigned integer that determines the number of threads used
+to concurrently poll Cache Servers. It is recommended that UIs built on the
+Traffic Ops API set this to \code{0} by default and caution users against
+changing it. The value \code{0} will cause Traffic Monitor to choose a value
+for itself\footnote{A recommendation for Traffic Monitor engineers: a
+reasonable default value would be the number of available CPU cores.}.
+
+\subsubsection{Time Pad}
+This is an unsigned integer that defines a set number of milliseconds to add
+to request timers to help spread requests out for Traffic Control systems that
+use a large number of Traffic Monitors.
