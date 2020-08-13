@@ -19,26 +19,48 @@ name: Traffic Ops Push CI
 
 on:
   push:
-    paths:
-      - traffic_ops/traffic_ops_golang/**
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
 
 jobs:
-  ops:
+  unit tests:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
       uses: actions/checkout@master
-    - name: Go build
-      uses: ./.github/actions/go-build
-      with:
-        dir: ./traffic_ops/traffic_ops_golang
-    - name: Go fmt Traffic Ops
-      uses: ./.github/actions/go-fmt/
-      with:
-        dir: ./traffic_ops/traffic_ops_golang/...
     - name: Run Go unit tests
       uses: ./.github/actions/go-test
       with:
         dir: ./traffic_ops/traffic_ops_golang/...
 
+  go fmt:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Go fmt Traffic Ops
+      uses: ./.github/actions/go-fmt/
+      with:
+        dir: ./traffic_ops/traffic_ops_golang/...
+
+  API tests:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:11.9
+        env:
+          POSTGRES_USER: traffic_ops
+          POSTGRES_PASSWORD: twelve
+          POSTGRES_DB: traffic_ops
+        ports:
+        - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Run API tests
+      uses: ./.github/actions/to-integration-tests
