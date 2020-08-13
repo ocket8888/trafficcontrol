@@ -28,7 +28,9 @@ const dockerArgs = [
 	"-e",
 	`GOPATH=${GOPATH}`,
 	"-v",
-	`${process.env.GITHUB_WORKSPACE}:${srcDir}`
+	`${process.env.GITHUB_WORKSPACE}:${srcDir}`,
+	"-w",
+	srcDir
 ];
 
 const spawnArgs = {stdio: "inherit"};
@@ -41,7 +43,7 @@ for (const component of components) {
 		"docker",
 		dockerArgs.concat([
 			`trafficcontrol/${component}_builder`,
-			`${srcDir}/build/build.sh`,
+			`build/build.sh`,
 			component
 		]),
 		spawnArgs
