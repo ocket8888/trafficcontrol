@@ -273,7 +273,7 @@ interface DNSDeliveryService extends BaseDeliveryService {
 	caching: 'CACHE' | 'RAM_ONLY' | 'NO_CACHE';
 	dscp: bigint;
 	maximumOriginConnections: bigint | null;
-	origin: bigint | Set<bigint>;
+	origin: bigint | (Array<bigint> & {0: bigint});
 	queryStringHandling: 'DROP' | 'IGNORE' | 'USE';
 	rangeRequestHandling: 'NO_CACHE' | 'WHOLE_OBJECT' | 'CACHE';
 	requiredCapabilities: Set<string>;
@@ -316,8 +316,8 @@ If this is null-typed, it has the special meaning "no limit".
 \paragraph{Origin}
 In normal cases, the Origin whose content is served by this Delivery Service is
 identified by an unsigned integer that is its ID. However, in the event that
-the Delivery Service is a Multi-Site Origin Delivery Service, it will have a
-set of such identifiers indicating all Origins used by the Delivery Service.
+the Delivery Service is a Multi-Site Origin Delivery Service, it will have an
+array of such identifiers indicating all Origins used by the Delivery Service.
 More detail about Multi-Site Origin Delivery Services can be found in
 \ref{sec:mso-props}.
 
@@ -378,7 +378,7 @@ interface HTTPDeliveryService extends BaseDeliveryService {
 	dscp: bigint;
 	loggedRequestHeaders: Set<string>;
 	maximumOriginConnections: bigint | null;
-	origin: bigint | Set<bigint>;
+	origin: bigint | (Array<bigint> & {0: bigint});
 	queryStringHandling: 'DROP' | 'IGNORE' | 'USE';
 	rangeRequestHandling: 'NO_CACHE' | 'WHOLE_OBJECT' | 'CACHE';
 	requiredCapabilities: Set<string>;
@@ -429,8 +429,8 @@ If this is null-typed, it has the special meaning "no limit".
 \paragraph{Origin}
 In normal cases, the Origin whose content is served by this Delivery Service is
 identified by an unsigned integer that is its ID. However, in the event that
-the Delivery Service is a Multi-Site Origin Delivery Service, it will have a
-set of such identifiers indicating all Origins used by the Delivery Service.
+the Delivery Service is a Multi-Site Origin Delivery Service, it will have an
+array of such identifiers indicating all Origins used by the Delivery Service.
 More detail about Multi-Site Origin Delivery Services can be found in
 \ref{sec:mso-props}.
 
@@ -516,3 +516,133 @@ interface SteeringDeliveryService extends BaseDeliveryService {
 \paragraph{Targets}
 
 \subsubsection{Multi-Site Origin Properties\label{sec:mso-props}}
+Multi-Site Origin (MSO) Delivery Services are, simply, Delivery Services with
+more than one Origin. They have special properties that define the interactions
+between the caching layers and these multiple Origins. Thus, only Delivery
+Services which include the ability to cache may be MSO Delivery Services -
+specifically only DNS-routed and HTTP-routed Delivery Services.
+
+\begin{codelisting}
+\captionof{listing}{Multi-Site Origin Delivery Services as Typescript Interfaces}
+\begin{minted}[tabsize=2]{typescript}
+interface DNSMSODeliveryService extends DNSDeliveryService {
+	maximumSimpleRetries: bigint | null;
+	maximumUnavailableServerRetries: bigint | null;
+	msoAlgorithm: 'ALWAYS_FIRST' |
+		'ROUND_ROBIN' |
+		'LATCHED' |
+		'STRICT' |
+		'CONSISTENT_HASH';
+	origin: Array<bigint> & {0: bigint};
+	parentRetry: 'BOTH' |'SIMPLE' | 'UNAVAILABLE_SERVER';
+	serverRetryResponses: Set<bigint>;
+}
+
+interface HTTPMSODeliveryService extends HTTPDeliveryService {
+	maximumSimpleRetries: bigint | null;
+	maximumUnavailableServerRetries: bigint | null;
+	msoAlgorithm: 'ALWAYS_FIRST' |
+		'ROUND_ROBIN' |
+		'LATCHED' |
+		'STRICT' |
+		'CONSISTENT_HASH';
+	origin: Array<bigint> & {0: bigint};
+	parentRetry: 'BOTH' |'SIMPLE' | 'UNAVAILABLE_SERVER';
+	serverRetryResponses: Set<bigint>;
+}
+\end{minted}
+\end{codelisting}
+
+\paragraph{Maximum Simple Retries}
+This unsigned integer sets the number of times that Cache Servers will select
+new parents and retry requests upon receiving a 404 Not Found response from the
+origin.\\
+This may be null-typed if and only if Parent Retry is "UNAVAILABLE\_SERVER".
+
+\paragraph{Maximum Unavailable Server Retries}
+This unsigned integer sets the number of times that Cache Servers will select
+new parents and retry requests upon receiving a response code found in the
+Server Retry Responses set - the Cache Servers in question will also mark the
+parent returning that response code as "down" according to the semantics of the
+specific caching proxy software\footnote{In particular, different versions of
+Apache Traffic Server might use different timings to mark servers as "up" after
+having been "down". Consult caching proxy software documentation for details.}
+used by the Cache Servers.\\
+This may be null-typed if and only if Parent Retry is "SIMPLE".
+
+\paragraph{MSO Algorithm}
+This string defines the algorithm used for parent selection at the highest
+caching tier. It may have one of the following values with the associated
+meanings:
+
+\begin{description}
+	\item[ALWAYS\_FIRST] The first parent in the Origin array is chosen to
+	service every request until or unless it becomes marked "down", at which
+	point the second parent will be chosen for every request until the previous
+	parent becomes "up" again, and so on until the list is exhausted (at which
+	point requests will, of course, fail if they are not serviceable from the
+	cache).\footnote{This algorithm is known in current API versions as the
+	\code{mso.algorithm} Parameter Value "False", as that is the exact value in
+	the \code{round\_robin} field of an Apache Traffic Server
+	\code{parent.config} file entry that is used to accomplish this.}
+	\item[CONSISTENT\_HASH] The parent Origin is chosen using a consistent hash
+	of the request URL so that one parent is chosen for a given URL. If a parent
+	is "down", the traffic that would go to the "down" parent is re-hashed
+	amongst the remaining parents. The other traffic is unaffected. Once the
+	"downed" parent becomes available, the traffic distribution returns to the
+	pre-"down" state.
+	\item[LATCHED] Like ALWAYS\_FIRST, the first parent in the Origin array is
+	chosen to service every request until or unless it becomes marked "down", at
+	which point the second parent will be chosen for every request. Unlike
+	ALWAYS\_FIRST, however, the first parent will not be chosen again once it
+	becomes "up". Instead, each successively chosen parent will be used until
+	and unless it becomes marked "down", and the list of parents is always
+	"traversed" by successive marking-"down"s in forward order.
+	\item[STRICT] Requests to parent Origins will be divided strictly between
+	them according to no metric other than the absolute number of requests. That
+	is, the first parent will be selected to service the first request, the
+	second parent will be selected to service the second request, wrapping back
+	to the first parent once the list has been exhausted.
+	\item[ROUND\_ROBIN] Requests to parent Origins will be divided between them
+	based on the requesting client or lower-level Cache Server. That is, the
+	first parent will be chosen to service the first request, and the second
+	request will use the second parent if and only if it originates from a
+	different IP address than the first.\footnote{This algorithm is known in
+	current API versions as the \code{mso.algorithm} Parameter Value "True", as
+	that is the exact value in the \code{round\_robin} field of an Apache
+	Traffic Server \code{parent.config} file entry that is used to accomplish
+	this.}
+\end{description}
+
+\paragraph{Origin}
+In MSO Delivery Services, Origin is an Array of Origin IDs, each of which may be
+selected as a parent by the highest/last caching layer to service requests for
+content that cannot be serviced from cache. There must be at least one ID in the
+array.\\
+The meaning of the order of the parents is defined by the setting of MSO
+Algorithm.
+
+\paragraph{Parent Retry}
+This string defines how Cache Servers react in various cases where content from
+the parent Origin that was selected to service a request is not available. It
+may have one of the following values with the associated meanings:
+
+\begin{description}
+	\item[BOTH] The behavior of both SIMPLE and UNAVAILABLE\_SERVER
+	is exhibited by Cache Servers.
+	\item[SIMPLE] Cache Servers will select a new parent - according to the MSO
+	Algorithm - and re-try requests when they receive a 404 Not Found response
+	from the selected parent Origin.
+	\item[UNAVAILABLE\_SERVER] Cache Servers will select a new parent -
+	according to the MSO Algorithm - and re-try requests when they receive a
+	503 Service Unavailable response from the selected parent Origin \emph{or}
+	when they receive any response code from the selected parent Origin that is
+	in the Server Retry Responses set.
+\end{description}
+
+\paragraph{Server Retry Responses}
+This set of unsigned integers defines the set of response codes that Cache
+Servers will consider indicative of a parent Origin being "down". Note that the
+response code 503 Service Unavailable \emph{always} indicates this, and need not
+be present in this set (which of course means that the behavior of considering
+the status code an indicator that the parent is "down" cannot be disabled.)
