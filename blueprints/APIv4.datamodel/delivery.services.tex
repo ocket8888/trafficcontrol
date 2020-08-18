@@ -499,10 +499,10 @@ interface StaticDeliveryService extends BaseDeliveryService {
 \begin{minted}[tabsize=2]{typescript}
 interface SteeringTarget {
 	target: string;
-	type: 'STEERING_WEIGHT' |
-		'STEERING_ORDER' |
-		'STEERING_GEO_WEIGHT' |
-		'STEERING_GEO_ORDER';
+	type: 'WEIGHT' |
+		'ORDER' |
+		'GEO_WEIGHT' |
+		'GEO_ORDER';
 	value: bigint;
 }
 
@@ -514,6 +514,59 @@ interface SteeringDeliveryService extends BaseDeliveryService {
 \end{codelisting}
 
 \paragraph{Targets}
+The "target" Delivery Services of a Steering-Routed Delivery Service are given
+as a set of of Target objects which express which Delivery Service each target
+is as well as the rules for balancing requests between them. The properties of
+these Targets are described in this paragraph.
+
+\subparagraph{Target}
+This string is the Name of the Delivery Service to which the Target refers. No
+two Targets may exist within the same Targets set that have the same Type and
+Target values.
+
+\subparagraph{Type}
+This string defines how and/or under what conditions the Target is chosen as the
+"destination" Delivery Service for client requests for content from the "parent"
+Steering-Routed Delivery Service. It may have one of the following values with
+the associated meanings:
+
+\begin{description}
+	\item[ORDER] The Value of an ORDER Target sets a strict order of preference.
+	In cases where a response to a client contains multiple Delivery Services,
+	those Targets with a lower Value appear earlier than those with a higher
+	Value. In cases where two or more Targets share the same Value, they each
+	have an equal chance of being presented to the client - effectively
+	spreading traffic evenly across them.
+	\item[WEIGHT] The Values of WEIGHT Targets are interpreted as “weights”,
+	which define how likely it is that any given client will be routed to a
+	specific Delivery Service - effectively this determines the spread of
+	traffic across each Target of this Type.
+	\item[GEO\_ORDER] These Targets behave exactly like ORDER Targets, but
+	Delivery Services are grouped according to the “locations” of their Origins.
+	Before choosing a Delivery Service to which to direct the client, Traffic
+	Router will first create subsets of choices according to these groupings,
+	and order them by physical distance from the client (closest to farthest).
+	Within these subsets, The Values of the Targets establish a strict
+	precedence ordering, just like ORDER Targets.
+	\item[GEO\_WEIGHT] These targets behave exactly like WEIGHT targets, but
+	Delivery Services are grouped according to the “locations” of their Origins.
+	Before choosing a Delivery Service to which to direct the client, Traffic
+	Router will first create subsets of choices according to these groupings,
+	and order them by physical distance from the client (closest to farthest).
+	Within these subsets, the Values of the Targets establish the likelihood
+	that any given target within the subset will be chosen for the client -
+	effectively determining the spread of traffic across Targets within that
+	subset.
+\end{description}
+
+The precedence order when multiple Targets of disparate Types exist within the
+same Targets set is undefined.
+
+\subparagraph{Value}
+This unsigned integer defines the conditions under which this Delivery Service
+will be chosen as the destination Delivery Service for client requests to the
+Steering-Routed "parent" Delivery Service. The exact process by which Traffic
+Router makes these decisions is determined by the Target's Type.
 
 \subsubsection{Multi-Site Origin Properties\label{sec:mso-props}}
 Multi-Site Origin (MSO) Delivery Services are, simply, Delivery Services with
