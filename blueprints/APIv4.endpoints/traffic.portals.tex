@@ -1,0 +1,109 @@
+% Licensed to the Apache Software Foundation (ASF) under one
+% or more contributor license agreements.  See the NOTICE file
+% distributed with this work for additional information
+% regarding copyright ownership.  The ASF licenses this file
+% to you under the Apache License, Version 2.0 (the
+% "License"); you may not use this file except in compliance
+% with the License.  You may obtain a copy of the License at
+%
+%   http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing,
+% software distributed under the License is distributed on an
+% "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+% KIND, either express or implied.  See the License for the
+% specific language governing permissions and limitations
+% under the License.
+
+\subsection{\code{/traffic\_portals}}
+This endpoint deals with manipulations and representations of Traffic Portal
+objects configured in Traffic Ops.
+
+\subsubsection{GET}
+Retrieves Traffic Portal representations.
+\begin{description}
+	\item[Required Permissions] \code{traffic-portals-read}
+	\item[Response Type] Array
+\end{description}
+
+\paragraph{Request Structure}
+This method of this endpoint implements the Age Filtering and Sorting and
+Pagination query parameters as outlined inSections \ref{sec:age-filtering} and
+\ref{sec:pagination}, respectively. It further provides the query parameters in
+Table \ref{tbl:trafficportals:get:qparams}.
+
+\begin{table}[h]
+\centering
+\caption{GET \code{/traffic\_portals} Query Parameters\label{tbl:trafficportals:get:qparams}}
+\begin{tabularx}{\linewidth}{|l|X|}
+	\hline
+	\textbf{Parameter} & \textbf{Description}\\
+	\hline
+	ipv4Address & Filters results to contain only the Traffic Portals with the
+	              given IPv4 Address.\\
+	ipv6Address & Filters results to contain only the Traffic Portals with the
+	              given IPv6 Address.\\
+	online      & Filters results to contain only the Traffic Portals that have
+	              the provided "Online" value - valid values are "true" and
+	              "false".\\
+	tag         & Filters results to contain only the Traffic Portals with the
+	              given Tag. Multiple tags may be given, either in regular,
+	              \code{application/x-www-form-urlencoded} format like e.g.
+	              \code{tag=Foo\&tag=Bar} \emph{or} as a comma-separated list,
+	              e.g. \code{tag=Foo,Bar}. In either case - or even in the case
+	              of mixed conventions - the filtered results will contain only
+	              those Traffic Portals that have \emph{all} specified Tags.\\
+	url         & Filters results to contain only the Traffic Portals with the
+	              given URL. This URL must be valid, and may not contain a
+	              non-root path - e.g. \code{https://example.com:443/} is
+	              acceptable, whereas \code{https://example.com:443/foo} is
+	              not.\\
+	\hline
+\end{tabularx}
+\end{table}
+
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}{http}
+GET /api/4.0/traffic_portals?online=true HTTP/1.1
+HOst: trafficops.infra.ciab.test
+Accept: application/json, */*;q=0.9
+Cookie: mojolicious=...
+
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is a set of representations of Traffic Portal objects, each
+representation extended with the \code{lastUpdated} property containing the
+Date/Time at which the Traffic Portal object was last modified.\\
+This method of this endpoint also implements the \code{count} property of the
+top-level \code{summary} object as described in Section
+\ref{sec:summary-object}.
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 200 OK
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Wed, 18 Nov 2020 20:46:57 GMT
+Content-Length: 237
+ETag: Sample Text
+
+{ "response": [
+	{
+		"ipv4Address": "192.168.240.12",
+		"ipv6Address": null,
+		"notes": "The default Traffic Portal instance for CDN-in-a-Box.",
+		"online": true,
+		"tags": [],
+		"url": "https://trafficportal.infra.ciab.test:443/"
+	}
+],
+"summary": {
+	"count": 1
+}}
+\end{minted}
+\end{codelisting}
