@@ -134,7 +134,11 @@ shown in Table \ref{tbl:trafficportals:post:qparams}.
 	                "filled" in by looking up the host name portion of the
 	                request body's \code{url} property. This may also be one of
 	                the strings "ipv4Address" and "ipv6Address", to limit the
-	                "filling in" behavior to the named IP address property.\\
+	                "filling in" behavior to the named IP address property. When
+	                this lookup fails for some reason, a warning-level alert
+	                accompanies the (presumably) successful response indicating
+	                the issue, and the field(s) requested to be "filled in" will
+	                remain "null"-typed in the created object.\\
 	\hline
 \end{tabularx}
 \end{table}
@@ -274,7 +278,11 @@ request path. Only one query parameter is supported, as shown in Table
 	                "filled" in by looking up the host name portion of the
 	                request body's \code{url} property. This may also be one of
 	                the strings "ipv4Address" and "ipv6Address", to limit the
-	                "filling in" behavior to the named IP address property.\\
+	                "filling in" behavior to the named IP address property. When
+	                this lookup fails for some reason, a warning-level alert
+	                accompanies the (presumably) successful response indicating
+	                the issue, and the field(s) requested to be "filled in" will
+	                remain "null"-typed in the created object.\\
 	\hline
 \end{tabularx}
 \end{table}
