@@ -96,6 +96,7 @@ ETag: Sample Text
 	{
 		"ipv4Address": "192.168.240.12",
 		"ipv6Address": null,
+		"lastUpdated": "2009-11-10T23:00:00Z"
 		"notes": "The default Traffic Portal instance for CDN-in-a-Box.",
 		"online": true,
 		"tags": [],
@@ -107,3 +108,91 @@ ETag: Sample Text
 }}
 \end{minted}
 \end{codelisting}
+
+\subsubsection{POST}
+Creates new Traffic Portal objects.
+\begin{description}
+	\item[Required Permissions] \code{traffic-portals-write}
+	\item[Response Type] Array
+\end{description}
+
+\paragraph{Request Structure}
+The body of a POST request to \code{/traffic_portals} is a representation of a
+Traffic Portal object to be created. Only one query parameter is supported, as
+shown in Table \ref{tbl:trafficportals:post:qparams}.
+
+\begin{table}[h]
+\centering
+\caption{POST \code{/traffic\_portals} Query Parameters\label{tbl:trafficportals:post:qparams}}
+\begin{tabularx}{\linewidth}{|l|X|}
+	\hline
+	\textbf{Parameter} & \textbf{Description}\\
+	\hline
+	lookupAddress & When this query string parameter is given, and is "true",
+	                then when the request body contains a \code{null}
+	                \code{ipv4Address} or \code{ipv6Address}, the value will be
+	                "filled" in by looking up the host name portion of the
+	                request body's \code{url} property. This may also be one of
+	                the strings "ipv4Address" and "ipv6Address", to limit the
+	                "filling in" behavior to the named IP address property.\\
+	\hline
+\end{tabularx}
+\end{table}
+
+\begin{codelisting}
+\captionof{listing}{Request Example}
+\begin{minted}[tabsize=2]{http}
+POST /api/4.0/traffic_portals?lookupAddress=ipv4Address HTTP/1.1
+HOst: trafficops.infra.ciab.test
+Accept: application/json, */*;q=0.9
+Cookie: mojolicious=...
+Content-Type: application/json
+Content-Length:
+
+{
+	"ipv4Address": null,
+	"ipv6Address": null,
+	"notes": "The default Traffic Portal instance for CDN-in-a-Box.",
+	"online": true,
+	"tags": [],
+	"url": "https://trafficportal.infra.ciab.test:443/"
+}
+
+\end{minted}
+\end{codelisting}
+
+\paragraph{Response Structure}
+The response is a representation of the created Traffic Portal object, augmented
+with the \code{lastUpdated} property containing the Date/Time at which the
+Traffic Portal object was last modified (which should be approximately equal to
+the current time).
+
+\begin{codelisting}
+\captionof{listing}{Response Example}
+\begin{minted}[tabsize=2]{http}
+HTTP/1.1 201 Created
+Content-Type: application/json
+Server: Traffic Ops/5.0
+Date: Wed, 18 Nov 2020 20:46:57 GMT
+Content-Length: 237
+ETag: Sample Text
+Location: /traffic_portals/https%3A%2F%2Ftrafficportal.infra.ciam.test%3A443
+
+{ "response": {
+	"ipv4Address": "192.168.240.12",
+	"ipv6Address": null,
+	"lastUpdated": "2009-11-10T23:00:00Z",
+	"notes": "The default Traffic Portal instance for CDN-in-a-Box.",
+	"online": true,
+	"tags": [],
+	"url": "https://trafficportal.infra.ciab.test:443/"
+},
+"alerts": [
+	{
+		"level": "success",
+		"text": "Traffic Portal 'https://trafficportal.infra.ciam.test:443' was created."
+	}
+]}
+\end{minted}
+\end{codelisting}
+
