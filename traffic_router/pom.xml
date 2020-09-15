@@ -48,12 +48,12 @@
 		<developerConnection>scm:git:file://</developerConnection>
 	</scm>
 
-	<repositories>
+	<!-- <repositories>
 		<repository>
 			<id>cloudera</id>
 			<url>https://repository.cloudera.com/content/repositories/releases</url>
 		</repository>
-	</repositories>
+	</repositories> -->
 
 	<build>
 		<plugins>

@@ -34,12 +34,12 @@
 			<java.library.path>must be passed on the Maven commandline</java.library.path>
 			<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-	<repositories>
+	<!-- <repositories>
 		<repository>
 			<id>cloudera</id>
 			<url>https://repository.cloudera.com/content/repositories/releases</url>
 		</repository>
-	</repositories>
+	</repositories> -->
 
 	<build>
 		<finalName>ROOT</finalName>
