@@ -101,6 +101,11 @@ public class TrafficRouterTest {
     }
 
     @Test
+    public void itFails() throws Exception {
+        assertTrue(false)
+    }
+
+    @Test
     public void itCreatesDnsResultsFromFederationMappingHit() throws Exception {
         final Name name = Name.fromString("edge.example.com");
         DNSRequest request = new DNSRequest("example.com", name, Type.A);
