@@ -102,7 +102,7 @@ public class TrafficRouterTest {
 
     @Test
     public void itFails() throws Exception {
-        assertTrue(false)
+        assertTrue(false);
     }
 
     @Test
