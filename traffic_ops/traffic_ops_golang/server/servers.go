@@ -589,7 +589,7 @@ func validateV3(s *tc.ServerNullable, tx *sql.Tx) (string, error) {
 		return serviceInterface, util.JoinErrs(errs)
 	}
 	query := `
-SELECT s.ID, ip.address FROM server s 
+SELECT s.ID, ip.address FROM server s
 JOIN profile p on p.Id = s.Profile
 JOIN interface i on i.server = s.ID
 JOIN ip_address ip on ip.Server = s.ID and ip.interface = i.name
@@ -1138,7 +1138,8 @@ func createInterfaces(id int, interfaces []tc.ServerInterfaceInfo, tx *sql.Tx) (
 
 	_, err := tx.Exec(ifaceQry, ifaceArgs...)
 	if err != nil {
-		return api.ParseDBError(err)
+		errs := api.ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 
 	ipQry += strings.Join(ipQueryParts, ",")
@@ -1146,7 +1147,8 @@ func createInterfaces(id int, interfaces []tc.ServerInterfaceInfo, tx *sql.Tx) (
 
 	_, err = tx.Exec(ipQry, ipArgs...)
 	if err != nil {
-		return api.ParseDBError(err)
+		errs := api.ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 
 	return nil, nil, http.StatusOK
@@ -1154,11 +1156,13 @@ func createInterfaces(id int, interfaces []tc.ServerInterfaceInfo, tx *sql.Tx) (
 
 func deleteInterfaces(id int, tx *sql.Tx) (error, error, int) {
 	if _, err := tx.Exec(deleteIPsQuery, id); err != nil && err != sql.ErrNoRows {
-		return api.ParseDBError(err)
+		errs := api.ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 
 	if _, err := tx.Exec(deleteInterfacesQuery, id); err != nil && err != sql.ErrNoRows {
-		return api.ParseDBError(err)
+		errs := api.ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 
 	return nil, nil, http.StatusOK
@@ -1300,8 +1304,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 
 	rows, err := inf.Tx.NamedQuery(updateQuery, server)
 	if err != nil {
-		userErr, sysErr, errCode = api.ParseDBError(err)
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+		inf.HandleErrs(w, r, api.ParseDBError(err))
 		return
 	}
 	defer rows.Close()
@@ -1380,8 +1383,7 @@ func createV1(inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
 
 	resultRows, err := inf.Tx.NamedQuery(insertQuery, server)
 	if err != nil {
-		userErr, sysErr, errCode := api.ParseDBError(err)
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+		inf.HandleErrs(w, r, api.ParseDBError(err))
 		return
 	}
 	defer resultRows.Close()
@@ -1452,8 +1454,7 @@ func createV2(inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
 
 	resultRows, err := inf.Tx.NamedQuery(insertQuery, server)
 	if err != nil {
-		userErr, sysErr, errCode := api.ParseDBError(err)
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+		inf.HandleErrs(w, r, api.ParseDBError(err))
 		return
 	}
 	defer resultRows.Close()
@@ -1526,8 +1527,7 @@ func createV3(inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
 
 	resultRows, err := inf.Tx.NamedQuery(insertQueryV3, server)
 	if err != nil {
-		userErr, sysErr, errCode := api.ParseDBError(err)
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+		inf.HandleErrs(w, r, api.ParseDBError(err))
 		return
 	}
 	defer resultRows.Close()
@@ -1629,8 +1629,7 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 
 	if result, err := tx.Exec(deleteServerQuery, id); err != nil {
 		log.Errorf("Raw error: %v", err)
-		userErr, sysErr, errCode = api.ParseDBError(err)
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+		inf.HandleErrs(w, r, api.ParseDBError(err))
 		return
 	} else if rowsAffected, err := result.RowsAffected(); err != nil {
 		api.HandleErr(w, r, tx, http.StatusInternalServerError, nil, fmt.Errorf("getting rows affected by server delete: %v", err))

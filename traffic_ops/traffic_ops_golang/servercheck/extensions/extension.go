@@ -109,8 +109,8 @@ func createCheckExt(toExt tc.ServerCheckExtensionNullable, tx *sqlx.Tx) (int, er
 	scc := ""
 	if err := tx.Tx.QueryRow(`
 	SELECT id, servercheck_column_name
-	FROM to_extension 
-	WHERE type in 
+	FROM to_extension
+	WHERE type in
 		(SELECT id FROM type WHERE name = 'CHECK_EXTENSION_OPEN_SLOT')
 	ORDER BY servercheck_column_name
 	LIMIT 1`).Scan(&id, &scc); err != nil {
@@ -294,7 +294,8 @@ func deleteServerCheckExtension(id int, tx *sqlx.Tx) (error, error, int) {
 
 	result, err := tx.NamedExec(updateQuery(), openTOExt)
 	if err != nil {
-		return api.ParseDBError(err)
+		errs := api.ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 
 	if rowsAffected, err := result.RowsAffected(); err != nil {

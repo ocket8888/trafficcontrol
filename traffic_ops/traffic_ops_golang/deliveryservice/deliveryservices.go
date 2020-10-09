@@ -339,8 +339,8 @@ func createV30(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, ds tc.D
 	)
 
 	if err != nil {
-		usrErr, sysErr, code := api.ParseDBError(err)
-		return nil, code, usrErr, sysErr
+		errs := api.ParseDBError(err)
+		return nil, errs.Code, errs.UserError, errs.SystemError
 	}
 	defer resultRows.Close()
 
@@ -377,8 +377,8 @@ func createV30(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, ds tc.D
 	}
 
 	if c, err := createConsistentHashQueryParams(tx, *ds.ID, ds.ConsistentHashQueryParams); err != nil {
-		usrErr, sysErr, code := api.ParseDBError(err)
-		return nil, code, usrErr, sysErr
+		errs := api.ParseDBError(err)
+		return nil, errs.Code, errs.UserError, errs.SystemError
 	} else {
 		api.CreateChangeLogRawTx(api.ApiChange, "DS: "+*ds.XMLID+", ID: "+strconv.Itoa(*ds.ID)+", ACTION: Created "+strconv.Itoa(c)+" consistent hash query params", user, tx)
 	}
@@ -868,8 +868,8 @@ func updateV30(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, ds *tc.
 		&ds.ID)
 
 	if err != nil {
-		usrErr, sysErr, code := api.ParseDBError(err)
-		return nil, code, usrErr, sysErr
+		errs := api.ParseDBError(err)
+		return nil, errs.Code, errs.UserError, errs.SystemError
 	}
 	defer resultRows.Close()
 	if !resultRows.Next() {
@@ -954,8 +954,8 @@ func updateV30(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, ds *tc.
 	}
 
 	if c, err := createConsistentHashQueryParams(tx, *ds.ID, ds.ConsistentHashQueryParams); err != nil {
-		usrErr, sysErr, code := api.ParseDBError(err)
-		return nil, code, usrErr, sysErr
+		errs := api.ParseDBError(err)
+		return nil, errs.Code, errs.UserError, errs.SystemError
 	} else {
 		api.CreateChangeLogRawTx(api.ApiChange, "DS: "+*ds.XMLID+", ID: "+strconv.Itoa(*ds.ID)+", ACTION: Created "+strconv.Itoa(c)+" consistent hash query params", user, tx)
 	}

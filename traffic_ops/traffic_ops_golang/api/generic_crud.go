@@ -23,11 +23,12 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-rfc"
 	ims "github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
-	"net/http"
-	"time"
 
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-util"
@@ -76,7 +77,8 @@ type GenericOptionsDeleter interface {
 func GenericCreate(val GenericCreator) (error, error, int) {
 	resultRows, err := val.APIInfo().Tx.NamedQuery(val.InsertQuery(), val)
 	if err != nil {
-		return ParseDBError(err)
+		errs := ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 	defer resultRows.Close()
 
@@ -113,7 +115,8 @@ func GenericCreate(val GenericCreator) (error, error, int) {
 func GenericCreateNameBasedID(val GenericCreator) (error, error, int) {
 	resultRows, err := val.APIInfo().Tx.NamedQuery(val.InsertQuery(), val)
 	if err != nil {
-		return ParseDBError(err)
+		errs := ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 	defer resultRows.Close()
 
@@ -226,7 +229,8 @@ func GenericRead(h http.Header, val GenericReader, useIMS bool) ([]interface{}, 
 func GenericUpdate(val GenericUpdater) (error, error, int) {
 	rows, err := val.APIInfo().Tx.NamedQuery(val.UpdateQuery(), val)
 	if err != nil {
-		return ParseDBError(err)
+		errs := ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 	defer rows.Close()
 
@@ -257,7 +261,8 @@ func GenericOptionsDelete(val GenericOptionsDeleter) (error, error, int) {
 	tx := val.APIInfo().Tx
 	result, err := tx.NamedExec(query, queryValues)
 	if err != nil {
-		return ParseDBError(err)
+		errs := ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 
 	if rowsAffected, err := result.RowsAffected(); err != nil {
@@ -275,7 +280,8 @@ func GenericOptionsDelete(val GenericOptionsDeleter) (error, error, int) {
 func GenericDelete(val GenericDeleter) (error, error, int) {
 	result, err := val.APIInfo().Tx.NamedExec(val.DeleteQuery(), val)
 	if err != nil {
-		return ParseDBError(err)
+		errs := ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 
 	if rowsAffected, err := result.RowsAffected(); err != nil {

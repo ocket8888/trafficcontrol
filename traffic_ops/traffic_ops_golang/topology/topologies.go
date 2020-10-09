@@ -22,6 +22,10 @@ package topology
 import (
 	"errors"
 	"fmt"
+	"net/http"
+	"strings"
+	"time"
+
 	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
@@ -33,9 +37,6 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
-	"net/http"
-	"strings"
-	"time"
 )
 
 // TOTopology is a type alias on which we can define functions.
@@ -324,7 +325,8 @@ func (topology *TOTopology) Create() (error, error, int) {
 	tx := topology.APIInfo().Tx.Tx
 	err := tx.QueryRow(insertQuery(), topology.Name, topology.Description).Scan(&topology.Name, &topology.Description, &topology.LastUpdated)
 	if err != nil {
-		return api.ParseDBError(err)
+		errs := api.ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 
 	if userErr, sysErr, errCode := topology.addNodes(); userErr != nil || sysErr != nil {
@@ -450,7 +452,8 @@ func (topology *TOTopology) addNodes() (error, error, int) {
 		rows.Next()
 		err = rows.Scan(&topology.Nodes[index].Id, &topology.Name, &topology.Nodes[index].Cachegroup)
 		if err != nil {
-			return api.ParseDBError(err)
+			errs := api.ParseDBError(err)
+			return errs.UserError, errs.SystemError, errs.Code
 		}
 	}
 	return nil, nil, http.StatusOK
@@ -472,7 +475,8 @@ func (topology *TOTopology) addParents() (error, error, int) {
 	}
 	rows, err := topology.ReqInfo.Tx.Query(nodeParentInsertQuery(), pq.Array(children), pq.Array(parents), pq.Array(ranks))
 	if err != nil {
-		return api.ParseDBError(err)
+		errs := api.ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 	defer log.Close(rows, "unable to close DB connection")
 	for _, node := range topology.Nodes {
@@ -481,7 +485,8 @@ func (topology *TOTopology) addParents() (error, error, int) {
 			parent := topology.Nodes[node.Parents[rank-1]]
 			err = rows.Scan(&node.Id, &parent.Id, &rank)
 			if err != nil {
-				return api.ParseDBError(err)
+				errs := api.ParseDBError(err)
+				return errs.UserError, errs.SystemError, errs.Code
 			}
 		}
 	}
@@ -497,7 +502,8 @@ func (topology *TOTopology) setDescription() (error, error, int) {
 	for rows.Next() {
 		err = rows.Scan(&topology.Name, &topology.Description, &topology.LastUpdated)
 		if err != nil {
-			return api.ParseDBError(err)
+			errs := api.ParseDBError(err)
+			return errs.UserError, errs.SystemError, errs.Code
 		}
 	}
 	return nil, nil, http.StatusOK

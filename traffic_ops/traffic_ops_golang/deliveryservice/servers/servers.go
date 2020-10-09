@@ -24,12 +24,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/apache/trafficcontrol/lib/go-rfc"
-	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/apache/trafficcontrol/lib/go-rfc"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
 	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-tc"
@@ -409,8 +410,7 @@ func GetReplaceHandler(w http.ResponseWriter, r *http.Request) {
 	for _, server := range servers {
 		dtos := map[string]interface{}{"id": dsId, "server": server}
 		if _, err := inf.Tx.NamedExec(insertIdsQuery(), dtos); err != nil {
-			usrErr, sysErr, code := api.ParseDBError(err)
-			api.HandleErr(w, r, inf.Tx.Tx, code, usrErr, sysErr)
+			inf.HandleErrs(w, r, api.ParseDBError(err))
 			return
 		}
 		respServers = append(respServers, server)
@@ -480,9 +480,7 @@ func GetCreateHandler(w http.ResponseWriter, r *http.Request) {
 
 	res, err := inf.Tx.Tx.Exec(`INSERT INTO deliveryservice_server (deliveryservice, server) SELECT $1, id FROM server WHERE host_name = ANY($2::text[])`, ds.ID, pq.Array(serverNames))
 	if err != nil {
-
-		usrErr, sysErr, code := api.ParseDBError(err)
-		api.HandleErr(w, r, inf.Tx.Tx, code, usrErr, sysErr)
+		inf.HandleErrs(w, r, api.ParseDBError(err))
 		return
 	}
 

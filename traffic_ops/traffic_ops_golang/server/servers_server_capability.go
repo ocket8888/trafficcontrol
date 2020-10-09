@@ -300,7 +300,8 @@ func (ssc *TOServerServerCapability) Create() (error, error, int) {
 
 	resultRows, err := tx.NamedQuery(scInsertQuery(), ssc)
 	if err != nil {
-		return api.ParseDBError(err)
+		errs := api.ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 	defer resultRows.Close()
 
@@ -360,7 +361,7 @@ SELECT ARRAY(
 	SELECT dsrc.deliveryservice_id
 	FROM deliveryservices_required_capability as dsrc
 	WHERE deliveryservice_id IN (
-		SELECT deliveryservice 
+		SELECT deliveryservice
 		FROM deliveryservice_server
 		WHERE server = $1)
 	AND dsrc.required_capability = $2)`

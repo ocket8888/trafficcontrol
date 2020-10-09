@@ -22,11 +22,12 @@ package steeringtargets
 import (
 	"errors"
 	"fmt"
-	"github.com/apache/trafficcontrol/lib/go-log"
-	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-util"
@@ -205,7 +206,8 @@ func (st *TOSteeringTargetV11) Create() (error, error, int) {
 
 	rows, err := st.ReqInfo.Tx.NamedQuery(insertQuery(), st)
 	if err != nil {
-		return api.ParseDBError(err)
+		errs := api.ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 	defer rows.Close()
 
@@ -246,7 +248,8 @@ func (st *TOSteeringTargetV11) Update() (error, error, int) {
 
 	rows, err := st.ReqInfo.Tx.NamedQuery(updateQuery(), st)
 	if err != nil {
-		return api.ParseDBError(err)
+		errs := api.ParseDBError(err)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 	defer rows.Close()
 

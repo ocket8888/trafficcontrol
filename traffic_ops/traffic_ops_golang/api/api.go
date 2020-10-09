@@ -259,6 +259,14 @@ func LogErr(r *http.Request, errCode int, userErr error, sysErr error) error {
 	return userErr
 }
 
+// LogErrs handles the logging of errors and setting up possibly nil errors
+// without actually writing anything to a http.ResponseWriter, unlike
+// handleSimpleErr. It returns the userErr which will be initialized to the
+// http.StatusText of errCode if it was passed as nil - otherwise left alone.
+func LogErrs(r *http.Request, errs Errors) error {
+	return LogErr(r, errs.Code, errs.UserError, errs.SystemError)
+}
+
 // handleSimpleErr is a helper for HandleErr.
 // This exists to prevent exposing HandleErr calls in this file with nil transactions, which might be copy-pasted creating bugs.
 func handleSimpleErr(w http.ResponseWriter, r *http.Request, statusCode int, userErr error, sysErr error) {
@@ -799,53 +807,68 @@ func toCamelCase(str string) string {
 }
 
 // parses pq errors for not null constraint
-func parseNotNullConstraint(err *pq.Error) (error, error, int) {
+func parseNotNullConstraint(err *pq.Error) Errors {
+	errs := NewErrors()
 	pattern := regexp.MustCompile(`null value in column "(.+)" violates not-null constraint`)
 	match := pattern.FindStringSubmatch(err.Message)
 	if match == nil {
-		return nil, nil, http.StatusOK
+		return errs
 	}
-	return fmt.Errorf("%s is a required field", toCamelCase(match[1])), nil, http.StatusBadRequest
+	errs.Code = http.StatusBadRequest
+	errs.UserError = fmt.Errorf("%s is a required field", toCamelCase(match[1]))
+	return errs
 }
 
 // parses pq errors for empty string check constraint
-func parseEmptyConstraint(err *pq.Error) (error, error, int) {
+func parseEmptyConstraint(err *pq.Error) Errors {
+	errs := NewErrors()
 	pattern := regexp.MustCompile(`new row for relation "[^"]*" violates check constraint "(.*)_empty"`)
 	match := pattern.FindStringSubmatch(err.Message)
 	if match == nil {
-		return nil, nil, http.StatusOK
+		return errs
 	}
-	return fmt.Errorf("%s cannot be ", match[1]), nil, http.StatusBadRequest
+	errs.Code = http.StatusBadRequest
+	errs.UserError = fmt.Errorf("%s cannot be ", match[1])
+	return errs
 }
 
 // parses pq errors for violated foreign key constraints
-func parseNotPresentFKConstraint(err *pq.Error) (error, error, int) {
+func parseNotPresentFKConstraint(err *pq.Error) Errors {
+	errs := NewErrors()
 	pattern := regexp.MustCompile(`Key \(.+\)=\(.+\) is not present in table "(.+)"`)
 	match := pattern.FindStringSubmatch(err.Detail)
 	if match == nil {
-		return nil, nil, http.StatusOK
+		return errs
 	}
-	return fmt.Errorf("%s not found", match[1]), nil, http.StatusNotFound
+	errs.UserError = fmt.Errorf("%s not found", match[1])
+	errs.Code = http.StatusNotFound
+	return errs
 }
 
 // parses pq errors for uniqueness constraint violations
-func parseUniqueConstraint(err *pq.Error) (error, error, int) {
+func parseUniqueConstraint(err *pq.Error) Errors {
+	errs := NewErrors()
 	pattern := regexp.MustCompile(`Key \((.+)\)=\((.+)\) already exists`)
 	match := pattern.FindStringSubmatch(err.Detail)
 	if match == nil {
-		return nil, nil, http.StatusOK
+		return errs
 	}
-	return fmt.Errorf("%v %s '%s' already exists.", err.Table, match[1], match[2]), nil, http.StatusBadRequest
+	errs.Code = http.StatusBadRequest
+	errs.UserError = fmt.Errorf("%v %s '%s' already exists", err.Table, match[1], match[2])
+	return errs
 }
 
 // parses pq errors for database enum constraint violations
-func parseEnumConstraint(err *pq.Error) (error, error, int) {
+func parseEnumConstraint(err *pq.Error) Errors {
+	errs := NewErrors()
 	pattern := regexp.MustCompile(`invalid input value for enum (.+): \"(.+)\"`)
 	match := pattern.FindStringSubmatch(err.Message)
 	if match == nil {
-		return nil, nil, http.StatusOK
+		return errs
 	}
-	return fmt.Errorf("invalid enum value %s for field %s.", match[2], match[1]), nil, http.StatusBadRequest
+	errs.Code = http.StatusBadRequest
+	errs.UserError = fmt.Errorf("invalid enum value %s for field %s", match[2], match[1])
+	return errs
 }
 
 // parses pq errors for ON DELETE RESTRICT fk constraint violations
@@ -865,11 +888,12 @@ func parseEnumConstraint(err *pq.Error) (error, error, int) {
 // It may be helpful to look at constraints for api_capability, role_capability,
 // and user_role for examples.
 //
-func parseRestrictFKConstraint(err *pq.Error) (error, error, int) {
+func parseRestrictFKConstraint(err *pq.Error) Errors {
+	errs := NewErrors()
 	pattern := regexp.MustCompile(`update or delete on table "([a-z_]+)" violates foreign key constraint ".+" on table "([a-z_]+)"`)
 	match := pattern.FindStringSubmatch(err.Message)
 	if match == nil {
-		return nil, nil, http.StatusOK
+		return errs
 	}
 
 	// small heuristic for grammar
@@ -878,43 +902,47 @@ func parseRestrictFKConstraint(err *pq.Error) (error, error, int) {
 	case 'a', 'e', 'i', 'o':
 		article = "an"
 	}
-	return fmt.Errorf("cannot delete %s because it is being used by %s %s", match[1], article, match[2]), nil, http.StatusBadRequest
+	errs.Code = http.StatusBadRequest
+	errs.UserError = fmt.Errorf("cannot delete %s because it is being used by %s %s", match[1], article, match[2])
+	return errs
 }
 
 // ParseDBError parses pq errors for database constraint violations, and returns the (userErr, sysErr, httpCode) format expected by the API helpers.
-func ParseDBError(ierr error) (error, error, int) {
-
+func ParseDBError(ierr error) Errors {
+	errs := NewErrors()
 	err, ok := ierr.(*pq.Error)
 	if !ok {
 		log.Errorf("a non-pq error was given")
-		return nil, ierr, http.StatusInternalServerError
+		errs.Code = http.StatusInternalServerError
+		errs.SystemError = ierr
+		return errs
 	}
 
-	if usrErr, sysErr, errCode := parseNotPresentFKConstraint(err); errCode != http.StatusOK {
-		return usrErr, sysErr, errCode
+	if errs = parseNotPresentFKConstraint(err); errs.Occurred() {
+		return errs
 	}
 
-	if usrErr, sysErr, errCode := parseUniqueConstraint(err); errCode != http.StatusOK {
-		return usrErr, sysErr, errCode
+	if errs = parseUniqueConstraint(err); errs.Occurred() {
+		return errs
 	}
 
-	if usrErr, sysErr, errCode := parseRestrictFKConstraint(err); errCode != http.StatusOK {
-		return usrErr, sysErr, errCode
+	if errs = parseRestrictFKConstraint(err); errs.Occurred() {
+		return errs
 	}
 
-	if usrErr, sysErr, errCode := parseNotNullConstraint(err); errCode != http.StatusOK {
-		return usrErr, sysErr, errCode
+	if errs = parseNotNullConstraint(err); errs.Occurred() {
+		return errs
 	}
 
-	if usrErr, sysErr, errCode := parseEmptyConstraint(err); errCode != http.StatusOK {
-		return usrErr, sysErr, errCode
+	if errs = parseEmptyConstraint(err); errs.Occurred() {
+		return errs
 	}
 
-	if usrErr, sysErr, errCode := parseEnumConstraint(err); errCode != http.StatusOK {
-		return usrErr, sysErr, errCode
+	if errs = parseEnumConstraint(err); errs.Occurred() {
+		return errs
 	}
 
-	return nil, err, http.StatusInternalServerError
+	return errs
 }
 
 // GetUserFromReq returns the current user, any user error, any system error, and an error code to be returned if either error was not nil.

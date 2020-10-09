@@ -19,16 +19,18 @@ package invalidationjobs
  * under the License.
  */
 
-import "database/sql"
-import "errors"
-import "fmt"
-import "net/http"
-import "strconv"
-import "time"
+import (
+	"database/sql"
+	"errors"
+	"fmt"
+	"net/http"
+	"strconv"
+	"time"
 
-import "github.com/apache/trafficcontrol/lib/go-tc"
-import "github.com/apache/trafficcontrol/lib/go-log"
-import "github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+)
 
 const userReadQuery = `
 SELECT job.agent,
@@ -113,13 +115,15 @@ func CreateUserJob(w http.ResponseWriter, r *http.Request) {
 		&result.Parameters,
 		&result.StartTime)
 	if err != nil {
-		userErr, sysErr, code := api.ParseDBError(err)
-		userErr = api.LogErr(r, code, userErr, sysErr)
+		// TODO: I feel like this should be using api.HandleErr or
+		// inf.HandleErrs
+		errs := api.ParseDBError(err)
+		errs.UserError = api.LogErrs(r, errs)
 		if err := inf.Tx.Tx.Rollback(); err != nil && err != sql.ErrTxDone {
 			log.Errorln("rolling back transaction: " + err.Error())
 		}
-		alerts.AddNewAlert(tc.ErrorLevel, userErr.Error())
-		api.WriteAlerts(w, r, code, alerts)
+		alerts.AddNewAlert(tc.ErrorLevel, errs.UserError.Error())
+		api.WriteAlerts(w, r, errs.Code, alerts)
 		return
 	}
 

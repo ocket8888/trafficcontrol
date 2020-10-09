@@ -19,20 +19,21 @@ package login
  * under the License.
  */
 
-import "bytes"
-import "database/sql"
-import "errors"
-import "fmt"
-import "html/template"
-import "net/http"
+import (
+	"bytes"
+	"database/sql"
+	"errors"
+	"fmt"
+	"html/template"
+	"net/http"
 
-import "github.com/apache/trafficcontrol/lib/go-log"
-import "github.com/apache/trafficcontrol/lib/go-rfc"
-import "github.com/apache/trafficcontrol/lib/go-tc"
-
-import "github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
-import "github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/config"
-import "github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
+	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/lib/go-rfc"
+	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/config"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
+)
 
 type registrationEmailFormatter struct {
 	From         rfc.EmailAddress
@@ -230,8 +231,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Errorf("Bare error: %v", err)
-		userErr, sysErr, errCode = api.ParseDBError(err)
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+		inf.HandleErrs(w, r, api.ParseDBError(err))
 		return
 	}
 
