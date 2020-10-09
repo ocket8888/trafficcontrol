@@ -75,8 +75,11 @@ type key int
 
 const CurrentUserKey key = iota
 
-// GetCurrentUserFromDB  - returns the id and privilege level of the given user along with the username, or -1 as the id, - as the userName and PrivLevelInvalid if the user doesn't exist, along with a user facing error, a system error to log, and an error code to return
-func GetCurrentUserFromDB(DB *sqlx.DB, user string, timeout time.Duration) (CurrentUser, error, error, int) {
+// GetCurrentUserFromDB returns the id and privilege level of the given user
+// along with the username, or -1 as the id, - as the userName and
+// PrivLevelInvalid if the user doesn't exist, along with an error code to
+// return, a user-facing error, and a system error to log.
+func GetCurrentUserFromDB(DB *sqlx.DB, user string, timeout time.Duration) (CurrentUser, int, error, error) {
 	qry := `
 SELECT
   r.priv_level,
@@ -93,9 +96,19 @@ WHERE
   u.username = $1
 `
 
+	u := CurrentUser{
+		UserName:     "-",
+		ID:           -1,
+		PrivLevel:    PrivLevelInvalid,
+		TenantID:     TenantIDInvalid,
+		Role:         -1,
+		Capabilities: []string{},
+	}
+
 	var currentUserInfo CurrentUser
 	if DB == nil {
-		return CurrentUser{"-", -1, PrivLevelInvalid, TenantIDInvalid, -1, []string{}}, nil, errors.New("no db provided to GetCurrentUserFromDB"), http.StatusInternalServerError
+		sysErr := errors.New("no db provided to GetCurrentUserFromDB")
+		return u, http.StatusInternalServerError, nil, sysErr
 	}
 	dbCtx, dbClose := context.WithTimeout(context.Background(), timeout)
 	defer dbClose()
@@ -103,13 +116,17 @@ WHERE
 	err := DB.GetContext(dbCtx, &currentUserInfo, qry, user)
 	switch {
 	case err == sql.ErrNoRows:
-		return CurrentUser{"-", -1, PrivLevelInvalid, TenantIDInvalid, -1, []string{}}, errors.New("user not found"), fmt.Errorf("checking user %v info: user not in database", user), http.StatusUnauthorized
+		userErr := errors.New("user not found")
+		sysErr := fmt.Errorf("checking user %v info: user not in database", user)
+		return u, http.StatusUnauthorized, userErr, sysErr
 	case err == context.DeadlineExceeded || err == context.Canceled:
-		return CurrentUser{"-", -1, PrivLevelInvalid, TenantIDInvalid, -1, []string{}}, nil, fmt.Errorf("db access timed out: %s number of open connections: %d\n", err, DB.Stats().OpenConnections), http.StatusServiceUnavailable
+		sysErr := fmt.Errorf("db access timed out: %s number of open connections: %d", err, DB.Stats().OpenConnections)
+		return u, http.StatusInternalServerError, nil, sysErr
 	case err != nil:
-		return CurrentUser{"-", -1, PrivLevelInvalid, TenantIDInvalid, -1, []string{}}, nil, fmt.Errorf("Error checking user %v info: %v", user, err.Error()), http.StatusInternalServerError
+		sysErr := fmt.Errorf("error checking user %s info: %v", user, err)
+		return u, http.StatusInternalServerError, nil, sysErr
 	default:
-		return currentUserInfo, nil, nil, http.StatusOK
+		return currentUserInfo, http.StatusOK, nil, nil
 	}
 }
 
