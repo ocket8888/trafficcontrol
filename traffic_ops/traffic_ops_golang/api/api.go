@@ -210,6 +210,18 @@ func HandleErr(w http.ResponseWriter, r *http.Request, tx *sql.Tx, statusCode in
 	handleSimpleErr(w, r, statusCode, userErr, sysErr)
 }
 
+// HandleErrs handles API errors, rolling back the transaction, writing the
+// status code and user-facing errors back to client, and logging any system
+// error. If there is no user-facing error provided, the text of the HTTP
+// status code is written.
+//
+// The tx may be nil, if there is no transaction. Passing a nil tx is strongly
+// discouraged if a transaction exists, because it will result in copy-paste
+// errors for the common APIInfo use case.
+func HandleErrs(w http.ResponseWriter, r *http.Request, tx *sql.Tx, errs Errors) {
+	HandleErr(w, r, tx, errs.Code, errs.UserError, errs.SystemError)
+}
+
 func HandleErrOptionalDeprecation(w http.ResponseWriter, r *http.Request, tx *sql.Tx, statusCode int, userErr error, sysErr error, deprecated bool, alternative *string) {
 	if deprecated {
 		HandleDeprecatedErr(w, r, tx, statusCode, userErr, sysErr, alternative)
@@ -599,10 +611,10 @@ func (inf *APIInfo) Close() {
 // errors.
 func (inf APIInfo) HandleErrs(w http.ResponseWriter, r *http.Request, e Errors) {
 	if inf.Tx == nil {
-		HandleErr(w, r, nil, e.Code, e.UserError, e.SystemError)
+		HandleErrs(w, r, nil, e)
 		return
 	}
-	HandleErr(w, r, inf.Tx.Tx, e.Code, e.UserError, e.SystemError)
+	HandleErrs(w, r, inf.Tx.Tx, e)
 }
 
 // SendMail is a convenience method used to call SendMail using an APIInfo structure's configuration.
