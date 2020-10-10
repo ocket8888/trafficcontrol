@@ -25,12 +25,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/apache/trafficcontrol/lib/go-rfc"
 	"io/ioutil"
 	"net/http"
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/apache/trafficcontrol/lib/go-rfc"
 
 	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-tc"
@@ -150,9 +151,9 @@ func SetLastModifiedHeader(r *http.Request, useIMS bool) bool {
 func ReadHandler(reader Reader) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		useIMS := false
-		inf, userErr, sysErr, errCode := NewInfo(r, nil, nil)
-		if userErr != nil || sysErr != nil {
-			HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+		inf, errs := NewInfo(r, nil, nil)
+		if errs.Occurred() {
+			HandleErrs(w, r, inf.Tx.Tx, errs)
 			return
 		}
 		defer inf.Close()
@@ -194,19 +195,24 @@ func DeprecatedReadHandler(reader Reader, alternative *string) http.HandlerFunc 
 	return func(w http.ResponseWriter, r *http.Request) {
 		alerts := CreateDeprecationAlerts(alternative)
 
-		inf, userErr, sysErr, errCode := NewInfo(r, nil, nil)
-		if userErr != nil || sysErr != nil {
-			userErr = LogErr(r, http.StatusInternalServerError, userErr, sysErr)
-			alerts.AddAlerts(tc.CreateErrorAlerts(userErr))
-			WriteAlerts(w, r, errCode, alerts)
+		inf, errs := NewInfo(r, nil, nil)
+		if errs.Occurred() {
+			// TODO: I think this should just be using HandleErrs - and
+			// logging the *actual* status code instead of always 500 ISE.
+			errs.UserError = LogErr(r, http.StatusInternalServerError, errs.UserError, errs.SystemError)
+			alerts.AddAlerts(tc.CreateErrorAlerts(errs.UserError))
+			WriteAlerts(w, r, errs.Code, alerts)
 			return
 		}
 
 		interfacePtr := reflect.ValueOf(reader)
 		if interfacePtr.Kind() != reflect.Ptr {
-			userErr = LogErr(r, http.StatusInternalServerError, nil, errors.New(" reflect: can only indirect from a pointer"))
+			// TODO: I think this should just be using HandleErrs
+			userErr := LogErr(r, http.StatusInternalServerError, nil, errors.New(" reflect: can only indirect from a pointer"))
 			alerts.AddAlerts(tc.CreateErrorAlerts(userErr))
-			WriteAlerts(w, r, errCode, alerts)
+			// TODO: I think this erroneously returns 200 OK instead of
+			// 500 Internal Server Error
+			WriteAlerts(w, r, errs.Code, alerts)
 			return
 		}
 
@@ -234,9 +240,9 @@ func DeprecatedReadHandler(reader Reader, alternative *string) http.HandlerFunc 
 //   *forming and writing the body over the wire
 func UpdateHandler(updater Updater) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		inf, userErr, sysErr, errCode := NewInfo(r, nil, nil)
-		if userErr != nil || sysErr != nil {
-			HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+		inf, errs := NewInfo(r, nil, nil)
+		if errs.Occurred() {
+			inf.HandleErrs(w, r, errs)
 			return
 		}
 		defer inf.Close()
@@ -299,7 +305,7 @@ func UpdateHandler(updater Updater) http.HandlerFunc {
 			}
 		}
 
-		userErr, sysErr, errCode = obj.Update()
+		userErr, sysErr, errCode := obj.Update()
 		if userErr != nil || sysErr != nil {
 			HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
 			return
@@ -325,9 +331,9 @@ func UpdateHandler(updater Updater) http.HandlerFunc {
 //   *forming and writing the body over the wire
 func DeleteHandler(deleter Deleter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		inf, userErr, sysErr, errCode := NewInfo(r, nil, nil)
-		if userErr != nil || sysErr != nil {
-			HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+		inf, errs := NewInfo(r, nil, nil)
+		if errs.Occurred() {
+			inf.HandleErrs(w, r, errs)
 			return
 		}
 		defer inf.Close()
@@ -431,9 +437,9 @@ func DeleteHandler(deleter Deleter) http.HandlerFunc {
 //   *forming and writing the body over the wire
 func DeprecatedDeleteHandler(deleter Deleter, alternative *string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		inf, userErr, sysErr, errCode := NewInfo(r, nil, nil)
-		if userErr != nil || sysErr != nil {
-			HandleDeprecatedErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr, alternative)
+		inf, errs := NewInfo(r, nil, nil)
+		if errs.Occurred() {
+			HandleDeprecatedErr(w, r, inf.Tx.Tx, errs.Code, errs.UserError, errs.SystemError, alternative)
 			return
 		}
 		defer inf.Close()
@@ -541,9 +547,9 @@ func DeprecatedDeleteHandler(deleter Deleter, alternative *string) http.HandlerF
 //   *forming and writing the body over the wire
 func CreateHandler(creator Creator) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		inf, userErr, sysErr, errCode := NewInfo(r, nil, nil)
-		if userErr != nil || sysErr != nil {
-			HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+		inf, errs := NewInfo(r, nil, nil)
+		if errs.Occurred() {
+			inf.HandleErrs(w, r, errs)
 			return
 		}
 		defer inf.Close()
@@ -591,7 +597,7 @@ func CreateHandler(creator Creator) http.HandlerFunc {
 					}
 				}
 
-				userErr, sysErr, errCode = objElem.Create()
+				userErr, sysErr, errCode := objElem.Create()
 				if userErr != nil || sysErr != nil {
 					HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
 					return
@@ -643,7 +649,7 @@ func CreateHandler(creator Creator) http.HandlerFunc {
 				}
 			}
 
-			userErr, sysErr, errCode = obj.Create()
+			userErr, sysErr, errCode := obj.Create()
 			if userErr != nil || sysErr != nil {
 				HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
 				return

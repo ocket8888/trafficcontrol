@@ -58,9 +58,9 @@ type ExpirationSummary struct {
 const emailTemplateFile = "/opt/traffic_ops/app/templates/send_mail/autorenewcerts_mail.html"
 
 func RenewCertificates(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	inf, errs := api.NewInfo(r, nil, nil)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	defer inf.Close()

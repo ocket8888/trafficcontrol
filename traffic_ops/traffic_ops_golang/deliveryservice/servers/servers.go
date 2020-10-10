@@ -117,9 +117,9 @@ func ReadDSSHandler(w http.ResponseWriter, r *http.Request) {
 	if cfg != nil {
 		useIMS = cfg.UseIMS
 	}
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, []string{"limit", "page"})
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	inf, errs := api.NewInfo(r, nil, []string{"limit", "page"})
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	defer inf.Close()
@@ -143,11 +143,11 @@ func ReadDSSHandler(w http.ResponseWriter, r *http.Request) {
 	api.WriteRespRaw(w, r, results)
 }
 
-// ReadDSSHandler list all of the Deliveryservice Servers in response to requests to api/1.1/deliveryserviceserver$
+// ReadDSSHandlerV14 list all of the Deliveryservice Servers in response to requests to api/1.4/deliveryserviceserver.
 func ReadDSSHandlerV14(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, []string{"limit", "page"})
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	inf, errs := api.NewInfo(r, nil, []string{"limit", "page"})
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	defer inf.Close()
@@ -339,9 +339,9 @@ type DSServerIds struct {
 type TODSServerIds DSServerIds
 
 func GetReplaceHandler(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, []string{"limit", "page"})
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	inf, errs := api.NewInfo(r, nil, []string{"limit", "page"})
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	defer inf.Close()
@@ -385,7 +385,7 @@ func GetReplaceHandler(w http.ResponseWriter, r *http.Request) {
 		api.HandleErr(w, r, inf.Tx.Tx, http.StatusInternalServerError, err, nil)
 		return
 	}
-	userErr = ValidateDSSAssignments(ds, serverNamesCdnIdAndTypes)
+	userErr := ValidateDSSAssignments(ds, serverNamesCdnIdAndTypes)
 	if userErr != nil {
 		api.HandleErr(w, r, inf.Tx.Tx, http.StatusBadRequest, userErr, nil)
 		return
@@ -428,9 +428,9 @@ type TODeliveryServiceServers tc.DeliveryServiceServers
 
 // GetCreateHandler assigns an existing Server to and existing Deliveryservice in response to api/1.1/deliveryservices/{xml_id}/servers
 func GetCreateHandler(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"xml_id"}, nil)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	inf, errs := api.NewInfo(r, []string{"xml_id"}, nil)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	defer inf.Close()
@@ -466,7 +466,7 @@ func GetCreateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userErr = ValidateDSSAssignments(ds, serverNamesCdnIdAndTypes)
+	userErr := ValidateDSSAssignments(ds, serverNamesCdnIdAndTypes)
 	if userErr != nil {
 		api.HandleErr(w, r, inf.Tx.Tx, http.StatusBadRequest, userErr, nil)
 		return
@@ -568,9 +568,9 @@ func GetReadUnassigned(w http.ResponseWriter, r *http.Request) {
 }
 
 func getRead(w http.ResponseWriter, r *http.Request, unassigned bool, alerts tc.Alerts) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"id"}, []string{"id"})
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	inf, errs := api.NewInfo(r, []string{"id"}, []string{"id"})
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	defer inf.Close()

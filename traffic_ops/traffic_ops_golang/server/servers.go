@@ -26,12 +26,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/topology"
 	"net"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/topology"
 
 	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-rfc"
@@ -625,10 +626,10 @@ and p.id = $1
 
 func Read(w http.ResponseWriter, r *http.Request) {
 	var maxTime *time.Time
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
+	inf, errs := api.NewInfo(r, nil, nil)
 	tx := inf.Tx.Tx
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	defer inf.Close()
@@ -650,7 +651,7 @@ func Read(w http.ResponseWriter, r *http.Request) {
 		log.Warnf("Couldn't get config %v", e)
 	}
 
-	servers, serverCount, userErr, sysErr, errCode, maxTime = getServers(r.Header, inf.Params, inf.Tx, inf.User, useIMS, *version)
+	servers, serverCount, userErr, sysErr, errCode, maxTime := getServers(r.Header, inf.Params, inf.Tx, inf.User, useIMS, *version)
 	if maxTime != nil && api.SetLastModifiedHeader(r, useIMS) {
 		// RFC1123
 		date := maxTime.Format("Mon, 02 Jan 2006 15:04:05 MST")
@@ -699,10 +700,10 @@ func Read(w http.ResponseWriter, r *http.Request) {
 
 func ReadID(w http.ResponseWriter, r *http.Request) {
 	alternative := "GET /servers with query parameter id"
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, []string{"id"})
+	inf, errs := api.NewInfo(r, nil, []string{"id"})
 	tx := inf.Tx.Tx
-	if userErr != nil || sysErr != nil {
-		api.HandleDeprecatedErr(w, r, tx, errCode, userErr, sysErr, &alternative)
+	if errs.Occurred() {
+		api.HandleErrsOptionalDeprecation(w, r, tx, errs, true, &alternative)
 		return
 	}
 	defer inf.Close()
@@ -722,7 +723,11 @@ func ReadID(w http.ResponseWriter, r *http.Request) {
 	} else {
 		log.Warnf("Couldn't get config %v", e)
 	}
-	servers, _, userErr, sysErr, errCode, _ = getServers(r.Header, inf.Params, inf.Tx, inf.User, useIMS, *version)
+	servers, _, userErr, sysErr, errCode, _ := getServers(r.Header, inf.Params, inf.Tx, inf.User, useIMS, *version)
+	if userErr != nil || sysErr != nil {
+		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+		return
+	}
 	if len(servers) > 1 {
 		api.HandleDeprecatedErr(w, r, tx, http.StatusInternalServerError, nil, fmt.Errorf("ID '%d' matched more than one server (%d total)", inf.IntParams["id"], len(servers)), &alternative)
 		return
@@ -1169,10 +1174,9 @@ func deleteInterfaces(id int, tx *sql.Tx) (error, error, int) {
 }
 
 func Update(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"id"}, []string{"id"})
-	tx := inf.Tx.Tx
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	inf, errs := api.NewInfo(r, []string{"id"}, []string{"id"})
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	defer inf.Close()
@@ -1184,10 +1188,12 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	tx := inf.Tx.Tx
 	//Get original xmppid
 	origSer, _, userErr, sysErr, _, _ := getServers(r.Header, inf.Params, inf.Tx, inf.User, false, *version)
 	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+		// TODO: I believe this is returning the wrong error code
+		api.HandleErr(w, r, tx, errs.Code, userErr, sysErr)
 		return
 	}
 	if len(origSer) == 0 {
@@ -1292,7 +1298,8 @@ func Update(w http.ResponseWriter, r *http.Request) {
 	server.ID = new(int)
 	*server.ID = inf.IntParams["id"]
 
-	if userErr, sysErr, errCode = checkTypeChangeSafety(server.CommonServerProperties, inf.Tx); userErr != nil || sysErr != nil {
+	userErr, sysErr, errCode := checkTypeChangeSafety(server.CommonServerProperties, inf.Tx)
+	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
 		return
 	}
@@ -1562,9 +1569,9 @@ func createV3(inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
 }
 
 func Create(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	inf, errs := api.NewInfo(r, nil, nil)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	defer inf.Close()
@@ -1580,10 +1587,9 @@ func Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func Delete(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"id"}, []string{"id"})
-	tx := inf.Tx.Tx
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	inf, errs := api.NewInfo(r, []string{"id"}, []string{"id"})
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	defer inf.Close()
@@ -1596,9 +1602,10 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := inf.IntParams["id"]
+	tx := inf.Tx.Tx
 
 	var servers []tc.ServerNullable
-	servers, _, userErr, sysErr, errCode, _ = getServers(r.Header, map[string]string{"id": inf.Params["id"]}, inf.Tx, inf.User, false, *version)
+	servers, _, userErr, sysErr, errCode, _ := getServers(r.Header, map[string]string{"id": inf.Params["id"]}, inf.Tx, inf.User, false, *version)
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
 		return

@@ -59,9 +59,9 @@ WHERE deliveryservice.id = ANY($1)
 `
 
 func AssignDeliveryServicesToServerHandler(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"id"}, []string{"id"})
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	inf, errs := api.NewInfo(r, []string{"id"}, []string{"id"})
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	defer inf.Close()
@@ -101,14 +101,14 @@ func AssignDeliveryServicesToServerHandler(w http.ResponseWriter, r *http.Reques
 	// We already know the CDN exists because that's part of the serverInfo query above
 	serverCDN, _, err := dbhelpers.GetCDNNameFromID(inf.Tx.Tx, int64(serverInfo.CDNID))
 	if err != nil {
-		sysErr = fmt.Errorf("Failed to get CDN name from ID: %v", err)
-		errCode = http.StatusInternalServerError
+		sysErr := fmt.Errorf("Failed to get CDN name from ID: %v", err)
+		errCode := http.StatusInternalServerError
 		api.HandleErr(w, r, inf.Tx.Tx, errCode, nil, sysErr)
 		return
 	}
 
 	if len(dsList) > 0 {
-		if errCode, userErr, sysErr = checkTenancyAndCDN(inf.Tx.Tx, string(serverCDN), server, serverInfo, dsList, inf.User); userErr != nil || sysErr != nil {
+		if errCode, userErr, sysErr := checkTenancyAndCDN(inf.Tx.Tx, string(serverCDN), server, serverInfo, dsList, inf.User); userErr != nil || sysErr != nil {
 			api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
 			return
 		}

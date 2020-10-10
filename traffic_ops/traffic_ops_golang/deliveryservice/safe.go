@@ -22,8 +22,9 @@ package deliveryservice
 import (
 	"database/sql"
 	"fmt"
-	"github.com/apache/trafficcontrol/lib/go-log"
 	"net/http"
+
+	"github.com/apache/trafficcontrol/lib/go-log"
 
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
@@ -44,17 +45,17 @@ RETURNING id
 //
 // The only fields which are "safe" to modify are the displayName, infoURL, longDesc, and longDesc1.
 func UpdateSafe(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"id"}, []string{"id"})
+	inf, errs := api.NewInfo(r, []string{"id"}, []string{"id"})
 	tx := inf.Tx.Tx
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	defer inf.Close()
 
 	dsID := inf.IntParams["id"]
 
-	userErr, sysErr, errCode = tenant.CheckID(tx, inf.User, dsID)
+	userErr, sysErr, errCode := tenant.CheckID(tx, inf.User, dsID)
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
 		return

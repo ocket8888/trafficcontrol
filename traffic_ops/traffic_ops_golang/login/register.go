@@ -151,21 +151,24 @@ func createRegistrationMsg(addr rfc.EmailAddress, t string, tx *sql.Tx, c config
 
 // RegisterUser is the handler for /users/register. It sends registration through Email.
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
-	var tx = inf.Tx.Tx
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	inf, errs := api.NewInfo(r, nil, nil)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	defer inf.Close()
 	defer r.Body.Close()
 
+	var tx = inf.Tx.Tx
 	var req tc.UserRegistrationRequest
-	if userErr = api.Parse(r.Body, tx, &req); userErr != nil {
+	userErr := api.Parse(r.Body, tx, &req)
+	if userErr != nil {
 		api.HandleErr(w, r, tx, http.StatusBadRequest, userErr, nil)
 		return
 	}
 
+	var sysErr error
+	var errCode int
 	if ok, err := inf.IsResourceAuthorizedToCurrentUser(int(req.TenantID)); err != nil {
 		sysErr = fmt.Errorf("Checking tenancy permissions of current user (%+v) on tenant #%d", inf.User, req.TenantID)
 		errCode = http.StatusInternalServerError
