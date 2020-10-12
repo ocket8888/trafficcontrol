@@ -277,31 +277,42 @@ func (ssc *TOServerServerCapability) buildDSReqCapError(dsIDs []int64, accessibl
 	return fmt.Errorf("cannot remove the capability %v from the server %v as the server is assigned to %v that require it", *ssc.ServerCapability, *ssc.ServerID, dsStr), nil, http.StatusBadRequest
 }
 
-func (ssc *TOServerServerCapability) Create() (error, error, int) {
+func (ssc *TOServerServerCapability) Create() api.Errors {
 	tx := ssc.APIInfo().Tx
 
 	// Check existence prior to checking type
 	_, exists, err := dbhelpers.GetServerNameFromID(tx.Tx, *ssc.ServerID)
 	if err != nil {
-		return nil, err, http.StatusInternalServerError
+		return api.Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: err,
+		}
 	}
 	if !exists {
-		return fmt.Errorf("server %v does not exist", *ssc.ServerID), nil, http.StatusNotFound
+		return api.Errors{
+			Code:      http.StatusNotFound,
+			UserError: fmt.Errorf("server %v does not exist", *ssc.ServerID),
+		}
 	}
 
 	// Ensure type is correct
 	correctType := true
 	if err := tx.Tx.QueryRow(scCheckServerTypeQuery(), ssc.ServerID).Scan(&correctType); err != nil {
-		return nil, fmt.Errorf("checking server type: %v", err), http.StatusInternalServerError
+		return api.Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: fmt.Errorf("checking server type: %v", err),
+		}
 	}
 	if !correctType {
-		return fmt.Errorf("server %v has an incorrect server type. Server capabilities can only be assigned to EDGE or MID servers", *ssc.ServerID), nil, http.StatusBadRequest
+		return api.Errors{
+			Code:      http.StatusBadRequest,
+			UserError: fmt.Errorf("server %v has an incorrect server type. Server capabilities can only be assigned to EDGE or MID servers", *ssc.ServerID),
+		}
 	}
 
 	resultRows, err := tx.NamedQuery(scInsertQuery(), ssc)
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 	defer resultRows.Close()
 
@@ -309,16 +320,25 @@ func (ssc *TOServerServerCapability) Create() (error, error, int) {
 	for resultRows.Next() {
 		rowsAffected++
 		if err := resultRows.StructScan(&ssc); err != nil {
-			return nil, errors.New(ssc.GetType() + " create scanning: " + err.Error()), http.StatusInternalServerError
+			return api.Errors{
+				Code:        http.StatusInternalServerError,
+				SystemError: fmt.Errorf("%s create scanning: %v", ssc.GetType(), err),
+			}
 		}
 	}
+
+	errs := api.Errors{
+		Code: http.StatusInternalServerError,
+	}
 	if rowsAffected == 0 {
-		return nil, errors.New(ssc.GetType() + " create: no " + ssc.GetType() + " was inserted, no rows was returned"), http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("%s create: no %s was inserted, no rows was returned", ssc.GetType(), ssc.GetType())
+		return errs
 	} else if rowsAffected > 1 {
-		return nil, errors.New("too many rows returned from " + ssc.GetType() + " insert"), http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("too many rows returned from %s insert", ssc.GetType())
+		return errs
 	}
 
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
 func scSelectQuery() string {

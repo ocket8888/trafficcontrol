@@ -254,34 +254,55 @@ LEFT JOIN tenant t ON o.tenant = t.id`
 	return selectStmt
 }
 
-func checkTenancy(originTenantID, deliveryserviceID *int, tx *sqlx.Tx, user *auth.CurrentUser) (error, error, int) {
+func checkTenancy(originTenantID, deliveryserviceID *int, tx *sqlx.Tx, user *auth.CurrentUser) api.Errors {
 	if originTenantID == nil {
-		return tc.NilTenantError, nil, http.StatusForbidden
+		return api.Errors{
+			Code:      http.StatusForbidden,
+			UserError: tc.NilTenantError,
+		}
 	}
 	authorized, err := tenant.IsResourceAuthorizedToUserTx(*originTenantID, user, tx.Tx)
 	if err != nil {
-		return nil, err, http.StatusInternalServerError
+		return api.Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: err,
+		}
 	}
 	if !authorized {
-		return tc.TenantUserNotAuthError, nil, http.StatusForbidden
+		return api.Errors{
+			Code:      http.StatusForbidden,
+			UserError: tc.TenantUserNotAuthError,
+		}
 	}
 
 	var deliveryserviceTenantID int
 	if err := tx.QueryRow(`SELECT tenant_id FROM deliveryservice where id = $1`, *deliveryserviceID).Scan(&deliveryserviceTenantID); err != nil {
+		errs := api.Errors{
+			Code: http.StatusBadRequest,
+		}
 		if err == sql.ErrNoRows {
-			return errors.New("checking tenancy: requested delivery service does not exist"), nil, http.StatusBadRequest
+			errs.SetUserError("checking tenancy: requested delivery service does not exist")
+			return errs
 		}
 		log.Errorf("could not get tenant_id from deliveryservice %d: %++v\n", *deliveryserviceID, err)
-		return err, nil, http.StatusBadRequest
+		// TODO: don't expose DB errors to the user
+		errs.UserError = err
+		return errs
 	}
 	authorized, err = tenant.IsResourceAuthorizedToUserTx(deliveryserviceTenantID, user, tx.Tx)
 	if err != nil {
-		return err, nil, http.StatusBadRequest
+		return api.Errors{
+			Code:      http.StatusBadRequest,
+			UserError: err,
+		}
 	}
 	if !authorized {
-		return tc.TenantDSUserNotAuthError, nil, http.StatusForbidden
+		return api.Errors{
+			Code:      http.StatusForbidden,
+			UserError: tc.TenantDSUserNotAuthError,
+		}
 	}
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
 //The TOOrigin implementation of the Updater interface
@@ -291,9 +312,9 @@ func checkTenancy(originTenantID, deliveryserviceID *int, tx *sqlx.Tx, user *aut
 //generic error message returned
 func (origin *TOOrigin) Update() (error, error, int) {
 	// TODO: enhance tenancy framework to handle this in isTenantAuthorized()
-	userErr, sysErr, errCode := checkTenancy(origin.TenantID, origin.DeliveryServiceID, origin.ReqInfo.Tx, origin.ReqInfo.User)
-	if userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	errs := checkTenancy(origin.TenantID, origin.DeliveryServiceID, origin.ReqInfo.Tx, origin.ReqInfo.User)
+	if errs.Occurred() {
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 
 	isPrimary := false
@@ -360,38 +381,44 @@ WHERE id=:id RETURNING last_updated`
 //generic error message returned
 //The insert sql returns the id and lastUpdated values of the newly inserted origin and have
 //to be added to the struct
-func (origin *TOOrigin) Create() (error, error, int) {
+func (origin *TOOrigin) Create() api.Errors {
 	// TODO: enhance tenancy framework to handle this in isTenantAuthorized()
-	userErr, sysErr, errCode := checkTenancy(origin.TenantID, origin.DeliveryServiceID, origin.ReqInfo.Tx, origin.ReqInfo.User)
-	if userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	errs := checkTenancy(origin.TenantID, origin.DeliveryServiceID, origin.ReqInfo.Tx, origin.ReqInfo.User)
+	if errs.Occurred() {
+		return errs
 	}
 
 	resultRows, err := origin.ReqInfo.Tx.NamedQuery(insertQuery(), origin)
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 	defer resultRows.Close()
 
 	var id int
 	var lastUpdated tc.TimeNoMod
+	errs = api.Errors{
+		Code: http.StatusInternalServerError,
+	}
 	rowsAffected := 0
 	for resultRows.Next() {
 		rowsAffected++
 		if err := resultRows.Scan(&id, &lastUpdated); err != nil {
-			return nil, errors.New("origin create: scanning: " + err.Error()), http.StatusInternalServerError
+			errs.SystemError = errors.New("origin create: scanning: " + err.Error())
+			return errs
 		}
 	}
+
 	if rowsAffected == 0 {
-		return nil, errors.New("origin create: no rows returned"), http.StatusInternalServerError
+		errs.SetSystemError("origin create: no rows returned")
+		return errs
 	} else if rowsAffected > 1 {
-		return nil, errors.New("origin create: multiple rows returned"), http.StatusInternalServerError
+		errs.SetSystemError("origin create: multiple rows returned")
+		return errs
 	}
 	origin.SetKeys(map[string]interface{}{"id": id})
 	origin.LastUpdated = &lastUpdated
 
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
 func insertQuery() string {

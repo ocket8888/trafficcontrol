@@ -127,7 +127,7 @@ func (cdn TOCDN) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (cdn *TOCDN) Create() (error, error, int) {
+func (cdn *TOCDN) Create() api.Errors {
 	*cdn.DomainName = strings.ToLower(*cdn.DomainName)
 	return api.GenericCreate(cdn)
 }

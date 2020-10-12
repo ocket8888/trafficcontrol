@@ -34,7 +34,7 @@ import (
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
 	"github.com/asaskevich/govalidator"
-	"github.com/go-ozzo/ozzo-validation"
+	validation "github.com/go-ozzo/ozzo-validation"
 )
 
 // we need a type alias to define functions on
@@ -127,7 +127,7 @@ func (fed *TOCDNFederation) Validate() error {
 // fedAPIInfo.Params["name"] is not used on creation, rather the cdn name
 // is connected when the federations/:id/deliveryservice links a federation
 // Note: cdns and deliveryservies have a 1-1 relationship
-func (fed *TOCDNFederation) Create() (error, error, int) {
+func (fed *TOCDNFederation) Create() api.Errors {
 	// Deliveryservice IDs should not be included on create.
 	if fed.DeliveryServiceIDs != nil {
 		fed.DsId = nil

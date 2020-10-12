@@ -20,15 +20,16 @@ package api
  */
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
-	"net/http"
-	"time"
 )
 
 type CRUDer interface {
-	Create() (error, error, int)
+	Create() Errors
 	Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time)
 	Update() (error, error, int)
 	Delete() (error, error, int)
@@ -61,7 +62,7 @@ type Identifier interface {
 
 type Creator interface {
 	// Create returns any user error, any system error, and the HTTP error code to be returned if there was an error.
-	Create() (error, error, int)
+	Create() Errors
 	APIInfoer
 	Identifier
 	Validator

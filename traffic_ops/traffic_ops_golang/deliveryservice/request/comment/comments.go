@@ -102,7 +102,7 @@ func (comment TODeliveryServiceRequestComment) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (comment *TODeliveryServiceRequestComment) Create() (error, error, int) {
+func (comment *TODeliveryServiceRequestComment) Create() api.Errors {
 	au := tc.IDNoMod(comment.ReqInfo.User.ID)
 	comment.AuthorID = &au
 	return api.GenericCreate(comment)

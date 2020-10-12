@@ -119,30 +119,36 @@ func (role TORole) Validate() error {
 	return util.JoinErrs(errsToReturn)
 }
 
-func (role *TORole) Create() (error, error, int) {
+func (role *TORole) Create() api.Errors {
 	if *role.PrivLevel > role.ReqInfo.User.PrivLevel {
-		return errors.New("can not create a role with a higher priv level than your own"), nil, http.StatusBadRequest
+		return api.Errors{
+			Code:      http.StatusBadRequest,
+			UserError: errors.New("can not create a role with a higher priv level than your own"),
+		}
 	}
 
-	userErr, sysErr, errCode := api.GenericCreate(role)
-	if userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	errs := api.GenericCreate(role)
+	if errs.Occurred() {
+		return errs
 	}
 
 	//after we have role ID we can associate the capabilities:
 	if role.Capabilities != nil && len(*role.Capabilities) > 0 {
-		userErr, sysErr, errCode = role.createRoleCapabilityAssociations(role.ReqInfo.Tx)
-		if userErr != nil || sysErr != nil {
-			return userErr, sysErr, errCode
+		errs = role.createRoleCapabilityAssociations(role.ReqInfo.Tx)
+		if errs.Occurred() {
+			return errs
 		}
 	}
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
-func (role *TORole) createRoleCapabilityAssociations(tx *sqlx.Tx) (error, error, int) {
+func (role *TORole) createRoleCapabilityAssociations(tx *sqlx.Tx) api.Errors {
 	result, err := tx.Exec(associateCapabilities(), role.ID, pq.Array(role.Capabilities))
 	if err != nil {
-		return nil, errors.New("creating role capabilities: " + err.Error()), http.StatusInternalServerError
+		return api.Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: fmt.Errorf("creating role capabilities: %v", err),
+		}
 	}
 
 	if rows, err := result.RowsAffected(); err != nil {
@@ -150,7 +156,7 @@ func (role *TORole) createRoleCapabilityAssociations(tx *sqlx.Tx) (error, error,
 	} else if expected := len(*role.Capabilities); int(rows) != expected {
 		log.Errorf("wrong number of role_capability rows created: %d expected: %d", rows, expected)
 	}
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
 func (role *TORole) deleteRoleCapabilityAssociations(tx *sqlx.Tx) (error, error, int) {
@@ -207,7 +213,8 @@ func (role *TORole) Update() (error, error, int) {
 		if userErr != nil || sysErr != nil {
 			return userErr, sysErr, errCode
 		}
-		return role.createRoleCapabilityAssociations(role.ReqInfo.Tx)
+		errs := role.createRoleCapabilityAssociations(role.ReqInfo.Tx)
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 	return nil, nil, http.StatusOK
 }

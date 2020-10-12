@@ -171,12 +171,12 @@ func TestDeleteInvalidType(t *testing.T) {
 func TestCreateInvalidType(t *testing.T) {
 	invalidCreateType := createDummyType("test")
 
-	err, _, statusCode := invalidCreateType.Create()
-	if err == nil {
-		t.Fatalf("expected create type to have an error")
+	errs := invalidCreateType.Create()
+	if !errs.Occurred() {
+		t.Error("expected create type to have an error")
 	}
-	if statusCode != http.StatusBadRequest {
-		t.Fatalf("expected create type to return a %v error", http.StatusBadRequest)
+	if errs.Code != http.StatusBadRequest {
+		t.Errorf("expected create type to return a %v error", http.StatusBadRequest)
 	}
 }
 

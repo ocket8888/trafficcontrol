@@ -109,7 +109,7 @@ JOIN division d ON r.division = d.id ` + where + orderBy + pagination +
 }
 
 func (rg *TORegion) Update() (error, error, int) { return api.GenericUpdate(rg) }
-func (rg *TORegion) Create() (error, error, int) { return api.GenericCreate(rg) }
+func (rg *TORegion) Create() api.Errors          { return api.GenericCreate(rg) }
 func (rg *TORegion) Delete() (error, error, int) { return api.GenericDelete(rg) }
 
 // OptionsDelete deletes a resource identified either as a route parameter or as a query string parameter.

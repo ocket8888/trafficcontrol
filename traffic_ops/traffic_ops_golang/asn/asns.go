@@ -99,10 +99,13 @@ func (asn TOASNV11) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (as *TOASNV11) Create() (error, error, int) {
+func (as *TOASNV11) Create() api.Errors {
 	err := as.ASNExists(true)
 	if err != nil {
-		return err, nil, http.StatusBadRequest
+		return api.Errors{
+			Code:      http.StatusBadRequest,
+			UserError: err,
+		}
 	}
 	return api.GenericCreate(as)
 }

@@ -21,11 +21,12 @@ package parameter
 
 import (
 	"errors"
-	"github.com/apache/trafficcontrol/lib/go-log"
-	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
@@ -126,7 +127,7 @@ func (param TOParameter) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (pa *TOParameter) Create() (error, error, int) {
+func (pa *TOParameter) Create() api.Errors {
 	if pa.Value == nil {
 		pa.Value = util.StrPtr("")
 	}

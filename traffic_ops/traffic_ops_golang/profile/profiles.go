@@ -21,10 +21,11 @@ package profile
 
 import (
 	"errors"
-	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
 	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-tc"
@@ -244,7 +245,7 @@ WHERE pp.profile = :profile_id`
 }
 
 func (pr *TOProfile) Update() (error, error, int) { return api.GenericUpdate(pr) }
-func (pr *TOProfile) Create() (error, error, int) { return api.GenericCreate(pr) }
+func (pr *TOProfile) Create() api.Errors          { return api.GenericCreate(pr) }
 func (pr *TOProfile) Delete() (error, error, int) { return api.GenericDelete(pr) }
 
 func updateQuery() string {

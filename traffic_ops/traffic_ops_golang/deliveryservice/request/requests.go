@@ -236,30 +236,43 @@ func (req *TODeliveryServiceRequest) Update() (error, error, int) {
 //generic error message returned
 //The insert sql returns the id and lastUpdated values of the newly inserted request and have
 //to be added to the struct
-func (req *TODeliveryServiceRequest) Create() (error, error, int) {
+func (req *TODeliveryServiceRequest) Create() api.Errors {
+	errs := api.NewErrors()
+
 	// TODO move to Validate()
 	if req.Status == nil {
-		return errors.New("missing status"), nil, http.StatusBadRequest
+		errs.Code = http.StatusBadRequest
+		errs.SetUserError("missing status")
+		return errs
 	}
 	if *req.Status != tc.RequestStatusDraft && *req.Status != tc.RequestStatusSubmitted {
-		return fmt.Errorf("invalid initial request status '%v'.  Must be '%v' or '%v'",
-			*req.Status, tc.RequestStatusDraft, tc.RequestStatusSubmitted), nil, http.StatusBadRequest
+		errs.Code = http.StatusBadRequest
+		errs.UserError = fmt.Errorf("invalid initial request status '%v'.  Must be '%v' or '%v'", *req.Status, tc.RequestStatusDraft, tc.RequestStatusSubmitted)
+		return errs
 	}
 	// first, ensure there's not an active request with this XMLID
 	ds := req.DeliveryService
 	if ds == nil {
-		return errors.New("no delivery service associated with this request"), nil, http.StatusBadRequest
+		errs.Code = http.StatusBadRequest
+		errs.SetUserError("no delivery service associated with this request")
+		return errs
 	}
 	if ds.XMLID == nil {
-		return errors.New("no xmlId associated with this request"), nil, http.StatusBadRequest
+		errs.Code = http.StatusBadRequest
+		errs.SetUserError("no xmlId associated with this request")
+		return errs
 	}
 	XMLID := *ds.XMLID
 	active, err := isActiveRequest(req.APIInfo().Tx, XMLID)
 	if err != nil {
-		return errors.New("checking request active: " + err.Error()), nil, http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("checking request active: %v", err)
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 	if active {
-		return errors.New(`An active request exists for delivery service '` + XMLID + `'`), nil, http.StatusBadRequest
+		errs.Code = http.StatusBadRequest
+		errs.SetUserError("An active request exists for delivery service '" + XMLID + "'")
+		return errs
 	}
 
 	userID := tc.IDNoMod(req.APIInfo().User.ID)

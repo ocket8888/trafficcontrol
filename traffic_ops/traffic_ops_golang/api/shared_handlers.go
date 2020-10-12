@@ -597,9 +597,9 @@ func CreateHandler(creator Creator) http.HandlerFunc {
 					}
 				}
 
-				userErr, sysErr, errCode := objElem.Create()
-				if userErr != nil || sysErr != nil {
-					HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+				errs := objElem.Create()
+				if errs.Occurred() {
+					HandleErrs(w, r, inf.Tx.Tx, errs)
 					return
 				}
 
@@ -649,9 +649,9 @@ func CreateHandler(creator Creator) http.HandlerFunc {
 				}
 			}
 
-			userErr, sysErr, errCode := obj.Create()
-			if userErr != nil || sysErr != nil {
-				HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+			errs := obj.Create()
+			if errs.Occurred() {
+				HandleErrs(w, r, inf.Tx.Tx, errs)
 				return
 			}
 

@@ -203,7 +203,7 @@ func (cg TOCacheGroup) Validate() error {
 //The TOCacheGroup implementation of the Creator interface
 //The insert sql returns the id and lastUpdated values of the newly inserted cachegroup and have
 //to be added to the struct
-func (cg *TOCacheGroup) Create() (error, error, int) {
+func (cg *TOCacheGroup) Create() api.Errors {
 
 	if cg.LocalizationMethods == nil {
 		cg.LocalizationMethods = &[]tc.LocalizationMethod{}
@@ -233,13 +233,15 @@ func (cg *TOCacheGroup) Create() (error, error, int) {
 		&cg.SecondaryParentName,
 	)
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 
 	coordinateID, err := cg.createCoordinate()
 	if err != nil {
-		return nil, errors.New("cachegroup create: creating coord:" + err.Error()), http.StatusInternalServerError
+		return api.Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: fmt.Errorf("cachegroup create: creating coord: %v", err),
+		}
 	}
 
 	err = cg.ReqInfo.Tx.Tx.QueryRow(
@@ -248,18 +250,26 @@ func (cg *TOCacheGroup) Create() (error, error, int) {
 		cg.ID,
 	).Scan(&cg.LastUpdated)
 	if err != nil {
-		return nil, fmt.Errorf("followup update during cachegroup create: %v", err), http.StatusInternalServerError
+		return api.Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: fmt.Errorf("followup update during cachegroup create: %v", err),
+		}
 	}
 
+	errs := api.Errors{
+		Code: http.StatusInternalServerError,
+	}
 	if err = cg.createLocalizationMethods(); err != nil {
-		return nil, errors.New("creating cachegroup: creating localization methods: " + err.Error()), http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("creating cachegroup: creating localization methods: %v", err)
+		return errs
 	}
 
 	if err = cg.createCacheGroupFallbacks(); err != nil {
-		return nil, errors.New("creating cachegroup: creating cache group fallbacks: " + err.Error()), http.StatusInternalServerError
+		errs.SystemError = errors.New("creating cachegroup: creating cache group fallbacks: " + err.Error())
+		return errs
 	}
 
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
 func (cg *TOCacheGroup) createLocalizationMethods() error {

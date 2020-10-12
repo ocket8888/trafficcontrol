@@ -321,23 +321,22 @@ func (topology *TOTopology) GetAuditName() string {
 }
 
 // Create is a requirement of the api.Creator interface.
-func (topology *TOTopology) Create() (error, error, int) {
+func (topology *TOTopology) Create() api.Errors {
 	tx := topology.APIInfo().Tx.Tx
 	err := tx.QueryRow(insertQuery(), topology.Name, topology.Description).Scan(&topology.Name, &topology.Description, &topology.LastUpdated)
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 
-	if userErr, sysErr, errCode := topology.addNodes(); userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	if errs := topology.addNodes(); errs.Occurred() {
+		return errs
 	}
 
-	if userErr, sysErr, errCode := topology.addParents(); userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	if errs := topology.addParents(); errs.Occurred() {
+		return errs
 	}
 
-	return nil, nil, 0
+	return api.NewErrors()
 }
 
 // Read is a requirement of the api.Reader interface and is called by api.ReadHandler().
@@ -431,7 +430,7 @@ func (topology *TOTopology) removeNodes(cachegroups *[]string) error {
 	return nil
 }
 
-func (topology *TOTopology) addNodes() (error, error, int) {
+func (topology *TOTopology) addNodes() api.Errors {
 	var cachegroupsToInsert []string
 	var indices = make([]int, 0)
 	for index, node := range topology.Nodes {
@@ -441,25 +440,27 @@ func (topology *TOTopology) addNodes() (error, error, int) {
 		}
 	}
 	if len(cachegroupsToInsert) == 0 {
-		return nil, nil, http.StatusOK
+		return api.NewErrors()
 	}
 	rows, err := topology.ReqInfo.Tx.Query(nodeInsertQuery(), topology.Name, pq.Array(cachegroupsToInsert))
 	if err != nil {
-		return nil, errors.New("error adding nodes: " + err.Error()), http.StatusInternalServerError
+		return api.Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: errors.New("error adding nodes: " + err.Error()),
+		}
 	}
 	defer log.Close(rows, "unable to close DB connection")
 	for _, index := range indices {
 		rows.Next()
 		err = rows.Scan(&topology.Nodes[index].Id, &topology.Name, &topology.Nodes[index].Cachegroup)
 		if err != nil {
-			errs := api.ParseDBError(err)
-			return errs.UserError, errs.SystemError, errs.Code
+			return api.ParseDBError(err)
 		}
 	}
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
-func (topology *TOTopology) addParents() (error, error, int) {
+func (topology *TOTopology) addParents() api.Errors {
 	var (
 		children []int
 		parents  []int
@@ -475,8 +476,7 @@ func (topology *TOTopology) addParents() (error, error, int) {
 	}
 	rows, err := topology.ReqInfo.Tx.Query(nodeParentInsertQuery(), pq.Array(children), pq.Array(parents), pq.Array(ranks))
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 	defer log.Close(rows, "unable to close DB connection")
 	for _, node := range topology.Nodes {
@@ -485,12 +485,11 @@ func (topology *TOTopology) addParents() (error, error, int) {
 			parent := topology.Nodes[node.Parents[rank-1]]
 			err = rows.Scan(&node.Id, &parent.Id, &rank)
 			if err != nil {
-				errs := api.ParseDBError(err)
-				return errs.UserError, errs.SystemError, errs.Code
+				return api.ParseDBError(err)
 			}
 		}
 	}
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
 func (topology *TOTopology) setDescription() (error, error, int) {
@@ -546,11 +545,11 @@ func (topology *TOTopology) Update() (error, error, int) {
 			return nil, err, http.StatusInternalServerError
 		}
 	}
-	if userErr, sysErr, errCode := topology.addNodes(); userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	if errs := topology.addNodes(); errs.Occurred() {
+		return errs.UserError, errs.SystemError, errs.Code
 	}
-	if userErr, sysErr, errCode := topology.addParents(); userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	if errs := topology.addParents(); errs.Occurred() {
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 
 	return nil, nil, http.StatusOK

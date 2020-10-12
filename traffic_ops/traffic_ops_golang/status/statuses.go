@@ -121,7 +121,7 @@ func (st *TOStatus) Read(h http.Header, useIMS bool) ([]interface{}, error, erro
 }
 
 func (st *TOStatus) Update() (error, error, int) { return api.GenericUpdate(st) }
-func (st *TOStatus) Create() (error, error, int) { return api.GenericCreate(st) }
+func (st *TOStatus) Create() api.Errors          { return api.GenericCreate(st) }
 func (st *TOStatus) Delete() (error, error, int) { return api.GenericDelete(st) }
 
 func selectQuery() string {

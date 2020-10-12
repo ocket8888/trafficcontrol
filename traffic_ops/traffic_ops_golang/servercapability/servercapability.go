@@ -20,13 +20,14 @@ package servercapability
  */
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
-	"net/http"
-	"time"
 
 	validation "github.com/go-ozzo/ozzo-validation"
 )
@@ -112,5 +113,5 @@ func (v *TOServerCapability) SelectMaxLastUpdatedQuery(where, orderBy, paginatio
 	select max(l.last_updated) as t from last_deleted l where l.table_name='server_capability') as res`
 }
 
-func (v *TOServerCapability) Create() (error, error, int) { return api.GenericCreateNameBasedID(v) }
+func (v *TOServerCapability) Create() api.Errors          { return api.GenericCreateNameBasedID(v) }
 func (v *TOServerCapability) Delete() (error, error, int) { return api.GenericDelete(v) }

@@ -116,33 +116,38 @@ func (pp *TOProfileParameter) Validate() error {
 //generic error message returned
 //The insert sql returns the profile and lastUpdated values of the newly inserted profileparameter and have
 //to be added to the struct
-func (pp *TOProfileParameter) Create() (error, error, int) {
+func (pp *TOProfileParameter) Create() api.Errors {
 	resultRows, err := pp.APIInfo().Tx.NamedQuery(insertQuery(), pp)
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 	defer resultRows.Close()
 
 	var profile int
 	var parameter int
 	var lastUpdated tc.TimeNoMod
+	errs := api.Errors{
+		Code: http.StatusInternalServerError,
+	}
 	rowsAffected := 0
 	for resultRows.Next() {
 		rowsAffected++
 		if err := resultRows.Scan(&profile, &parameter, &lastUpdated); err != nil {
-			return nil, errors.New("profileparameter create scanning: " + err.Error()), http.StatusInternalServerError
+			errs.SystemError = errors.New("profileparameter create scanning: " + err.Error())
+			return errs
 		}
 	}
 	if rowsAffected == 0 {
-		return nil, errors.New("profileparameter create returned no rows"), http.StatusInternalServerError
+		errs.SetSystemError("profileparameter create returned no rows")
+		return errs
 	}
 	if rowsAffected > 1 {
-		return nil, errors.New("profileparameter create returned multiple rows"), http.StatusInternalServerError
+		errs.SetSystemError("profileparameter create returned multiple rows")
+		return errs
 	}
 
 	pp.SetKeys(map[string]interface{}{ProfileIDQueryParam: profile, ParameterIDQueryParam: parameter})
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
 func insertQuery() string {

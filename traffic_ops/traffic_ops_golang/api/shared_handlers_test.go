@@ -78,8 +78,12 @@ func (v *tester) Validate() error {
 }
 
 //Creator interface functions
-func (i *tester) Create() (error, error, int) {
-	return i.userErr, i.sysErr, i.errCode
+func (i *tester) Create() Errors {
+	return Errors{
+		Code:        i.errCode,
+		SystemError: i.sysErr,
+		UserError:   i.userErr,
+	}
 }
 
 //Reader interface functions

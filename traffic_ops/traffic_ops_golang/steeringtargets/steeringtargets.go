@@ -187,43 +187,57 @@ func selectMaxLastUpdatedQuery(where string) string {
 	select max(last_updated) as t from last_deleted l where l.table_name='steering_target') as res`
 }
 
-func (st *TOSteeringTargetV11) Create() (error, error, int) {
+func (st *TOSteeringTargetV11) Create() api.Errors {
+	errs := api.Errors{
+		Code: http.StatusBadRequest,
+	}
 	dsIDInt, err := strconv.Atoi(st.ReqInfo.Params["deliveryservice"])
 	if err != nil {
-		return errors.New("delivery service ID must be an integer"), nil, http.StatusBadRequest
+		errs.SetUserError("delivery service ID must be an integer")
+		return errs
 	}
 	dsID := uint64(dsIDInt)
 	st.DeliveryServiceID = &dsID
 
 	// target can't be in the Validate func, because it's in the parameters of PUT, not the body (but it is in the body in the POST here).
 	if st.TargetID == nil {
-		return errors.New("missing target"), nil, http.StatusBadRequest
+		errs.SetUserError("missing target")
+		return errs
 	}
 
 	if userErr, sysErr, errCode := tenant.CheckID(st.ReqInfo.Tx.Tx, st.ReqInfo.User, int(*st.DeliveryServiceID)); userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+		return api.Errors{
+			Code:        errCode,
+			SystemError: sysErr,
+			UserError:   userErr,
+		}
 	}
 
 	rows, err := st.ReqInfo.Tx.NamedQuery(insertQuery(), st)
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 	defer rows.Close()
 
+	errs = api.Errors{
+		Code: http.StatusInternalServerError,
+	}
 	rowsAffected := 0
 	for rows.Next() {
 		rowsAffected++
 		if err = rows.StructScan(&st); err != nil {
-			return nil, errors.New("steering target create scanning: " + err.Error()), http.StatusInternalServerError
+			errs.SystemError = errors.New("steering target create scanning: " + err.Error())
+			return errs
 		}
 	}
 	if rowsAffected == 0 {
-		return nil, errors.New("no " + st.GetType() + " was inserted, no id was returned"), http.StatusInternalServerError
+		errs.SystemError = errors.New("no " + st.GetType() + " was inserted, no id was returned")
+		return errs
 	} else if rowsAffected > 1 {
-		return nil, errors.New("too many ids returned from steering target insert"), http.StatusInternalServerError
+		errs.SetSystemError("too many ids returned from steering target insert")
+		return errs
 	}
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
 func (st *TOSteeringTargetV11) Update() (error, error, int) {

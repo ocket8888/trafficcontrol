@@ -98,7 +98,7 @@ func (division TODivision) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (dv *TODivision) Create() (error, error, int) { return api.GenericCreate(dv) }
+func (dv *TODivision) Create() api.Errors { return api.GenericCreate(dv) }
 func (dv *TODivision) Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time) {
 	params := dv.APIInfo().Params
 	// TODO move to router, and do for all endpoints

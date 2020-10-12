@@ -25,6 +25,10 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"net/http"
+	"strconv"
+	"time"
+
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
@@ -34,9 +38,6 @@ import (
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/lib/pq"
-	"net/http"
-	"strconv"
-	"time"
 )
 
 // TOTenant provides a local type against which to define methods
@@ -125,7 +126,7 @@ func (ten TOTenant) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (tn *TOTenant) Create() (error, error, int) { return api.GenericCreate(tn) }
+func (tn *TOTenant) Create() api.Errors { return api.GenericCreate(tn) }
 
 func (ten *TOTenant) Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time) {
 	if ten.APIInfo().User.TenantID == auth.TenantIDInvalid {

@@ -257,52 +257,63 @@ func (rc *RequiredCapability) Delete() (error, error, int) {
 }
 
 // Create implements the api.CRUDer interface.
-func (rc *RequiredCapability) Create() (error, error, int) {
+func (rc *RequiredCapability) Create() api.Errors {
+	errs := api.NewErrors()
 	authorized, err := rc.isTenantAuthorized()
 	if !authorized {
-		return errors.New("not authorized on this tenant"), nil, http.StatusForbidden
+		errs.SetUserError("not authorized on this tenant")
+		errs.Code = http.StatusForbidden
+		return errs
 	} else if err != nil {
-		return nil, fmt.Errorf("checking authorization for existing DS ID: %s" + err.Error()), http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("checking authorization for existing DS ID: %v", err)
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	// Ensure DS type is only of HTTP*, DNS* types
 	dsType, reqCaps, topology, dsExists, err := dbhelpers.GetDeliveryServiceTypeRequiredCapabilitiesAndTopology(*rc.DeliveryServiceID, rc.APIInfo().Tx.Tx)
 	if err != nil {
-		return nil, err, http.StatusInternalServerError
+		errs.SystemError = err
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 	if !dsExists {
-		return errors.New("a deliveryservice with id '" + strconv.Itoa(*rc.DeliveryServiceID) + "' was not found"), nil, http.StatusNotFound
+		errs.UserError = fmt.Errorf("a deliveryservice with id '%d' was not found", *rc.DeliveryServiceID)
+		errs.Code = http.StatusNotFound
+		return errs
 	}
 
 	if !dsType.IsHTTP() && !dsType.IsDNS() {
-		return errors.New("Invalid DS type. Only DNS and HTTP delivery services can have required capabilities"), nil, http.StatusBadRequest
+		errs.SetUserError("Invalid DS type. Only DNS and HTTP delivery services can have required capabilities")
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 
-	usrErr, sysErr, rCode := rc.checkServerCap()
-	if usrErr != nil || sysErr != nil {
-		return usrErr, sysErr, rCode
+	errs = rc.checkServerCap()
+	if errs.Occurred() {
+		return errs
 	}
 
 	if topology == nil {
-		usrErr, sysErr, rCode = rc.ensureDSServerCap()
-		if usrErr != nil || sysErr != nil {
-			return usrErr, sysErr, rCode
+		errs = rc.ensureDSServerCap()
+		if errs.Occurred() {
+			return errs
 		}
 	} else {
 		newReqCaps := append(reqCaps, *rc.RequiredCapability)
-		usrErr, sysErr, rCode = EnsureTopologyBasedRequiredCapabilities(rc.APIInfo().Tx.Tx, *rc.DeliveryServiceID, *topology, newReqCaps)
-		if usrErr != nil {
-			return fmt.Errorf("cannot add required capability: %v", usrErr), sysErr, rCode
-		}
-		if sysErr != nil {
-			return usrErr, sysErr, rCode
+		errs = EnsureTopologyBasedRequiredCapabilities(rc.APIInfo().Tx.Tx, *rc.DeliveryServiceID, *topology, newReqCaps)
+		if errs.Occurred() {
+
+			if errs.UserError != nil {
+				errs.UserError = fmt.Errorf("cannot add required capability: %v", errs.UserError)
+			}
+			return errs
 		}
 	}
 
 	rows, err := rc.APIInfo().Tx.NamedQuery(rcInsertQuery(), rc)
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 	defer log.Close(rows, "closing rows in RequiredCapability.Create()")
 
@@ -310,19 +321,29 @@ func (rc *RequiredCapability) Create() (error, error, int) {
 	for rows.Next() {
 		rowsAffected++
 		if err := rows.StructScan(&rc); err != nil {
-			return nil, fmt.Errorf("%s create scanning: %s", rc.GetType(), err.Error()), http.StatusInternalServerError
+			return api.Errors{
+				Code:        http.StatusInternalServerError,
+				SystemError: fmt.Errorf("%s create scanning: %s", rc.GetType(), err.Error()),
+			}
 		}
 	}
+
 	if rowsAffected == 0 {
-		return nil, fmt.Errorf("%s create: no %s was inserted, no rows was returned", rc.GetType(), rc.GetType()), http.StatusInternalServerError
+		return api.Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: fmt.Errorf("%s create: no %s was inserted, no rows was returned", rc.GetType(), rc.GetType()),
+		}
 	} else if rowsAffected > 1 {
-		return nil, fmt.Errorf("too many rows returned from %s insert", rc.GetType()), http.StatusInternalServerError
+		return api.Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: fmt.Errorf("too many rows returned from %s insert", rc.GetType()),
+		}
 	}
 
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
-func (rc *RequiredCapability) checkServerCap() (error, error, int) {
+func (rc *RequiredCapability) checkServerCap() api.Errors {
 	tx := rc.APIInfo().Tx
 
 	// Get server capability name
@@ -331,19 +352,25 @@ func (rc *RequiredCapability) checkServerCap() (error, error, int) {
 		SELECT name
 		FROM server_capability
 		WHERE name = $1`, rc.RequiredCapability).Scan(&name); err != nil && err != sql.ErrNoRows {
-		return nil, fmt.Errorf("querying server capability for name '%v': %v", rc.RequiredCapability, err), http.StatusInternalServerError
+		return api.Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: fmt.Errorf("querying server capability for name '%v': %v", rc.RequiredCapability, err),
+		}
 	}
 
 	if len(name) == 0 {
-		return fmt.Errorf("server_capability not found"), nil, http.StatusNotFound
+		return api.Errors{
+			Code:      http.StatusNotFound,
+			UserError: errors.New("server_capability not found"),
+		}
 	}
 
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
 // EnsureTopologyBasedRequiredCapabilities ensures that at least one server per cachegroup
 // in this delivery service's topology has this delivery service's required capabilities.
-func EnsureTopologyBasedRequiredCapabilities(tx *sql.Tx, dsID int, topology string, requiredCapabilities []string) (error, error, int) {
+func EnsureTopologyBasedRequiredCapabilities(tx *sql.Tx, dsID int, topology string, requiredCapabilities []string) api.Errors {
 	q := `
 SELECT
   s.id,
@@ -360,7 +387,10 @@ GROUP BY s.id, c.name
 `
 	rows, err := tx.Query(q, dsID, topology)
 	if err != nil {
-		return nil, fmt.Errorf("querying server capabilities in EnsureTopologyBasedRequiredCapabilities: %v", err), http.StatusInternalServerError
+		return api.Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: fmt.Errorf("querying server capabilities in EnsureTopologyBasedRequiredCapabilities: %v", err),
+		}
 	}
 	defer log.Close(rows, "closing rows in EnsureTopologyBasedRequiredCapabilities")
 
@@ -371,7 +401,10 @@ GROUP BY s.id, c.name
 		cachegroup := ""
 		serverCap := []string{}
 		if err := rows.Scan(&serverID, &cachegroup, pq.Array(&serverCap)); err != nil {
-			return nil, fmt.Errorf("scanning rows in EnsureTopologyBasedRequiredCapabilities: %v", err), http.StatusInternalServerError
+			return api.Errors{
+				Code:        http.StatusInternalServerError,
+				SystemError: fmt.Errorf("scanning rows in EnsureTopologyBasedRequiredCapabilities: %v", err),
+			}
 		}
 		cachegroupServers[cachegroup] = append(cachegroupServers[cachegroup], serverID)
 		serverCapabilities[serverID] = make(map[string]struct{}, len(serverCap))
@@ -380,8 +413,10 @@ GROUP BY s.id, c.name
 		}
 	}
 	if len(serverCapabilities) == 0 {
-		return fmt.Errorf("topology %s contains no servers in this delivery service's CDN; "+
-			"therefore, this delivery service's required capabilities cannot be satisfied", topology), nil, http.StatusBadRequest
+		return api.Errors{
+			Code:        http.StatusBadRequest,
+			SystemError: fmt.Errorf("topology %s contains no servers in this delivery service's CDN; therefore, this delivery service's required capabilities cannot be satisfied", topology),
+		}
 	}
 
 	invalidCachegroups := []string{}
@@ -405,12 +440,15 @@ GROUP BY s.id, c.name
 		}
 	}
 	if len(invalidCachegroups) > 0 {
-		return fmt.Errorf("the following cachegroups in this delivery service's topology do not contain at least one server with the required capabilities: %s", strings.Join(invalidCachegroups, ", ")), nil, http.StatusBadRequest
+		return api.Errors{
+			Code:      http.StatusBadRequest,
+			UserError: fmt.Errorf("the following cachegroups in this delivery service's topology do not contain at least one server with the required capabilities: %s", strings.Join(invalidCachegroups, ", ")),
+		}
 	}
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
-func (rc *RequiredCapability) ensureDSServerCap() (error, error, int) {
+func (rc *RequiredCapability) ensureDSServerCap() api.Errors {
 	tx := rc.APIInfo().Tx
 
 	// Get assigned DS server IDs
@@ -424,11 +462,14 @@ func (rc *RequiredCapability) ensureDSServerCap() (error, error, int) {
 		WHERE ds.deliveryservice=$1
 		AND NOT t.name LIKE 'ORG%'
 	)`, rc.DeliveryServiceID).Scan(pq.Array(&dsServerIDs)); err != nil && err != sql.ErrNoRows {
-		return nil, fmt.Errorf("reading delivery service %v servers: %v", *rc.DeliveryServiceID, err), http.StatusInternalServerError
+		return api.Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: fmt.Errorf("reading delivery service %v servers: %v", *rc.DeliveryServiceID, err),
+		}
 	}
 
 	if len(dsServerIDs) == 0 { // no attached servers can return success right away
-		return nil, nil, http.StatusOK
+		return api.NewErrors()
 	}
 
 	// Get servers IDs that have the new capability
@@ -440,15 +481,21 @@ func (rc *RequiredCapability) ensureDSServerCap() (error, error, int) {
 		WHERE server = ANY($1)
 		AND server_capability=$2
 	)`, pq.Array(dsServerIDs), rc.RequiredCapability).Scan(pq.Array(&capServerIDs)); err != nil && err != sql.ErrNoRows {
-		return nil, fmt.Errorf("reading servers that have server capability %v attached: %v", *rc.RequiredCapability, err), http.StatusInternalServerError
+		return api.Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: fmt.Errorf("reading servers that have server capability %v attached: %v", *rc.RequiredCapability, err),
+		}
 	}
 
 	vIDs := getViolatingServerIDs(dsServerIDs, capServerIDs)
 	if len(vIDs) > 0 {
-		return fmt.Errorf("capability %v cannot be made required on the delivery service %v as it has the associated servers %v that do not have the capability assigned", *rc.RequiredCapability, *rc.DeliveryServiceID, strings.Join(vIDs, ",")), nil, http.StatusBadRequest
+		return api.Errors{
+			Code:      http.StatusBadRequest,
+			UserError: fmt.Errorf("capability %v cannot be made required on the delivery service %v as it has the associated servers %v that do not have the capability assigned", *rc.RequiredCapability, *rc.DeliveryServiceID, strings.Join(vIDs, ",")),
+		}
 	}
 
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
 func getViolatingServerIDs(dsServerIDs, capServerIDs []int64) []string {

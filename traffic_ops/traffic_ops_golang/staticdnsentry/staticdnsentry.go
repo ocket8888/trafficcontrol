@@ -137,7 +137,7 @@ func (en *TOStaticDNSEntry) Read(h http.Header, useIMS bool) ([]interface{}, err
 	api.DefaultSort(en.APIInfo(), "host")
 	return api.GenericRead(h, en, useIMS)
 }
-func (en *TOStaticDNSEntry) Create() (error, error, int) { return api.GenericCreate(en) }
+func (en *TOStaticDNSEntry) Create() api.Errors          { return api.GenericCreate(en) }
 func (en *TOStaticDNSEntry) Update() (error, error, int) { return api.GenericUpdate(en) }
 func (en *TOStaticDNSEntry) Delete() (error, error, int) { return api.GenericDelete(en) }
 func (v *TOStaticDNSEntry) SelectMaxLastUpdatedQuery(where, orderBy, pagination, tableName string) string {

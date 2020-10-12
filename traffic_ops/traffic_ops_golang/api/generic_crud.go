@@ -28,11 +28,11 @@ import (
 
 	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-rfc"
-	ims "github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
-
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-util"
+
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
+	ims "github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 )
 
 type GenericCreator interface {
@@ -74,11 +74,10 @@ type GenericOptionsDeleter interface {
 }
 
 // GenericCreate does a Create (POST) for the given GenericCreator object and type. This exists as a generic function, for the common use case of a single "id" key and a lastUpdated field.
-func GenericCreate(val GenericCreator) (error, error, int) {
+func GenericCreate(val GenericCreator) Errors {
 	resultRows, err := val.APIInfo().Tx.NamedQuery(val.InsertQuery(), val)
 	if err != nil {
-		errs := ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return ParseDBError(err)
 	}
 	defer resultRows.Close()
 
@@ -88,7 +87,10 @@ func GenericCreate(val GenericCreator) (error, error, int) {
 	for resultRows.Next() {
 		rowsAffected++
 		if err := resultRows.Scan(&id, &lastUpdated); err != nil {
-			return nil, errors.New(val.GetType() + " create scanning: " + err.Error()), http.StatusInternalServerError
+			return Errors{
+				Code:        http.StatusInternalServerError,
+				SystemError: fmt.Errorf("%v create scanning: %v", val.GetType(), err),
+			}
 		}
 	}
 
@@ -102,39 +104,52 @@ func GenericCreate(val GenericCreator) (error, error, int) {
 	default:
 	}
 	if rowsAffected == 0 {
-		return nil, errors.New(val.GetType() + " create: no " + val.GetType() + " was inserted, no id was returned"), http.StatusInternalServerError
-	} else if rowsAffected > 1 {
-		return nil, errors.New("too many ids returned from " + val.GetType() + " insert"), http.StatusInternalServerError
+		return Errors{
+			SystemError: fmt.Errorf("%s create: no %s was inserted, no id was returned", val.GetType(), val.GetType()),
+			Code:        http.StatusInternalServerError,
+		}
+	}
+	if rowsAffected > 1 {
+		return Errors{
+			SystemError: fmt.Errorf("too many ids returned from %s insert", val.GetType()),
+			Code:        http.StatusInternalServerError,
+		}
 	}
 	val.SetKeys(map[string]interface{}{"id": id})
 	val.SetLastUpdated(lastUpdated)
-	return nil, nil, http.StatusOK
+	return NewErrors()
 }
 
 // GenericCreateNameBasedID does a Create (POST) for the given GenericCreator object and type. This exists as a generic function, for the use case of a single "name" key (not a numerical "id" key) and a lastUpdated field.
-func GenericCreateNameBasedID(val GenericCreator) (error, error, int) {
+func GenericCreateNameBasedID(val GenericCreator) Errors {
 	resultRows, err := val.APIInfo().Tx.NamedQuery(val.InsertQuery(), val)
 	if err != nil {
-		errs := ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return ParseDBError(err)
 	}
 	defer resultRows.Close()
 
 	lastUpdated := tc.TimeNoMod{}
 	rowsAffected := 0
+	errs := NewErrors()
 	for resultRows.Next() {
 		rowsAffected++
 		if err := resultRows.Scan(&lastUpdated); err != nil {
-			return nil, errors.New(val.GetType() + " create scanning: " + err.Error()), http.StatusInternalServerError
+			errs.SystemError = fmt.Errorf("%s create scanning: %v", val.GetType(), err)
+			errs.Code = http.StatusInternalServerError
+			return errs
 		}
 	}
 	if rowsAffected == 0 {
-		return nil, errors.New(val.GetType() + " create: no " + val.GetType() + " was inserted, no row was returned"), http.StatusInternalServerError
+		errs.Code = http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("%s create: no %s was inserted, no row was returned", val.GetType(), val.GetType())
+		return errs
 	} else if rowsAffected > 1 {
-		return nil, errors.New("too many rows returned from " + val.GetType() + " insert"), http.StatusInternalServerError
+		errs.Code = http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("too many rows returned from %s insert", val.GetType())
+		return errs
 	}
 	val.SetLastUpdated(lastUpdated)
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 // TryIfModifiedSinceQuery checks to see the max time that an entity was changed, and then returns a boolean (which tells us whether or not to run the main query for the endpoint)

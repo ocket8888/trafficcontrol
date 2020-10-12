@@ -113,13 +113,9 @@ func copyProfile(inf *api.APIInfo, p *tc.ProfileCopy) api.Errors {
 	// use existing CRUD helpers to create the new profile
 	toProfile.ProfileNullable = profiles[0].(tc.ProfileNullable)
 	toProfile.ProfileNullable.Name = &p.Name
-	userErr, sysErr, errCode = api.GenericCreate(toProfile)
-	if userErr != nil || sysErr != nil {
-		return api.Errors{
-			UserError:   userErr,
-			SystemError: sysErr,
-			Code:        errCode,
-		}
+	errs := api.GenericCreate(toProfile)
+	if errs.Occurred() {
+		return errs
 	}
 
 	p.ExistingID = *profiles[0].(tc.ProfileNullable).ID
@@ -159,13 +155,9 @@ func copyParameters(inf *api.APIInfo, p *tc.ProfileCopy) api.Errors {
 		// parameters to new profile.
 		toParam.ProfileParameterNullable.ProfileID = &p.ID
 		toParam.ProfileParameterNullable.ParameterID = param.Parameter
-		userErr, sysErr, errCode := toParam.Create()
-		if userErr != nil || sysErr != nil {
-			return api.Errors{
-				UserError:   userErr,
-				SystemError: sysErr,
-				Code:        errCode,
-			}
+		errs := toParam.Create()
+		if errs.Occurred() {
+			return errs
 		}
 		newParams++
 	}

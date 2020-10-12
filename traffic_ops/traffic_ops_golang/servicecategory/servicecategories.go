@@ -31,7 +31,7 @@ import (
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
-	"github.com/go-ozzo/ozzo-validation"
+	validation "github.com/go-ozzo/ozzo-validation"
 )
 
 type TOServiceCategory struct {
@@ -100,7 +100,7 @@ func (serviceCategory TOServiceCategory) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (serviceCategory *TOServiceCategory) Create() (error, error, int) {
+func (serviceCategory *TOServiceCategory) Create() api.Errors {
 	return api.GenericCreate(serviceCategory)
 }
 

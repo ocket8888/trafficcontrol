@@ -121,9 +121,12 @@ func (tp *TOType) Delete() (error, error, int) {
 	return api.GenericDelete(tp)
 }
 
-func (tp *TOType) Create() (error, error, int) {
+func (tp *TOType) Create() api.Errors {
 	if !tp.AllowMutation(true) {
-		return errors.New("can not create type"), nil, http.StatusBadRequest
+		return api.Errors{
+			Code:      http.StatusBadRequest,
+			UserError: errors.New("can not create type"),
+		}
 	}
 	return api.GenericCreate(tp)
 }

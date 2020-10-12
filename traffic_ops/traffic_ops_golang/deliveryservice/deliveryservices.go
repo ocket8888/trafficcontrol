@@ -799,8 +799,8 @@ func updateV30(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, ds *tc.
 			return nil, http.StatusInternalServerError, nil, errors.New("getting existing DS required capabilities: " + err.Error())
 		}
 		if len(requiredCapabilities) > 0 {
-			if userErr, sysErr, status := EnsureTopologyBasedRequiredCapabilities(tx, *ds.ID, *ds.Topology, requiredCapabilities); userErr != nil || sysErr != nil {
-				return nil, status, userErr, sysErr
+			if errs := EnsureTopologyBasedRequiredCapabilities(tx, *ds.ID, *ds.Topology, requiredCapabilities); errs.Occurred() {
+				return nil, errs.Code, errs.UserError, errs.SystemError
 			}
 		}
 	}

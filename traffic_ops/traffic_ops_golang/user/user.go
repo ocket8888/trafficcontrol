@@ -21,6 +21,7 @@ package user
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -122,29 +123,34 @@ func (user *TOUser) postValidate() error {
 }
 
 // Note: Not using GenericCreate because Scan also needs to scan tenant and rolename
-func (user *TOUser) Create() (error, error, int) {
+func (user *TOUser) Create() api.Errors {
 
 	// PUT and POST validation differs slightly
 	err := user.postValidate()
 	if err != nil {
-		return err, nil, http.StatusBadRequest
+		return api.Errors{
+			Code:      http.StatusBadRequest,
+			UserError: err,
+		}
 	}
 
 	// make sure the user cannot create someone with a higher priv_level than themselves
-	if usrErr, sysErr, code := user.privCheck(); code != http.StatusOK {
-		return usrErr, sysErr, code
+	if errs := user.privCheck(); errs.Occurred() {
+		return errs
 	}
 
 	// Convert password to SCRYPT
 	*user.LocalPassword, err = auth.DerivePassword(*user.LocalPassword)
 	if err != nil {
-		return err, nil, http.StatusBadRequest
+		return api.Errors{
+			Code:      http.StatusBadRequest,
+			UserError: err,
+		}
 	}
 
 	resultRows, err := user.ReqInfo.Tx.NamedQuery(user.InsertQuery(), user)
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 	defer resultRows.Close()
 
@@ -153,18 +159,24 @@ func (user *TOUser) Create() (error, error, int) {
 	var tenant string
 	var rolename string
 
+	errs := api.Errors{
+		Code: http.StatusInternalServerError,
+	}
 	rowsAffected := 0
 	for resultRows.Next() {
 		rowsAffected++
 		if err = resultRows.Scan(&id, &lastUpdated, &tenant, &rolename); err != nil {
-			return nil, fmt.Errorf("could not scan after insert: %s\n)", err), http.StatusInternalServerError
+			errs.SystemError = fmt.Errorf("could not scan after insert: %v)", err)
+			return errs
 		}
 	}
 
 	if rowsAffected == 0 {
-		return nil, fmt.Errorf("no user was inserted, nothing was returned"), http.StatusInternalServerError
+		errs.SetSystemError("no user was inserted, nothing was returned")
+		return errs
 	} else if rowsAffected > 1 {
-		return nil, fmt.Errorf("too many rows affected from user insert"), http.StatusInternalServerError
+		errs.SetSystemError("too many rows affected from user insert")
+		return errs
 	}
 
 	user.ID = &id
@@ -173,7 +185,7 @@ func (user *TOUser) Create() (error, error, int) {
 	user.RoleName = &rolename
 	user.LocalPassword = nil
 
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
 // This is not using GenericRead because of this tenancy check. Maybe we can add tenancy functionality to the generic case?
@@ -236,17 +248,23 @@ func selectMaxLastUpdatedQuery(where string) string {
 	select max(last_updated) as t from last_deleted l where l.table_name='tm_user') as res`
 }
 
-func (user *TOUser) privCheck() (error, error, int) {
+func (user *TOUser) privCheck() api.Errors {
 	requestedPrivLevel, _, err := dbhelpers.GetPrivLevelFromRoleID(user.ReqInfo.Tx.Tx, *user.Role)
 	if err != nil {
-		return nil, err, http.StatusInternalServerError
+		return api.Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: err,
+		}
 	}
 
 	if user.ReqInfo.User.PrivLevel < requestedPrivLevel {
-		return fmt.Errorf("user cannot update a user with a role more privileged than themselves"), nil, http.StatusForbidden
+		return api.Errors{
+			Code:      http.StatusForbidden,
+			UserError: errors.New("user cannot update a user with a role more privileged than themselves"),
+		}
 	}
 
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
 func (user *TOUser) Update() (error, error, int) {
@@ -257,8 +275,8 @@ func (user *TOUser) Update() (error, error, int) {
 	}
 
 	// make sure the user cannot update someone with a higher priv_level than themselves
-	if usrErr, sysErr, code := user.privCheck(); code != http.StatusOK {
-		return usrErr, sysErr, code
+	if errs := user.privCheck(); errs.Occurred() {
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 
 	if user.LocalPassword != nil {

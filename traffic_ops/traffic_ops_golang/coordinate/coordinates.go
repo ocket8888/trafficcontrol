@@ -119,7 +119,7 @@ func (coordinate TOCoordinate) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (coord *TOCoordinate) Create() (error, error, int) { return api.GenericCreate(coord) }
+func (coord *TOCoordinate) Create() api.Errors { return api.GenericCreate(coord) }
 func (coord *TOCoordinate) Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time) {
 	api.DefaultSort(coord.APIInfo(), "name")
 	return api.GenericRead(h, coord, useIMS)
