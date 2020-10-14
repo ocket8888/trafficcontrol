@@ -151,46 +151,59 @@ func checkTenancy(tenantID *int, tenantIDs []int) bool {
 	return false
 }
 
-func (fed *TOCDNFederation) Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time) {
+func (fed *TOCDNFederation) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+	errs := api.NewErrors()
 	if idstr, ok := fed.APIInfo().Params["id"]; ok {
 		id, err := strconv.Atoi(idstr)
 		if err != nil {
-			return nil, errors.New("id must be an integer"), nil, http.StatusBadRequest, nil
+			errs.SetUserError("id must be an integer")
+			errs.Code = http.StatusBadRequest
+			return nil, errs, nil
 		}
 		fed.ID = util.IntPtr(id)
 	}
 
 	tenantIDs, err := tenant.GetUserTenantIDListTx(fed.APIInfo().Tx.Tx, fed.APIInfo().User.TenantID)
 	if err != nil {
-		return nil, nil, errors.New("getting tenant list for user: " + err.Error()), http.StatusInternalServerError, nil
+		errs.SystemError = errors.New("getting tenant list for user: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return nil, errs, nil
 	}
 
 	api.DefaultSort(fed.APIInfo(), "cname")
-	federations, userErr, sysErr, errCode, maxTime := api.GenericRead(h, fed, useIMS)
-	if userErr != nil || sysErr != nil {
-		return nil, userErr, sysErr, errCode, nil
+	federations, errs, maxTime := api.GenericRead(h, fed, useIMS)
+	if errs.Occurred() {
+		return nil, errs, nil
 	}
 
 	filteredFederations := []interface{}{}
 	for _, ifederation := range federations {
 		federation := ifederation.(*TOCDNFederation)
 		if !checkTenancy(federation.TenantID, tenantIDs) {
-			return nil, errors.New("user not authorized for requested federation"), nil, http.StatusForbidden, nil
+			errs.Code = http.StatusForbidden
+			errs.SetUserError("user not authorized for requested federation")
+			return nil, errs, nil
 		}
 		filteredFederations = append(filteredFederations, federation.CDNFederation)
 	}
 
 	if len(filteredFederations) == 0 {
 		if fed.ID != nil {
-			return nil, errors.New("not found"), nil, http.StatusNotFound, nil
+			errs.SetUserError("not found")
+			errs.Code = http.StatusNotFound
+			return nil, errs, nil
 		}
 		if ok, err := dbhelpers.CDNExists(fed.APIInfo().Params["name"], fed.APIInfo().Tx.Tx); err != nil {
-			return nil, nil, errors.New("verifying CDN exists: " + err.Error()), http.StatusInternalServerError, nil
+			errs.Code = http.StatusInternalServerError
+			errs.SystemError = errors.New("verifying CDN exists: " + err.Error())
+			return nil, errs, nil
 		} else if !ok {
-			return nil, errors.New("cdn not found"), nil, http.StatusNotFound, nil
+			errs.Code = http.StatusNotFound
+			errs.SetUserError("cdn not found")
+			return nil, errs, nil
 		}
 	}
-	return filteredFederations, nil, nil, errCode, maxTime
+	return filteredFederations, errs, maxTime
 }
 
 func (fed *TOCDNFederation) Update() (error, error, int) {

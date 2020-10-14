@@ -340,19 +340,19 @@ func (topology *TOTopology) Create() api.Errors {
 }
 
 // Read is a requirement of the api.Reader interface and is called by api.ReadHandler().
-func (topology *TOTopology) Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time) {
+func (topology *TOTopology) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	interfaces := make([]interface{}, 0)
 	where, orderBy, pagination, queryValues, errs := dbhelpers.BuildWhereAndOrderByAndPagination(topology.ReqInfo.Params, topology.ParamColumns())
 	if len(errs) > 0 {
-		return nil, util.JoinErrs(errs), nil, http.StatusBadRequest, nil
+		return nil, api.Errors{UserError: util.JoinErrs(errs), Code: http.StatusBadRequest}, nil
 	}
 	if useIMS {
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(topology.ReqInfo.Tx, h, queryValues, selectMaxLastUpdatedQuery(where))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return interfaces, nil, nil, http.StatusNotModified, &maxTime
+			return interfaces, api.Errors{Code: http.StatusNotModified}, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {
@@ -362,7 +362,7 @@ func (topology *TOTopology) Read(h http.Header, useIMS bool) ([]interface{}, err
 	query := selectQuery() + where + orderBy + pagination
 	rows, err := topology.ReqInfo.Tx.NamedQuery(query, queryValues)
 	if err != nil {
-		return nil, nil, errors.New("topology read: querying: " + err.Error()), http.StatusInternalServerError, nil
+		return nil, api.Errors{SystemError: errors.New("topology read: querying: " + err.Error()), Code: http.StatusInternalServerError}, nil
 	}
 	defer log.Close(rows, "unable to close DB connection")
 	topologies := map[string]*tc.Topology{}
@@ -383,7 +383,7 @@ func (topology *TOTopology) Read(h http.Header, useIMS bool) ([]interface{}, err
 			&topologyNode.Cachegroup,
 			&parents,
 		); err != nil {
-			return nil, nil, errors.New("topology read: scanning: " + err.Error()), http.StatusInternalServerError, nil
+			return nil, api.Errors{SystemError: errors.New("topology read: scanning: " + err.Error()), Code: http.StatusInternalServerError}, nil
 		}
 		for _, id := range parents {
 			topologyNode.Parents = append(topologyNode.Parents, int(id))
@@ -411,7 +411,7 @@ func (topology *TOTopology) Read(h http.Header, useIMS bool) ([]interface{}, err
 		}
 		interfaces = append(interfaces, *topology)
 	}
-	return interfaces, nil, nil, http.StatusOK, &maxTime
+	return interfaces, api.NewErrors(), &maxTime
 }
 
 func (topology *TOTopology) removeParents() error {
@@ -510,9 +510,9 @@ func (topology *TOTopology) setDescription() (error, error, int) {
 
 // Update is a requirement of the api.Updater interface.
 func (topology *TOTopology) Update() (error, error, int) {
-	topologies, userErr, sysErr, errCode, _ := topology.Read(nil, false)
-	if userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	topologies, errs, _ := topology.Read(nil, false)
+	if errs.Occurred() {
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 	if len(topologies) != 1 {
 		return fmt.Errorf("cannot find exactly 1 topology with the query string provided"), nil, http.StatusBadRequest
@@ -563,9 +563,9 @@ func (topology *TOTopology) Delete() (error, error, int) {
 
 // OptionsDelete is a requirement of the OptionsDeleter interface.
 func (topology *TOTopology) OptionsDelete() (error, error, int) {
-	topologies, userErr, sysErr, errCode, _ := topology.Read(nil, false)
-	if userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	topologies, errs, _ := topology.Read(nil, false)
+	if errs.Occurred() {
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 	if len(topologies) != 1 {
 		return fmt.Errorf("cannot find exactly 1 topology with the query string provided"), nil, http.StatusBadRequest

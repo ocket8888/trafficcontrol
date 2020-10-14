@@ -87,17 +87,17 @@ func (i *tester) Create() Errors {
 }
 
 //Reader interface functions
-func (i *tester) Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time) {
+func (i *tester) Read(h http.Header, useIMS bool) ([]interface{}, Errors, *time.Time) {
 	if h.Get(rfc.IfModifiedSince) != "" {
 		if imsDate, ok := rfc.ParseHTTPDate(h.Get(rfc.IfModifiedSince)); !ok {
-			return []interface{}{tester{ID: 1}}, nil, nil, http.StatusOK, nil
+			return []interface{}{tester{ID: 1}}, NewErrors(), nil
 		} else {
 			if imsDate.UTC().After(time.Now().UTC()) {
-				return []interface{}{}, nil, nil, http.StatusNotModified, &imsDate
+				return []interface{}{}, Errors{Code: http.StatusNotModified}, &imsDate
 			}
 		}
 	}
-	return []interface{}{tester{ID: 1}}, nil, nil, http.StatusOK, nil
+	return []interface{}{tester{ID: 1}}, NewErrors(), nil
 }
 
 //Updater interface functions

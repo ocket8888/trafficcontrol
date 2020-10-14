@@ -30,7 +30,7 @@ import (
 
 type CRUDer interface {
 	Create() Errors
-	Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time)
+	Read(h http.Header, useIMS bool) ([]interface{}, Errors, *time.Time)
 	Update() (error, error, int)
 	Delete() (error, error, int)
 	APIInfoer
@@ -75,7 +75,7 @@ type MultipleCreator interface {
 
 type Reader interface {
 	// Read returns the object to write to the user, any user error, any system error, and the HTTP error code to be returned if there was an error.
-	Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time)
+	Read(h http.Header, useIMS bool) ([]interface{}, Errors, *time.Time)
 	APIInfoer
 }
 

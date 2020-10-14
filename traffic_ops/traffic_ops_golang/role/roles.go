@@ -172,15 +172,17 @@ func (role *TORole) deleteRoleCapabilityAssociations(tx *sqlx.Tx) (error, error,
 	return nil, nil, http.StatusOK
 }
 
-func (role *TORole) Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time) {
+func (role *TORole) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
 	version := role.APIInfo().Version
 	api.DefaultSort(role.APIInfo(), "name")
-	vals, userErr, sysErr, errCode, maxTime := api.GenericRead(h, role, useIMS)
-	if errCode == http.StatusNotModified {
-		return []interface{}{}, nil, nil, errCode, maxTime
+	vals, errs, maxTime := api.GenericRead(h, role, useIMS)
+	// TODO: Maybe it doesn't matter, but I think this should first check if an
+	// error has occurred. Or actually maybe this could just be an '||' check?
+	if errs.Code == http.StatusNotModified {
+		return []interface{}{}, errs, maxTime
 	}
-	if userErr != nil || sysErr != nil {
-		return nil, userErr, sysErr, errCode, maxTime
+	if errs.Occurred() {
+		return nil, errs, maxTime
 	}
 
 	returnable := []interface{}{}
@@ -195,7 +197,7 @@ func (role *TORole) Read(h http.Header, useIMS bool) ([]interface{}, error, erro
 			returnable = append(returnable, rl.RoleV11)
 		}
 	}
-	return returnable, nil, nil, http.StatusOK, maxTime
+	return returnable, errs, maxTime
 }
 
 func (role *TORole) Update() (error, error, int) {

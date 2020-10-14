@@ -747,16 +747,20 @@ type TODSSDeliveryService struct {
 }
 
 // Read shows all of the delivery services associated with the specified server.
-func (dss *TODSSDeliveryService) Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time) {
+func (dss *TODSSDeliveryService) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	returnable := []interface{}{}
 	params := dss.APIInfo().Params
 	tx := dss.APIInfo().Tx.Tx
 	user := dss.APIInfo().User
+	errs := api.NewErrors()
 
+	// TODO: I think maybe this could utilize IntParams?
 	if err := api.IsInt(params["id"]); err != nil {
-		return nil, err, nil, http.StatusBadRequest, nil
+		errs.UserError = err
+		errs.Code = http.StatusBadRequest
+		return nil, errs, nil
 	}
 
 	if _, ok := params["orderby"]; !ok {
@@ -769,9 +773,11 @@ func (dss *TODSSDeliveryService) Read(h http.Header, useIMS bool) ([]interface{}
 		"xml_id": dbhelpers.WhereColumnInfo{"ds.xml_id", nil},
 		"xmlId":  dbhelpers.WhereColumnInfo{"ds.xml_id", nil},
 	}
-	where, orderBy, pagination, queryValues, errs := dbhelpers.BuildWhereAndOrderByAndPagination(params, queryParamsToSQLCols)
-	if len(errs) > 0 {
-		return nil, nil, errors.New("reading server dses: " + util.JoinErrsStr(errs)), http.StatusInternalServerError, nil
+	where, orderBy, pagination, queryValues, dbErrs := dbhelpers.BuildWhereAndOrderByAndPagination(params, queryParamsToSQLCols)
+	if len(dbErrs) > 0 {
+		errs.SetSystemError("reading server dses: " + util.JoinErrsStr(dbErrs))
+		errs.Code = http.StatusInternalServerError
+		return nil, errs, nil
 	}
 
 	if where != "" {
@@ -784,7 +790,9 @@ func (dss *TODSSDeliveryService) Read(h http.Header, useIMS bool) ([]interface{}
 	tenantIDs, err := tenant.GetUserTenantIDListTx(tx, user.TenantID)
 	if err != nil {
 		log.Errorln("received error querying for user's tenants: " + err.Error())
-		return nil, nil, err, http.StatusInternalServerError, nil
+		errs.SystemError = err
+		errs.Code = http.StatusInternalServerError
+		return nil, errs, nil
 	}
 	where, queryValues = dbhelpers.AddTenancyCheck(where, queryValues, "ds.tenant_id", tenantIDs)
 	query := deliveryservice.GetDSSelectQuery() + where + orderBy + pagination
@@ -794,7 +802,7 @@ func (dss *TODSSDeliveryService) Read(h http.Header, useIMS bool) ([]interface{}
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(dss.APIInfo().Tx, h, queryValues, selectMaxLastUpdatedQuery(where))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return returnable, nil, nil, http.StatusNotModified, &maxTime
+			return returnable, api.Errors{Code: http.StatusNotModified}, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {
@@ -803,18 +811,20 @@ func (dss *TODSSDeliveryService) Read(h http.Header, useIMS bool) ([]interface{}
 	log.Debugln("generated deliveryServices query: " + query)
 	log.Debugf("executing with values: %++v\n", queryValues)
 
-	dses, userErr, sysErr, _ := deliveryservice.GetDeliveryServices(query, queryValues, dss.APIInfo().Tx)
-	if sysErr != nil {
-		sysErr = fmt.Errorf("reading server dses: %v ", sysErr)
-	}
-	if userErr != nil || sysErr != nil {
-		return nil, userErr, sysErr, http.StatusInternalServerError, nil
+	dses, errs := deliveryservice.GetDeliveryServices(query, queryValues, dss.APIInfo().Tx)
+	if errs.Occurred() {
+		if errs.SystemError != nil {
+			errs.SystemError = fmt.Errorf("reading server dses: %v ", errs.SystemError)
+		}
+		// TODO: this maybe shouldn't change the status code
+		errs.Code = http.StatusInternalServerError
+		return nil, errs, nil
 	}
 
 	for _, ds := range dses {
 		returnable = append(returnable, ds)
 	}
-	return returnable, nil, nil, http.StatusOK, &maxTime
+	return returnable, errs, &maxTime
 }
 
 func selectMaxLastUpdatedQuery(where string) string {

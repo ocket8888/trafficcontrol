@@ -109,7 +109,8 @@ func (as *TOASNV11) Create() api.Errors {
 	}
 	return api.GenericCreate(as)
 }
-func (as *TOASNV11) Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time) {
+
+func (as *TOASNV11) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
 	api.DefaultSort(as.APIInfo(), "asn")
 	return api.GenericRead(h, as, useIMS)
 }
@@ -173,9 +174,9 @@ func V11ReadAll(w http.ResponseWriter, r *http.Request) {
 
 	asn := &TOASNV11{}
 	asn.SetInfo(inf)
-	asns, userErr, sysErr, errCode, _ := api.GenericRead(r.Header, asn, false)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	asns, errs, _ := api.GenericRead(r.Header, asn, false)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	api.WriteResp(w, r, tc.ASNsV11{asns})

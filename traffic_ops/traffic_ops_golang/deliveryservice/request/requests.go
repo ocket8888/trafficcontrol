@@ -78,7 +78,7 @@ func (req TODeliveryServiceRequest) GetType() string {
 }
 
 // Read implements the api.Reader interface
-func (req *TODeliveryServiceRequest) Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time) {
+func (req *TODeliveryServiceRequest) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	deliveryServiceRequests := []interface{}{}
@@ -93,6 +93,8 @@ func (req *TODeliveryServiceRequest) Read(h http.Header, useIMS bool) ([]interfa
 		"xmlId":      dbhelpers.WhereColumnInfo{Column: "r.deliveryservice->>'xmlId'"},
 	}
 
+	errs := api.NewErrors()
+
 	p := req.APIInfo().Params
 	if _, ok := req.APIInfo().Params["orderby"]; !ok {
 		// if orderby not provided, default to orderby xmlId.  Making a copy of parameters to not modify input arg
@@ -103,15 +105,18 @@ func (req *TODeliveryServiceRequest) Read(h http.Header, useIMS bool) ([]interfa
 		p["orderby"] = "xmlId"
 	}
 
-	where, orderBy, pagination, queryValues, errs := dbhelpers.BuildWhereAndOrderByAndPagination(p, queryParamsToQueryCols)
-	if len(errs) > 0 {
-		return nil, util.JoinErrs(errs), nil, http.StatusBadRequest, nil
+	where, orderBy, pagination, queryValues, dbErrs := dbhelpers.BuildWhereAndOrderByAndPagination(p, queryParamsToQueryCols)
+	if len(dbErrs) > 0 {
+		errs.UserError = util.JoinErrs(dbErrs)
+		errs.Code = http.StatusBadRequest
+		return nil, errs, nil
 	}
 	if useIMS {
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(req.APIInfo().Tx, h, queryValues, selectMaxLastUpdatedQuery(where))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return deliveryServiceRequests, nil, nil, http.StatusNotModified, &maxTime
+			errs.Code = http.StatusNotModified
+			return deliveryServiceRequests, errs, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {
@@ -119,7 +124,9 @@ func (req *TODeliveryServiceRequest) Read(h http.Header, useIMS bool) ([]interfa
 	}
 	tenantIDs, err := tenant.GetUserTenantIDListTx(req.APIInfo().Tx.Tx, req.APIInfo().User.TenantID)
 	if err != nil {
-		return nil, nil, errors.New("dsr getting tenant list: " + err.Error()), http.StatusInternalServerError, nil
+		errs.SystemError = errors.New("dsr getting tenant list: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return nil, errs, nil
 	}
 	where, queryValues = dbhelpers.AddTenancyCheck(where, queryValues, "CAST(r.deliveryservice->>'tenantId' AS bigint)", tenantIDs)
 
@@ -128,19 +135,23 @@ func (req *TODeliveryServiceRequest) Read(h http.Header, useIMS bool) ([]interfa
 
 	rows, err := req.APIInfo().Tx.NamedQuery(query, queryValues)
 	if err != nil {
-		return nil, nil, errors.New("dsr querying: " + err.Error()), http.StatusInternalServerError, &maxTime
+		errs.Code = http.StatusInternalServerError
+		errs.SystemError = errors.New("dsr querying: " + err.Error())
+		return nil, errs, nil
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		var s TODeliveryServiceRequest
 		if err = rows.StructScan(&s); err != nil {
-			return nil, nil, errors.New("dsr scanning: " + err.Error()), http.StatusInternalServerError, &maxTime
+			errs.Code = http.StatusInternalServerError
+			errs.SystemError = errors.New("dsr scanning: " + err.Error())
+			return nil, errs, &maxTime
 		}
 		deliveryServiceRequests = append(deliveryServiceRequests, s)
 	}
 
-	return deliveryServiceRequests, nil, nil, http.StatusOK, &maxTime
+	return deliveryServiceRequests, errs, &maxTime
 }
 
 func selectMaxLastUpdatedQuery(where string) string {

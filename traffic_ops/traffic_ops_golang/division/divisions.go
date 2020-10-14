@@ -99,7 +99,7 @@ func (division TODivision) Validate() error {
 }
 
 func (dv *TODivision) Create() api.Errors { return api.GenericCreate(dv) }
-func (dv *TODivision) Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time) {
+func (dv *TODivision) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
 	params := dv.APIInfo().Params
 	// TODO move to router, and do for all endpoints
 	if strings.HasSuffix(params["name"], ".json") {

@@ -189,19 +189,24 @@ func (user *TOUser) Create() api.Errors {
 }
 
 // This is not using GenericRead because of this tenancy check. Maybe we can add tenancy functionality to the generic case?
-func (this *TOUser) Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time) {
+func (this *TOUser) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	inf := this.APIInfo()
 	api.DefaultSort(inf, "username")
-	where, orderBy, pagination, queryValues, errs := dbhelpers.BuildWhereAndOrderByAndPagination(inf.Params, this.ParamColumns())
-	if len(errs) > 0 {
-		return nil, util.JoinErrs(errs), nil, http.StatusBadRequest, nil
+	errs := api.NewErrors()
+	where, orderBy, pagination, queryValues, dbErrs := dbhelpers.BuildWhereAndOrderByAndPagination(inf.Params, this.ParamColumns())
+	if len(dbErrs) > 0 {
+		errs.UserError = util.JoinErrs(dbErrs)
+		errs.Code = http.StatusBadRequest
+		return nil, errs, nil
 	}
 
 	tenantIDs, err := tenant.GetUserTenantIDListTx(inf.Tx.Tx, inf.User.TenantID)
 	if err != nil {
-		return nil, nil, fmt.Errorf("getting tenant list for user: %v\n", err), http.StatusInternalServerError, nil
+		errs.SystemError = fmt.Errorf("getting tenant list for user: %v", err)
+		errs.Code = http.StatusInternalServerError
+		return nil, errs, nil
 	}
 	where, queryValues = dbhelpers.AddTenancyCheck(where, queryValues, "u.tenant_id", tenantIDs)
 
@@ -209,7 +214,7 @@ func (this *TOUser) Read(h http.Header, useIMS bool) ([]interface{}, error, erro
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(this.APIInfo().Tx, h, queryValues, selectMaxLastUpdatedQuery(where))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return []interface{}{}, nil, nil, http.StatusNotModified, &maxTime
+			return []interface{}{}, api.Errors{Code: http.StatusNotModified}, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {
@@ -218,7 +223,9 @@ func (this *TOUser) Read(h http.Header, useIMS bool) ([]interface{}, error, erro
 	query := this.SelectQuery() + where + orderBy + pagination
 	rows, err := inf.Tx.NamedQuery(query, queryValues)
 	if err != nil {
-		return nil, nil, fmt.Errorf("querying users : %v", err), http.StatusInternalServerError, nil
+		errs.SystemError = fmt.Errorf("querying users : %v", err)
+		errs.Code = http.StatusInternalServerError
+		return nil, errs, nil
 	}
 	defer rows.Close()
 
@@ -231,12 +238,14 @@ func (this *TOUser) Read(h http.Header, useIMS bool) ([]interface{}, error, erro
 	users := []interface{}{}
 	for rows.Next() {
 		if err = rows.StructScan(user); err != nil {
-			return nil, nil, fmt.Errorf("parsing user rows: %v", err), http.StatusInternalServerError, nil
+			errs.SystemError = fmt.Errorf("parsing user rows: %v", err)
+			errs.Code = http.StatusInternalServerError
+			return nil, errs, nil
 		}
 		users = append(users, *user)
 	}
 
-	return users, nil, nil, http.StatusOK, &maxTime
+	return users, errs, &maxTime
 }
 
 func selectMaxLastUpdatedQuery(where string) string {

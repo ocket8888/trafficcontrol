@@ -174,9 +174,9 @@ func ReadHandler(reader Reader) http.HandlerFunc {
 		if cfg != nil {
 			useIMS = cfg.UseIMS
 		}
-		results, userErr, sysErr, errCode, maxTime := obj.Read(r.Header, useIMS)
-		if userErr != nil || sysErr != nil {
-			HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+		results, errs, maxTime := obj.Read(r.Header, useIMS)
+		if errs.Occurred() {
+			HandleErrs(w, r, inf.Tx.Tx, errs)
 			return
 		}
 		if maxTime != nil && SetLastModifiedHeader(r, useIMS) {
@@ -184,7 +184,7 @@ func ReadHandler(reader Reader) http.HandlerFunc {
 			date := maxTime.Format("Mon, 02 Jan 2006 15:04:05 MST")
 			w.Header().Add(rfc.LastModified, date)
 		}
-		w.WriteHeader(errCode)
+		w.WriteHeader(errs.Code)
 		WriteResp(w, r, results)
 	}
 }
@@ -220,11 +220,12 @@ func DeprecatedReadHandler(reader Reader, alternative *string) http.HandlerFunc 
 		obj := reflect.New(objectType).Interface().(Reader)
 		obj.SetInfo(inf)
 
-		results, userErr, sysErr, errCode, _ := obj.Read(r.Header, false)
-		if userErr != nil || sysErr != nil {
-			userErr = LogErr(r, http.StatusInternalServerError, userErr, sysErr)
+		results, errs, _ := obj.Read(r.Header, false)
+		if errs.Occurred() {
+			// TODO: I think this should just be using HandleErrs
+			userErr := LogErrs(r, errs)
 			alerts.AddAlerts(tc.CreateErrorAlerts(userErr))
-			WriteAlerts(w, r, errCode, alerts)
+			WriteAlerts(w, r, errs.Code, alerts)
 			return
 		}
 		WriteAlertsObj(w, r, http.StatusOK, alerts, results)

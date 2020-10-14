@@ -20,7 +20,6 @@ package servicecategory
  */
 
 import (
-	"errors"
 	"net/http"
 	"strconv"
 	"time"
@@ -104,16 +103,19 @@ func (serviceCategory *TOServiceCategory) Create() api.Errors {
 	return api.GenericCreate(serviceCategory)
 }
 
-func (serviceCategory *TOServiceCategory) Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time) {
+func (serviceCategory *TOServiceCategory) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+	errs := api.NewErrors()
 	tenantIDs, err := tenant.GetUserTenantIDListTx(serviceCategory.APIInfo().Tx.Tx, serviceCategory.APIInfo().User.TenantID)
 	if err != nil {
-		return nil, nil, errors.New("getting tenant list for user: " + err.Error()), http.StatusInternalServerError, nil
+		errs.SetSystemError("getting tenant list for user: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return nil, errs, nil
 	}
 
 	api.DefaultSort(serviceCategory.APIInfo(), "name")
-	serviceCategories, userErr, sysErr, errCode, maxTime := api.GenericRead(h, serviceCategory, useIMS)
-	if userErr != nil || sysErr != nil {
-		return nil, userErr, sysErr, errCode, nil
+	serviceCategories, errs, maxTime := api.GenericRead(h, serviceCategory, useIMS)
+	if errs.Occurred() {
+		return nil, errs, nil
 	}
 
 	filteredServiceCategories := []interface{}{}
@@ -124,7 +126,7 @@ func (serviceCategory *TOServiceCategory) Read(h http.Header, useIMS bool) ([]in
 		}
 	}
 
-	return filteredServiceCategories, nil, nil, errCode, maxTime
+	return filteredServiceCategories, errs, maxTime
 }
 
 func checkTenancy(category *tc.ServiceCategory, tenantIDs []int) bool {
