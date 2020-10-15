@@ -293,17 +293,26 @@ func (req *TODeliveryServiceRequest) Create() api.Errors {
 	return api.GenericCreate(req)
 }
 
-func (req *TODeliveryServiceRequest) Delete() (error, error, int) {
+func (req *TODeliveryServiceRequest) Delete() api.Errors {
+	errs := api.NewErrors()
 	if req.ID == nil {
-		return errors.New("missing id"), nil, http.StatusBadRequest
+		errs.SetUserError("missing id")
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 
 	st := tc.RequestStatusInvalid
 	if err := req.APIInfo().Tx.Tx.QueryRow(`SELECT status FROM deliveryservice_request WHERE id=$1`, *req.ID).Scan(&st); err != nil {
-		return nil, errors.New("dsr delete querying status: " + err.Error()), http.StatusBadRequest
+		// TODO: this should return an appropriate error message to the client
+		// if it's going to tell them it's their fault the request failed
+		errs.SetSystemError("dsr delete querying status: " + err.Error())
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 	if st == tc.RequestStatusComplete || st == tc.RequestStatusPending || st == tc.RequestStatusRejected {
-		return errors.New("cannot delete a deliveryservice_request with state " + string(st)), nil, http.StatusBadRequest
+		errs.SetUserError("cannot delete a deliveryservice_request with state " + string(st))
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 
 	return api.GenericDelete(req)

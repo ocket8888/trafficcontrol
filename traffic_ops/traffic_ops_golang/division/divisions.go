@@ -109,7 +109,7 @@ func (dv *TODivision) Read(h http.Header, useIMS bool) ([]interface{}, api.Error
 	return api.GenericRead(h, dv, useIMS)
 }
 func (dv *TODivision) Update() (error, error, int) { return api.GenericUpdate(dv) }
-func (dv *TODivision) Delete() (error, error, int) { return api.GenericDelete(dv) }
+func (dv *TODivision) Delete() api.Errors          { return api.GenericDelete(dv) }
 
 func insertQuery() string {
 	return `INSERT INTO division (name) VALUES (:name) RETURNING id,last_updated`

@@ -114,9 +114,12 @@ func (tp *TOType) Update() (error, error, int) {
 	return api.GenericUpdate(tp)
 }
 
-func (tp *TOType) Delete() (error, error, int) {
+func (tp *TOType) Delete() api.Errors {
 	if !tp.AllowMutation(false) {
-		return errors.New(fmt.Sprintf("can not delete type")), nil, http.StatusBadRequest
+		return api.Errors{
+			UserError: errors.New(fmt.Sprintf("can not delete type")),
+			Code:      http.StatusBadRequest,
+		}
 	}
 	return api.GenericDelete(tp)
 }

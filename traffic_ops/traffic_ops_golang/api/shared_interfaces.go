@@ -32,7 +32,7 @@ type CRUDer interface {
 	Create() Errors
 	Read(h http.Header, useIMS bool) ([]interface{}, Errors, *time.Time)
 	Update() (error, error, int)
-	Delete() (error, error, int)
+	Delete() Errors
 	APIInfoer
 	Identifier
 	Validator
@@ -89,7 +89,7 @@ type Updater interface {
 
 type Deleter interface {
 	// Delete returns any user error, any system error, and the HTTP error code to be returned if there was an error.
-	Delete() (error, error, int)
+	Delete() Errors
 	APIInfoer
 	Identifier
 }

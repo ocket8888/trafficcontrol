@@ -40,9 +40,7 @@ import (
 type tester struct {
 	ID          int
 	APIInfoImpl `json:"-"`
-	userErr     error //only for testing
-	sysErr      error //only for testing
-	errCode     int   //only for testing
+	errs        Errors //only for testing
 }
 
 var cfg = config.Config{ConfigTrafficOpsGolang: config.ConfigTrafficOpsGolang{DBQueryTimeoutSeconds: 20}, UseIMS: true}
@@ -79,11 +77,7 @@ func (v *tester) Validate() error {
 
 //Creator interface functions
 func (i *tester) Create() Errors {
-	return Errors{
-		Code:        i.errCode,
-		SystemError: i.sysErr,
-		UserError:   i.userErr,
-	}
+	return i.errs
 }
 
 //Reader interface functions
@@ -102,19 +96,21 @@ func (i *tester) Read(h http.Header, useIMS bool) ([]interface{}, Errors, *time.
 
 //Updater interface functions
 func (i *tester) Update() (error, error, int) {
-	return i.userErr, i.sysErr, i.errCode
+	return i.errs.UserError, i.errs.SystemError, i.errs.Code
 }
 
 //Deleter interface functions
-func (i *tester) Delete() (error, error, int) {
-	return i.userErr, i.sysErr, i.errCode
+func (i *tester) Delete() Errors {
+	return i.errs
 }
 
 //used for testing purposes only
-func (t *tester) SetError(userErr error, sysErr error, errCode int) {
-	t.userErr = userErr
-	t.sysErr = sysErr
-	t.errCode = errCode
+func (i *tester) SetError(userErr error, sysErr error, errCode int) {
+	i.errs = Errors{
+		Code:        errCode,
+		SystemError: sysErr,
+		UserError:   userErr,
+	}
 }
 
 func TestCreateHandler(t *testing.T) {

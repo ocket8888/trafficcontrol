@@ -973,32 +973,42 @@ func updateV30(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, ds *tc.
 }
 
 //Delete is the DeliveryService implementation of the Deleter interface.
-func (ds *TODeliveryService) Delete() (error, error, int) {
+func (ds *TODeliveryService) Delete() api.Errors {
+	errs := api.NewErrors()
 	if ds.ID == nil {
-		return errors.New("missing id"), nil, http.StatusBadRequest
+		errs.SetUserError("missing id")
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 
 	xmlID, ok, err := GetXMLID(ds.ReqInfo.Tx.Tx, *ds.ID)
 	if err != nil {
-		return nil, errors.New("ds delete: getting xmlid: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("ds delete: getting xmlid: " + err.Error())
+		errs.Code = http.StatusInternalServerError
 	} else if !ok {
-		return errors.New("delivery service not found"), nil, http.StatusNotFound
+		errs.SetUserError("delivery service not found")
+		errs.Code = http.StatusNotFound
+		return errs
 	}
 	ds.XMLID = &xmlID
 
 	// Note ds regexes MUST be deleted before the ds, because there's a ON DELETE CASCADE on deliveryservice_regex (but not on regex).
 	// Likewise, it MUST happen in a transaction with the later DS delete, so they aren't deleted if the DS delete fails.
 	if _, err := ds.ReqInfo.Tx.Tx.Exec(`DELETE FROM regex WHERE id IN (SELECT regex FROM deliveryservice_regex WHERE deliveryservice=$1)`, *ds.ID); err != nil {
-		return nil, errors.New("TODeliveryService.Delete deleting regexes for delivery service: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("TODeliveryService.Delete deleting regexes for delivery service: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	if _, err := ds.ReqInfo.Tx.Tx.Exec(`DELETE FROM deliveryservice_regex WHERE deliveryservice=$1`, *ds.ID); err != nil {
-		return nil, errors.New("TODeliveryService.Delete deleting delivery service regexes: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("TODeliveryService.Delete deleting delivery service regexes: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
-	userErr, sysErr, errCode := api.GenericDelete(ds)
-	if userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	errs = api.GenericDelete(ds)
+	if errs.Occurred() {
+		return errs
 	}
 
 	paramConfigFilePrefixes := []string{"hdr_rw_", "hdr_rw_mid_", "regex_remap_", "cacheurl_"}
@@ -1008,10 +1018,11 @@ func (ds *TODeliveryService) Delete() (error, error, int) {
 	}
 
 	if _, err := ds.ReqInfo.Tx.Tx.Exec(`DELETE FROM parameter WHERE name = 'location' AND config_file = ANY($1)`, pq.Array(configFiles)); err != nil {
-		return nil, errors.New("TODeliveryService.Delete deleting delivery service parameteres: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("TODeliveryService.Delete deleting delivery service parameteres: " + err.Error())
+		errs.Code = http.StatusInternalServerError
 	}
 
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 func (v *TODeliveryService) DeleteQuery() string {

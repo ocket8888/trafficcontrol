@@ -298,19 +298,22 @@ func GenericOptionsDelete(val GenericOptionsDeleter) (error, error, int) {
 }
 
 // GenericDelete does a Delete (DELETE) for the given GenericDeleter object and type. This exists as a generic function, for the common use case of a simple delete with query parameters defined in the sqlx struct tags.
-func GenericDelete(val GenericDeleter) (error, error, int) {
+func GenericDelete(val GenericDeleter) Errors {
 	result, err := val.APIInfo().Tx.NamedExec(val.DeleteQuery(), val)
 	if err != nil {
-		errs := ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return ParseDBError(err)
 	}
 
+	errs := NewErrors()
 	if rowsAffected, err := result.RowsAffected(); err != nil {
-		return nil, errors.New("deleting " + val.GetType() + ": getting rows affected: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("deleting " + val.GetType() + ": getting rows affected: " + err.Error())
+		errs.Code = http.StatusInternalServerError
 	} else if rowsAffected < 1 {
-		return errors.New("no " + val.GetType() + " with that key found"), nil, http.StatusNotFound
+		errs.SetUserError("no " + val.GetType() + " with that key found")
+		errs.Code = http.StatusNotFound
 	} else if rowsAffected > 1 {
-		return nil, fmt.Errorf(val.GetType()+" delete affected too many rows: %d", rowsAffected), http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf(val.GetType()+" delete affected too many rows: %d", rowsAffected)
+		errs.Code = http.StatusInternalServerError
 	}
-	return nil, nil, http.StatusOK
+	return errs
 }

@@ -414,7 +414,11 @@ func DeleteHandler(deleter Deleter) http.HandlerFunc {
 			obj.SetInfo(inf)
 			userErr, sysErr, errCode = obj.OptionsDelete()
 		} else {
-			userErr, sysErr, errCode = obj.Delete()
+			errs := obj.Delete()
+			if errs.Occurred() {
+				inf.HandleErrs(w, r, errs)
+				return
+			}
 		}
 		if userErr != nil || sysErr != nil {
 			HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
@@ -520,7 +524,11 @@ func DeprecatedDeleteHandler(deleter Deleter, alternative *string) http.HandlerF
 			obj.SetInfo(inf)
 			userErr, sysErr, errCode = obj.OptionsDelete()
 		} else {
-			userErr, sysErr, errCode = obj.Delete()
+			errs := obj.Delete()
+			if errs.Occurred() {
+				inf.HandleErrs(w, r, errs)
+				return
+			}
 		}
 
 		if userErr != nil || sysErr != nil {

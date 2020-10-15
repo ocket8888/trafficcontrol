@@ -459,32 +459,44 @@ tenant) VALUES (
 
 //The Origin implementation of the Deleter interface
 //all implementations of Deleter should use transactions and return the proper errorType
-func (origin *TOOrigin) Delete() (error, error, int) {
+func (origin *TOOrigin) Delete() api.Errors {
+	errs := api.NewErrors()
 	isPrimary := false
 	q := `SELECT is_primary FROM origin WHERE id = $1`
 	if err := origin.ReqInfo.Tx.QueryRow(q, *origin.ID).Scan(&isPrimary); err != nil {
 		if err == sql.ErrNoRows {
-			return errors.New("origin not found"), nil, http.StatusNotFound
+			errs.SetUserError("origin not found")
+			errs.Code = http.StatusNotFound
+		} else {
+			errs.SetSystemError("origin delete: is_primary scanning: " + err.Error())
+			errs.Code = http.StatusInternalServerError
 		}
-		return nil, errors.New("origin delete: is_primary scanning: " + err.Error()), http.StatusInternalServerError
+		return errs
 	}
 	if isPrimary {
-		return errors.New("cannot delete a primary origin"), nil, http.StatusBadRequest
+		errs.SetUserError("cannot delete a primary origin")
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 
 	result, err := origin.ReqInfo.Tx.NamedExec(deleteQuery(), origin)
 	if err != nil {
-		return nil, errors.New("origin delete: query: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("origin delete: query: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
-		return nil, errors.New("origin delete: getting rows affected: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("origin delete: getting rows affected: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 	if rowsAffected != 1 {
-		return nil, errors.New("origin delete: multiple rows affected"), http.StatusInternalServerError
+		errs.SetSystemError("origin delete: multiple rows affected")
+		errs.Code = http.StatusInternalServerError
 	}
 
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 func deleteQuery() string {

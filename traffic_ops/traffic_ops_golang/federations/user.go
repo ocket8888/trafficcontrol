@@ -147,7 +147,7 @@ func (v *TOUsers) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *
 	return api.GenericRead(h, v, useIMS)
 }
 
-func (v *TOUsers) Delete() (error, error, int) { return api.GenericDelete(v) }
+func (v *TOUsers) Delete() api.Errors { return api.GenericDelete(v) }
 
 func PostUsers(w http.ResponseWriter, r *http.Request) {
 	inf, errs := api.NewInfo(r, []string{"id"}, []string{"id"})

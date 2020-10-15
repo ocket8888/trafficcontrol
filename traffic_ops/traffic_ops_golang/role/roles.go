@@ -159,17 +159,20 @@ func (role *TORole) createRoleCapabilityAssociations(tx *sqlx.Tx) api.Errors {
 	return api.NewErrors()
 }
 
-func (role *TORole) deleteRoleCapabilityAssociations(tx *sqlx.Tx) (error, error, int) {
+func (role *TORole) deleteRoleCapabilityAssociations(tx *sqlx.Tx) api.Errors {
 	result, err := tx.Exec(deleteAssociatedCapabilities(), role.ID)
 	if err != nil {
-		return nil, errors.New("deleting role capabilities: " + err.Error()), http.StatusInternalServerError
+		return api.Errors{
+			SystemError: errors.New("deleting role capabilities: " + err.Error()),
+			Code:        http.StatusInternalServerError,
+		}
 	}
 
 	if _, err = result.RowsAffected(); err != nil {
 		log.Errorf("could not check result after inserting role_capability relations: %v", err)
 	}
 	// TODO verify expected row count shouldn't be checked?
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
 func (role *TORole) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
@@ -211,27 +214,33 @@ func (role *TORole) Update() (error, error, int) {
 
 	// TODO cascade delete, to automatically do this in SQL?
 	if role.Capabilities != nil && *role.Capabilities != nil {
-		userErr, sysErr, errCode = role.deleteRoleCapabilityAssociations(role.ReqInfo.Tx)
-		if userErr != nil || sysErr != nil {
-			return userErr, sysErr, errCode
+		errs := role.deleteRoleCapabilityAssociations(role.ReqInfo.Tx)
+		if errs.Occurred() {
+			return errs.UserError, errs.SystemError, errs.Code
 		}
-		errs := role.createRoleCapabilityAssociations(role.ReqInfo.Tx)
+		errs = role.createRoleCapabilityAssociations(role.ReqInfo.Tx)
 		return errs.UserError, errs.SystemError, errs.Code
 	}
 	return nil, nil, http.StatusOK
 }
 
-func (role *TORole) Delete() (error, error, int) {
+func (role *TORole) Delete() api.Errors {
 	assignedUsers := 0
 	if err := role.ReqInfo.Tx.Get(&assignedUsers, "SELECT COUNT(id) FROM tm_user WHERE role=$1", role.ID); err != nil {
-		return nil, errors.New("role delete counting assigned users: " + err.Error()), http.StatusInternalServerError
+		return api.Errors{
+			SystemError: errors.New("role delete counting assigned users: " + err.Error()),
+			Code:        http.StatusInternalServerError,
+		}
 	} else if assignedUsers != 0 {
-		return fmt.Errorf("can not delete a role with %d assigned users", assignedUsers), nil, http.StatusBadRequest
+		return api.Errors{
+			SystemError: fmt.Errorf("can not delete a role with %d assigned users", assignedUsers),
+			Code:        http.StatusBadRequest,
+		}
 	}
 
-	userErr, sysErr, errCode := api.GenericDelete(role)
-	if userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	errs := api.GenericDelete(role)
+	if errs.Occurred() {
+		return errs
 	}
 	return role.deleteRoleCapabilityAssociations(role.ReqInfo.Tx)
 }

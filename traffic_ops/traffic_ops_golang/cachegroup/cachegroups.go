@@ -641,43 +641,58 @@ func (cg *TOCacheGroup) getCoordinateID() (*int, error) {
 
 //The CacheGroup implementation of the Deleter interface
 //all implementations of Deleter should use transactions and return the proper errorType
-func (cg *TOCacheGroup) Delete() (error, error, int) {
+func (cg *TOCacheGroup) Delete() api.Errors {
+	errs := api.NewErrors()
 	inUse, err := isUsed(cg.ReqInfo.Tx, *cg.ID)
 	if inUse {
-		return err, nil, http.StatusBadRequest
+		errs.UserError = err
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 	if err != nil {
-		return nil, errors.New("cachegroup delete: checking use: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("cachegroup delete: checking use: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	coordinateID, err := cg.getCoordinateID()
 	if err == sql.ErrNoRows {
-		return errors.New("no cachegroup with that id found"), nil, http.StatusNotFound
+		errs.SetUserError("no cachegroup with that id found")
+		errs.Code = http.StatusNotFound
 	}
 	if err != nil {
-		return nil, errors.New("cachegroup delete: getting coord: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("cachegroup delete: getting coord: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	if err = cg.deleteCoordinate(*coordinateID); err != nil {
-		return nil, errors.New("cachegroup delete: deleting coord: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("cachegroup delete: deleting coord: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	result, err := cg.ReqInfo.Tx.Exec(DeleteQuery(), *cg.ID)
 	if err != nil {
-		return nil, errors.New("cachegroup delete: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("cachegroup delete: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
-		return nil, fmt.Errorf("getting rows affected: %v", err), http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("getting rows affected: %v", err)
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	// In the zero case, either err != nil occurs (from the Exec) or we got sql.ErrNoRows above
 	if rowsAffected != 1 {
-		return nil, errors.New("cachegroup delete affected multiple rows"), http.StatusInternalServerError
+		errs.SetSystemError("cachegroup delete affected multiple rows")
+		errs.Code = http.StatusInternalServerError
 	}
 
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 func InsertQuery() string {

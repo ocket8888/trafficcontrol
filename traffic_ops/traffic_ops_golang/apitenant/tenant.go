@@ -201,27 +201,34 @@ func (ten *TOTenant) IsTenantAuthorized(user *auth.CurrentUser) (bool, error) {
 
 func (tn *TOTenant) Update() (error, error, int) { return api.GenericUpdate(tn) }
 
-func (ten *TOTenant) Delete() (error, error, int) {
+func (ten *TOTenant) Delete() api.Errors {
 	result, err := ten.APIInfo().Tx.NamedExec(deleteQuery(), ten)
 	if err != nil {
 		return parseDeleteErr(err, *ten.ID, ten.APIInfo().Tx.Tx) // this is why we can't use api.GenericDelete
 	}
 
+	errs := api.NewErrors()
 	if rowsAffected, err := result.RowsAffected(); err != nil {
-		return nil, errors.New("deleting " + ten.GetType() + ": getting rows affected: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("deleting " + ten.GetType() + ": getting rows affected: " + err.Error())
+		errs.Code = http.StatusInternalServerError
 	} else if rowsAffected < 1 {
-		return errors.New("no " + ten.GetType() + " with that id found"), nil, http.StatusNotFound
+		errs.SetUserError("no " + ten.GetType() + " with that id found")
+		errs.Code = http.StatusNotFound
 	} else if rowsAffected > 1 {
-		return nil, fmt.Errorf(ten.GetType()+" delete affected too many rows: %d", rowsAffected), http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf(ten.GetType()+" delete affected too many rows: %d", rowsAffected)
+		errs.Code = http.StatusInternalServerError
 	}
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 // parseDeleteErr takes the tenant delete error, and returns the appropriate user error, system error, and http status code.
-func parseDeleteErr(err error, id int, tx *sql.Tx) (error, error, int) {
+func parseDeleteErr(err error, id int, tx *sql.Tx) api.Errors {
 	pqErr, ok := err.(*pq.Error)
 	if !ok {
-		return nil, errors.New("deleting tenant: " + err.Error()), http.StatusInternalServerError
+		return api.Errors{
+			SystemError: errors.New("deleting tenant: " + err.Error()),
+			Code:        http.StatusInternalServerError,
+		}
 	}
 	// TODO fix this to check for other Postgres errors besides key violations
 	existing := ""
@@ -237,7 +244,11 @@ func parseDeleteErr(err error, id int, tx *sql.Tx) (error, error, int) {
 	default:
 		existing = pqErr.Table
 	}
-	return errors.New("Tenant '" + strconv.Itoa(id) + "' has " + existing + ". Please update these " + existing + " and retry."), nil, http.StatusBadRequest
+
+	return api.Errors{
+		UserError: errors.New("Tenant '" + strconv.Itoa(id) + "' has " + existing + ". Please update these " + existing + " and retry."),
+		Code:      http.StatusBadRequest,
+	}
 }
 
 // selectQuery returns a query on the tenant table that limits to tenants within the realm of the tenantID.  It's intended

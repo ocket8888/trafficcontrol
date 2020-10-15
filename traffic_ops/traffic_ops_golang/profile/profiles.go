@@ -256,7 +256,7 @@ WHERE pp.profile = :profile_id`
 
 func (pr *TOProfile) Update() (error, error, int) { return api.GenericUpdate(pr) }
 func (pr *TOProfile) Create() api.Errors          { return api.GenericCreate(pr) }
-func (pr *TOProfile) Delete() (error, error, int) { return api.GenericDelete(pr) }
+func (pr *TOProfile) Delete() api.Errors          { return api.GenericDelete(pr) }
 
 func updateQuery() string {
 	query := `UPDATE

@@ -132,7 +132,7 @@ func (v *TOCoordinate) SelectMaxLastUpdatedQuery(where, orderBy, pagination, tab
 }
 
 func (coord *TOCoordinate) Update() (error, error, int) { return api.GenericUpdate(coord) }
-func (coord *TOCoordinate) Delete() (error, error, int) { return api.GenericDelete(coord) }
+func (coord *TOCoordinate) Delete() api.Errors          { return api.GenericDelete(coord) }
 
 func selectQuery() string {
 	query := `SELECT

@@ -557,8 +557,8 @@ func (topology *TOTopology) Update() (error, error, int) {
 
 // Delete is unused and simply satisfies the Deleter interface
 // (although TOTOpology is used as an OptionsDeleter)
-func (topology *TOTopology) Delete() (error, error, int) {
-	return nil, nil, 0
+func (topology *TOTopology) Delete() api.Errors {
+	return api.NewErrors()
 }
 
 // OptionsDelete is a requirement of the OptionsDeleter interface.

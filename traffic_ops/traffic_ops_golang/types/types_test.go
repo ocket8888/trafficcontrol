@@ -159,11 +159,11 @@ func TestUpdateInvalidType(t *testing.T) {
 func TestDeleteInvalidType(t *testing.T) {
 	invalidDeleteType := createDummyType("other")
 
-	err, _, statusCode := invalidDeleteType.Delete()
-	if err == nil {
+	errs := invalidDeleteType.Delete()
+	if errs.UserError == nil {
 		t.Fatalf("expected delete type to have an error")
 	}
-	if statusCode != http.StatusBadRequest {
+	if errs.Code != http.StatusBadRequest {
 		t.Fatalf("expected delete type to return a %v error", http.StatusBadRequest)
 	}
 }

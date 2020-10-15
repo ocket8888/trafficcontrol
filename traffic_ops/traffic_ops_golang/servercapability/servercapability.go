@@ -113,5 +113,5 @@ func (v *TOServerCapability) SelectMaxLastUpdatedQuery(where, orderBy, paginatio
 	select max(l.last_updated) as t from last_deleted l where l.table_name='server_capability') as res`
 }
 
-func (v *TOServerCapability) Create() api.Errors          { return api.GenericCreateNameBasedID(v) }
-func (v *TOServerCapability) Delete() (error, error, int) { return api.GenericDelete(v) }
+func (v *TOServerCapability) Create() api.Errors { return api.GenericCreateNameBasedID(v) }
+func (v *TOServerCapability) Delete() api.Errors { return api.GenericDelete(v) }

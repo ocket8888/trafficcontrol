@@ -296,26 +296,37 @@ func (st *TOSteeringTargetV11) Update() (error, error, int) {
 	return nil, nil, http.StatusOK
 }
 
-func (st *TOSteeringTargetV11) Delete() (error, error, int) {
+func (st *TOSteeringTargetV11) Delete() api.Errors {
 	if userErr, sysErr, errCode := tenant.CheckID(st.ReqInfo.Tx.Tx, st.ReqInfo.User, int(*st.DeliveryServiceID)); userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+		return api.Errors{
+			UserError:   userErr,
+			SystemError: sysErr,
+			Code:        errCode,
+		}
 	}
 
+	errs := api.NewErrors()
 	result, err := st.ReqInfo.Tx.NamedExec(deleteQuery(), st)
 	if err != nil {
-		return nil, errors.New("steering target delete exec: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("steering target delete exec: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
-		return nil, errors.New("steering target delete exec getting rows affected: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("steering target delete exec getting rows affected: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	if rowsAffected < 1 {
-		return errors.New("steering target not found"), nil, http.StatusNotFound
+		errs.SetUserError("steering target not found")
+		errs.Code = http.StatusNotFound
 	} else if rowsAffected != 1 {
-		return nil, fmt.Errorf("this create affected too many rows: %d", rowsAffected), http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("this create affected too many rows: %d", rowsAffected)
+		errs.Code = http.StatusInternalServerError
 	}
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 func selectQuery() string {

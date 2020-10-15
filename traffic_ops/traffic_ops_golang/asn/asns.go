@@ -131,7 +131,7 @@ func (as *TOASNV11) Update() (error, error, int) {
 	return api.GenericUpdate(as)
 }
 
-func (as *TOASNV11) Delete() (error, error, int) { return api.GenericDelete(as) }
+func (as *TOASNV11) Delete() api.Errors { return api.GenericDelete(as) }
 
 func (asn TOASNV11) ASNExists(create bool) error {
 	if asn.APIInfo() == nil || asn.APIInfo().Tx == nil {

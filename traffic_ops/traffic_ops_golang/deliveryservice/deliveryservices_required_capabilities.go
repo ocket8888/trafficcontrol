@@ -255,12 +255,18 @@ func selectMaxLastUpdatedQueryRC(where string, orderBy string, pagination string
 }
 
 // Delete implements the api.CRUDer interface.
-func (rc *RequiredCapability) Delete() (error, error, int) {
+func (rc *RequiredCapability) Delete() api.Errors {
 	authorized, err := rc.isTenantAuthorized()
 	if !authorized {
-		return errors.New("not authorized on this tenant"), nil, http.StatusForbidden
+		return api.Errors{
+			UserError: errors.New("not authorized on this tenant"),
+			Code:      http.StatusForbidden,
+		}
 	} else if err != nil {
-		return nil, fmt.Errorf("checking authorization for existing DS ID: %s" + err.Error()), http.StatusInternalServerError
+		return api.Errors{
+			SystemError: fmt.Errorf("checking authorization for existing DS ID: %s" + err.Error()),
+			Code:        http.StatusInternalServerError,
+		}
 	}
 
 	return api.GenericDelete(rc)

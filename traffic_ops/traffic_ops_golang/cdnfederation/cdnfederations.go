@@ -207,9 +207,9 @@ func (fed *TOCDNFederation) Read(h http.Header, useIMS bool) ([]interface{}, api
 }
 
 func (fed *TOCDNFederation) Update() (error, error, int) {
-	userErr, sysErr, errCode := fed.isTenantAuthorized()
-	if userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	errs := fed.isTenantAuthorized()
+	if errs.Occurred() {
+		return errs.UserError, errs.SystemError, errs.Code
 	}
 	// Deliveryservice IDs should not be included on update.
 	if fed.DeliveryServiceIDs != nil {
@@ -223,37 +223,45 @@ func (fed *TOCDNFederation) Update() (error, error, int) {
 // Delete implements the Deleter interface for TOCDNFederation.
 // In the perl version, :name is ignored. It is not even verified whether or not
 // :name is a real cdn that exists. This mimicks the perl behavior.
-func (fed *TOCDNFederation) Delete() (error, error, int) {
-	userErr, sysErr, errCode := fed.isTenantAuthorized()
-	if userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+func (fed *TOCDNFederation) Delete() api.Errors {
+	errs := fed.isTenantAuthorized()
+	if errs.Occurred() {
+		return errs
 	}
 	return api.GenericDelete(fed)
 }
 
-func (fed TOCDNFederation) isTenantAuthorized() (error, error, int) {
+func (fed TOCDNFederation) isTenantAuthorized() api.Errors {
+	errs := api.NewErrors()
 	tenantID, err := getTenantIDFromFedID(*fed.ID, fed.APIInfo().Tx.Tx)
 	if err != nil {
 		// If nobody has claimed a tenant, that federation is publicly visible.
 		// This logically follows /federations/:id/deliveryservices
 		if err == sql.ErrNoRows {
-			return nil, nil, http.StatusOK
+			return errs
 		}
-		return nil, errors.New("getting tenant id from federation: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("getting tenant id from federation: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	// TODO: After IsResourceAuthorizedToUserTx is updated to no longer have `use_tenancy`,
 	// that will probably be better to use. For now, use the list. Issue #2602
 	list, err := tenant.GetUserTenantIDListTx(fed.APIInfo().Tx.Tx, fed.APIInfo().User.TenantID)
 	if err != nil {
-		return nil, errors.New("getting federation tenant list: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("getting federation tenant list: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 	for _, id := range list {
 		if id == tenantID {
-			return nil, nil, http.StatusOK
+			return errs
 		}
 	}
-	return errors.New("unauthorized for tenant"), nil, http.StatusForbidden
+
+	errs.SetUserError("unauthorized for tenant")
+	errs.Code = http.StatusForbidden
+	return errs
 }
 
 func getTenantIDFromFedID(id int, tx *sql.Tx) (int, error) {

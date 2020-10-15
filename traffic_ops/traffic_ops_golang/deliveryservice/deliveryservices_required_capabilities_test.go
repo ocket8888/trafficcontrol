@@ -254,14 +254,11 @@ func TestDeleteDeliveryServicesRequiredCapability(t *testing.T) {
 		},
 	}
 
-	userErr, sysErr, errCode := rc.Delete()
-	if userErr != nil {
-		t.Fatalf(userErr.Error())
+	errs := rc.Delete()
+	if errs.Occurred() {
+		t.Fatal(errs)
 	}
-	if sysErr != nil {
-		t.Fatalf(sysErr.Error())
-	}
-	if got, want := errCode, http.StatusOK; got != want {
+	if got, want := errs.Code, http.StatusOK; got != want {
 		t.Fatalf(fmt.Sprintf("got %d; expected http status code %d", got, want))
 	}
 
@@ -296,18 +293,21 @@ func TestUnauthorizedDeleteDeliveryServicesRequiredCapability(t *testing.T) {
 
 	mockTenantID(t, mock, 0)
 
-	userErr, sysErr, errCode := rc.Delete()
+	errs := rc.Delete()
 
+	// TODO: this could segfault before failing
 	expErr := "not authorized on this tenant"
-	if userErr.Error() != expErr {
-		t.Fatalf("got %s; expected %s", userErr, expErr)
+	if errs.UserError.Error() != expErr {
+		t.Fatalf("got %s; expected %s", errs.UserError, expErr)
 	}
 
-	if sysErr != nil {
-		t.Fatalf(userErr.Error())
+	if errs.SystemError != nil {
+		// TODO: I think this should be failing with the system error, and also
+		// it seems like this would segfault.
+		t.Fatalf(errs.UserError.Error())
 	}
 
-	if got, want := errCode, http.StatusForbidden; got != want {
+	if got, want := errs.Code, http.StatusForbidden; got != want {
 		t.Fatalf(fmt.Sprintf("got %d; expected http status code %d", got, want))
 	}
 

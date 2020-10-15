@@ -114,7 +114,7 @@ JOIN region r ON pl.region = r.id ` + where + orderBy + pagination +
 
 func (pl *TOPhysLocation) Update() (error, error, int) { return api.GenericUpdate(pl) }
 func (pl *TOPhysLocation) Create() api.Errors          { return api.GenericCreate(pl) }
-func (pl *TOPhysLocation) Delete() (error, error, int) { return api.GenericDelete(pl) }
+func (pl *TOPhysLocation) Delete() api.Errors          { return api.GenericDelete(pl) }
 
 func selectQuery() string {
 	return `

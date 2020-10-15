@@ -165,7 +165,7 @@ func (pp *TOProfileParameter) Read(h http.Header, useIMS bool) ([]interface{}, a
 	api.DefaultSort(pp.APIInfo(), "parameter")
 	return api.GenericRead(h, pp, useIMS)
 }
-func (pp *TOProfileParameter) Delete() (error, error, int) { return api.GenericDelete(pp) }
+func (pp *TOProfileParameter) Delete() api.Errors { return api.GenericDelete(pp) }
 func (v *TOProfileParameter) SelectMaxLastUpdatedQuery(where, orderBy, pagination, tableName string) string {
 	return `SELECT max(t) from (
 		SELECT max(pp.last_updated) as t FROM profile_parameter pp

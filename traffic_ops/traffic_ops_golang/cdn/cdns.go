@@ -142,7 +142,7 @@ func (cdn *TOCDN) Update() (error, error, int) {
 	return api.GenericUpdate(cdn)
 }
 
-func (cdn *TOCDN) Delete() (error, error, int) { return api.GenericDelete(cdn) }
+func (cdn *TOCDN) Delete() api.Errors { return api.GenericDelete(cdn) }
 
 func selectQuery() string {
 	query := `SELECT

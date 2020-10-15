@@ -129,16 +129,23 @@ func (comment *TODeliveryServiceRequestComment) Update() (error, error, int) {
 	return api.GenericUpdate(comment)
 }
 
-func (comment *TODeliveryServiceRequestComment) Delete() (error, error, int) {
+func (comment *TODeliveryServiceRequestComment) Delete() api.Errors {
 	var current TODeliveryServiceRequestComment
 	err := comment.ReqInfo.Tx.QueryRowx(selectQuery() + `WHERE dsrc.id=` + strconv.Itoa(*comment.ID)).StructScan(&current)
 	if err != nil {
-		return nil, errors.New("querying DeliveryServiceRequestComments: " + err.Error()), http.StatusInternalServerError
+
+		return api.Errors{
+			SystemError: errors.New("querying DeliveryServiceRequestComments: " + err.Error()),
+			Code:        http.StatusInternalServerError,
+		}
 	}
 
 	if userID := tc.IDNoMod(comment.ReqInfo.User.ID); *current.AuthorID != userID {
 		// TODO determine if users should be able to delete sub-tenant users' comments? Else, a deleted user's comments can never be removed.
-		return errors.New("Comments can only be deleted by the author"), nil, http.StatusBadRequest
+		return api.Errors{
+			UserError: errors.New("Comments can only be deleted by the author"),
+			Code:      http.StatusBadRequest,
+		}
 	}
 
 	return api.GenericDelete(comment)

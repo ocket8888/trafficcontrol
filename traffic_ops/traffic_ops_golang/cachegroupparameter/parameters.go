@@ -207,19 +207,31 @@ func (cgparam *TOCacheGroupParameter) GetKeys() (map[string]interface{}, bool) {
 }
 
 // Delete implements the api.CRUDer interface.
-func (cgparam *TOCacheGroupParameter) Delete() (error, error, int) {
+func (cgparam *TOCacheGroupParameter) Delete() api.Errors {
 	_, ok, err := dbhelpers.GetCacheGroupNameFromID(cgparam.ReqInfo.Tx.Tx, cgparam.CacheGroupID)
 	if err != nil {
-		return nil, err, http.StatusInternalServerError
+		return api.Errors{
+			SystemError: err,
+			Code:        http.StatusInternalServerError,
+		}
 	} else if !ok {
-		return fmt.Errorf("cachegroup %v does not exist", cgparam.CacheGroupID), nil, http.StatusNotFound
+		return api.Errors{
+			UserError: fmt.Errorf("cachegroup %v does not exist", cgparam.CacheGroupID),
+			Code:      http.StatusNotFound,
+		}
 	}
 
 	_, ok, err = dbhelpers.GetParamNameByID(cgparam.ReqInfo.Tx.Tx, *cgparam.ID)
 	if err != nil {
-		return nil, err, http.StatusInternalServerError
+		return api.Errors{
+			SystemError: err,
+			Code:        http.StatusInternalServerError,
+		}
 	} else if !ok {
-		return fmt.Errorf("parameter %v does not exist", *cgparam.ID), nil, http.StatusNotFound
+		return api.Errors{
+			UserError: fmt.Errorf("parameter %v does not exist", *cgparam.ID),
+			Code:      http.StatusNotFound,
+		}
 	}
 
 	return api.GenericDelete(cgparam)

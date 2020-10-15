@@ -187,7 +187,7 @@ func (pa *TOParameter) Update() (error, error, int) {
 	return api.GenericUpdate(pa)
 }
 
-func (pa *TOParameter) Delete() (error, error, int) { return api.GenericDelete(pa) }
+func (pa *TOParameter) Delete() api.Errors { return api.GenericDelete(pa) }
 
 func insertQuery() string {
 	query := `INSERT INTO parameter (
