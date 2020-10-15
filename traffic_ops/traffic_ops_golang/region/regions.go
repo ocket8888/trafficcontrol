@@ -113,7 +113,7 @@ func (rg *TORegion) Create() api.Errors          { return api.GenericCreate(rg) 
 func (rg *TORegion) Delete() api.Errors          { return api.GenericDelete(rg) }
 
 // OptionsDelete deletes a resource identified either as a route parameter or as a query string parameter.
-func (rg *TORegion) OptionsDelete() (error, error, int) { return api.GenericOptionsDelete(rg) }
+func (rg *TORegion) OptionsDelete() api.Errors { return api.GenericOptionsDelete(rg) }
 
 func selectQuery() string {
 	return `SELECT

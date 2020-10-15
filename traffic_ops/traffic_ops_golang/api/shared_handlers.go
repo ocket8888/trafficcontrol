@@ -116,19 +116,22 @@ func decodeAndValidateRequestBody(r *http.Request, v Validator) error {
 	return v.Validate()
 }
 
-func checkIfOptionsDeleter(obj interface{}, params map[string]string) (bool, error, error, int) {
+func checkIfOptionsDeleter(obj interface{}, params map[string]string) (bool, Errors) {
+	errs := NewErrors()
 	optionsDeleter, ok := obj.(OptionsDeleter)
 	if !ok {
-		return false, nil, nil, http.StatusOK
+		return false, errs
 	}
 	options := optionsDeleter.DeleteKeyOptions()
 	for key, _ := range options {
 		if params[key] != "" {
-			return true, nil, nil, http.StatusOK
+			return true, errs
 		}
 	}
 	name := reflect.TypeOf(obj).Elem().Name()[2:]
-	return false, errors.New("Refusing to delete all resources of type " + name), nil, http.StatusBadRequest
+	errs.SetUserError("Refusing to delete all resources of type " + name)
+	errs.Code = http.StatusBadRequest
+	return false, errs
 }
 
 // SetLastModifiedHeader sets the Last-Modified header in case the "useIMS" is set to true in the config,
@@ -348,9 +351,9 @@ func DeleteHandler(deleter Deleter) http.HandlerFunc {
 		obj := reflect.New(objectType).Interface().(Deleter)
 		obj.SetInfo(inf)
 
-		isOptionsDeleter, userErr, sysErr, errCode := checkIfOptionsDeleter(obj, inf.Params)
-		if userErr != nil || sysErr != nil {
-			HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+		isOptionsDeleter, errs := checkIfOptionsDeleter(obj, inf.Params)
+		if errs.Occurred() {
+			inf.HandleErrs(w, r, errs)
 			return
 		}
 		var (
@@ -412,16 +415,12 @@ func DeleteHandler(deleter Deleter) http.HandlerFunc {
 		if isOptionsDeleter {
 			obj := reflect.New(objectType).Interface().(OptionsDeleter)
 			obj.SetInfo(inf)
-			userErr, sysErr, errCode = obj.OptionsDelete()
+			errs = obj.OptionsDelete()
 		} else {
-			errs := obj.Delete()
-			if errs.Occurred() {
-				inf.HandleErrs(w, r, errs)
-				return
-			}
+			errs = obj.Delete()
 		}
-		if userErr != nil || sysErr != nil {
-			HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+		if errs.Occurred() {
+			inf.HandleErrs(w, r, errs)
 			return
 		}
 
@@ -458,9 +457,9 @@ func DeprecatedDeleteHandler(deleter Deleter, alternative *string) http.HandlerF
 		obj := reflect.New(objectType).Interface().(Deleter)
 		obj.SetInfo(inf)
 
-		isOptionsDeleter, userErr, sysErr, errCode := checkIfOptionsDeleter(obj, inf.Params)
-		if userErr != nil || sysErr != nil {
-			HandleDeprecatedErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr, alternative)
+		isOptionsDeleter, errs := checkIfOptionsDeleter(obj, inf.Params)
+		if errs.Occurred() {
+			HandleErrsOptionalDeprecation(w, r, inf.Tx.Tx, errs, true, alternative)
 			return
 		}
 		var (
@@ -522,17 +521,13 @@ func DeprecatedDeleteHandler(deleter Deleter, alternative *string) http.HandlerF
 		if isOptionsDeleter {
 			obj := reflect.New(objectType).Interface().(OptionsDeleter)
 			obj.SetInfo(inf)
-			userErr, sysErr, errCode = obj.OptionsDelete()
+			errs = obj.OptionsDelete()
 		} else {
-			errs := obj.Delete()
-			if errs.Occurred() {
-				inf.HandleErrs(w, r, errs)
-				return
-			}
+			errs = obj.Delete()
 		}
 
-		if userErr != nil || sysErr != nil {
-			HandleDeprecatedErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr, alternative)
+		if errs.Occurred() {
+			HandleErrsOptionalDeprecation(w, r, inf.Tx.Tx, errs, true, alternative)
 			return
 		}
 

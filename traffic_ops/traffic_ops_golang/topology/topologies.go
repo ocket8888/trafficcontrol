@@ -562,13 +562,15 @@ func (topology *TOTopology) Delete() api.Errors {
 }
 
 // OptionsDelete is a requirement of the OptionsDeleter interface.
-func (topology *TOTopology) OptionsDelete() (error, error, int) {
+func (topology *TOTopology) OptionsDelete() api.Errors {
 	topologies, errs, _ := topology.Read(nil, false)
 	if errs.Occurred() {
-		return errs.UserError, errs.SystemError, errs.Code
+		return errs
 	}
 	if len(topologies) != 1 {
-		return fmt.Errorf("cannot find exactly 1 topology with the query string provided"), nil, http.StatusBadRequest
+		errs.UserError = fmt.Errorf("cannot find exactly 1 topology with the query string provided")
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 	topology.Topology = topologies[0].(tc.Topology)
 

@@ -98,7 +98,7 @@ type Deleter interface {
 type OptionsDeleter interface {
 	// OptionsDelete returns any user error, any system error, and the HTTP error code to be returned if there was an
 	// error.
-	OptionsDelete() (error, error, int)
+	OptionsDelete() Errors
 	APIInfoer
 	Identifier
 	DeleteKeyOptions() map[string]dbhelpers.WhereColumnInfo

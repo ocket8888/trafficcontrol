@@ -272,29 +272,35 @@ func GenericUpdate(val GenericUpdater) (error, error, int) {
 // GenericOptionsDelete does a Delete (DELETE) for the given GenericOptionsDeleter object and type. Unlike
 // GenericDelete, there is no requirement that a specific key is used as the parameter.
 // GenericOptionsDeleter.DeleteKeyOptions() specifies which keys can be used.
-func GenericOptionsDelete(val GenericOptionsDeleter) (error, error, int) {
-	where, _, _, queryValues, errs := dbhelpers.BuildWhereAndOrderByAndPagination(val.APIInfo().Params, val.DeleteKeyOptions())
-	if len(errs) > 0 {
-		return util.JoinErrs(errs), nil, http.StatusBadRequest
+func GenericOptionsDelete(val GenericOptionsDeleter) Errors {
+	where, _, _, queryValues, dbErrs := dbhelpers.BuildWhereAndOrderByAndPagination(val.APIInfo().Params, val.DeleteKeyOptions())
+	if len(dbErrs) > 0 {
+		return Errors{
+			UserError: util.JoinErrs(dbErrs),
+			Code:      http.StatusBadRequest,
+		}
 	}
 
 	query := val.DeleteQueryBase() + where
 	tx := val.APIInfo().Tx
 	result, err := tx.NamedExec(query, queryValues)
 	if err != nil {
-		errs := ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return ParseDBError(err)
 	}
 
+	errs := NewErrors()
 	if rowsAffected, err := result.RowsAffected(); err != nil {
-		return nil, errors.New("deleting " + val.GetType() + ": getting rows affected: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("deleting " + val.GetType() + ": getting rows affected: " + err.Error())
+		errs.Code = http.StatusInternalServerError
 	} else if rowsAffected < 1 {
-		return errors.New("no " + val.GetType() + " with that key found"), nil, http.StatusNotFound
+		errs.SetUserError("no " + val.GetType() + " with that key found")
+		errs.Code = http.StatusNotFound
 	} else if rowsAffected > 1 {
-		return nil, fmt.Errorf(val.GetType()+" delete affected too many rows: %d", rowsAffected), http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf(val.GetType()+" delete affected too many rows: %d", rowsAffected)
+		errs.Code = http.StatusInternalServerError
 	}
 
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 // GenericDelete does a Delete (DELETE) for the given GenericDeleter object and type. This exists as a generic function, for the common use case of a simple delete with query parameters defined in the sqlx struct tags.
