@@ -158,8 +158,8 @@ parameter) VALUES (
 :parameter_id) RETURNING profile, parameter, last_updated`
 }
 
-func (pp *TOProfileParameter) Update() (error, error, int) {
-	return nil, nil, http.StatusNotImplemented
+func (pp *TOProfileParameter) Update() api.Errors {
+	return api.Errors{Code: http.StatusNotImplemented}
 }
 func (pp *TOProfileParameter) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
 	api.DefaultSort(pp.APIInfo(), "parameter")
