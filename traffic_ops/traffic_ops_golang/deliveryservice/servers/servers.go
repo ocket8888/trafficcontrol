@@ -377,8 +377,8 @@ func GetReplaceHandler(w http.ResponseWriter, r *http.Request) {
 		api.HandleErr(w, r, inf.Tx.Tx, http.StatusBadRequest, errors.New("no delivery service with that ID exists"), nil)
 		return
 	}
-	if userErr, sysErr, errCode := tenant.Check(inf.User, ds.Name, inf.Tx.Tx); userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	if errs = tenant.Check(inf.User, ds.Name, inf.Tx.Tx); errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	serverNamesCdnIdAndTypes, err := dbhelpers.GetServerHostNamesAndTypesFromIDs(inf.Tx.Tx, servers)
@@ -438,8 +438,8 @@ func GetCreateHandler(w http.ResponseWriter, r *http.Request) {
 
 	dsName := inf.Params["xml_id"]
 
-	if userErr, sysErr, errCode := tenant.Check(inf.User, dsName, inf.Tx.Tx); userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	if errs = tenant.Check(inf.User, dsName, inf.Tx.Tx); errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 

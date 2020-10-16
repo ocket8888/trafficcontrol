@@ -64,8 +64,8 @@ func AddSSLKeys(w http.ResponseWriter, r *http.Request) {
 		api.HandleErr(w, r, inf.Tx.Tx, http.StatusBadRequest, errors.New("parsing request: "+err.Error()), nil)
 		return
 	}
-	if userErr, sysErr, errCode := tenant.Check(inf.User, *req.DeliveryService, inf.Tx.Tx); userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	if errs := tenant.Check(inf.User, *req.DeliveryService, inf.Tx.Tx); errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
@@ -246,10 +246,11 @@ func GetSSLKeysByXMLID(w http.ResponseWriter, r *http.Request) {
 func getSSLKeysByXMLIDHelper(xmlID string, alerts tc.Alerts, inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
 	version := inf.Params["version"]
 	decode := inf.Params["decode"]
-	if userErr, sysErr, errCode := tenant.Check(inf.User, xmlID, inf.Tx.Tx); userErr != nil || sysErr != nil {
-		userErr = api.LogErr(r, errCode, userErr, sysErr)
+	if errs := tenant.Check(inf.User, xmlID, inf.Tx.Tx); errs.Occurred() {
+		// TODO: I think this should just be using HandleErrs
+		userErr := api.LogErrs(r, errs)
 		alerts.AddNewAlert(tc.ErrorLevel, userErr.Error())
-		api.WriteAlerts(w, r, errCode, alerts)
+		api.WriteAlerts(w, r, errs.Code, alerts)
 		return
 	}
 	keyObj, ok, err := riaksvc.GetDeliveryServiceSSLKeysObj(xmlID, version, inf.Tx.Tx, inf.Config.RiakAuthOptions, inf.Config.RiakPort)
@@ -298,10 +299,11 @@ func GetSSLKeysByXMLIDV15(w http.ResponseWriter, r *http.Request) {
 func getSSLKeysByXMLIDHelperV15(xmlID string, alerts tc.Alerts, inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
 	version := inf.Params["version"]
 	decode := inf.Params["decode"]
-	if userErr, sysErr, errCode := tenant.Check(inf.User, xmlID, inf.Tx.Tx); userErr != nil || sysErr != nil {
-		userErr = api.LogErr(r, errCode, userErr, sysErr)
+	if errs := tenant.Check(inf.User, xmlID, inf.Tx.Tx); errs.Occurred() {
+		// TODO: I think this should just be using HandleErrs
+		userErr := api.LogErrs(r, errs)
 		alerts.AddNewAlert(tc.ErrorLevel, userErr.Error())
-		api.WriteAlerts(w, r, errCode, alerts)
+		api.WriteAlerts(w, r, errs.Code, alerts)
 		return
 	}
 	keyObj, ok, err := riaksvc.GetDeliveryServiceSSLKeysObjV15(xmlID, version, inf.Tx.Tx, inf.Config.RiakAuthOptions, inf.Config.RiakPort)
@@ -415,8 +417,8 @@ func deleteSSLKeys(w http.ResponseWriter, r *http.Request, deprecated bool) {
 		api.HandleErrOptionalDeprecation(w, r, inf.Tx.Tx, http.StatusNotFound, errors.New("no DS with name "+xmlID), nil, deprecated, &alt)
 		return
 	}
-	if userErr, sysErr, errCode := tenant.Check(inf.User, xmlID, inf.Tx.Tx); userErr != nil || sysErr != nil {
-		api.HandleErrOptionalDeprecation(w, r, inf.Tx.Tx, errCode, userErr, sysErr, deprecated, &alt)
+	if errs := tenant.Check(inf.User, xmlID, inf.Tx.Tx); errs.Occurred() {
+		api.HandleErrsOptionalDeprecation(w, r, inf.Tx.Tx, errs, deprecated, &alt)
 		return
 	}
 	if err := riaksvc.DeleteDSSSLKeys(inf.Tx.Tx, inf.Config.RiakAuthOptions, inf.Config.RiakPort, xmlID, inf.Params["version"]); err != nil {

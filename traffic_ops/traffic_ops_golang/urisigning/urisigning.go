@@ -64,8 +64,8 @@ func GetURIsignkeysHandler(w http.ResponseWriter, r *http.Request) {
 
 	xmlID := inf.Params["xmlID"]
 
-	if userErr, sysErr, errCode := tenant.Check(inf.User, xmlID, inf.Tx.Tx); userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	if errs = tenant.Check(inf.User, xmlID, inf.Tx.Tx); errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
@@ -103,8 +103,8 @@ func RemoveDeliveryServiceURIKeysHandler(w http.ResponseWriter, r *http.Request)
 	}
 
 	xmlID := inf.Params["xmlID"]
-	if userErr, sysErr, errCode := tenant.Check(inf.User, xmlID, inf.Tx.Tx); userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	if errs = tenant.Check(inf.User, xmlID, inf.Tx.Tx); errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	dsID, ok, err := getDSIDFromName(inf.Tx.Tx, xmlID)
@@ -156,8 +156,8 @@ func SaveDeliveryServiceURIKeysHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	xmlID := inf.Params["xmlID"]
-	if userErr, sysErr, errCode := tenant.Check(inf.User, xmlID, inf.Tx.Tx); userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+	if errs := tenant.Check(inf.User, xmlID, inf.Tx.Tx); errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	dsID, ok, err := getDSIDFromName(inf.Tx.Tx, xmlID)

@@ -31,6 +31,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-util"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
 )
 
@@ -61,22 +62,28 @@ func GetDeliveryServiceTenantInfo(xmlID string, tx *sql.Tx) (*DeliveryServiceTen
 // Check checks that the given user has access to the given XMLID. Returns a user error, system error,
 // and the HTTP status code to be returned to the user if an error occurred. On success, the user error
 // and system error will both be nil, and the error code should be ignored.
-func Check(user *auth.CurrentUser, XMLID string, tx *sql.Tx) (error, error, int) {
+func Check(user *auth.CurrentUser, XMLID string, tx *sql.Tx) apierrors.Errors {
+	errs := apierrors.New()
 	dsInfo, err := GetDeliveryServiceTenantInfo(XMLID, tx)
 	if err != nil {
 		if dsInfo == nil {
-			return nil, errors.New("deliveryservice lookup failure: " + err.Error()), http.StatusInternalServerError
+			errs.SetSystemError("deliveryservice lookup failure: " + err.Error())
+			errs.Code = http.StatusInternalServerError
+		} else {
+			errs.SetUserError("no such deliveryservice: '" + XMLID + "'")
+			errs.Code = http.StatusBadRequest
 		}
-		return errors.New("no such deliveryservice: '" + XMLID + "'"), nil, http.StatusBadRequest
+		return errs
 	}
 	hasAccess, err := dsInfo.IsTenantAuthorized(user, tx)
 	if err != nil {
-		return nil, errors.New("user tenancy check failure: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("user tenancy check failure: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+	} else if !hasAccess {
+		errs.SetUserError("Access to this resource is not authorized")
+		errs.Code = http.StatusForbidden
 	}
-	if !hasAccess {
-		return nil, errors.New("Access to this resource is not authorized"), http.StatusForbidden
-	}
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 // CheckID checks that the given user has access to the given delivery service. Returns a user error,
