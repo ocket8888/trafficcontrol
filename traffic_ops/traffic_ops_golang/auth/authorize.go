@@ -97,14 +97,7 @@ WHERE
   u.username = $1
 `
 
-	u := CurrentUser{
-		UserName:     "-",
-		ID:           -1,
-		PrivLevel:    PrivLevelInvalid,
-		TenantID:     TenantIDInvalid,
-		Role:         -1,
-		Capabilities: []string{},
-	}
+	var u CurrentUser
 
 	errs := apierrors.New()
 	if DB == nil {
