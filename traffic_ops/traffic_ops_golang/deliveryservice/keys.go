@@ -160,11 +160,12 @@ func getXmlIDFromRequest(w http.ResponseWriter, r *http.Request) (*api.APIInfo, 
 	}
 
 	hostName := inf.Params["hostname"]
-	xmlID, userErr, sysErr, errCode := getXmlIdFromHostname(inf, hostName)
-	if userErr != nil || sysErr != nil {
-		userErr = api.LogErr(r, errCode, userErr, sysErr)
+	xmlID, errs := getXmlIdFromHostname(inf, hostName)
+	if errs.Occurred() {
+		// TODO: I think this should just be using HandleErrs
+		userErr := api.LogErrs(r, errs)
 		alerts.AddNewAlert(tc.ErrorLevel, userErr.Error())
-		api.WriteAlerts(w, r, errCode, alerts)
+		api.WriteAlerts(w, r, errs.Code, alerts)
 		return inf, "", errors.New("getting XML ID from request")
 	}
 	return inf, xmlID, nil
@@ -182,7 +183,7 @@ func GetSSLKeysByHostNameV15(w http.ResponseWriter, r *http.Request) {
 	getSSLKeysByXMLIDHelperV15(xmlID, tc.CreateAlerts(tc.WarnLevel, hostnameKeyDepMsg), inf, w, r)
 }
 
-func getXmlIdFromHostname(inf *api.APIInfo, hostName string) (string, error, error, int) {
+func getXmlIdFromHostname(inf *api.APIInfo, hostName string) (string, api.Errors) {
 	domainName := ""
 	hostRegex := ""
 	strArr := strings.Split(hostName, ".")
@@ -195,24 +196,34 @@ func getXmlIdFromHostname(inf *api.APIInfo, hostName string) (string, error, err
 		hostRegex = `.*\.` + strArr[1] + `\..*`
 	}
 
+	errs := api.NewErrors()
+
 	// lookup the cdnID
 	cdnID, ok, err := getCDNIDByDomainname(domainName, inf.Tx.Tx)
 	if err != nil {
-		return "", nil, errors.New("getting cdn id by domain name: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("getting cdn id by domain name: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return "", errs
 	}
 	if !ok {
-		return "", errors.New("a CDN does not exist for the domain: " + domainName + " parsed from hostname: " + hostName), nil, http.StatusNotFound
+		errs.SetUserError("a CDN does not exist for the domain: " + domainName + " parsed from hostname: " + hostName)
+		errs.Code = http.StatusNotFound
+		return "", errs
 	}
 	// now lookup the deliveryservice xmlID
 	xmlID, ok, err := getXMLID(cdnID, hostRegex, inf.Tx.Tx)
 	if err != nil {
-		return "", nil, errors.New("getting xml id: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("getting xml id: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return "", errs
 	}
 	if !ok {
-		return "", errors.New("a delivery service does not exist for a host with hostname of " + hostName), nil, http.StatusNotFound
+		errs.SetUserError("a delivery service does not exist for a host with hostname of " + hostName)
+		errs.Code = http.StatusNotFound
+		return "", errs
 	}
 
-	return xmlID, nil, nil, http.StatusOK
+	return xmlID, errs
 }
 
 // GetSSLKeysByXMLID fetches the deliveryservice ssl keys by the specified xmlID.
