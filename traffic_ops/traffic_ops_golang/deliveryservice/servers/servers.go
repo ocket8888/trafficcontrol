@@ -391,9 +391,9 @@ func GetReplaceHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usrErr, sysErr, status := ValidateServerCapabilities(ds.ID, serverNamesCdnIdAndTypes, inf.Tx.Tx)
-	if usrErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, status, usrErr, sysErr)
+	errs = ValidateServerCapabilities(ds.ID, serverNamesCdnIdAndTypes, inf.Tx.Tx)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
@@ -472,9 +472,9 @@ func GetCreateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usrErr, sysErr, status := ValidateServerCapabilities(ds.ID, serverNamesCdnIdAndTypes, inf.Tx.Tx)
-	if usrErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, status, usrErr, sysErr)
+	errs = ValidateServerCapabilities(ds.ID, serverNamesCdnIdAndTypes, inf.Tx.Tx)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
@@ -520,7 +520,7 @@ func ValidateDSSAssignments(ds DSInfo, servers []dbhelpers.ServerHostNameCDNIDAn
 }
 
 // ValidateServerCapabilities checks that the delivery service's requirements are met by each server to be assigned.
-func ValidateServerCapabilities(dsID int, serverNamesAndTypes []dbhelpers.ServerHostNameCDNIDAndType, tx *sql.Tx) (error, error, int) {
+func ValidateServerCapabilities(dsID int, serverNamesAndTypes []dbhelpers.ServerHostNameCDNIDAndType, tx *sql.Tx) api.Errors {
 	nonOriginServerNames := []string{}
 	for _, s := range serverNamesAndTypes {
 		if strings.HasPrefix(s.Type, tc.EdgeTypePrefix) {
@@ -531,23 +531,30 @@ func ValidateServerCapabilities(dsID int, serverNamesAndTypes []dbhelpers.Server
 	var sCaps []string
 	dsCaps, err := dbhelpers.GetDSRequiredCapabilitiesFromID(dsID, tx)
 
+	errs := api.NewErrors()
 	if err != nil {
-		return nil, err, http.StatusInternalServerError
+		errs.SystemError = err
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	for _, name := range nonOriginServerNames {
 		sCaps, err = dbhelpers.GetServerCapabilitiesFromName(name, tx)
 		if err != nil {
-			return nil, err, http.StatusInternalServerError
+			errs.Code = http.StatusInternalServerError
+			errs.SystemError = err
+			return errs
 		}
 		for _, dsc := range dsCaps {
 			if !util.ContainsStr(sCaps, dsc) {
-				return fmt.Errorf("Caching server cannot be assigned to this delivery service without having the required delivery service capabilities: [%v] for server %s", dsCaps, name), nil, http.StatusBadRequest
+				errs.UserError = fmt.Errorf("Caching server cannot be assigned to this delivery service without having the required delivery service capabilities: [%v] for server %s", dsCaps, name)
+				errs.Code = http.StatusBadRequest
+				return errs
 			}
 		}
 	}
 
-	return nil, nil, 0
+	return errs
 }
 
 func insertIdsQuery() string {
