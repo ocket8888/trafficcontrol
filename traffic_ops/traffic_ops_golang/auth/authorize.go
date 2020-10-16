@@ -29,6 +29,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/config"
 
 	"github.com/jmoiron/sqlx"
@@ -79,7 +80,7 @@ const CurrentUserKey key = iota
 // along with the username, or -1 as the id, - as the userName and
 // PrivLevelInvalid if the user doesn't exist, along with an error code to
 // return, a user-facing error, and a system error to log.
-func GetCurrentUserFromDB(DB *sqlx.DB, user string, timeout time.Duration) (CurrentUser, int, error, error) {
+func GetCurrentUserFromDB(DB *sqlx.DB, user string, timeout time.Duration) (CurrentUser, apierrors.Errors) {
 	qry := `
 SELECT
   r.priv_level,
@@ -105,29 +106,29 @@ WHERE
 		Capabilities: []string{},
 	}
 
-	var currentUserInfo CurrentUser
+	errs := apierrors.New()
 	if DB == nil {
-		sysErr := errors.New("no db provided to GetCurrentUserFromDB")
-		return u, http.StatusInternalServerError, nil, sysErr
+		errs.SetSystemError("no db provided to GetCurrentUserFromDB")
+		errs.Code = http.StatusInternalServerError
+		return u, errs
 	}
 	dbCtx, dbClose := context.WithTimeout(context.Background(), timeout)
 	defer dbClose()
 
-	err := DB.GetContext(dbCtx, &currentUserInfo, qry, user)
+	err := DB.GetContext(dbCtx, &u, qry, user)
 	switch {
 	case err == sql.ErrNoRows:
-		userErr := errors.New("user not found")
-		sysErr := fmt.Errorf("checking user %v info: user not in database", user)
-		return u, http.StatusUnauthorized, userErr, sysErr
+		errs.SetUserError("user not found")
+		errs.SystemError = fmt.Errorf("checking user %v info: user not in database", user)
+		errs.Code = http.StatusUnauthorized
 	case err == context.DeadlineExceeded || err == context.Canceled:
-		sysErr := fmt.Errorf("db access timed out: %s number of open connections: %d", err, DB.Stats().OpenConnections)
-		return u, http.StatusInternalServerError, nil, sysErr
+		errs.SystemError = fmt.Errorf("db access timed out: %s number of open connections: %d", err, DB.Stats().OpenConnections)
+		errs.Code = http.StatusInternalServerError
 	case err != nil:
-		sysErr := fmt.Errorf("error checking user %s info: %v", user, err)
-		return u, http.StatusInternalServerError, nil, sysErr
-	default:
-		return currentUserInfo, http.StatusOK, nil, nil
+		errs.SystemError = fmt.Errorf("error checking user %s info: %v", user, err)
+		errs.Code = http.StatusInternalServerError
 	}
+	return u, errs
 }
 
 func GetCurrentUser(ctx context.Context) (*CurrentUser, error) {

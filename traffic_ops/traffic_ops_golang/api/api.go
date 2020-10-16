@@ -1009,7 +1009,7 @@ func GetUserFromReq(w http.ResponseWriter, r *http.Request, secret string) (auth
 		return u, errs
 	}
 
-	u, errs.Code, errs.UserError, errs.SystemError = auth.GetCurrentUserFromDB(db, username, time.Duration(cfg.DBQueryTimeoutSeconds)*time.Second)
+	u, errs = auth.GetCurrentUserFromDB(db, username, time.Duration(cfg.DBQueryTimeoutSeconds)*time.Second)
 	if errs.Occurred() {
 		return u, errs
 	}
