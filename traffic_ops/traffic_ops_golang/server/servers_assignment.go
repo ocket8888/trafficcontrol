@@ -91,9 +91,9 @@ func AssignDeliveryServicesToServerHandler(w http.ResponseWriter, r *http.Reques
 	}
 
 	if !strings.HasPrefix(serverInfo.Type, tc.OriginTypeName) {
-		usrErr, sysErr, status := ValidateDSCapabilities(dsList, serverInfo.HostName, inf.Tx.Tx)
-		if usrErr != nil || sysErr != nil {
-			api.HandleErr(w, r, inf.Tx.Tx, status, usrErr, sysErr)
+		errs := ValidateDSCapabilities(dsList, serverInfo.HostName, inf.Tx.Tx)
+		if errs.Occurred() {
+			inf.HandleErrs(w, r, errs)
 			return
 		}
 	}
@@ -168,27 +168,34 @@ func checkTenancyAndCDN(tx *sql.Tx, serverCDN string, server int, serverInfo tc.
 }
 
 // ValidateDSCapabilities checks that the server meets the requirements of each delivery service to be assigned.
-func ValidateDSCapabilities(dsIDs []int, serverName string, tx *sql.Tx) (error, error, int) {
+func ValidateDSCapabilities(dsIDs []int, serverName string, tx *sql.Tx) api.Errors {
 	var dsCaps []string
 	sCaps, err := dbhelpers.GetServerCapabilitiesFromName(serverName, tx)
 
+	errs := api.NewErrors()
 	if err != nil {
-		return nil, err, http.StatusInternalServerError
+		errs.SystemError = err
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	for _, id := range dsIDs {
 		dsCaps, err = dbhelpers.GetDSRequiredCapabilitiesFromID(id, tx)
 		if err != nil {
-			return nil, err, http.StatusInternalServerError
+			errs.SystemError = err
+			errs.Code = http.StatusInternalServerError
+			return errs
 		}
 		for _, dsc := range dsCaps {
 			if !util.ContainsStr(sCaps, dsc) {
-				return errors.New(fmt.Sprintf("Caching server cannot assign this delivery service without having the required delivery service capabilities: [%v] for server %s", dsCaps, serverName)), nil, http.StatusBadRequest
+				errs.UserError = fmt.Errorf("Caching server cannot assign this delivery service without having the required delivery service capabilities: [%v] for server %s", dsCaps, serverName)
+				errs.Code = http.StatusBadRequest
+				return errs
 			}
 		}
 	}
 
-	return nil, nil, 0
+	return errs
 }
 
 func assignDeliveryServicesToServer(server int, dses []int, replace bool, tx *sql.Tx) ([]int, error) {
