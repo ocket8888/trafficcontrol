@@ -810,8 +810,9 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 			return nil, 0, errs, nil
 		}
 
-		errs.UserError, errs.SystemError, _ = tenant.CheckID(tx.Tx, user, dsID)
+		errs = tenant.CheckID(tx.Tx, user, dsID)
 		if errs.Occurred() {
+			// TODO: should this be overriding the status code?
 			errs.Code = http.StatusForbidden
 			return nil, 0, errs, nil
 		}

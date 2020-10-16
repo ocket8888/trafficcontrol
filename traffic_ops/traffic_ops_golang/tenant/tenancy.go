@@ -89,26 +89,32 @@ func Check(user *auth.CurrentUser, XMLID string, tx *sql.Tx) apierrors.Errors {
 // CheckID checks that the given user has access to the given delivery service. Returns a user error,
 // a system error, and an HTTP error code. If both the user and system error are nil, the error
 // code should be ignored.
-func CheckID(tx *sql.Tx, user *auth.CurrentUser, dsID int) (error, error, int) {
+func CheckID(tx *sql.Tx, user *auth.CurrentUser, dsID int) apierrors.Errors {
+	errs := apierrors.New()
 	dsTenantID, ok, err := getDSTenantIDByIDTx(tx, dsID)
 	if err != nil {
-		return nil, errors.New("checking tenant: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("checking tenant: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 	if !ok {
-		return errors.New("delivery service " + strconv.Itoa(dsID) + " not found"), nil, http.StatusNotFound
+		errs.SetUserError("delivery service " + strconv.Itoa(dsID) + " not found")
+		errs.Code = http.StatusNotFound
+		return errs
 	}
 	if dsTenantID == nil {
-		return nil, nil, http.StatusOK
+		return errs
 	}
 
 	authorized, err := IsResourceAuthorizedToUserTx(*dsTenantID, user, tx)
 	if err != nil {
-		return nil, errors.New("checking tenant: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("checking tenant: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+	} else if !authorized {
+		errs.SetUserError("not authorized on this tenant")
+		errs.Code = http.StatusForbidden
 	}
-	if !authorized {
-		return errors.New("not authorized on this tenant"), nil, http.StatusForbidden
-	}
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 // GetUserTenantListTx returns a Tenant list that the specified user has access to.

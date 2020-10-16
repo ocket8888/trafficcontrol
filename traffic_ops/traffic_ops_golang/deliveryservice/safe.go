@@ -55,9 +55,9 @@ func UpdateSafe(w http.ResponseWriter, r *http.Request) {
 
 	dsID := inf.IntParams["id"]
 
-	userErr, sysErr, errCode := tenant.CheckID(tx, inf.User, dsID)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	errs = tenant.CheckID(tx, inf.User, dsID)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
@@ -71,7 +71,7 @@ func UpdateSafe(w http.ResponseWriter, r *http.Request) {
 		api.HandleErr(w, r, tx, http.StatusInternalServerError, nil, fmt.Errorf("Updating Delivery Service (safe): %s", err))
 		return
 	} else if !ok {
-		userErr = fmt.Errorf("No Delivery Service exists by ID '%d'", dsID)
+		userErr := fmt.Errorf("No Delivery Service exists by ID '%d'", dsID)
 		api.HandleErr(w, r, tx, http.StatusNotFound, userErr, nil)
 		return
 	}
@@ -88,7 +88,7 @@ func UpdateSafe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if len(dses) != 1 {
-		sysErr = fmt.Errorf("Updating Delivery Service (safe): expected one Delivery Service returned from read, got %v", len(dses))
+		sysErr := fmt.Errorf("Updating Delivery Service (safe): expected one Delivery Service returned from read, got %v", len(dses))
 		api.HandleErr(w, r, tx, http.StatusInternalServerError, nil, sysErr)
 		return
 	}

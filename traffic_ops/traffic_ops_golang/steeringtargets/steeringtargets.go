@@ -217,12 +217,8 @@ func (st *TOSteeringTargetV11) Create() apierrors.Errors {
 		return errs
 	}
 
-	if userErr, sysErr, errCode := tenant.CheckID(st.ReqInfo.Tx.Tx, st.ReqInfo.User, int(*st.DeliveryServiceID)); userErr != nil || sysErr != nil {
-		return apierrors.Errors{
-			Code:        errCode,
-			SystemError: sysErr,
-			UserError:   userErr,
-		}
+	if errs = tenant.CheckID(st.ReqInfo.Tx.Tx, st.ReqInfo.User, int(*st.DeliveryServiceID)); errs.Occurred() {
+		return errs
 	}
 
 	rows, err := st.ReqInfo.Tx.NamedQuery(insertQuery(), st)
@@ -272,12 +268,8 @@ func (st *TOSteeringTargetV11) Update() apierrors.Errors {
 	targetID := uint64(targetIDInt)
 	st.TargetID = &targetID
 
-	if userErr, sysErr, errCode := tenant.CheckID(st.ReqInfo.Tx.Tx, st.ReqInfo.User, int(*st.DeliveryServiceID)); userErr != nil || sysErr != nil {
-		return apierrors.Errors{
-			UserError:   userErr,
-			SystemError: sysErr,
-			Code:        errCode,
-		}
+	if errs = tenant.CheckID(st.ReqInfo.Tx.Tx, st.ReqInfo.User, int(*st.DeliveryServiceID)); errs.Occurred() {
+		return errs
 	}
 
 	rows, err := st.ReqInfo.Tx.NamedQuery(updateQuery(), st)
@@ -310,15 +302,11 @@ func (st *TOSteeringTargetV11) Update() apierrors.Errors {
 }
 
 func (st *TOSteeringTargetV11) Delete() apierrors.Errors {
-	if userErr, sysErr, errCode := tenant.CheckID(st.ReqInfo.Tx.Tx, st.ReqInfo.User, int(*st.DeliveryServiceID)); userErr != nil || sysErr != nil {
-		return apierrors.Errors{
-			UserError:   userErr,
-			SystemError: sysErr,
-			Code:        errCode,
-		}
+	errs := tenant.CheckID(st.ReqInfo.Tx.Tx, st.ReqInfo.User, int(*st.DeliveryServiceID))
+	if errs.Occurred() {
+		return errs
 	}
 
-	errs := apierrors.New()
 	result, err := st.ReqInfo.Tx.NamedExec(deleteQuery(), st)
 	if err != nil {
 		errs.SetSystemError("steering target delete exec: " + err.Error())

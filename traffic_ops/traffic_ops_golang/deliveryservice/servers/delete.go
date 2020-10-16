@@ -53,9 +53,9 @@ func delete(w http.ResponseWriter, r *http.Request, deprecated bool) {
 	dsID := inf.IntParams["dsid"]
 	serverID := inf.IntParams["serverid"]
 
-	userErr, sysErr, errCode := tenant.CheckID(inf.Tx.Tx, inf.User, dsID)
-	if userErr != nil || sysErr != nil {
-		api.HandleErrOptionalDeprecation(w, r, inf.Tx.Tx, errCode, userErr, sysErr, deprecated, &alt)
+	errs = tenant.CheckID(inf.Tx.Tx, inf.User, dsID)
+	if errs.Occurred() {
+		api.HandleErrsOptionalDeprecation(w, r, inf.Tx.Tx, errs, deprecated, &alt)
 		return
 	}
 

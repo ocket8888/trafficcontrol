@@ -46,9 +46,9 @@ func GetDSRouting(w http.ResponseWriter, r *http.Request) {
 	dsID := inf.IntParams["id"]
 
 	tx := inf.Tx.Tx
-	userErr, sysErr, errCode := tenant.CheckID(tx, inf.User, dsID)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	errs = tenant.CheckID(tx, inf.User, dsID)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
