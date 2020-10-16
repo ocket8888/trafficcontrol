@@ -649,7 +649,7 @@ func (inf APIInfo) HandleErrs(w http.ResponseWriter, r *http.Request, e Errors) 
 }
 
 // SendMail is a convenience method used to call SendMail using an APIInfo structure's configuration.
-func (inf *APIInfo) SendMail(to rfc.EmailAddress, msg []byte) (int, error, error) {
+func (inf *APIInfo) SendMail(to rfc.EmailAddress, msg []byte) Errors {
 	return SendMail(to, msg, inf.Config)
 }
 
@@ -670,9 +670,12 @@ func (inf *APIInfo) IsResourceAuthorizedToCurrentUser(resourceTenantID int) (boo
 // SendMail returns (in order) an HTTP status code, a user-friendly error, and an error fit for
 // logging to system error logs. If either the user or system error is non-nil, the operation failed,
 // and the HTTP status code indicates the type of failure.
-func SendMail(to rfc.EmailAddress, msg []byte, cfg *config.Config) (int, error, error) {
+func SendMail(to rfc.EmailAddress, msg []byte, cfg *config.Config) Errors {
+	errs := NewErrors()
 	if !cfg.SMTP.Enabled {
-		return http.StatusInternalServerError, nil, errors.New("SMTP is not enabled; mail cannot be sent")
+		errs.Code = http.StatusInternalServerError
+		errs.SetSystemError("SMTP is not enabled; mail cannot be sent")
+		return errs
 	}
 	var auth smtp.Auth
 	if cfg.SMTP.User != "" {
@@ -680,9 +683,10 @@ func SendMail(to rfc.EmailAddress, msg []byte, cfg *config.Config) (int, error, 
 	}
 	err := smtp.SendMail(cfg.SMTP.Address, auth, cfg.ConfigTO.EmailFrom.Address.Address, []string{to.Address.Address}, msg)
 	if err != nil {
-		return http.StatusInternalServerError, nil, fmt.Errorf("Failed to send email: %v", err)
+		errs.Code = http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("Failed to send email: %v", err)
 	}
-	return http.StatusOK, nil, nil
+	return errs
 }
 
 // CreateInfluxClient constructs and returns an InfluxDB HTTP client, if enabled and when possible.
@@ -1068,14 +1072,17 @@ func AddUserToReq(r *http.Request, u auth.CurrentUser) {
 // SendEmailFromTemplate returns (in order) an HTTP status code, a user-friendly error, and an error fit for
 // logging to system error logs. If either the user or system error is non-nil, the operation failed,
 // and the HTTP status code indicates the type of failure.
-func SendEmailFromTemplate(config config.Config, header string, data interface{}, templateFile string, toEmail string) (int, error, error) {
+func SendEmailFromTemplate(config config.Config, header string, data interface{}, templateFile string, toEmail string) Errors {
 	email := rfc.EmailAddress{
 		Address: mail.Address{Name: "", Address: toEmail},
 	}
 
 	msgBodyBuffer, err := parseTemplate(templateFile, data)
 	if err != nil {
-		return http.StatusInternalServerError, err, nil
+		return Errors{
+			Code:        http.StatusInternalServerError,
+			SystemError: err,
+		}
 	}
 	msg := append([]byte(header), msgBodyBuffer.Bytes()...)
 
