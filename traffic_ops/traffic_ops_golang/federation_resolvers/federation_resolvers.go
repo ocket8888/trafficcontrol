@@ -254,34 +254,29 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	}
 	defer inf.Close()
 
-	tx := inf.Tx.Tx
-	alert, respObj, userErr, sysErr, statusCode := deleteFederationResolver(inf)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, statusCode, userErr, sysErr)
+	alert, respObj, errs := deleteFederationResolver(inf)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
 	api.WriteRespAlertObj(w, r, tc.SuccessLevel, alert.Text, respObj)
 }
 
-func deleteFederationResolver(inf *api.APIInfo) (tc.Alert, tc.FederationResolver, error, error, int) {
-	var userErr error
-	var sysErr error
-	var statusCode = http.StatusOK
+func deleteFederationResolver(inf *api.APIInfo) (tc.Alert, tc.FederationResolver, api.Errors) {
 	var alert tc.Alert
 	var result tc.FederationResolver
-
+	errs := api.NewErrors()
 	err := inf.Tx.Tx.QueryRow(deleteQuery, inf.IntParams["id"]).Scan(&result.ID, &result.IPAddress, &result.Type)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			userErr = fmt.Errorf("No federation resolver by ID %d", inf.IntParams["id"])
-			statusCode = http.StatusNotFound
+			errs.UserError = fmt.Errorf("No federation resolver by ID %d", inf.IntParams["id"])
+			errs.Code = http.StatusNotFound
 		} else {
-			errs := api.ParseDBError(err)
-			return alert, result, errs.UserError, errs.SystemError, errs.Code
+			errs = api.ParseDBError(err)
 		}
 
-		return alert, result, userErr, sysErr, statusCode
+		return alert, result, errs
 	}
 
 	changeLogMsg := fmt.Sprintf("FEDERATION_RESOLVER: %s, ID: %d, ACTION: Deleted", *result.IPAddress, *result.ID)
@@ -293,7 +288,7 @@ func deleteFederationResolver(inf *api.APIInfo) (tc.Alert, tc.FederationResolver
 		Text:  alertMsg,
 	}
 
-	return alert, result, userErr, sysErr, statusCode
+	return alert, result, errs
 }
 
 // DeleteByID is the handler for DELETE requests to /federation_resolvers/{{ID}}.
@@ -306,9 +301,9 @@ func DeleteByID(w http.ResponseWriter, r *http.Request) {
 	defer inf.Close()
 
 	tx := inf.Tx.Tx
-	alert, respObj, userErr, sysErr, statusCode := deleteFederationResolver(inf)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, statusCode, userErr, sysErr)
+	alert, respObj, errs := deleteFederationResolver(inf)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
@@ -332,9 +327,11 @@ func DeleteByID(w http.ResponseWriter, r *http.Request) {
 		resp.Response = nil
 	}
 
+	statusCode := http.StatusOK
+	var userErr error
 	respBts, err := json.Marshal(resp)
 	if err != nil {
-		sysErr = fmt.Errorf("marhsaling response: %v", err)
+		sysErr := fmt.Errorf("marhsaling response: %v", err)
 		// TODO: I think this should've returned errCode...
 		// errCode = http.StatusInternalServerError
 		api.HandleErr(w, r, tx, statusCode, userErr, sysErr)
