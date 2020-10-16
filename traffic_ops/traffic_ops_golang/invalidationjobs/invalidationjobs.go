@@ -29,6 +29,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
 	"github.com/lib/pq"
@@ -205,10 +206,10 @@ func selectMaxLastUpdatedQuery(where string) string {
 
 // Used by GET requests to `/jobs`, simply returns a filtered list of
 // content invalidation jobs according to the provided query parameters.
-func (job *InvalidationJob) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (job *InvalidationJob) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	queryParamsToSQLCols := map[string]dbhelpers.WhereColumnInfo{
 		"id":              dbhelpers.WhereColumnInfo{"job.id", api.IsInt},
 		"keyword":         dbhelpers.WhereColumnInfo{"job.keyword", nil},
@@ -244,7 +245,7 @@ func (job *InvalidationJob) Read(h http.Header, useIMS bool) ([]interface{}, api
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(job.APIInfo().Tx, h, queryValues, selectMaxLastUpdatedQuery(where))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return []interface{}{}, api.Errors{Code: http.StatusNotFound}, &maxTime
+			return []interface{}{}, apierrors.Errors{Code: http.StatusNotFound}, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {

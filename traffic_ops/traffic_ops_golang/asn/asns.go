@@ -29,6 +29,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -99,10 +100,10 @@ func (asn TOASNV11) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (as *TOASNV11) Create() api.Errors {
+func (as *TOASNV11) Create() apierrors.Errors {
 	err := as.ASNExists(true)
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:      http.StatusBadRequest,
 			UserError: err,
 		}
@@ -110,7 +111,7 @@ func (as *TOASNV11) Create() api.Errors {
 	return api.GenericCreate(as)
 }
 
-func (as *TOASNV11) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (as *TOASNV11) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	api.DefaultSort(as.APIInfo(), "asn")
 	return api.GenericRead(h, as, useIMS)
 }
@@ -123,10 +124,10 @@ JOIN
 	select max(last_updated) as t from last_deleted l where l.table_name='asn') as res`
 }
 
-func (as *TOASNV11) Update() api.Errors {
+func (as *TOASNV11) Update() apierrors.Errors {
 	err := as.ASNExists(false)
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			UserError: err,
 			Code:      http.StatusBadRequest,
 		}
@@ -134,7 +135,7 @@ func (as *TOASNV11) Update() api.Errors {
 	return api.GenericUpdate(as)
 }
 
-func (as *TOASNV11) Delete() api.Errors { return api.GenericDelete(as) }
+func (as *TOASNV11) Delete() apierrors.Errors { return api.GenericDelete(as) }
 
 func (asn TOASNV11) ASNExists(create bool) error {
 	if asn.APIInfo() == nil || asn.APIInfo().Tx == nil {

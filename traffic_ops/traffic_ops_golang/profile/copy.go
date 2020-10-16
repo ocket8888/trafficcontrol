@@ -26,6 +26,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/profileparameter"
 )
 
@@ -62,17 +63,17 @@ func CopyProfileHandler(w http.ResponseWriter, r *http.Request) {
 	api.WriteRespAlertObj(w, r, tc.SuccessLevel, successMsg, p.Response)
 }
 
-func copyProfile(inf *api.APIInfo, p *tc.ProfileCopy) api.Errors {
+func copyProfile(inf *api.APIInfo, p *tc.ProfileCopy) apierrors.Errors {
 	// check if the newProfile already exists
 	ok, err := tc.ProfileExistsByName(p.Name, inf.Tx.Tx)
 	if ok {
-		return api.Errors{
+		return apierrors.Errors{
 			UserError: fmt.Errorf("profile with name %s already exists", p.Name),
 			Code:      http.StatusBadRequest,
 		}
 	}
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			SystemError: err,
 			Code:        http.StatusInternalServerError,
 		}
@@ -95,12 +96,12 @@ func copyProfile(inf *api.APIInfo, p *tc.ProfileCopy) api.Errors {
 	}
 
 	if len(profiles) == 0 {
-		return api.Errors{
+		return apierrors.Errors{
 			UserError: fmt.Errorf("profile with name %s does not exist", p.ExistingName),
 			Code:      http.StatusNotFound,
 		}
 	} else if len(profiles) > 1 {
-		return api.Errors{
+		return apierrors.Errors{
 			SystemError: fmt.Errorf("multiple profiles with name %s returned", p.ExistingName),
 			Code:        http.StatusInternalServerError,
 		}
@@ -118,10 +119,10 @@ func copyProfile(inf *api.APIInfo, p *tc.ProfileCopy) api.Errors {
 	p.ID = *toProfile.ProfileNullable.ID
 	p.Description = *toProfile.ProfileNullable.Description
 	log.Infof("created new profile [%s] from existing profile [%s]", p.Name, p.ExistingName)
-	return api.NewErrors()
+	return apierrors.New()
 }
 
-func copyParameters(inf *api.APIInfo, p *tc.ProfileCopy) api.Errors {
+func copyParameters(inf *api.APIInfo, p *tc.ProfileCopy) apierrors.Errors {
 	// use existing ProfileParameter CRUD helpers to find parameters for the existing profile
 	inf.Params = map[string]string{
 		"profileId": fmt.Sprintf("%d", p.ExistingID),
@@ -155,5 +156,5 @@ func copyParameters(inf *api.APIInfo, p *tc.ProfileCopy) api.Errors {
 	}
 
 	log.Infof("profile [%s] was assigned to %d parameters", p.Name, newParams)
-	return api.NewErrors()
+	return apierrors.New()
 }

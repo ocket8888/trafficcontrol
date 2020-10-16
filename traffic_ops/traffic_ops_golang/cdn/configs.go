@@ -25,6 +25,7 @@ import (
 
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 )
 
@@ -46,7 +47,7 @@ id
 FROM cdn`
 }
 
-func (v *TOCDNConf) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (v *TOCDNConf) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	return api.GenericRead(h, v, useIMS)
 }
 func (v *TOCDNConf) SelectMaxLastUpdatedQuery(where, orderBy, pagination, tableName string) string {

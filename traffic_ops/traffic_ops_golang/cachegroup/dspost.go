@@ -30,6 +30,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
@@ -63,7 +64,7 @@ func DSPostHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // postDSes returns the post response, any user error, any system error, and the HTTP status code to be returned in the event of an error.
-func postDSes(tx *sql.Tx, user *auth.CurrentUser, cgID int, dsIDs []int) (tc.CacheGroupPostDSResp, api.Errors) {
+func postDSes(tx *sql.Tx, user *auth.CurrentUser, cgID int, dsIDs []int) (tc.CacheGroupPostDSResp, apierrors.Errors) {
 	var resp tc.CacheGroupPostDSResp
 	cdnName, errs := getCachegroupCDN(tx, cgID)
 	if errs.Occurred() {
@@ -203,7 +204,7 @@ AND cdn.name <> $2::text
 	return nil
 }
 
-func getCachegroupCDN(tx *sql.Tx, cgID int) (string, api.Errors) {
+func getCachegroupCDN(tx *sql.Tx, cgID int) (string, apierrors.Errors) {
 	q := `
 SELECT cdn.name
 FROM cdn
@@ -212,7 +213,7 @@ JOIN type on server.type = type.id
 WHERE server.cachegroup = $1
 AND (type.name LIKE 'EDGE%' OR type.name LIKE 'ORG%')
 `
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	rows, err := tx.Query(q, cgID)
 	if err != nil {
 		errs.SetSystemError("selecting cachegroup CDNs: " + err.Error())

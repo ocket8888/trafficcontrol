@@ -25,6 +25,7 @@ import (
 	"time"
 
 	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
 	"github.com/apache/trafficcontrol/lib/go-tc"
@@ -126,18 +127,18 @@ func (param TOParameter) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (pa *TOParameter) Create() api.Errors {
+func (pa *TOParameter) Create() apierrors.Errors {
 	if pa.Value == nil {
 		pa.Value = util.StrPtr("")
 	}
 	return api.GenericCreate(pa)
 }
 
-func (param *TOParameter) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (param *TOParameter) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	queryParamsToQueryCols := param.ParamColumns()
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	where, orderBy, pagination, queryValues, dbErrs := dbhelpers.BuildWhereAndOrderByAndPagination(param.APIInfo().Params, queryParamsToQueryCols)
 	if len(dbErrs) > 0 {
 		errs.Code = http.StatusBadRequest
@@ -148,7 +149,7 @@ func (param *TOParameter) Read(h http.Header, useIMS bool) ([]interface{}, api.E
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(param.APIInfo().Tx, h, queryValues, param.SelectMaxLastUpdatedQuery(where, orderBy, pagination, "parameter"))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return []interface{}{}, api.Errors{Code: http.StatusNotModified}, &maxTime
+			return []interface{}{}, apierrors.Errors{Code: http.StatusNotModified}, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {
@@ -180,14 +181,14 @@ func (param *TOParameter) Read(h http.Header, useIMS bool) ([]interface{}, api.E
 	return params, errs, &maxTime
 }
 
-func (pa *TOParameter) Update() api.Errors {
+func (pa *TOParameter) Update() apierrors.Errors {
 	if pa.Value == nil {
 		pa.Value = util.StrPtr("")
 	}
 	return api.GenericUpdate(pa)
 }
 
-func (pa *TOParameter) Delete() api.Errors { return api.GenericDelete(pa) }
+func (pa *TOParameter) Delete() apierrors.Errors { return api.GenericDelete(pa) }
 
 func insertQuery() string {
 	query := `INSERT INTO parameter (

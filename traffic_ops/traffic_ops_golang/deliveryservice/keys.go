@@ -37,6 +37,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/riaksvc"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
 )
@@ -183,7 +184,7 @@ func GetSSLKeysByHostNameV15(w http.ResponseWriter, r *http.Request) {
 	getSSLKeysByXMLIDHelperV15(xmlID, tc.CreateAlerts(tc.WarnLevel, hostnameKeyDepMsg), inf, w, r)
 }
 
-func getXmlIdFromHostname(inf *api.APIInfo, hostName string) (string, api.Errors) {
+func getXmlIdFromHostname(inf *api.APIInfo, hostName string) (string, apierrors.Errors) {
 	domainName := ""
 	hostRegex := ""
 	strArr := strings.Split(hostName, ".")
@@ -196,7 +197,7 @@ func getXmlIdFromHostname(inf *api.APIInfo, hostName string) (string, api.Errors
 		hostRegex = `.*\.` + strArr[1] + `\..*`
 	}
 
-	errs := api.NewErrors()
+	errs := apierrors.New()
 
 	// lookup the cdnID
 	cdnID, ok, err := getCDNIDByDomainname(domainName, inf.Tx.Tx)

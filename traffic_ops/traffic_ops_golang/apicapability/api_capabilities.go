@@ -7,6 +7,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/jmoiron/sqlx"
 )
@@ -51,8 +52,8 @@ func GetAPICapabilitiesHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func getAPICapabilities(tx *sqlx.Tx, params map[string]string) ([]tc.APICapability, api.Errors) {
-	err := api.NewErrors()
+func getAPICapabilities(tx *sqlx.Tx, params map[string]string) ([]tc.APICapability, apierrors.Errors) {
+	err := apierrors.New()
 	selectQuery := `SELECT id, http_method, route, capability, last_updated FROM api_capability`
 	queryParamsToQueryCols := map[string]dbhelpers.WhereColumnInfo{
 		"id":          dbhelpers.WhereColumnInfo{"id", api.IsInt},

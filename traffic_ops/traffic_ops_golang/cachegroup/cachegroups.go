@@ -28,6 +28,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
 	"github.com/apache/trafficcontrol/lib/go-log"
@@ -203,7 +204,7 @@ func (cg TOCacheGroup) Validate() error {
 //The TOCacheGroup implementation of the Creator interface
 //The insert sql returns the id and lastUpdated values of the newly inserted cachegroup and have
 //to be added to the struct
-func (cg *TOCacheGroup) Create() api.Errors {
+func (cg *TOCacheGroup) Create() apierrors.Errors {
 
 	if cg.LocalizationMethods == nil {
 		cg.LocalizationMethods = &[]tc.LocalizationMethod{}
@@ -238,7 +239,7 @@ func (cg *TOCacheGroup) Create() api.Errors {
 
 	coordinateID, err := cg.createCoordinate()
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:        http.StatusInternalServerError,
 			SystemError: fmt.Errorf("cachegroup create: creating coord: %v", err),
 		}
@@ -250,13 +251,13 @@ func (cg *TOCacheGroup) Create() api.Errors {
 		cg.ID,
 	).Scan(&cg.LastUpdated)
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:        http.StatusInternalServerError,
 			SystemError: fmt.Errorf("followup update during cachegroup create: %v", err),
 		}
 	}
 
-	errs := api.Errors{
+	errs := apierrors.Errors{
 		Code: http.StatusInternalServerError,
 	}
 	if err = cg.createLocalizationMethods(); err != nil {
@@ -269,7 +270,7 @@ func (cg *TOCacheGroup) Create() api.Errors {
 		return errs
 	}
 
-	return api.NewErrors()
+	return apierrors.New()
 }
 
 func (cg *TOCacheGroup) createLocalizationMethods() error {
@@ -398,7 +399,7 @@ func (cg *TOCacheGroup) deleteCoordinate(coordinateID int) error {
 	return nil
 }
 
-func GetCacheGroupsByName(names []string, Tx *sqlx.Tx) (map[string]tc.CacheGroupNullable, api.Errors) {
+func GetCacheGroupsByName(names []string, Tx *sqlx.Tx) (map[string]tc.CacheGroupNullable, apierrors.Errors) {
 	query := SelectQuery() + multipleCacheGroupsWhere()
 	namesPqArray := pq.Array(names)
 	rows, err := Tx.Query(query, namesPqArray)
@@ -428,7 +429,7 @@ func GetCacheGroupsByName(names []string, Tx *sqlx.Tx) (map[string]tc.CacheGroup
 			pq.Array(&cgfs),
 			&s.FallbackToClosest,
 		); err != nil {
-			return nil, api.Errors{
+			return nil, apierrors.Errors{
 				SystemError: errors.New("cachegroup read: scanning: " + err.Error()),
 				Code:        http.StatusInternalServerError,
 			}
@@ -437,14 +438,14 @@ func GetCacheGroupsByName(names []string, Tx *sqlx.Tx) (map[string]tc.CacheGroup
 		s.Fallbacks = &cgfs
 		cacheGroupMap[*s.Name] = s
 	}
-	return cacheGroupMap, api.NewErrors()
+	return cacheGroupMap, apierrors.New()
 }
 
-func (cg *TOCacheGroup) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (cg *TOCacheGroup) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	cacheGroups := []interface{}{}
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	// Query Parameters to Database Query column mappings
 	// see the fields mapped in the SQL query
 	queryParamsToQueryCols := map[string]dbhelpers.WhereColumnInfo{
@@ -465,7 +466,7 @@ func (cg *TOCacheGroup) Read(h http.Header, useIMS bool) ([]interface{}, api.Err
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(cg.APIInfo().Tx, h, queryValues, selectMaxLastUpdatedQuery(where))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return cacheGroups, api.Errors{Code: http.StatusNotModified}, &maxTime
+			return cacheGroups, apierrors.Errors{Code: http.StatusNotModified}, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {
@@ -539,7 +540,7 @@ LEFT JOIN cachegroup AS cgs ON cachegroup.secondary_parent_cachegroup_id = cgs.i
 }
 
 //The TOCacheGroup implementation of the Updater interface
-func (cg *TOCacheGroup) Update() api.Errors {
+func (cg *TOCacheGroup) Update() apierrors.Errors {
 
 	if cg.LocalizationMethods == nil {
 		cg.LocalizationMethods = &[]tc.LocalizationMethod{}
@@ -593,9 +594,9 @@ func (cg *TOCacheGroup) Update() api.Errors {
 	return errs
 }
 
-func (cg *TOCacheGroup) handleCoordinateUpdate() (*int, api.Errors) {
+func (cg *TOCacheGroup) handleCoordinateUpdate() (*int, apierrors.Errors) {
 
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	coordinateID, err := cg.getCoordinateID()
 
 	// This is not a logic error. Because the coordinate id is recieved from the
@@ -653,8 +654,8 @@ func (cg *TOCacheGroup) getCoordinateID() (*int, error) {
 
 //The CacheGroup implementation of the Deleter interface
 //all implementations of Deleter should use transactions and return the proper errorType
-func (cg *TOCacheGroup) Delete() api.Errors {
-	errs := api.NewErrors()
+func (cg *TOCacheGroup) Delete() apierrors.Errors {
+	errs := apierrors.New()
 	inUse, err := isUsed(cg.ReqInfo.Tx, *cg.ID)
 	if inUse {
 		errs.UserError = err

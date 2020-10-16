@@ -39,6 +39,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-util"
 
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/deliveryservice"
@@ -766,7 +767,7 @@ JOIN type t ON s.type = t.id ` +
 	select max(last_updated) as t from last_deleted l where l.table_name='server') as res`
 }
 
-func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth.CurrentUser, useIMS bool, version api.Version) ([]tc.ServerNullable, uint64, api.Errors, *time.Time) {
+func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth.CurrentUser, useIMS bool, version api.Version) ([]tc.ServerNullable, uint64, apierrors.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	// Query Parameters to Database Query column mappings
@@ -793,7 +794,7 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 	queryAddition := ""
 	dsHasRequiredCapabilities := false
 	var cdnID int
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	if dsIDStr, ok := params[`dsId`]; ok {
 		// don't allow query on ds outside user's tenant
 		dsID, err := strconv.Atoi(dsIDStr)
@@ -891,7 +892,7 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(tx, h, queryValues, selectMaxLastUpdatedQuery(queryAddition, where))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return serversList, 0, api.Errors{Code: http.StatusNotModified}, &maxTime
+			return serversList, 0, apierrors.Errors{Code: http.StatusNotModified}, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {
@@ -1044,8 +1045,8 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 }
 
 // getMidServers gets the mids used by the edges provided with an option to filter for a given cdn
-func getMidServers(edgeIDs []int, servers map[int]tc.ServerNullable, cdnID int, tx *sqlx.Tx) ([]int, api.Errors) {
-	errs := api.NewErrors()
+func getMidServers(edgeIDs []int, servers map[int]tc.ServerNullable, cdnID int, tx *sqlx.Tx) ([]int, apierrors.Errors) {
+	errs := apierrors.New()
 	if len(edgeIDs) == 0 {
 		return nil, errs
 	}
@@ -1112,11 +1113,11 @@ func getMidServers(edgeIDs []int, servers map[int]tc.ServerNullable, cdnID int, 
 	return ids, errs
 }
 
-func checkTypeChangeSafety(server tc.CommonServerProperties, tx *sqlx.Tx) api.Errors {
+func checkTypeChangeSafety(server tc.CommonServerProperties, tx *sqlx.Tx) apierrors.Errors {
 	// see if cdn or type changed
 	var cdnID int
 	var typeID int
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	if err := tx.QueryRow("SELECT type, cdn_id FROM server WHERE id = $1", *server.ID).Scan(&typeID, &cdnID); err != nil {
 		if err == sql.ErrNoRows {
 			errs.SetUserError("no server found with this ID")
@@ -1151,11 +1152,11 @@ func checkTypeChangeSafety(server tc.CommonServerProperties, tx *sqlx.Tx) api.Er
 	return errs
 }
 
-func updateStatusLastUpdatedTime(id int, status_last_updated_time *time.Time, tx *sql.Tx) api.Errors {
+func updateStatusLastUpdatedTime(id int, status_last_updated_time *time.Time, tx *sql.Tx) apierrors.Errors {
 	query := `UPDATE server SET
 	status_last_updated=$1
 WHERE id=$2 `
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	if _, err := tx.Exec(query, status_last_updated_time, id); err != nil {
 		errs.SetSystemError("updating status last updated: " + err.Error())
 		errs.Code = http.StatusInternalServerError
@@ -1163,7 +1164,7 @@ WHERE id=$2 `
 	return errs
 }
 
-func createInterfaces(id int, interfaces []tc.ServerInterfaceInfo, tx *sql.Tx) api.Errors {
+func createInterfaces(id int, interfaces []tc.ServerInterfaceInfo, tx *sql.Tx) apierrors.Errors {
 	ifaceQry := `
 	INSERT INTO interface (
 		max_bandwidth,
@@ -1214,10 +1215,10 @@ func createInterfaces(id int, interfaces []tc.ServerInterfaceInfo, tx *sql.Tx) a
 		return api.ParseDBError(err)
 	}
 
-	return api.NewErrors()
+	return apierrors.New()
 }
 
-func deleteInterfaces(id int, tx *sql.Tx) api.Errors {
+func deleteInterfaces(id int, tx *sql.Tx) apierrors.Errors {
 	if _, err := tx.Exec(deleteIPsQuery, id); err != nil && err != sql.ErrNoRows {
 		return api.ParseDBError(err)
 	}
@@ -1226,7 +1227,7 @@ func deleteInterfaces(id int, tx *sql.Tx) api.Errors {
 		return api.ParseDBError(err)
 	}
 
-	return api.NewErrors()
+	return apierrors.New()
 }
 
 func Update(w http.ResponseWriter, r *http.Request) {

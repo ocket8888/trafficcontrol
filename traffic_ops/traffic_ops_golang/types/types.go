@@ -31,6 +31,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -102,14 +103,14 @@ func (typ *TOType) Validate() error {
 	return nil
 }
 
-func (tp *TOType) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (tp *TOType) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	api.DefaultSort(tp.APIInfo(), "name")
 	return api.GenericRead(h, tp, useIMS)
 }
 
-func (tp *TOType) Update() api.Errors {
+func (tp *TOType) Update() apierrors.Errors {
 	if !tp.AllowMutation(false) {
-		return api.Errors{
+		return apierrors.Errors{
 			UserError: errors.New("can not update type"),
 			Code:      http.StatusBadRequest,
 		}
@@ -117,9 +118,9 @@ func (tp *TOType) Update() api.Errors {
 	return api.GenericUpdate(tp)
 }
 
-func (tp *TOType) Delete() api.Errors {
+func (tp *TOType) Delete() apierrors.Errors {
 	if !tp.AllowMutation(false) {
-		return api.Errors{
+		return apierrors.Errors{
 			UserError: errors.New(fmt.Sprintf("can not delete type")),
 			Code:      http.StatusBadRequest,
 		}
@@ -127,9 +128,9 @@ func (tp *TOType) Delete() api.Errors {
 	return api.GenericDelete(tp)
 }
 
-func (tp *TOType) Create() api.Errors {
+func (tp *TOType) Create() apierrors.Errors {
 	if !tp.AllowMutation(true) {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:      http.StatusBadRequest,
 			UserError: errors.New("can not create type"),
 		}

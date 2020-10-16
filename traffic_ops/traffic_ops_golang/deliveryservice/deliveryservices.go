@@ -33,6 +33,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
@@ -202,7 +203,7 @@ func CreateV30(w http.ResponseWriter, r *http.Request) {
 	api.WriteRespAlertObj(w, r, tc.SuccessLevel, "Deliveryservice creation was successful.", []tc.DeliveryServiceNullableV30{*res})
 }
 
-func createV12(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS tc.DeliveryServiceNullableV12) (*tc.DeliveryServiceNullableV12, api.Errors) {
+func createV12(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS tc.DeliveryServiceNullableV12) (*tc.DeliveryServiceNullableV12, apierrors.Errors) {
 	dsV13 := tc.DeliveryServiceNullableV13{DeliveryServiceNullableV12: reqDS}
 	res, errs := createV13(w, r, inf, dsV13)
 	if res != nil {
@@ -211,7 +212,7 @@ func createV12(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS t
 	return nil, errs
 }
 
-func createV13(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS tc.DeliveryServiceNullableV13) (*tc.DeliveryServiceNullableV13, api.Errors) {
+func createV13(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS tc.DeliveryServiceNullableV13) (*tc.DeliveryServiceNullableV13, apierrors.Errors) {
 	dsV14 := tc.DeliveryServiceNullableV14{DeliveryServiceNullableV13: reqDS}
 	res, errs := createV14(w, r, inf, dsV14)
 	if res != nil {
@@ -220,7 +221,7 @@ func createV13(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS t
 	return nil, errs
 }
 
-func createV14(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS tc.DeliveryServiceNullableV14) (*tc.DeliveryServiceNullableV14, api.Errors) {
+func createV14(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS tc.DeliveryServiceNullableV14) (*tc.DeliveryServiceNullableV14, apierrors.Errors) {
 	dsV15 := tc.DeliveryServiceNullableV15{DeliveryServiceNullableV14: reqDS}
 	res, errs := createV15(w, r, inf, dsV15)
 	if res != nil {
@@ -229,7 +230,7 @@ func createV14(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS t
 	return nil, errs
 }
 
-func createV15(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS tc.DeliveryServiceNullableV15) (*tc.DeliveryServiceNullableV15, api.Errors) {
+func createV15(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS tc.DeliveryServiceNullableV15) (*tc.DeliveryServiceNullableV15, apierrors.Errors) {
 	dsV30 := tc.DeliveryServiceNullableV30{DeliveryServiceNullableV15: reqDS}
 	res, errs := createV30(w, r, inf, dsV30)
 	if res != nil {
@@ -238,8 +239,8 @@ func createV15(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS t
 	return nil, errs
 }
 
-func checkTopology(tx *sql.Tx, ds tc.DeliveryServiceNullableV30) api.Errors {
-	errs := api.NewErrors()
+func checkTopology(tx *sql.Tx, ds tc.DeliveryServiceNullableV30) apierrors.Errors {
+	errs := apierrors.New()
 	if ds.Topology != nil {
 		if ok, err := dbhelpers.TopologyExists(tx, *ds.Topology); err != nil {
 			errs.Code = http.StatusInternalServerError
@@ -254,11 +255,11 @@ func checkTopology(tx *sql.Tx, ds tc.DeliveryServiceNullableV30) api.Errors {
 }
 
 // create creates the given ds in the database, and returns the DS with its id and other fields created on insert set. On error, the HTTP status code, user error, and system error are returned. The status code SHOULD NOT be used, if both errors are nil.
-func createV30(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, ds tc.DeliveryServiceNullableV30) (*tc.DeliveryServiceNullableV30, api.Errors) {
+func createV30(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, ds tc.DeliveryServiceNullableV30) (*tc.DeliveryServiceNullableV30, apierrors.Errors) {
 	user := inf.User
 	tx := inf.Tx.Tx
 	cfg := inf.Config
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	if err := ds.Validate(tx); err != nil {
 		errs.Code = http.StatusBadRequest
 		errs.SetUserError("invalid request: " + err.Error())
@@ -485,8 +486,8 @@ func createConsistentHashQueryParams(tx *sql.Tx, dsID int, consistentHashQueryPa
 	return c, nil
 }
 
-func (ds *TODeliveryService) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
-	errs := api.NewErrors()
+func (ds *TODeliveryService) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
+	errs := apierrors.New()
 	version := ds.APIInfo().Version
 	if version == nil {
 		errs.SetSystemError("TODeliveryService.Read called with nil API version")
@@ -656,7 +657,7 @@ func UpdateV30(w http.ResponseWriter, r *http.Request) {
 	api.WriteRespAlertObj(w, r, tc.SuccessLevel, "Deliveryservice update was successful.", []tc.DeliveryServiceNullableV30{*res})
 }
 
-func updateV12(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS *tc.DeliveryServiceNullableV12) (*tc.DeliveryServiceNullableV12, api.Errors) {
+func updateV12(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS *tc.DeliveryServiceNullableV12) (*tc.DeliveryServiceNullableV12, apierrors.Errors) {
 	dsV13 := tc.DeliveryServiceNullableV13{DeliveryServiceNullableV12: *reqDS}
 	// query the DB for existing 1.3 fields in order to "upgrade" this 1.2 request into a 1.3 request
 	query := `
@@ -670,7 +671,7 @@ FROM
   deliveryservice ds
 WHERE
   ds.id = $1`
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	if err := inf.Tx.Tx.QueryRow(query, *reqDS.ID).Scan(
 		&dsV13.DeepCachingType,
 		&dsV13.FQPacingRate,
@@ -698,7 +699,7 @@ WHERE
 	return nil, errs
 }
 
-func updateV13(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS *tc.DeliveryServiceNullableV13) (*tc.DeliveryServiceNullableV13, api.Errors) {
+func updateV13(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS *tc.DeliveryServiceNullableV13) (*tc.DeliveryServiceNullableV13, apierrors.Errors) {
 	dsV14 := tc.DeliveryServiceNullableV14{DeliveryServiceNullableV13: *reqDS}
 	// query the DB for existing 1.4 fields in order to "upgrade" this 1.3 request into a 1.4 request
 	query := `
@@ -712,7 +713,7 @@ FROM
   deliveryservice ds
 WHERE
   ds.id = $1`
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	if err := inf.Tx.Tx.QueryRow(query, *reqDS.ID).Scan(
 		&dsV14.ConsistentHashRegex,
 		&dsV14.MaxOriginConnections,
@@ -734,7 +735,7 @@ WHERE
 	return nil, errs
 }
 
-func updateV14(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS *tc.DeliveryServiceNullableV14) (*tc.DeliveryServiceNullableV14, api.Errors) {
+func updateV14(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS *tc.DeliveryServiceNullableV14) (*tc.DeliveryServiceNullableV14, apierrors.Errors) {
 	dsV15 := tc.DeliveryServiceNullableV15{DeliveryServiceNullableV14: *reqDS}
 	// query the DB for existing 1.5 fields in order to "upgrade" this 1.4 request into a 1.5 request
 	query := `
@@ -745,7 +746,7 @@ FROM
   deliveryservice ds
 WHERE
   ds.id = $1`
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	if err := inf.Tx.Tx.QueryRow(query, *reqDS.ID).Scan(
 		&dsV15.EcsEnabled,
 		&dsV15.RangeSliceBlockSize,
@@ -766,7 +767,7 @@ WHERE
 	return nil, errs
 }
 
-func updateV15(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS *tc.DeliveryServiceNullableV15) (*tc.DeliveryServiceNullableV15, api.Errors) {
+func updateV15(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, reqDS *tc.DeliveryServiceNullableV15) (*tc.DeliveryServiceNullableV15, apierrors.Errors) {
 	dsV30 := tc.DeliveryServiceNullableV30{DeliveryServiceNullableV15: *reqDS}
 	// query the DB for existing 3.0 fields in order to "upgrade" this 1.5 request into a 3.0 request
 	query := `
@@ -780,7 +781,7 @@ FROM
   deliveryservice ds
 WHERE
   ds.id = $1`
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	if err := inf.Tx.Tx.QueryRow(query, *reqDS.ID).Scan(
 		&dsV30.Topology,
 		&dsV30.FirstHeaderRewrite,
@@ -804,10 +805,10 @@ WHERE
 	return nil, errs
 }
 
-func updateV30(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, ds *tc.DeliveryServiceNullableV30) (*tc.DeliveryServiceNullableV30, api.Errors) {
+func updateV30(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, ds *tc.DeliveryServiceNullableV30) (*tc.DeliveryServiceNullableV30, apierrors.Errors) {
 	tx := inf.Tx.Tx
 	user := inf.User
-	errs := api.NewErrors()
+	errs := apierrors.New()
 
 	if err := ds.Validate(tx); err != nil {
 		errs.Code = http.StatusBadRequest
@@ -1079,8 +1080,8 @@ func updateV30(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, ds *tc.
 }
 
 //Delete is the DeliveryService implementation of the Deleter interface.
-func (ds *TODeliveryService) Delete() api.Errors {
-	errs := api.NewErrors()
+func (ds *TODeliveryService) Delete() apierrors.Errors {
+	errs := apierrors.New()
 	if ds.ID == nil {
 		errs.SetUserError("missing id")
 		errs.Code = http.StatusBadRequest
@@ -1135,7 +1136,7 @@ func (v *TODeliveryService) DeleteQuery() string {
 	return `DELETE FROM deliveryservice WHERE id = :id`
 }
 
-func readGetDeliveryServices(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth.CurrentUser, useIMS bool) ([]tc.DeliveryServiceNullableV30, api.Errors, *time.Time) {
+func readGetDeliveryServices(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth.CurrentUser, useIMS bool) ([]tc.DeliveryServiceNullableV30, apierrors.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	if strings.HasSuffix(params["id"], ".json") {
@@ -1161,7 +1162,7 @@ func readGetDeliveryServices(h http.Header, params map[string]string, tx *sqlx.T
 		"serviceCategory":  {"ds.service_category", nil},
 	}
 
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	where, orderBy, pagination, queryValues, dbErrs := dbhelpers.BuildWhereAndOrderByAndPagination(params, queryParamsToSQLCols)
 	if len(dbErrs) > 0 {
 		errs.UserError = util.JoinErrs(dbErrs)
@@ -1172,7 +1173,7 @@ func readGetDeliveryServices(h http.Header, params map[string]string, tx *sqlx.T
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(tx, h, queryValues, selectMaxLastUpdatedQuery(where))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return []tc.DeliveryServiceNullableV30{}, api.Errors{Code: http.StatusNotModified}, &maxTime
+			return []tc.DeliveryServiceNullableV30{}, apierrors.Errors{Code: http.StatusNotModified}, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {
@@ -1344,8 +1345,8 @@ func getDSType(tx *sql.Tx, xmlid string) (tc.DSType, bool, error) {
 	return tc.DSTypeFromString(name), true, nil
 }
 
-func GetDeliveryServices(query string, queryValues map[string]interface{}, tx *sqlx.Tx) ([]tc.DeliveryServiceNullableV30, api.Errors) {
-	errs := api.NewErrors()
+func GetDeliveryServices(query string, queryValues map[string]interface{}, tx *sqlx.Tx) ([]tc.DeliveryServiceNullableV30, apierrors.Errors) {
+	errs := apierrors.New()
 	rows, err := tx.NamedQuery(query, queryValues)
 	if err != nil {
 		errs.SystemError = fmt.Errorf("querying: %v", err)

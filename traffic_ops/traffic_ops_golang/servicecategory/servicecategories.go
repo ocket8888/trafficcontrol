@@ -28,6 +28,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -99,12 +100,12 @@ func (serviceCategory TOServiceCategory) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (serviceCategory *TOServiceCategory) Create() api.Errors {
+func (serviceCategory *TOServiceCategory) Create() apierrors.Errors {
 	return api.GenericCreate(serviceCategory)
 }
 
-func (serviceCategory *TOServiceCategory) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
-	errs := api.NewErrors()
+func (serviceCategory *TOServiceCategory) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
+	errs := apierrors.New()
 	tenantIDs, err := tenant.GetUserTenantIDListTx(serviceCategory.APIInfo().Tx.Tx, serviceCategory.APIInfo().User.TenantID)
 	if err != nil {
 		errs.SetSystemError("getting tenant list for user: " + err.Error())
@@ -138,10 +139,10 @@ func checkTenancy(category *tc.ServiceCategory, tenantIDs []int) bool {
 	return false
 }
 
-func (serviceCategory *TOServiceCategory) Update() api.Errors {
+func (serviceCategory *TOServiceCategory) Update() apierrors.Errors {
 	return api.GenericUpdate(serviceCategory)
 }
-func (serviceCategory *TOServiceCategory) Delete() api.Errors {
+func (serviceCategory *TOServiceCategory) Delete() apierrors.Errors {
 	return api.GenericDelete(serviceCategory)
 }
 

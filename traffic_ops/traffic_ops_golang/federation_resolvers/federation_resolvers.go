@@ -33,6 +33,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
@@ -263,10 +264,10 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	api.WriteRespAlertObj(w, r, tc.SuccessLevel, alert.Text, respObj)
 }
 
-func deleteFederationResolver(inf *api.APIInfo) (tc.Alert, tc.FederationResolver, api.Errors) {
+func deleteFederationResolver(inf *api.APIInfo) (tc.Alert, tc.FederationResolver, apierrors.Errors) {
 	var alert tc.Alert
 	var result tc.FederationResolver
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	err := inf.Tx.Tx.QueryRow(deleteQuery, inf.IntParams["id"]).Scan(&result.ID, &result.IPAddress, &result.Type)
 	if err != nil {
 		if err == sql.ErrNoRows {

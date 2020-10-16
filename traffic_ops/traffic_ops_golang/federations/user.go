@@ -29,6 +29,7 @@ import (
 
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/lib/pq"
 )
@@ -126,28 +127,28 @@ func (v *TOUsers) GetType() string {
 	return fedUserType
 }
 
-func (v *TOUsers) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (v *TOUsers) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	fedIDStr := v.APIInfo().Params["id"]
 	fedID, err := strconv.Atoi(fedIDStr)
 	if err != nil {
-		errs := api.Errors{Code: http.StatusBadRequest}
+		errs := apierrors.Errors{Code: http.StatusBadRequest}
 		errs.SetUserError("federation id must be an integer")
 		return nil, errs, nil
 	}
 	_, exists, err := getFedNameByID(v.APIInfo().Tx.Tx, fedID)
 	if err != nil {
-		errs := api.Errors{Code: http.StatusInternalServerError}
+		errs := apierrors.Errors{Code: http.StatusInternalServerError}
 		errs.SystemError = fmt.Errorf("getting federation cname from ID %v: %v", fedID, err)
 		return nil, errs, nil
 	} else if !exists {
-		errs := api.Errors{Code: http.StatusNotFound}
+		errs := apierrors.Errors{Code: http.StatusNotFound}
 		errs.UserError = fmt.Errorf("federation %v not found", fedID)
 		return nil, errs, nil
 	}
 	return api.GenericRead(h, v, useIMS)
 }
 
-func (v *TOUsers) Delete() api.Errors { return api.GenericDelete(v) }
+func (v *TOUsers) Delete() apierrors.Errors { return api.GenericDelete(v) }
 
 func PostUsers(w http.ResponseWriter, r *http.Request) {
 	inf, errs := api.NewInfo(r, []string{"id"}, []string{"id"})

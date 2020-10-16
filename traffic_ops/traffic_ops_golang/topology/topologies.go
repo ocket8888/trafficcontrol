@@ -31,6 +31,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/cachegroup"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
@@ -322,7 +323,7 @@ func (topology *TOTopology) GetAuditName() string {
 }
 
 // Create is a requirement of the api.Creator interface.
-func (topology *TOTopology) Create() api.Errors {
+func (topology *TOTopology) Create() apierrors.Errors {
 	tx := topology.APIInfo().Tx.Tx
 	err := tx.QueryRow(insertQuery(), topology.Name, topology.Description).Scan(&topology.Name, &topology.Description, &topology.LastUpdated)
 	if err != nil {
@@ -337,23 +338,23 @@ func (topology *TOTopology) Create() api.Errors {
 		return errs
 	}
 
-	return api.NewErrors()
+	return apierrors.New()
 }
 
 // Read is a requirement of the api.Reader interface and is called by api.ReadHandler().
-func (topology *TOTopology) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (topology *TOTopology) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	interfaces := make([]interface{}, 0)
 	where, orderBy, pagination, queryValues, errs := dbhelpers.BuildWhereAndOrderByAndPagination(topology.ReqInfo.Params, topology.ParamColumns())
 	if len(errs) > 0 {
-		return nil, api.Errors{UserError: util.JoinErrs(errs), Code: http.StatusBadRequest}, nil
+		return nil, apierrors.Errors{UserError: util.JoinErrs(errs), Code: http.StatusBadRequest}, nil
 	}
 	if useIMS {
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(topology.ReqInfo.Tx, h, queryValues, selectMaxLastUpdatedQuery(where))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return interfaces, api.Errors{Code: http.StatusNotModified}, &maxTime
+			return interfaces, apierrors.Errors{Code: http.StatusNotModified}, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {
@@ -363,7 +364,7 @@ func (topology *TOTopology) Read(h http.Header, useIMS bool) ([]interface{}, api
 	query := selectQuery() + where + orderBy + pagination
 	rows, err := topology.ReqInfo.Tx.NamedQuery(query, queryValues)
 	if err != nil {
-		return nil, api.Errors{SystemError: errors.New("topology read: querying: " + err.Error()), Code: http.StatusInternalServerError}, nil
+		return nil, apierrors.Errors{SystemError: errors.New("topology read: querying: " + err.Error()), Code: http.StatusInternalServerError}, nil
 	}
 	defer log.Close(rows, "unable to close DB connection")
 	topologies := map[string]*tc.Topology{}
@@ -384,7 +385,7 @@ func (topology *TOTopology) Read(h http.Header, useIMS bool) ([]interface{}, api
 			&topologyNode.Cachegroup,
 			&parents,
 		); err != nil {
-			return nil, api.Errors{SystemError: errors.New("topology read: scanning: " + err.Error()), Code: http.StatusInternalServerError}, nil
+			return nil, apierrors.Errors{SystemError: errors.New("topology read: scanning: " + err.Error()), Code: http.StatusInternalServerError}, nil
 		}
 		for _, id := range parents {
 			topologyNode.Parents = append(topologyNode.Parents, int(id))
@@ -412,7 +413,7 @@ func (topology *TOTopology) Read(h http.Header, useIMS bool) ([]interface{}, api
 		}
 		interfaces = append(interfaces, *topology)
 	}
-	return interfaces, api.NewErrors(), &maxTime
+	return interfaces, apierrors.New(), &maxTime
 }
 
 func (topology *TOTopology) removeParents() error {
@@ -431,7 +432,7 @@ func (topology *TOTopology) removeNodes(cachegroups *[]string) error {
 	return nil
 }
 
-func (topology *TOTopology) addNodes() api.Errors {
+func (topology *TOTopology) addNodes() apierrors.Errors {
 	var cachegroupsToInsert []string
 	var indices = make([]int, 0)
 	for index, node := range topology.Nodes {
@@ -441,11 +442,11 @@ func (topology *TOTopology) addNodes() api.Errors {
 		}
 	}
 	if len(cachegroupsToInsert) == 0 {
-		return api.NewErrors()
+		return apierrors.New()
 	}
 	rows, err := topology.ReqInfo.Tx.Query(nodeInsertQuery(), topology.Name, pq.Array(cachegroupsToInsert))
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:        http.StatusInternalServerError,
 			SystemError: errors.New("error adding nodes: " + err.Error()),
 		}
@@ -458,10 +459,10 @@ func (topology *TOTopology) addNodes() api.Errors {
 			return api.ParseDBError(err)
 		}
 	}
-	return api.NewErrors()
+	return apierrors.New()
 }
 
-func (topology *TOTopology) addParents() api.Errors {
+func (topology *TOTopology) addParents() apierrors.Errors {
 	var (
 		children []int
 		parents  []int
@@ -490,11 +491,11 @@ func (topology *TOTopology) addParents() api.Errors {
 			}
 		}
 	}
-	return api.NewErrors()
+	return apierrors.New()
 }
 
-func (topology *TOTopology) setDescription() api.Errors {
-	errs := api.NewErrors()
+func (topology *TOTopology) setDescription() apierrors.Errors {
+	errs := apierrors.New()
 	rows, err := topology.ReqInfo.Tx.Query(updateQuery(), topology.Description, topology.Name)
 	if err != nil {
 		errs.SystemError = fmt.Errorf("topology update: error setting the description for topology %v: %v", topology.Name, err.Error())
@@ -512,7 +513,7 @@ func (topology *TOTopology) setDescription() api.Errors {
 }
 
 // Update is a requirement of the api.Updater interface.
-func (topology *TOTopology) Update() api.Errors {
+func (topology *TOTopology) Update() apierrors.Errors {
 	topologies, errs, _ := topology.Read(nil, false)
 	if errs.Occurred() {
 		return errs
@@ -562,12 +563,12 @@ func (topology *TOTopology) Update() api.Errors {
 
 // Delete is unused and simply satisfies the Deleter interface
 // (although TOTOpology is used as an OptionsDeleter)
-func (topology *TOTopology) Delete() api.Errors {
-	return api.NewErrors()
+func (topology *TOTopology) Delete() apierrors.Errors {
+	return apierrors.New()
 }
 
 // OptionsDelete is a requirement of the OptionsDeleter interface.
-func (topology *TOTopology) OptionsDelete() api.Errors {
+func (topology *TOTopology) OptionsDelete() apierrors.Errors {
 	topologies, errs, _ := topology.Read(nil, false)
 	if errs.Occurred() {
 		return errs

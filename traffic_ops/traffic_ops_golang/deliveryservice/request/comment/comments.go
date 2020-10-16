@@ -29,6 +29,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -102,18 +103,18 @@ func (comment TODeliveryServiceRequestComment) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (comment *TODeliveryServiceRequestComment) Create() api.Errors {
+func (comment *TODeliveryServiceRequestComment) Create() apierrors.Errors {
 	au := tc.IDNoMod(comment.ReqInfo.User.ID)
 	comment.AuthorID = &au
 	return api.GenericCreate(comment)
 }
 
-func (comment *TODeliveryServiceRequestComment) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (comment *TODeliveryServiceRequestComment) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	api.DefaultSort(comment.APIInfo(), "xmlId")
 	return api.GenericRead(h, comment, useIMS)
 }
 
-func (comment *TODeliveryServiceRequestComment) Update() api.Errors {
+func (comment *TODeliveryServiceRequestComment) Update() apierrors.Errors {
 	current := TODeliveryServiceRequestComment{}
 	err := comment.ReqInfo.Tx.QueryRowx(selectQuery() + `WHERE dsrc.id=` + strconv.Itoa(*comment.ID)).StructScan(&current)
 	if err != nil {
@@ -122,7 +123,7 @@ func (comment *TODeliveryServiceRequestComment) Update() api.Errors {
 
 	userID := tc.IDNoMod(comment.ReqInfo.User.ID)
 	if *current.AuthorID != userID {
-		return api.Errors{
+		return apierrors.Errors{
 			UserError: errors.New("Comments can only be updated by the author"),
 			Code:      http.StatusBadRequest,
 		}
@@ -131,12 +132,12 @@ func (comment *TODeliveryServiceRequestComment) Update() api.Errors {
 	return api.GenericUpdate(comment)
 }
 
-func (comment *TODeliveryServiceRequestComment) Delete() api.Errors {
+func (comment *TODeliveryServiceRequestComment) Delete() apierrors.Errors {
 	var current TODeliveryServiceRequestComment
 	err := comment.ReqInfo.Tx.QueryRowx(selectQuery() + `WHERE dsrc.id=` + strconv.Itoa(*comment.ID)).StructScan(&current)
 	if err != nil {
 
-		return api.Errors{
+		return apierrors.Errors{
 			SystemError: errors.New("querying DeliveryServiceRequestComments: " + err.Error()),
 			Code:        http.StatusInternalServerError,
 		}
@@ -144,7 +145,7 @@ func (comment *TODeliveryServiceRequestComment) Delete() api.Errors {
 
 	if userID := tc.IDNoMod(comment.ReqInfo.User.ID); *current.AuthorID != userID {
 		// TODO determine if users should be able to delete sub-tenant users' comments? Else, a deleted user's comments can never be removed.
-		return api.Errors{
+		return apierrors.Errors{
 			UserError: errors.New("Comments can only be deleted by the author"),
 			Code:      http.StatusBadRequest,
 		}

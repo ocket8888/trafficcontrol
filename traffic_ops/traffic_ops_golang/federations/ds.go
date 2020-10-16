@@ -29,6 +29,7 @@ import (
 
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 
 	"github.com/lib/pq"
@@ -166,13 +167,13 @@ func (v *TOFedDSes) GetKeyFieldsInfo() []api.KeyFieldInfo {
 	}
 }
 
-func (v *TOFedDSes) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (v *TOFedDSes) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	api.DefaultSort(v.APIInfo(), "xmlId")
 	return api.GenericRead(h, v, useIMS)
 }
 
-func (v *TOFedDSes) Delete() api.Errors {
-	errs := api.NewErrors()
+func (v *TOFedDSes) Delete() apierrors.Errors {
+	errs := apierrors.New()
 	dsIDStr, ok := v.APIInfo().Params["dsID"]
 	if !ok {
 		errs.SetUserError("dsID must be specified for deletion")
@@ -201,8 +202,8 @@ func (v *TOFedDSes) Delete() api.Errors {
 	return errs
 }
 
-func checkFedDSDeletion(tx *sql.Tx, fedID, dsID int) api.Errors {
-	errs := api.NewErrors()
+func checkFedDSDeletion(tx *sql.Tx, fedID, dsID int) apierrors.Errors {
+	errs := apierrors.New()
 	q := `SELECT ARRAY(SELECT deliveryservice FROM federation_deliveryservice WHERE federation=$1)`
 	dsIDs := []int64{} // pq.Array does not support int slice needs to be int64
 	err := tx.QueryRow(q, fedID).Scan(pq.Array(&dsIDs))

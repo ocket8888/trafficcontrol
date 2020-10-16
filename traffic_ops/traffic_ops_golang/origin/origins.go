@@ -27,6 +27,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
 	"github.com/apache/trafficcontrol/lib/go-log"
@@ -132,7 +133,7 @@ func (origin *TOOrigin) IsTenantAuthorized(user *auth.CurrentUser) (bool, error)
 	return tenant.IsResourceAuthorizedToUserTx(*currentTenantID, user, origin.ReqInfo.Tx.Tx)
 }
 
-func (origin *TOOrigin) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (origin *TOOrigin) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	returnable := []interface{}{}
 	origins, errs, maxTime := getOrigins(h, origin.ReqInfo.Params, origin.ReqInfo.Tx, origin.ReqInfo.User, useIMS)
 	if errs.Occurred() {
@@ -146,7 +147,7 @@ func (origin *TOOrigin) Read(h http.Header, useIMS bool) ([]interface{}, api.Err
 	return returnable, errs, maxTime
 }
 
-func getOrigins(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth.CurrentUser, useIMS bool) ([]tc.Origin, api.Errors, *time.Time) {
+func getOrigins(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth.CurrentUser, useIMS bool) ([]tc.Origin, apierrors.Errors, *time.Time) {
 	var rows *sqlx.Rows
 	var err error
 	var maxTime time.Time
@@ -165,7 +166,7 @@ func getOrigins(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 		"tenant":          dbhelpers.WhereColumnInfo{"o.tenant", api.IsInt},
 	}
 
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	where, orderBy, pagination, queryValues, dbErrs := dbhelpers.BuildWhereAndOrderByAndPagination(params, queryParamsToSQLCols)
 	if len(dbErrs) > 0 {
 		errs.UserError = util.JoinErrs(dbErrs)
@@ -176,7 +177,7 @@ func getOrigins(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(tx, h, queryValues, selectMaxLastUpdatedQuery(where))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return []tc.Origin{}, api.Errors{Code: http.StatusNotModified}, &maxTime
+			return []tc.Origin{}, apierrors.Errors{Code: http.StatusNotModified}, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {
@@ -263,22 +264,22 @@ LEFT JOIN tenant t ON o.tenant = t.id`
 	return selectStmt
 }
 
-func checkTenancy(originTenantID, deliveryserviceID *int, tx *sqlx.Tx, user *auth.CurrentUser) api.Errors {
+func checkTenancy(originTenantID, deliveryserviceID *int, tx *sqlx.Tx, user *auth.CurrentUser) apierrors.Errors {
 	if originTenantID == nil {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:      http.StatusForbidden,
 			UserError: tc.NilTenantError,
 		}
 	}
 	authorized, err := tenant.IsResourceAuthorizedToUserTx(*originTenantID, user, tx.Tx)
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:        http.StatusInternalServerError,
 			SystemError: err,
 		}
 	}
 	if !authorized {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:      http.StatusForbidden,
 			UserError: tc.TenantUserNotAuthError,
 		}
@@ -286,7 +287,7 @@ func checkTenancy(originTenantID, deliveryserviceID *int, tx *sqlx.Tx, user *aut
 
 	var deliveryserviceTenantID int
 	if err := tx.QueryRow(`SELECT tenant_id FROM deliveryservice where id = $1`, *deliveryserviceID).Scan(&deliveryserviceTenantID); err != nil {
-		errs := api.Errors{
+		errs := apierrors.Errors{
 			Code: http.StatusBadRequest,
 		}
 		if err == sql.ErrNoRows {
@@ -300,18 +301,18 @@ func checkTenancy(originTenantID, deliveryserviceID *int, tx *sqlx.Tx, user *aut
 	}
 	authorized, err = tenant.IsResourceAuthorizedToUserTx(deliveryserviceTenantID, user, tx.Tx)
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:      http.StatusBadRequest,
 			UserError: err,
 		}
 	}
 	if !authorized {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:      http.StatusForbidden,
 			UserError: tc.TenantDSUserNotAuthError,
 		}
 	}
-	return api.NewErrors()
+	return apierrors.New()
 }
 
 //The TOOrigin implementation of the Updater interface
@@ -319,7 +320,7 @@ func checkTenancy(originTenantID, deliveryserviceID *int, tx *sqlx.Tx, user *aut
 //ParsePQUniqueConstraintError is used to determine if an origin with conflicting values exists
 //if so, it will return an errorType of DataConflict and the type should be appended to the
 //generic error message returned
-func (origin *TOOrigin) Update() api.Errors {
+func (origin *TOOrigin) Update() apierrors.Errors {
 	// TODO: enhance tenancy framework to handle this in isTenantAuthorized()
 	errs := checkTenancy(origin.TenantID, origin.DeliveryServiceID, origin.ReqInfo.Tx, origin.ReqInfo.User)
 	if errs.Occurred() {
@@ -399,7 +400,7 @@ WHERE id=:id RETURNING last_updated`
 //generic error message returned
 //The insert sql returns the id and lastUpdated values of the newly inserted origin and have
 //to be added to the struct
-func (origin *TOOrigin) Create() api.Errors {
+func (origin *TOOrigin) Create() apierrors.Errors {
 	// TODO: enhance tenancy framework to handle this in isTenantAuthorized()
 	errs := checkTenancy(origin.TenantID, origin.DeliveryServiceID, origin.ReqInfo.Tx, origin.ReqInfo.User)
 	if errs.Occurred() {
@@ -414,7 +415,7 @@ func (origin *TOOrigin) Create() api.Errors {
 
 	var id int
 	var lastUpdated tc.TimeNoMod
-	errs = api.Errors{
+	errs = apierrors.Errors{
 		Code: http.StatusInternalServerError,
 	}
 	rowsAffected := 0
@@ -436,7 +437,7 @@ func (origin *TOOrigin) Create() api.Errors {
 	origin.SetKeys(map[string]interface{}{"id": id})
 	origin.LastUpdated = &lastUpdated
 
-	return api.NewErrors()
+	return apierrors.New()
 }
 
 func insertQuery() string {
@@ -468,8 +469,8 @@ tenant) VALUES (
 
 //The Origin implementation of the Deleter interface
 //all implementations of Deleter should use transactions and return the proper errorType
-func (origin *TOOrigin) Delete() api.Errors {
-	errs := api.NewErrors()
+func (origin *TOOrigin) Delete() apierrors.Errors {
+	errs := apierrors.New()
 	isPrimary := false
 	q := `SELECT is_primary FROM origin WHERE id = $1`
 	if err := origin.ReqInfo.Tx.QueryRow(q, *origin.ID).Scan(&isPrimary); err != nil {

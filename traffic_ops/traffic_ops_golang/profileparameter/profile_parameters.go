@@ -29,6 +29,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -116,7 +117,7 @@ func (pp *TOProfileParameter) Validate() error {
 //generic error message returned
 //The insert sql returns the profile and lastUpdated values of the newly inserted profileparameter and have
 //to be added to the struct
-func (pp *TOProfileParameter) Create() api.Errors {
+func (pp *TOProfileParameter) Create() apierrors.Errors {
 	resultRows, err := pp.APIInfo().Tx.NamedQuery(insertQuery(), pp)
 	if err != nil {
 		return api.ParseDBError(err)
@@ -126,7 +127,7 @@ func (pp *TOProfileParameter) Create() api.Errors {
 	var profile int
 	var parameter int
 	var lastUpdated tc.TimeNoMod
-	errs := api.Errors{
+	errs := apierrors.Errors{
 		Code: http.StatusInternalServerError,
 	}
 	rowsAffected := 0
@@ -147,7 +148,7 @@ func (pp *TOProfileParameter) Create() api.Errors {
 	}
 
 	pp.SetKeys(map[string]interface{}{ProfileIDQueryParam: profile, ParameterIDQueryParam: parameter})
-	return api.NewErrors()
+	return apierrors.New()
 }
 
 func insertQuery() string {
@@ -158,14 +159,14 @@ parameter) VALUES (
 :parameter_id) RETURNING profile, parameter, last_updated`
 }
 
-func (pp *TOProfileParameter) Update() api.Errors {
-	return api.Errors{Code: http.StatusNotImplemented}
+func (pp *TOProfileParameter) Update() apierrors.Errors {
+	return apierrors.Errors{Code: http.StatusNotImplemented}
 }
-func (pp *TOProfileParameter) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (pp *TOProfileParameter) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	api.DefaultSort(pp.APIInfo(), "parameter")
 	return api.GenericRead(h, pp, useIMS)
 }
-func (pp *TOProfileParameter) Delete() api.Errors { return api.GenericDelete(pp) }
+func (pp *TOProfileParameter) Delete() apierrors.Errors { return api.GenericDelete(pp) }
 func (v *TOProfileParameter) SelectMaxLastUpdatedQuery(where, orderBy, pagination, tableName string) string {
 	return `SELECT max(t) from (
 		SELECT max(pp.last_updated) as t FROM profile_parameter pp

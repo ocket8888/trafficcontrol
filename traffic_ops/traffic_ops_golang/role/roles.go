@@ -31,6 +31,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -119,9 +120,9 @@ func (role TORole) Validate() error {
 	return util.JoinErrs(errsToReturn)
 }
 
-func (role *TORole) Create() api.Errors {
+func (role *TORole) Create() apierrors.Errors {
 	if *role.PrivLevel > role.ReqInfo.User.PrivLevel {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:      http.StatusBadRequest,
 			UserError: errors.New("can not create a role with a higher priv level than your own"),
 		}
@@ -139,13 +140,13 @@ func (role *TORole) Create() api.Errors {
 			return errs
 		}
 	}
-	return api.NewErrors()
+	return apierrors.New()
 }
 
-func (role *TORole) createRoleCapabilityAssociations(tx *sqlx.Tx) api.Errors {
+func (role *TORole) createRoleCapabilityAssociations(tx *sqlx.Tx) apierrors.Errors {
 	result, err := tx.Exec(associateCapabilities(), role.ID, pq.Array(role.Capabilities))
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:        http.StatusInternalServerError,
 			SystemError: fmt.Errorf("creating role capabilities: %v", err),
 		}
@@ -156,13 +157,13 @@ func (role *TORole) createRoleCapabilityAssociations(tx *sqlx.Tx) api.Errors {
 	} else if expected := len(*role.Capabilities); int(rows) != expected {
 		log.Errorf("wrong number of role_capability rows created: %d expected: %d", rows, expected)
 	}
-	return api.NewErrors()
+	return apierrors.New()
 }
 
-func (role *TORole) deleteRoleCapabilityAssociations(tx *sqlx.Tx) api.Errors {
+func (role *TORole) deleteRoleCapabilityAssociations(tx *sqlx.Tx) apierrors.Errors {
 	result, err := tx.Exec(deleteAssociatedCapabilities(), role.ID)
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			SystemError: errors.New("deleting role capabilities: " + err.Error()),
 			Code:        http.StatusInternalServerError,
 		}
@@ -172,10 +173,10 @@ func (role *TORole) deleteRoleCapabilityAssociations(tx *sqlx.Tx) api.Errors {
 		log.Errorf("could not check result after inserting role_capability relations: %v", err)
 	}
 	// TODO verify expected row count shouldn't be checked?
-	return api.NewErrors()
+	return apierrors.New()
 }
 
-func (role *TORole) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (role *TORole) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	version := role.APIInfo().Version
 	api.DefaultSort(role.APIInfo(), "name")
 	vals, errs, maxTime := api.GenericRead(h, role, useIMS)
@@ -203,8 +204,8 @@ func (role *TORole) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors,
 	return returnable, errs, maxTime
 }
 
-func (role *TORole) Update() api.Errors {
-	errs := api.NewErrors()
+func (role *TORole) Update() apierrors.Errors {
+	errs := apierrors.New()
 	if *role.PrivLevel > role.ReqInfo.User.PrivLevel {
 		errs.SetUserError("can not create a role with a higher priv level than your own")
 		errs.Code = http.StatusForbidden
@@ -227,15 +228,15 @@ func (role *TORole) Update() api.Errors {
 	return errs
 }
 
-func (role *TORole) Delete() api.Errors {
+func (role *TORole) Delete() apierrors.Errors {
 	assignedUsers := 0
 	if err := role.ReqInfo.Tx.Get(&assignedUsers, "SELECT COUNT(id) FROM tm_user WHERE role=$1", role.ID); err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			SystemError: errors.New("role delete counting assigned users: " + err.Error()),
 			Code:        http.StatusInternalServerError,
 		}
 	} else if assignedUsers != 0 {
-		return api.Errors{
+		return apierrors.Errors{
 			SystemError: fmt.Errorf("can not delete a role with %d assigned users", assignedUsers),
 			Code:        http.StatusBadRequest,
 		}

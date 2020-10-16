@@ -28,6 +28,7 @@ import (
 	"time"
 
 	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
 	"github.com/apache/trafficcontrol/lib/go-tc"
@@ -123,12 +124,12 @@ func (user *TOUser) postValidate() error {
 }
 
 // Note: Not using GenericCreate because Scan also needs to scan tenant and rolename
-func (user *TOUser) Create() api.Errors {
+func (user *TOUser) Create() apierrors.Errors {
 
 	// PUT and POST validation differs slightly
 	err := user.postValidate()
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:      http.StatusBadRequest,
 			UserError: err,
 		}
@@ -142,7 +143,7 @@ func (user *TOUser) Create() api.Errors {
 	// Convert password to SCRYPT
 	*user.LocalPassword, err = auth.DerivePassword(*user.LocalPassword)
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:      http.StatusBadRequest,
 			UserError: err,
 		}
@@ -159,7 +160,7 @@ func (user *TOUser) Create() api.Errors {
 	var tenant string
 	var rolename string
 
-	errs := api.Errors{
+	errs := apierrors.Errors{
 		Code: http.StatusInternalServerError,
 	}
 	rowsAffected := 0
@@ -185,16 +186,16 @@ func (user *TOUser) Create() api.Errors {
 	user.RoleName = &rolename
 	user.LocalPassword = nil
 
-	return api.NewErrors()
+	return apierrors.New()
 }
 
 // This is not using GenericRead because of this tenancy check. Maybe we can add tenancy functionality to the generic case?
-func (this *TOUser) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (this *TOUser) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	inf := this.APIInfo()
 	api.DefaultSort(inf, "username")
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	where, orderBy, pagination, queryValues, dbErrs := dbhelpers.BuildWhereAndOrderByAndPagination(inf.Params, this.ParamColumns())
 	if len(dbErrs) > 0 {
 		errs.UserError = util.JoinErrs(dbErrs)
@@ -214,7 +215,7 @@ func (this *TOUser) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors,
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(this.APIInfo().Tx, h, queryValues, selectMaxLastUpdatedQuery(where))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return []interface{}{}, api.Errors{Code: http.StatusNotModified}, &maxTime
+			return []interface{}{}, apierrors.Errors{Code: http.StatusNotModified}, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {
@@ -257,30 +258,30 @@ func selectMaxLastUpdatedQuery(where string) string {
 	select max(last_updated) as t from last_deleted l where l.table_name='tm_user') as res`
 }
 
-func (user *TOUser) privCheck() api.Errors {
+func (user *TOUser) privCheck() apierrors.Errors {
 	requestedPrivLevel, _, err := dbhelpers.GetPrivLevelFromRoleID(user.ReqInfo.Tx.Tx, *user.Role)
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:        http.StatusInternalServerError,
 			SystemError: err,
 		}
 	}
 
 	if user.ReqInfo.User.PrivLevel < requestedPrivLevel {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:      http.StatusForbidden,
 			UserError: errors.New("user cannot update a user with a role more privileged than themselves"),
 		}
 	}
 
-	return api.NewErrors()
+	return apierrors.New()
 }
 
-func (user *TOUser) Update() api.Errors {
+func (user *TOUser) Update() apierrors.Errors {
 
 	// make sure current user cannot update their own role to a new value
 	if user.ReqInfo.User.ID == *user.ID && user.ReqInfo.User.Role != *user.Role {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:      http.StatusBadRequest,
 			UserError: fmt.Errorf("users cannot update their own role"),
 		}

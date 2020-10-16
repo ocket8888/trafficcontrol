@@ -29,6 +29,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/jmoiron/sqlx"
 )
@@ -83,7 +84,7 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		errCode = http.StatusBadRequest
 	}
 	if userErr != nil || sysErr != nil {
-		errs = api.Errors{
+		errs = apierrors.Errors{
 			Code:        errCode,
 			SystemError: sysErr,
 			UserError:   userErr,
@@ -292,9 +293,9 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	api.WriteAlerts(w, r, http.StatusOK, alerts)
 }
 
-func deleteServerCheckExtension(id int, tx *sqlx.Tx) api.Errors {
+func deleteServerCheckExtension(id int, tx *sqlx.Tx) apierrors.Errors {
 	// Get Open Slot Type ID
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	openID, exists, err := dbhelpers.GetTypeIDByName("CHECK_EXTENSION_OPEN_SLOT", tx.Tx)
 	if !exists {
 		errs.SetSystemError("expected type CHECK_EXTENSION_OPEN_SLOT does not exist in type table")
@@ -337,7 +338,7 @@ func deleteServerCheckExtension(id int, tx *sqlx.Tx) api.Errors {
 	return errs
 }
 
-func handleError(w http.ResponseWriter, r *http.Request, httpMethod string, tx *sql.Tx, apiVersion uint64, errs api.Errors) {
+func handleError(w http.ResponseWriter, r *http.Request, httpMethod string, tx *sql.Tx, apiVersion uint64, errs apierrors.Errors) {
 	if apiVersion < 2 {
 		alt := "/servercheck/extensions"
 		if httpMethod == http.MethodDelete {

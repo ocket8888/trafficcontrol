@@ -27,6 +27,7 @@ import (
 	"time"
 
 	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
 	"github.com/apache/trafficcontrol/lib/go-tc"
@@ -98,7 +99,7 @@ func (st TOSteeringTargetV11) Validate() error {
 	return st.SteeringTargetNullable.Validate(st.ReqInfo.Tx.Tx)
 }
 
-func (st *TOSteeringTargetV11) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (st *TOSteeringTargetV11) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	steeringTargets, errs, maxTime := read(h, st.ReqInfo.Tx, st.ReqInfo.Params, st.ReqInfo.User, useIMS)
 	if errs.Occurred() {
 		return nil, errs, nil
@@ -110,14 +111,14 @@ func (st *TOSteeringTargetV11) Read(h http.Header, useIMS bool) ([]interface{}, 
 	return iSteeringTargets, errs, maxTime
 }
 
-func read(h http.Header, tx *sqlx.Tx, parameters map[string]string, user *auth.CurrentUser, useIMS bool) ([]tc.SteeringTargetNullable, api.Errors, *time.Time) {
+func read(h http.Header, tx *sqlx.Tx, parameters map[string]string, user *auth.CurrentUser, useIMS bool) ([]tc.SteeringTargetNullable, apierrors.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	queryParamsToQueryCols := map[string]dbhelpers.WhereColumnInfo{
 		"deliveryservice": dbhelpers.WhereColumnInfo{"st.deliveryservice", api.IsInt},
 		"target":          dbhelpers.WhereColumnInfo{"st.target", api.IsInt},
 	}
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	where, orderBy, pagination, queryValues, dbErrs := dbhelpers.BuildWhereAndOrderByAndPagination(parameters, queryParamsToQueryCols)
 	if len(dbErrs) > 0 {
 		errs.UserError = util.JoinErrs(dbErrs)
@@ -129,7 +130,7 @@ func read(h http.Header, tx *sqlx.Tx, parameters map[string]string, user *auth.C
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(tx, h, queryValues, selectMaxLastUpdatedQuery(where))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return []tc.SteeringTargetNullable{}, api.Errors{Code: http.StatusNotModified}, &maxTime
+			return []tc.SteeringTargetNullable{}, apierrors.Errors{Code: http.StatusNotModified}, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {
@@ -198,8 +199,8 @@ func selectMaxLastUpdatedQuery(where string) string {
 	select max(last_updated) as t from last_deleted l where l.table_name='steering_target') as res`
 }
 
-func (st *TOSteeringTargetV11) Create() api.Errors {
-	errs := api.Errors{
+func (st *TOSteeringTargetV11) Create() apierrors.Errors {
+	errs := apierrors.Errors{
 		Code: http.StatusBadRequest,
 	}
 	dsIDInt, err := strconv.Atoi(st.ReqInfo.Params["deliveryservice"])
@@ -217,7 +218,7 @@ func (st *TOSteeringTargetV11) Create() api.Errors {
 	}
 
 	if userErr, sysErr, errCode := tenant.CheckID(st.ReqInfo.Tx.Tx, st.ReqInfo.User, int(*st.DeliveryServiceID)); userErr != nil || sysErr != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:        errCode,
 			SystemError: sysErr,
 			UserError:   userErr,
@@ -230,7 +231,7 @@ func (st *TOSteeringTargetV11) Create() api.Errors {
 	}
 	defer rows.Close()
 
-	errs = api.Errors{
+	errs = apierrors.Errors{
 		Code: http.StatusInternalServerError,
 	}
 	rowsAffected := 0
@@ -248,11 +249,11 @@ func (st *TOSteeringTargetV11) Create() api.Errors {
 		errs.SetSystemError("too many ids returned from steering target insert")
 		return errs
 	}
-	return api.NewErrors()
+	return apierrors.New()
 }
 
-func (st *TOSteeringTargetV11) Update() api.Errors {
-	errs := api.NewErrors()
+func (st *TOSteeringTargetV11) Update() apierrors.Errors {
+	errs := apierrors.New()
 	dsIDInt, err := strconv.Atoi(st.ReqInfo.Params["deliveryservice"])
 	if err != nil {
 		errs.SetUserError("delivery service ID must be an integer")
@@ -272,7 +273,7 @@ func (st *TOSteeringTargetV11) Update() api.Errors {
 	st.TargetID = &targetID
 
 	if userErr, sysErr, errCode := tenant.CheckID(st.ReqInfo.Tx.Tx, st.ReqInfo.User, int(*st.DeliveryServiceID)); userErr != nil || sysErr != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			UserError:   userErr,
 			SystemError: sysErr,
 			Code:        errCode,
@@ -308,16 +309,16 @@ func (st *TOSteeringTargetV11) Update() api.Errors {
 	return errs
 }
 
-func (st *TOSteeringTargetV11) Delete() api.Errors {
+func (st *TOSteeringTargetV11) Delete() apierrors.Errors {
 	if userErr, sysErr, errCode := tenant.CheckID(st.ReqInfo.Tx.Tx, st.ReqInfo.User, int(*st.DeliveryServiceID)); userErr != nil || sysErr != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			UserError:   userErr,
 			SystemError: sysErr,
 			Code:        errCode,
 		}
 	}
 
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	result, err := st.ReqInfo.Tx.NamedExec(deleteQuery(), st)
 	if err != nil {
 		errs.SetSystemError("steering target delete exec: " + err.Error())

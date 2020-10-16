@@ -35,6 +35,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
@@ -366,8 +367,8 @@ func AddFederationResolverMappingsForCurrentUser(w http.ResponseWriter, r *http.
 }
 
 // handles the main logic of the POST handler, separated out for convenience
-func addFederationResolverMappingsForCurrentUser(u *auth.CurrentUser, tx *sql.Tx, mappings []tc.DeliveryServiceFederationResolverMapping) api.Errors {
-	errs := api.NewErrors()
+func addFederationResolverMappingsForCurrentUser(u *auth.CurrentUser, tx *sql.Tx, mappings []tc.DeliveryServiceFederationResolverMapping) apierrors.Errors {
+	errs := apierrors.New()
 	for _, fed := range mappings {
 		dsTenant, ok, err := dbhelpers.GetDSTenantIDFromXMLID(tx, fed.DeliveryService)
 		if err != nil {
@@ -496,9 +497,9 @@ func RemoveFederationResolverMappingsForCurrentUser(w http.ResponseWriter, r *ht
 }
 
 // handles the main logic of the DELETE handler, separated out for convenience
-func removeFederationResolverMappingsForCurrentUser(tx *sql.Tx, u *auth.CurrentUser) ([]string, api.Errors) {
+func removeFederationResolverMappingsForCurrentUser(tx *sql.Tx, u *auth.CurrentUser) ([]string, apierrors.Errors) {
 	rows, err := tx.Query(deleteCurrentUserFederationResolversQuery, u.ID)
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	if err != nil {
 		if err == sql.ErrNoRows {
 			errs.UserError = fmt.Errorf("No federation resolvers to delete for user %s", u.UserName)

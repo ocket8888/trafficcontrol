@@ -33,6 +33,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
@@ -126,11 +127,11 @@ func (ten TOTenant) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (tn *TOTenant) Create() api.Errors { return api.GenericCreate(tn) }
+func (tn *TOTenant) Create() apierrors.Errors { return api.GenericCreate(tn) }
 
-func (ten *TOTenant) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (ten *TOTenant) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	if ten.APIInfo().User.TenantID == auth.TenantIDInvalid {
-		return nil, api.NewErrors(), nil
+		return nil, apierrors.New(), nil
 	}
 	api.DefaultSort(ten.APIInfo(), "name")
 	tenants, errs, maxTime := api.GenericRead(h, ten, useIMS)
@@ -199,15 +200,15 @@ func (ten *TOTenant) IsTenantAuthorized(user *auth.CurrentUser) (bool, error) {
 	return tenant.IsResourceAuthorizedToUserTx(*ten.ParentID, user, ten.APIInfo().Tx.Tx)
 }
 
-func (tn *TOTenant) Update() api.Errors { return api.GenericUpdate(tn) }
+func (tn *TOTenant) Update() apierrors.Errors { return api.GenericUpdate(tn) }
 
-func (ten *TOTenant) Delete() api.Errors {
+func (ten *TOTenant) Delete() apierrors.Errors {
 	result, err := ten.APIInfo().Tx.NamedExec(deleteQuery(), ten)
 	if err != nil {
 		return parseDeleteErr(err, *ten.ID, ten.APIInfo().Tx.Tx) // this is why we can't use api.GenericDelete
 	}
 
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	if rowsAffected, err := result.RowsAffected(); err != nil {
 		errs.SetSystemError("deleting " + ten.GetType() + ": getting rows affected: " + err.Error())
 		errs.Code = http.StatusInternalServerError
@@ -222,10 +223,10 @@ func (ten *TOTenant) Delete() api.Errors {
 }
 
 // parseDeleteErr takes the tenant delete error, and returns the appropriate user error, system error, and http status code.
-func parseDeleteErr(err error, id int, tx *sql.Tx) api.Errors {
+func parseDeleteErr(err error, id int, tx *sql.Tx) apierrors.Errors {
 	pqErr, ok := err.(*pq.Error)
 	if !ok {
-		return api.Errors{
+		return apierrors.Errors{
 			SystemError: errors.New("deleting tenant: " + err.Error()),
 			Code:        http.StatusInternalServerError,
 		}
@@ -245,7 +246,7 @@ func parseDeleteErr(err error, id int, tx *sql.Tx) api.Errors {
 		existing = pqErr.Table
 	}
 
-	return api.Errors{
+	return apierrors.Errors{
 		UserError: errors.New("Tenant '" + strconv.Itoa(id) + "' has " + existing + ". Please update these " + existing + " and retry."),
 		Code:      http.StatusBadRequest,
 	}

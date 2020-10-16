@@ -30,6 +30,7 @@ import (
 	"time"
 
 	"github.com/apache/trafficcontrol/lib/go-rfc"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
 	"github.com/apache/trafficcontrol/lib/go-log"
@@ -520,7 +521,7 @@ func ValidateDSSAssignments(ds DSInfo, servers []dbhelpers.ServerHostNameCDNIDAn
 }
 
 // ValidateServerCapabilities checks that the delivery service's requirements are met by each server to be assigned.
-func ValidateServerCapabilities(dsID int, serverNamesAndTypes []dbhelpers.ServerHostNameCDNIDAndType, tx *sql.Tx) api.Errors {
+func ValidateServerCapabilities(dsID int, serverNamesAndTypes []dbhelpers.ServerHostNameCDNIDAndType, tx *sql.Tx) apierrors.Errors {
 	nonOriginServerNames := []string{}
 	for _, s := range serverNamesAndTypes {
 		if strings.HasPrefix(s.Type, tc.EdgeTypePrefix) {
@@ -531,7 +532,7 @@ func ValidateServerCapabilities(dsID int, serverNamesAndTypes []dbhelpers.Server
 	var sCaps []string
 	dsCaps, err := dbhelpers.GetDSRequiredCapabilitiesFromID(dsID, tx)
 
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	if err != nil {
 		errs.SystemError = err
 		errs.Code = http.StatusInternalServerError
@@ -754,14 +755,14 @@ type TODSSDeliveryService struct {
 }
 
 // Read shows all of the delivery services associated with the specified server.
-func (dss *TODSSDeliveryService) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (dss *TODSSDeliveryService) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	returnable := []interface{}{}
 	params := dss.APIInfo().Params
 	tx := dss.APIInfo().Tx.Tx
 	user := dss.APIInfo().User
-	errs := api.NewErrors()
+	errs := apierrors.New()
 
 	// TODO: I think maybe this could utilize IntParams?
 	if err := api.IsInt(params["id"]); err != nil {
@@ -809,7 +810,7 @@ func (dss *TODSSDeliveryService) Read(h http.Header, useIMS bool) ([]interface{}
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(dss.APIInfo().Tx, h, queryValues, selectMaxLastUpdatedQuery(where))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return returnable, api.Errors{Code: http.StatusNotModified}, &maxTime
+			return returnable, apierrors.Errors{Code: http.StatusNotModified}, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {

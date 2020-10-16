@@ -31,6 +31,7 @@ import (
 	"time"
 
 	"github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
 	"github.com/jmoiron/sqlx"
@@ -67,12 +68,12 @@ func (cgparam *TOCacheGroupParameter) GetType() string {
 	return "cachegroup parameter"
 }
 
-func (cgparam *TOCacheGroupParameter) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (cgparam *TOCacheGroupParameter) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	queryParamsToQueryCols := cgparam.ParamColumns()
 	parameters := cgparam.APIInfo().Params
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	where, orderBy, pagination, queryValues, es := dbhelpers.BuildWhereAndOrderByAndPagination(parameters, queryParamsToQueryCols)
 	if len(es) > 0 {
 		errs.UserError = util.JoinErrs(es)
@@ -207,15 +208,15 @@ func (cgparam *TOCacheGroupParameter) GetKeys() (map[string]interface{}, bool) {
 }
 
 // Delete implements the api.CRUDer interface.
-func (cgparam *TOCacheGroupParameter) Delete() api.Errors {
+func (cgparam *TOCacheGroupParameter) Delete() apierrors.Errors {
 	_, ok, err := dbhelpers.GetCacheGroupNameFromID(cgparam.ReqInfo.Tx.Tx, cgparam.CacheGroupID)
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			SystemError: err,
 			Code:        http.StatusInternalServerError,
 		}
 	} else if !ok {
-		return api.Errors{
+		return apierrors.Errors{
 			UserError: fmt.Errorf("cachegroup %v does not exist", cgparam.CacheGroupID),
 			Code:      http.StatusNotFound,
 		}
@@ -223,12 +224,12 @@ func (cgparam *TOCacheGroupParameter) Delete() api.Errors {
 
 	_, ok, err = dbhelpers.GetParamNameByID(cgparam.ReqInfo.Tx.Tx, *cgparam.ID)
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			SystemError: err,
 			Code:        http.StatusInternalServerError,
 		}
 	} else if !ok {
-		return api.Errors{
+		return apierrors.Errors{
 			UserError: fmt.Errorf("parameter %v does not exist", *cgparam.ID),
 			Code:      http.StatusNotFound,
 		}

@@ -33,6 +33,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
@@ -126,8 +127,8 @@ func AssignDeliveryServicesToServerHandler(w http.ResponseWriter, r *http.Reques
 	api.WriteRespAlertObj(w, r, tc.SuccessLevel, "successfully assigned dses to server", tc.AssignedDsResponse{server, assignedDSes, replace})
 }
 
-func checkTenancyAndCDN(tx *sql.Tx, serverCDN string, server int, serverInfo tc.ServerInfo, dsList []int, user *auth.CurrentUser) api.Errors {
-	errs := api.NewErrors()
+func checkTenancyAndCDN(tx *sql.Tx, serverCDN string, server int, serverInfo tc.ServerInfo, dsList []int, user *auth.CurrentUser) apierrors.Errors {
+	errs := apierrors.New()
 	rows, err := tx.Query(needsCheckInfoQuery, pq.Array(dsList))
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -183,11 +184,11 @@ func checkTenancyAndCDN(tx *sql.Tx, serverCDN string, server int, serverInfo tc.
 }
 
 // ValidateDSCapabilities checks that the server meets the requirements of each delivery service to be assigned.
-func ValidateDSCapabilities(dsIDs []int, serverName string, tx *sql.Tx) api.Errors {
+func ValidateDSCapabilities(dsIDs []int, serverName string, tx *sql.Tx) apierrors.Errors {
 	var dsCaps []string
 	sCaps, err := dbhelpers.GetServerCapabilitiesFromName(serverName, tx)
 
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	if err != nil {
 		errs.SystemError = err
 		errs.Code = http.StatusInternalServerError

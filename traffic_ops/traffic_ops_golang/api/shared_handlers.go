@@ -32,6 +32,7 @@ import (
 	"strings"
 
 	"github.com/apache/trafficcontrol/lib/go-rfc"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 
 	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-tc"
@@ -116,8 +117,8 @@ func decodeAndValidateRequestBody(r *http.Request, v Validator) error {
 	return v.Validate()
 }
 
-func checkIfOptionsDeleter(obj interface{}, params map[string]string) (bool, Errors) {
-	errs := NewErrors()
+func checkIfOptionsDeleter(obj interface{}, params map[string]string) (bool, apierrors.Errors) {
+	errs := apierrors.New()
 	optionsDeleter, ok := obj.(OptionsDeleter)
 	if !ok {
 		return false, errs

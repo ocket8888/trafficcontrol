@@ -24,15 +24,16 @@ import (
 	"time"
 
 	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 )
 
 type CRUDer interface {
-	Create() Errors
-	Read(h http.Header, useIMS bool) ([]interface{}, Errors, *time.Time)
-	Update() Errors
-	Delete() Errors
+	Create() apierrors.Errors
+	Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time)
+	Update() apierrors.Errors
+	Delete() apierrors.Errors
 	APIInfoer
 	Identifier
 	Validator
@@ -62,7 +63,7 @@ type Identifier interface {
 
 type Creator interface {
 	// Create returns any user error, any system error, and the HTTP error code to be returned if there was an error.
-	Create() Errors
+	Create() apierrors.Errors
 	APIInfoer
 	Identifier
 	Validator
@@ -75,13 +76,13 @@ type MultipleCreator interface {
 
 type Reader interface {
 	// Read returns the object to write to the user, any user error, any system error, and the HTTP error code to be returned if there was an error.
-	Read(h http.Header, useIMS bool) ([]interface{}, Errors, *time.Time)
+	Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time)
 	APIInfoer
 }
 
 type Updater interface {
 	// Update returns any user error, any system error, and the HTTP error code to be returned if there was an error.
-	Update() Errors
+	Update() apierrors.Errors
 	APIInfoer
 	Identifier
 	Validator
@@ -89,7 +90,7 @@ type Updater interface {
 
 type Deleter interface {
 	// Delete returns any user error, any system error, and the HTTP error code to be returned if there was an error.
-	Delete() Errors
+	Delete() apierrors.Errors
 	APIInfoer
 	Identifier
 }
@@ -98,7 +99,7 @@ type Deleter interface {
 type OptionsDeleter interface {
 	// OptionsDelete returns any user error, any system error, and the HTTP error code to be returned if there was an
 	// error.
-	OptionsDelete() Errors
+	OptionsDelete() apierrors.Errors
 	APIInfoer
 	Identifier
 	DeleteKeyOptions() map[string]dbhelpers.WhereColumnInfo

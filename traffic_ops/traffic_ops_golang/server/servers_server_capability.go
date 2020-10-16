@@ -32,6 +32,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
 
@@ -122,11 +123,11 @@ func (ssc TOServerServerCapability) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (ssc *TOServerServerCapability) Update() api.Errors {
-	return api.Errors{Code: http.StatusNotImplemented}
+func (ssc *TOServerServerCapability) Update() apierrors.Errors {
+	return apierrors.Errors{Code: http.StatusNotImplemented}
 }
 
-func (ssc *TOServerServerCapability) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (ssc *TOServerServerCapability) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	api.DefaultSort(ssc.APIInfo(), "serverHostName")
 	return api.GenericRead(h, ssc, useIMS)
 }
@@ -138,10 +139,10 @@ JOIN server s ON sc.server = s.id ` + where + orderBy + pagination +
 	select max(last_updated) as t from last_deleted l where l.table_name='server_server_capability') as res`
 }
 
-func (ssc *TOServerServerCapability) Delete() api.Errors {
+func (ssc *TOServerServerCapability) Delete() apierrors.Errors {
 	tenantIDs, err := tenant.GetUserTenantIDListTx(ssc.APIInfo().Tx.Tx, ssc.APIInfo().User.TenantID)
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			SystemError: fmt.Errorf("deleting servers_server_capability: %v", err),
 			Code:        http.StatusInternalServerError,
 		}
@@ -163,8 +164,8 @@ func (ssc *TOServerServerCapability) Delete() api.Errors {
 	return api.GenericDelete(ssc)
 }
 
-func checkTopologyBasedDSRequiredCapabilities(ssc *TOServerServerCapability, accessibleTenants map[int]struct{}) api.Errors {
-	errs := api.NewErrors()
+func checkTopologyBasedDSRequiredCapabilities(ssc *TOServerServerCapability, accessibleTenants map[int]struct{}) apierrors.Errors {
+	errs := apierrors.New()
 	dsRows, err := ssc.APIInfo().Tx.Tx.Query(getTopologyBasedDSesReqCapQuery(), ssc.ServerID, ssc.ServerCapability)
 	if err != nil {
 		errs.SystemError = fmt.Errorf("querying topology-based DSes with the required capability %s: %v", *ssc.ServerCapability, err)
@@ -252,10 +253,10 @@ func checkTopologyBasedDSRequiredCapabilities(ssc *TOServerServerCapability, acc
 	return errs
 }
 
-func checkDSRequiredCapabilities(ssc *TOServerServerCapability, accessibleTenants map[int]struct{}) api.Errors {
+func checkDSRequiredCapabilities(ssc *TOServerServerCapability, accessibleTenants map[int]struct{}) apierrors.Errors {
 	// Ensure that the user is not removing a server capability from the server
 	// that is required by the delivery services the server is assigned to (if applicable)
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	dsIDs := []int64{}
 	if err := ssc.APIInfo().Tx.Tx.QueryRow(checkDSReqCapQuery(), ssc.ServerID, ssc.ServerCapability).Scan(pq.Array(&dsIDs)); err != nil {
 		errs.SystemError = fmt.Errorf("checking removing server server capability would still suffice delivery service requried capabilites: %v", err)
@@ -269,11 +270,11 @@ func checkDSRequiredCapabilities(ssc *TOServerServerCapability, accessibleTenant
 	return errs
 }
 
-func (ssc *TOServerServerCapability) buildDSReqCapError(dsIDs []int64, accessibleTenants map[int]struct{}) api.Errors {
+func (ssc *TOServerServerCapability) buildDSReqCapError(dsIDs []int64, accessibleTenants map[int]struct{}) apierrors.Errors {
 
 	dsTenantIDs, err := getDSTenantIDsByIDs(ssc.APIInfo().Tx, dsIDs)
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			SystemError: err,
 			Code:        http.StatusInternalServerError,
 		}
@@ -294,25 +295,25 @@ func (ssc *TOServerServerCapability) buildDSReqCapError(dsIDs []int64, accessibl
 	if len(authDSIDs) > 0 {
 		dsStr = fmt.Sprintf("the delivery services %v", strings.Join(authDSIDs, ","))
 	}
-	return api.Errors{
+	return apierrors.Errors{
 		UserError: fmt.Errorf("cannot remove the capability %v from the server %v as the server is assigned to %v that require it", *ssc.ServerCapability, *ssc.ServerID, dsStr),
 		Code:      http.StatusBadRequest,
 	}
 }
 
-func (ssc *TOServerServerCapability) Create() api.Errors {
+func (ssc *TOServerServerCapability) Create() apierrors.Errors {
 	tx := ssc.APIInfo().Tx
 
 	// Check existence prior to checking type
 	_, exists, err := dbhelpers.GetServerNameFromID(tx.Tx, *ssc.ServerID)
 	if err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:        http.StatusInternalServerError,
 			SystemError: err,
 		}
 	}
 	if !exists {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:      http.StatusNotFound,
 			UserError: fmt.Errorf("server %v does not exist", *ssc.ServerID),
 		}
@@ -321,13 +322,13 @@ func (ssc *TOServerServerCapability) Create() api.Errors {
 	// Ensure type is correct
 	correctType := true
 	if err := tx.Tx.QueryRow(scCheckServerTypeQuery(), ssc.ServerID).Scan(&correctType); err != nil {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:        http.StatusInternalServerError,
 			SystemError: fmt.Errorf("checking server type: %v", err),
 		}
 	}
 	if !correctType {
-		return api.Errors{
+		return apierrors.Errors{
 			Code:      http.StatusBadRequest,
 			UserError: fmt.Errorf("server %v has an incorrect server type. Server capabilities can only be assigned to EDGE or MID servers", *ssc.ServerID),
 		}
@@ -343,14 +344,14 @@ func (ssc *TOServerServerCapability) Create() api.Errors {
 	for resultRows.Next() {
 		rowsAffected++
 		if err := resultRows.StructScan(&ssc); err != nil {
-			return api.Errors{
+			return apierrors.Errors{
 				Code:        http.StatusInternalServerError,
 				SystemError: fmt.Errorf("%s create scanning: %v", ssc.GetType(), err),
 			}
 		}
 	}
 
-	errs := api.Errors{
+	errs := apierrors.Errors{
 		Code: http.StatusInternalServerError,
 	}
 	if rowsAffected == 0 {
@@ -361,7 +362,7 @@ func (ssc *TOServerServerCapability) Create() api.Errors {
 		return errs
 	}
 
-	return api.NewErrors()
+	return apierrors.New()
 }
 
 func scSelectQuery() string {

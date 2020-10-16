@@ -27,6 +27,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -102,7 +103,7 @@ func (v *TOServerCapability) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (v *TOServerCapability) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (v *TOServerCapability) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	api.DefaultSort(v.APIInfo(), "name")
 	return api.GenericRead(h, v, useIMS)
 }
@@ -113,5 +114,5 @@ func (v *TOServerCapability) SelectMaxLastUpdatedQuery(where, orderBy, paginatio
 	select max(l.last_updated) as t from last_deleted l where l.table_name='server_capability') as res`
 }
 
-func (v *TOServerCapability) Create() api.Errors { return api.GenericCreateNameBasedID(v) }
-func (v *TOServerCapability) Delete() api.Errors { return api.GenericDelete(v) }
+func (v *TOServerCapability) Create() apierrors.Errors { return api.GenericCreateNameBasedID(v) }
+func (v *TOServerCapability) Delete() apierrors.Errors { return api.GenericDelete(v) }

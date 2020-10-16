@@ -30,6 +30,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
@@ -78,7 +79,7 @@ func (req TODeliveryServiceRequest) GetType() string {
 }
 
 // Read implements the api.Reader interface
-func (req *TODeliveryServiceRequest) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (req *TODeliveryServiceRequest) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	deliveryServiceRequests := []interface{}{}
@@ -93,7 +94,7 @@ func (req *TODeliveryServiceRequest) Read(h http.Header, useIMS bool) ([]interfa
 		"xmlId":      dbhelpers.WhereColumnInfo{Column: "r.deliveryservice->>'xmlId'"},
 	}
 
-	errs := api.NewErrors()
+	errs := apierrors.New()
 
 	p := req.APIInfo().Params
 	if _, ok := req.APIInfo().Params["orderby"]; !ok {
@@ -209,8 +210,8 @@ func (req TODeliveryServiceRequest) IsTenantAuthorized(user *auth.CurrentUser) (
 //ParsePQUniqueConstraintError is used to determine if a request with conflicting values exists
 //if so, it will return an errorType of DataConflict and the type should be appended to the
 //generic error message returned
-func (req *TODeliveryServiceRequest) Update() api.Errors {
-	errs := api.NewErrors()
+func (req *TODeliveryServiceRequest) Update() apierrors.Errors {
+	errs := apierrors.New()
 	if req.ID == nil {
 		errs.SetUserError("missing id")
 		errs.Code = http.StatusBadRequest
@@ -258,8 +259,8 @@ func (req *TODeliveryServiceRequest) Update() api.Errors {
 //generic error message returned
 //The insert sql returns the id and lastUpdated values of the newly inserted request and have
 //to be added to the struct
-func (req *TODeliveryServiceRequest) Create() api.Errors {
-	errs := api.NewErrors()
+func (req *TODeliveryServiceRequest) Create() apierrors.Errors {
+	errs := apierrors.New()
 
 	// TODO move to Validate()
 	if req.Status == nil {
@@ -304,8 +305,8 @@ func (req *TODeliveryServiceRequest) Create() api.Errors {
 	return api.GenericCreate(req)
 }
 
-func (req *TODeliveryServiceRequest) Delete() api.Errors {
-	errs := api.NewErrors()
+func (req *TODeliveryServiceRequest) Delete() apierrors.Errors {
+	errs := apierrors.New()
 	if req.ID == nil {
 		errs.SetUserError("missing id")
 		errs.Code = http.StatusBadRequest
@@ -403,8 +404,8 @@ type deliveryServiceRequestAssignment struct {
 }
 
 // Update assignee only
-func (req *deliveryServiceRequestAssignment) Update() api.Errors {
-	errs := api.NewErrors()
+func (req *deliveryServiceRequestAssignment) Update() apierrors.Errors {
+	errs := apierrors.New()
 	// req represents the state the deliveryservice_request is to transition to
 	// we want to limit what changes here -- only assignee can change
 	if req.ID == nil {
@@ -472,8 +473,8 @@ type deliveryServiceRequestStatus struct {
 	TODeliveryServiceRequest
 }
 
-func (req *deliveryServiceRequestStatus) Update() api.Errors {
-	errs := api.NewErrors()
+func (req *deliveryServiceRequestStatus) Update() apierrors.Errors {
+	errs := apierrors.New()
 	// req represents the state the deliveryservice_request is to transition to
 	// we want to limit what changes here -- only status can change,  and only according to the established rules
 	// for status transition

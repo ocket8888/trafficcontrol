@@ -31,6 +31,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
 	"github.com/asaskevich/govalidator"
@@ -127,7 +128,7 @@ func (fed *TOCDNFederation) Validate() error {
 // fedAPIInfo.Params["name"] is not used on creation, rather the cdn name
 // is connected when the federations/:id/deliveryservice links a federation
 // Note: cdns and deliveryservies have a 1-1 relationship
-func (fed *TOCDNFederation) Create() api.Errors {
+func (fed *TOCDNFederation) Create() apierrors.Errors {
 	// Deliveryservice IDs should not be included on create.
 	if fed.DeliveryServiceIDs != nil {
 		fed.DsId = nil
@@ -151,8 +152,8 @@ func checkTenancy(tenantID *int, tenantIDs []int) bool {
 	return false
 }
 
-func (fed *TOCDNFederation) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
-	errs := api.NewErrors()
+func (fed *TOCDNFederation) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
+	errs := apierrors.New()
 	if idstr, ok := fed.APIInfo().Params["id"]; ok {
 		id, err := strconv.Atoi(idstr)
 		if err != nil {
@@ -206,7 +207,7 @@ func (fed *TOCDNFederation) Read(h http.Header, useIMS bool) ([]interface{}, api
 	return filteredFederations, errs, maxTime
 }
 
-func (fed *TOCDNFederation) Update() api.Errors {
+func (fed *TOCDNFederation) Update() apierrors.Errors {
 	errs := fed.isTenantAuthorized()
 	if errs.Occurred() {
 		return errs
@@ -223,7 +224,7 @@ func (fed *TOCDNFederation) Update() api.Errors {
 // Delete implements the Deleter interface for TOCDNFederation.
 // In the perl version, :name is ignored. It is not even verified whether or not
 // :name is a real cdn that exists. This mimicks the perl behavior.
-func (fed *TOCDNFederation) Delete() api.Errors {
+func (fed *TOCDNFederation) Delete() apierrors.Errors {
 	errs := fed.isTenantAuthorized()
 	if errs.Occurred() {
 		return errs
@@ -231,8 +232,8 @@ func (fed *TOCDNFederation) Delete() api.Errors {
 	return api.GenericDelete(fed)
 }
 
-func (fed TOCDNFederation) isTenantAuthorized() api.Errors {
-	errs := api.NewErrors()
+func (fed TOCDNFederation) isTenantAuthorized() apierrors.Errors {
+	errs := apierrors.New()
 	tenantID, err := getTenantIDFromFedID(*fed.ID, fed.APIInfo().Tx.Tx)
 	if err != nil {
 		// If nobody has claimed a tenant, that federation is publicly visible.

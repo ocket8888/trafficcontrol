@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 
 	"github.com/apache/trafficcontrol/lib/go-log"
@@ -237,9 +238,9 @@ func DeprecatedReadServersChecks(w http.ResponseWriter, r *http.Request) {
 	api.WriteAlertsObj(w, r, http.StatusOK, alerts, data)
 }
 
-func handleReadServerCheck(inf *api.APIInfo, tx *sql.Tx) ([]tc.GenericServerCheck, api.Errors) {
+func handleReadServerCheck(inf *api.APIInfo, tx *sql.Tx) ([]tc.GenericServerCheck, apierrors.Errors) {
 	extensions := make(map[string]string)
-	errs := api.NewErrors()
+	errs := apierrors.New()
 	extRows, err := tx.Query(extensionsQuery)
 	if err != nil {
 		errs.SystemError = fmt.Errorf("querying for extensions: %v", err)

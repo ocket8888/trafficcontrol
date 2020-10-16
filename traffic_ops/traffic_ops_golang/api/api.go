@@ -41,6 +41,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-rfc"
 	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/config"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
@@ -82,49 +83,6 @@ type APIResponseWithSummary struct {
 	} `json:"summary"`
 }
 
-// Errors represents a set of errors to be handled by the API.
-type Errors struct {
-	// Code is the HTTP response code. If no error has occurred, this *should*
-	// be http.StatusOK.
-	Code int
-	// SystemError is an error that occurred internally; not safe for exposure
-	// to the user.
-	SystemError error
-	// UserError is an error that should be shown to the user to explain why
-	// their request failed.
-	UserError error
-}
-
-// NewErrors constructs a new Errors where no error has actually occurred.
-func NewErrors() Errors {
-	return Errors{
-		Code:        http.StatusOK,
-		SystemError: nil,
-		UserError:   nil,
-	}
-}
-
-// Occurred returns whether at least one error has occurred (is non-nil).
-func (e Errors) Occurred() bool {
-	return e.SystemError != nil || e.UserError != nil
-}
-
-// SetSystemError sets the Errors' system-level error to a new error containing
-// the passed message.
-func (e *Errors) SetSystemError(err string) {
-	e.SystemError = errors.New(err)
-}
-
-// SetUserError sets the Errors' user-level error to a new error containing the
-// passed message.
-func (e *Errors) SetUserError(err string) {
-	e.UserError = errors.New(err)
-}
-
-func (e Errors) String() string {
-	return fmt.Sprintf("Errors(Code=%d, SystemError='%v', UserError='%v')", e.Code, e.SystemError, e.UserError)
-}
-
 // GoneHandler is an http.Handler function that just writes a 410 Gone response
 // back to the client, along with an error-level alert stating that the endpoint
 // is no longer available.
@@ -133,7 +91,7 @@ func GoneHandler(w http.ResponseWriter, r *http.Request) {
 	HandleErr(w, r, nil, http.StatusGone, err, nil)
 }
 
-// WriteResp takes any object, serializes it as JSON, and writes that to w. Any errors are logged and written to w via tc.GetHandleErrorsFunc.
+// WriteResp takes any object, serializes it as JSON, and writes that to w. Any errors are logged and written to w via tc.GetHandleapierrors.ErrorsFunc.
 // This is a helper for the common case; not using this in unusual cases is perfectly acceptable.
 func WriteResp(w http.ResponseWriter, r *http.Request, v interface{}) {
 	resp := APIResponse{v}
@@ -218,7 +176,7 @@ func HandleErr(w http.ResponseWriter, r *http.Request, tx *sql.Tx, statusCode in
 // The tx may be nil, if there is no transaction. Passing a nil tx is strongly
 // discouraged if a transaction exists, because it will result in copy-paste
 // errors for the common APIInfo use case.
-func HandleErrs(w http.ResponseWriter, r *http.Request, tx *sql.Tx, errs Errors) {
+func HandleErrs(w http.ResponseWriter, r *http.Request, tx *sql.Tx, errs apierrors.Errors) {
 	HandleErr(w, r, tx, errs.Code, errs.UserError, errs.SystemError)
 }
 
@@ -230,11 +188,11 @@ func HandleErrOptionalDeprecation(w http.ResponseWriter, r *http.Request, tx *sq
 	}
 }
 
-// HandleErrsOptionalDeprecation handles a set of API Errors. If 'deprecated'
+// HandleErrsOptionalDeprecation handles a set of API apierrors.Errors. If 'deprecated'
 // is true, then a deprecation alert will be added to the response, and if
 // alternative is not nil it will be presented to the client as the replacement
 // for the deprecated route.
-func HandleErrsOptionalDeprecation(w http.ResponseWriter, r *http.Request, tx *sql.Tx, errs Errors, deprecated bool, alternative *string) {
+func HandleErrsOptionalDeprecation(w http.ResponseWriter, r *http.Request, tx *sql.Tx, errs apierrors.Errors, deprecated bool, alternative *string) {
 	HandleErrOptionalDeprecation(w, r, tx, errs.Code, errs.UserError, errs.SystemError, deprecated, alternative)
 }
 
@@ -283,7 +241,7 @@ func LogErr(r *http.Request, errCode int, userErr error, sysErr error) error {
 // without actually writing anything to a http.ResponseWriter, unlike
 // handleSimpleErr. It returns the userErr which will be initialized to the
 // http.StatusText of errCode if it was passed as nil - otherwise left alone.
-func LogErrs(r *http.Request, errs Errors) error {
+func LogErrs(r *http.Request, errs apierrors.Errors) error {
 	return LogErr(r, errs.Code, errs.UserError, errs.SystemError)
 }
 
@@ -326,7 +284,7 @@ func RespWriterVals(w http.ResponseWriter, r *http.Request, tx *sql.Tx, vals map
 	}
 }
 
-// WriteRespAlert creates an alert, serializes it as JSON, and writes that to w. Any errors are logged and written to w via tc.GetHandleErrorsFunc.
+// WriteRespAlert creates an alert, serializes it as JSON, and writes that to w. Any errors are logged and written to w via tc.GetHandleapierrors.ErrorsFunc.
 // This is a helper for the common case; not using this in unusual cases is perfectly acceptable.
 func WriteRespAlert(w http.ResponseWriter, r *http.Request, level tc.AlertLevel, msg string) {
 	if respWritten(r) {
@@ -482,8 +440,8 @@ func StripParamJSON(params map[string]string) map[string]string {
 
 // AllParams takes the request (in which the router has inserted context for path parameters), and an array of parameters required to be integers, and returns the map of combined parameters, and the map of int parameters; or a user or system error and the HTTP error code. The intParams may be nil if no integer parameters are required.
 // This is a helper for the common case; not using this in unusual cases is perfectly acceptable.
-func AllParams(req *http.Request, required []string, ints []string) (map[string]string, map[string]int, Errors) {
-	errs := NewErrors()
+func AllParams(req *http.Request, required []string, ints []string) (map[string]string, map[string]int, apierrors.Errors) {
+	errs := apierrors.New()
 	params, err := GetCombinedParams(req)
 	if err != nil {
 		errs.Code = http.StatusInternalServerError
@@ -567,12 +525,12 @@ type APIInfo struct {
 //    api.WriteResp(w, r, respObj)
 //  }
 //
-func NewInfo(r *http.Request, requiredParams []string, intParamNames []string) (*APIInfo, Errors) {
+func NewInfo(r *http.Request, requiredParams []string, intParamNames []string) (*APIInfo, apierrors.Errors) {
 	inf := &APIInfo{
 		Tx: &sqlx.Tx{},
 	}
 
-	errs := Errors{
+	errs := apierrors.Errors{
 		Code: http.StatusInternalServerError,
 	}
 
@@ -610,7 +568,7 @@ func NewInfo(r *http.Request, requiredParams []string, intParamNames []string) (
 	dbCtx, _ := context.WithTimeout(r.Context(), time.Duration(cfg.DBQueryTimeoutSeconds)*time.Second)
 	tx, err := db.BeginTxx(dbCtx, nil)
 	if err != nil {
-		return inf, Errors{
+		return inf, apierrors.Errors{
 			Code:        http.StatusInternalServerError,
 			SystemError: fmt.Errorf("could not begin transaction: %v", err),
 			UserError:   nil,
@@ -640,7 +598,7 @@ func (inf *APIInfo) Close() {
 
 // HandleErrs writes the appropriate response to the client given the provided
 // errors.
-func (inf APIInfo) HandleErrs(w http.ResponseWriter, r *http.Request, e Errors) {
+func (inf APIInfo) HandleErrs(w http.ResponseWriter, r *http.Request, e apierrors.Errors) {
 	if inf.Tx == nil {
 		HandleErrs(w, r, nil, e)
 		return
@@ -649,7 +607,7 @@ func (inf APIInfo) HandleErrs(w http.ResponseWriter, r *http.Request, e Errors) 
 }
 
 // SendMail is a convenience method used to call SendMail using an APIInfo structure's configuration.
-func (inf *APIInfo) SendMail(to rfc.EmailAddress, msg []byte) Errors {
+func (inf *APIInfo) SendMail(to rfc.EmailAddress, msg []byte) apierrors.Errors {
 	return SendMail(to, msg, inf.Config)
 }
 
@@ -670,8 +628,8 @@ func (inf *APIInfo) IsResourceAuthorizedToCurrentUser(resourceTenantID int) (boo
 // SendMail returns (in order) an HTTP status code, a user-friendly error, and an error fit for
 // logging to system error logs. If either the user or system error is non-nil, the operation failed,
 // and the HTTP status code indicates the type of failure.
-func SendMail(to rfc.EmailAddress, msg []byte, cfg *config.Config) Errors {
-	errs := NewErrors()
+func SendMail(to rfc.EmailAddress, msg []byte, cfg *config.Config) apierrors.Errors {
+	errs := apierrors.New()
 	if !cfg.SMTP.Enabled {
 		errs.Code = http.StatusInternalServerError
 		errs.SetSystemError("SMTP is not enabled; mail cannot be sent")
@@ -861,8 +819,8 @@ func toCamelCase(str string) string {
 }
 
 // parses pq errors for not null constraint
-func parseNotNullConstraint(err *pq.Error) Errors {
-	errs := NewErrors()
+func parseNotNullConstraint(err *pq.Error) apierrors.Errors {
+	errs := apierrors.New()
 	pattern := regexp.MustCompile(`null value in column "(.+)" violates not-null constraint`)
 	match := pattern.FindStringSubmatch(err.Message)
 	if match == nil {
@@ -874,8 +832,8 @@ func parseNotNullConstraint(err *pq.Error) Errors {
 }
 
 // parses pq errors for empty string check constraint
-func parseEmptyConstraint(err *pq.Error) Errors {
-	errs := NewErrors()
+func parseEmptyConstraint(err *pq.Error) apierrors.Errors {
+	errs := apierrors.New()
 	pattern := regexp.MustCompile(`new row for relation "[^"]*" violates check constraint "(.*)_empty"`)
 	match := pattern.FindStringSubmatch(err.Message)
 	if match == nil {
@@ -887,8 +845,8 @@ func parseEmptyConstraint(err *pq.Error) Errors {
 }
 
 // parses pq errors for violated foreign key constraints
-func parseNotPresentFKConstraint(err *pq.Error) Errors {
-	errs := NewErrors()
+func parseNotPresentFKConstraint(err *pq.Error) apierrors.Errors {
+	errs := apierrors.New()
 	pattern := regexp.MustCompile(`Key \(.+\)=\(.+\) is not present in table "(.+)"`)
 	match := pattern.FindStringSubmatch(err.Detail)
 	if match == nil {
@@ -900,8 +858,8 @@ func parseNotPresentFKConstraint(err *pq.Error) Errors {
 }
 
 // parses pq errors for uniqueness constraint violations
-func parseUniqueConstraint(err *pq.Error) Errors {
-	errs := NewErrors()
+func parseUniqueConstraint(err *pq.Error) apierrors.Errors {
+	errs := apierrors.New()
 	pattern := regexp.MustCompile(`Key \((.+)\)=\((.+)\) already exists`)
 	match := pattern.FindStringSubmatch(err.Detail)
 	if match == nil {
@@ -913,8 +871,8 @@ func parseUniqueConstraint(err *pq.Error) Errors {
 }
 
 // parses pq errors for database enum constraint violations
-func parseEnumConstraint(err *pq.Error) Errors {
-	errs := NewErrors()
+func parseEnumConstraint(err *pq.Error) apierrors.Errors {
+	errs := apierrors.New()
 	pattern := regexp.MustCompile(`invalid input value for enum (.+): \"(.+)\"`)
 	match := pattern.FindStringSubmatch(err.Message)
 	if match == nil {
@@ -942,8 +900,8 @@ func parseEnumConstraint(err *pq.Error) Errors {
 // It may be helpful to look at constraints for api_capability, role_capability,
 // and user_role for examples.
 //
-func parseRestrictFKConstraint(err *pq.Error) Errors {
-	errs := NewErrors()
+func parseRestrictFKConstraint(err *pq.Error) apierrors.Errors {
+	errs := apierrors.New()
 	pattern := regexp.MustCompile(`update or delete on table "([a-z_]+)" violates foreign key constraint ".+" on table "([a-z_]+)"`)
 	match := pattern.FindStringSubmatch(err.Message)
 	if match == nil {
@@ -962,8 +920,8 @@ func parseRestrictFKConstraint(err *pq.Error) Errors {
 }
 
 // ParseDBError parses pq errors for database constraint violations, and returns the (userErr, sysErr, httpCode) format expected by the API helpers.
-func ParseDBError(ierr error) Errors {
-	errs := NewErrors()
+func ParseDBError(ierr error) apierrors.Errors {
+	errs := apierrors.New()
 	err, ok := ierr.(*pq.Error)
 	if !ok {
 		log.Errorf("a non-pq error was given")
@@ -1001,8 +959,8 @@ func ParseDBError(ierr error) Errors {
 
 // GetUserFromReq returns the current user, any user error, any system error, and an error code to be returned if either error was not nil.
 // This also uses the given ResponseWriter to refresh the cookie, if it was valid.
-func GetUserFromReq(w http.ResponseWriter, r *http.Request, secret string) (auth.CurrentUser, Errors) {
-	errs := Errors{
+func GetUserFromReq(w http.ResponseWriter, r *http.Request, secret string) (auth.CurrentUser, apierrors.Errors) {
+	errs := apierrors.Errors{
 		Code:        http.StatusUnauthorized,
 		SystemError: nil,
 		UserError:   errors.New("Unauthorized, please log in."),
@@ -1059,7 +1017,7 @@ func GetUserFromReq(w http.ResponseWriter, r *http.Request, secret string) (auth
 	duration := tocookie.DefaultDuration
 	newCookie := tocookie.GetCookie(oldCookie.AuthData, duration, secret)
 	http.SetCookie(w, newCookie)
-	return u, NewErrors()
+	return u, apierrors.New()
 }
 
 func AddUserToReq(r *http.Request, u auth.CurrentUser) {
@@ -1072,14 +1030,14 @@ func AddUserToReq(r *http.Request, u auth.CurrentUser) {
 // SendEmailFromTemplate returns (in order) an HTTP status code, a user-friendly error, and an error fit for
 // logging to system error logs. If either the user or system error is non-nil, the operation failed,
 // and the HTTP status code indicates the type of failure.
-func SendEmailFromTemplate(config config.Config, header string, data interface{}, templateFile string, toEmail string) Errors {
+func SendEmailFromTemplate(config config.Config, header string, data interface{}, templateFile string, toEmail string) apierrors.Errors {
 	email := rfc.EmailAddress{
 		Address: mail.Address{Name: "", Address: toEmail},
 	}
 
 	msgBodyBuffer, err := parseTemplate(templateFile, data)
 	if err != nil {
-		return Errors{
+		return apierrors.Errors{
 			Code:        http.StatusInternalServerError,
 			SystemError: err,
 		}

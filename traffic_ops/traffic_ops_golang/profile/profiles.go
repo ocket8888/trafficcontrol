@@ -25,6 +25,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
 	"github.com/apache/trafficcontrol/lib/go-log"
@@ -104,7 +105,7 @@ func (prof *TOProfile) Validate() error {
 	return nil
 }
 
-func (prof *TOProfile) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (prof *TOProfile) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	// Query Parameters to Database Query column mappings
@@ -126,7 +127,7 @@ func (prof *TOProfile) Read(h http.Header, useIMS bool) ([]interface{}, api.Erro
 		}
 	}
 
-	e := api.NewErrors()
+	e := apierrors.New()
 	if len(errs) > 0 {
 		e.Code = http.StatusBadRequest
 		e.UserError = util.JoinErrs(errs)
@@ -254,9 +255,9 @@ JOIN profile_parameter pp ON pp.parameter = p.id
 WHERE pp.profile = :profile_id`
 }
 
-func (pr *TOProfile) Update() api.Errors { return api.GenericUpdate(pr) }
-func (pr *TOProfile) Create() api.Errors { return api.GenericCreate(pr) }
-func (pr *TOProfile) Delete() api.Errors { return api.GenericDelete(pr) }
+func (pr *TOProfile) Update() apierrors.Errors { return api.GenericUpdate(pr) }
+func (pr *TOProfile) Create() apierrors.Errors { return api.GenericCreate(pr) }
+func (pr *TOProfile) Delete() apierrors.Errors { return api.GenericDelete(pr) }
 
 func updateQuery() string {
 	query := `UPDATE

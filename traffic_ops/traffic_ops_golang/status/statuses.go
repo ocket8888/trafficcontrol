@@ -30,6 +30,7 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/apierrors"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -99,7 +100,7 @@ func (status TOStatus) Validate() error {
 	return util.JoinErrs(tovalidate.ToErrors(errs))
 }
 
-func (st *TOStatus) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *time.Time) {
+func (st *TOStatus) Read(h http.Header, useIMS bool) ([]interface{}, apierrors.Errors, *time.Time) {
 	api.DefaultSort(st.APIInfo(), "name")
 	readVals, errs, maxTime := api.GenericRead(h, st, useIMS)
 	if errs.Occurred() {
@@ -121,9 +122,9 @@ func (st *TOStatus) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors,
 	return readVals, errs, maxTime
 }
 
-func (st *TOStatus) Update() api.Errors { return api.GenericUpdate(st) }
-func (st *TOStatus) Create() api.Errors { return api.GenericCreate(st) }
-func (st *TOStatus) Delete() api.Errors { return api.GenericDelete(st) }
+func (st *TOStatus) Update() apierrors.Errors { return api.GenericUpdate(st) }
+func (st *TOStatus) Create() apierrors.Errors { return api.GenericCreate(st) }
+func (st *TOStatus) Delete() apierrors.Errors { return api.GenericDelete(st) }
 
 func selectQuery() string {
 	return `
