@@ -91,7 +91,7 @@ func GoneHandler(w http.ResponseWriter, r *http.Request) {
 	HandleErr(w, r, nil, http.StatusGone, err, nil)
 }
 
-// WriteResp takes any object, serializes it as JSON, and writes that to w. Any errors are logged and written to w via tc.GetHandleapierrors.ErrorsFunc.
+// WriteResp takes any object, serializes it as JSON, and writes that to w. Any errors are logged and written to w via tc.GetHandleErrorsFunc.
 // This is a helper for the common case; not using this in unusual cases is perfectly acceptable.
 func WriteResp(w http.ResponseWriter, r *http.Request, v interface{}) {
 	resp := APIResponse{v}
@@ -284,7 +284,7 @@ func RespWriterVals(w http.ResponseWriter, r *http.Request, tx *sql.Tx, vals map
 	}
 }
 
-// WriteRespAlert creates an alert, serializes it as JSON, and writes that to w. Any errors are logged and written to w via tc.GetHandleapierrors.ErrorsFunc.
+// WriteRespAlert creates an alert, serializes it as JSON, and writes that to w. Any errors are logged and written to w via tc.GetHandleErrorsFunc.
 // This is a helper for the common case; not using this in unusual cases is perfectly acceptable.
 func WriteRespAlert(w http.ResponseWriter, r *http.Request, level tc.AlertLevel, msg string) {
 	if respWritten(r) {
