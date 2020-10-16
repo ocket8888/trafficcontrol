@@ -19,18 +19,18 @@ package federations
  * under the License.
  */
 
-import "database/sql"
-import "io/ioutil"
-import "net/http"
-import "strings"
-import "testing"
+import (
+	"database/sql"
+	"io/ioutil"
+	"net/http"
+	"strings"
+	"testing"
 
-import "github.com/apache/trafficcontrol/lib/go-tc"
-
-import "github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
-import "github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
-
-import "gopkg.in/DATA-DOG/go-sqlmock.v1"
+	"github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
+	"gopkg.in/DATA-DOG/go-sqlmock.v1"
+)
 
 func TestAddFederationResolverMappingsForCurrentUser(t *testing.T) {
 	t.Run("add Federation Resolver Mappings for the current user", positiveTestAddFederationResolverMappingsForCurrentUser)
@@ -313,15 +313,12 @@ func TestRemoveFederationResolverMappingsForCurrentUser(t *testing.T) {
 		t.Fatalf("an error '%s' was not expected when beginning a mock transaction", err)
 	}
 
-	returnedIPs, userErr, sysErr, errCode := removeFederationResolverMappingsForCurrentUser(tx, &u)
-	if userErr != nil {
-		t.Errorf("Unexpected user error removing resolvers: %v", userErr)
+	returnedIPs, errs := removeFederationResolverMappingsForCurrentUser(tx, &u)
+	if errs.Occurred() {
+		t.Errorf("Unexpected error(s) removing resolvers: %s", errs)
 	}
-	if sysErr != nil {
-		t.Errorf("Unexpected system error removing resolvers: %v", sysErr)
-	}
-	if errCode != http.StatusOK {
-		t.Errorf("Expected return code %d when removing resolvers, but got %d", http.StatusOK, errCode)
+	if errs.Code != http.StatusOK {
+		t.Errorf("Expected return code %d when removing resolvers, but got %d", http.StatusOK, errs.Code)
 	}
 
 	if len(returnedIPs) != len(ips) {
