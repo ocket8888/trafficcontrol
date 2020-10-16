@@ -247,26 +247,31 @@ func GenericRead(h http.Header, val GenericReader, useIMS bool) ([]interface{}, 
 }
 
 // GenericUpdate handles the common update case, where the update returns the new last_modified time.
-func GenericUpdate(val GenericUpdater) (error, error, int) {
+func GenericUpdate(val GenericUpdater) Errors {
 	rows, err := val.APIInfo().Tx.NamedQuery(val.UpdateQuery(), val)
 	if err != nil {
-		errs := ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return ParseDBError(err)
 	}
 	defer rows.Close()
 
+	errs := NewErrors()
 	if !rows.Next() {
-		return errors.New("no " + val.GetType() + " found with this id"), nil, http.StatusNotFound
+		errs.SetUserError("no " + val.GetType() + " found with this id")
+		errs.Code = http.StatusNotFound
+		return errs
 	}
 	lastUpdated := tc.TimeNoMod{}
 	if err := rows.Scan(&lastUpdated); err != nil {
-		return nil, errors.New("scanning lastUpdated from " + val.GetType() + " insert: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("scanning lastUpdated from " + val.GetType() + " insert: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 	val.SetLastUpdated(lastUpdated)
 	if rows.Next() {
-		return nil, errors.New(val.GetType() + " update affected too many rows: >1"), http.StatusInternalServerError
+		errs.SetSystemError(val.GetType() + " update affected too many rows: >1")
+		errs.Code = http.StatusInternalServerError
 	}
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 // GenericOptionsDelete does a Delete (DELETE) for the given GenericOptionsDeleter object and type. Unlike

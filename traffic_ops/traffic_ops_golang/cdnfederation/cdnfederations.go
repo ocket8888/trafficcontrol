@@ -206,10 +206,10 @@ func (fed *TOCDNFederation) Read(h http.Header, useIMS bool) ([]interface{}, api
 	return filteredFederations, errs, maxTime
 }
 
-func (fed *TOCDNFederation) Update() (error, error, int) {
+func (fed *TOCDNFederation) Update() api.Errors {
 	errs := fed.isTenantAuthorized()
 	if errs.Occurred() {
-		return errs.UserError, errs.SystemError, errs.Code
+		return errs
 	}
 	// Deliveryservice IDs should not be included on update.
 	if fed.DeliveryServiceIDs != nil {

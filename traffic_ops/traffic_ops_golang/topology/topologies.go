@@ -492,38 +492,44 @@ func (topology *TOTopology) addParents() api.Errors {
 	return api.NewErrors()
 }
 
-func (topology *TOTopology) setDescription() (error, error, int) {
+func (topology *TOTopology) setDescription() api.Errors {
+	errs := api.NewErrors()
 	rows, err := topology.ReqInfo.Tx.Query(updateQuery(), topology.Description, topology.Name)
 	if err != nil {
-		return nil, fmt.Errorf("topology update: error setting the description for topology %v: %v", topology.Name, err.Error()), http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("topology update: error setting the description for topology %v: %v", topology.Name, err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 	defer log.Close(rows, "unable to close DB connection")
 	for rows.Next() {
 		err = rows.Scan(&topology.Name, &topology.Description, &topology.LastUpdated)
 		if err != nil {
-			errs := api.ParseDBError(err)
-			return errs.UserError, errs.SystemError, errs.Code
+			return api.ParseDBError(err)
 		}
 	}
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 // Update is a requirement of the api.Updater interface.
-func (topology *TOTopology) Update() (error, error, int) {
+func (topology *TOTopology) Update() api.Errors {
 	topologies, errs, _ := topology.Read(nil, false)
 	if errs.Occurred() {
-		return errs.UserError, errs.SystemError, errs.Code
+		return errs
 	}
 	if len(topologies) != 1 {
-		return fmt.Errorf("cannot find exactly 1 topology with the query string provided"), nil, http.StatusBadRequest
+		errs.SetUserError("cannot find exactly 1 topology with the query string provided")
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 	oldTopology := TOTopology{APIInfoImpl: topology.APIInfoImpl, Topology: topologies[0].(tc.Topology)}
-	if userErr, sysErr, errCode := topology.setDescription(); userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	if errs = topology.setDescription(); errs.Occurred() {
+		return errs
 	}
 
 	if err := oldTopology.removeParents(); err != nil {
-		return nil, err, http.StatusInternalServerError
+		errs.SystemError = err
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 	var oldNodes, newNodes = map[string]int{}, map[string]int{}
 	for index, node := range oldTopology.Nodes {
@@ -542,17 +548,15 @@ func (topology *TOTopology) Update() (error, error, int) {
 	}
 	if len(toRemove) > 0 {
 		if err := oldTopology.removeNodes(&toRemove); err != nil {
-			return nil, err, http.StatusInternalServerError
+			errs.SystemError = err
+			errs.Code = http.StatusInternalServerError
+			return errs
 		}
 	}
-	if errs := topology.addNodes(); errs.Occurred() {
-		return errs.UserError, errs.SystemError, errs.Code
+	if errs = topology.addNodes(); errs.Occurred() {
+		return errs
 	}
-	if errs := topology.addParents(); errs.Occurred() {
-		return errs.UserError, errs.SystemError, errs.Code
-	}
-
-	return nil, nil, http.StatusOK
+	return topology.addParents()
 }
 
 // Delete is unused and simply satisfies the Deleter interface

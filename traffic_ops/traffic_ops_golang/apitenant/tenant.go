@@ -199,7 +199,7 @@ func (ten *TOTenant) IsTenantAuthorized(user *auth.CurrentUser) (bool, error) {
 	return tenant.IsResourceAuthorizedToUserTx(*ten.ParentID, user, ten.APIInfo().Tx.Tx)
 }
 
-func (tn *TOTenant) Update() (error, error, int) { return api.GenericUpdate(tn) }
+func (tn *TOTenant) Update() api.Errors { return api.GenericUpdate(tn) }
 
 func (ten *TOTenant) Delete() api.Errors {
 	result, err := ten.APIInfo().Tx.NamedExec(deleteQuery(), ten)

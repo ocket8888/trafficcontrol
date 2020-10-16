@@ -309,9 +309,9 @@ func UpdateHandler(updater Updater) http.HandlerFunc {
 			}
 		}
 
-		userErr, sysErr, errCode := obj.Update()
-		if userErr != nil || sysErr != nil {
-			HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+		errs = obj.Update()
+		if errs.Occurred() {
+			inf.HandleErrs(w, r, errs)
 			return
 		}
 

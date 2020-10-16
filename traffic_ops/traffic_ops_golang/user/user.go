@@ -276,30 +276,35 @@ func (user *TOUser) privCheck() api.Errors {
 	return api.NewErrors()
 }
 
-func (user *TOUser) Update() (error, error, int) {
+func (user *TOUser) Update() api.Errors {
 
 	// make sure current user cannot update their own role to a new value
 	if user.ReqInfo.User.ID == *user.ID && user.ReqInfo.User.Role != *user.Role {
-		return fmt.Errorf("users cannot update their own role"), nil, http.StatusBadRequest
+		return api.Errors{
+			Code:      http.StatusBadRequest,
+			UserError: fmt.Errorf("users cannot update their own role"),
+		}
 	}
 
 	// make sure the user cannot update someone with a higher priv_level than themselves
-	if errs := user.privCheck(); errs.Occurred() {
-		return errs.UserError, errs.SystemError, errs.Code
+	errs := user.privCheck()
+	if errs.Occurred() {
+		return errs
 	}
 
 	if user.LocalPassword != nil {
 		var err error
 		*user.LocalPassword, err = auth.DerivePassword(*user.LocalPassword)
 		if err != nil {
-			return nil, err, http.StatusInternalServerError
+			errs.SystemError = err
+			errs.Code = http.StatusInternalServerError
+			return errs
 		}
 	}
 
 	resultRows, err := user.ReqInfo.Tx.NamedQuery(user.UpdateQuery(), user)
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 	defer resultRows.Close()
 
@@ -311,7 +316,9 @@ func (user *TOUser) Update() (error, error, int) {
 	for resultRows.Next() {
 		rowsAffected++
 		if err := resultRows.Scan(&lastUpdated, &tenant, &rolename); err != nil {
-			return nil, fmt.Errorf("could not scan lastUpdated from insert: %s\n", err), http.StatusInternalServerError
+			errs.SystemError = fmt.Errorf("could not scan lastUpdated from insert: %s", err)
+			errs.Code = http.StatusInternalServerError
+			return errs
 		}
 	}
 
@@ -322,12 +329,15 @@ func (user *TOUser) Update() (error, error, int) {
 
 	if rowsAffected != 1 {
 		if rowsAffected < 1 {
-			return fmt.Errorf("no user found with this id"), nil, http.StatusNotFound
+			errs.SetUserError("no user found with this id")
+			errs.Code = http.StatusNotFound
+		} else {
+			errs.SystemError = fmt.Errorf("this update affected too many rows: %d", rowsAffected)
+			errs.Code = http.StatusInternalServerError
 		}
-		return nil, fmt.Errorf("this update affected too many rows: %d", rowsAffected), http.StatusInternalServerError
 	}
 
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 func (u *TOUser) IsTenantAuthorized(user *auth.CurrentUser) (bool, error) {

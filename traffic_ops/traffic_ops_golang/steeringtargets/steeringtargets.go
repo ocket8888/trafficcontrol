@@ -251,10 +251,13 @@ func (st *TOSteeringTargetV11) Create() api.Errors {
 	return api.NewErrors()
 }
 
-func (st *TOSteeringTargetV11) Update() (error, error, int) {
+func (st *TOSteeringTargetV11) Update() api.Errors {
+	errs := api.NewErrors()
 	dsIDInt, err := strconv.Atoi(st.ReqInfo.Params["deliveryservice"])
 	if err != nil {
-		return errors.New("delivery service ID must be an integer"), nil, http.StatusBadRequest
+		errs.SetUserError("delivery service ID must be an integer")
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 	dsID := uint64(dsIDInt)
 	// TODO determine if the CRUDer automatically does this
@@ -262,19 +265,23 @@ func (st *TOSteeringTargetV11) Update() (error, error, int) {
 
 	targetIDInt, err := strconv.Atoi(st.ReqInfo.Params["target"])
 	if err != nil {
-		return errors.New("target ID must be an integer"), nil, http.StatusBadRequest
+		errs.SetUserError("target ID must be an integer")
+		errs.Code = http.StatusBadRequest
 	}
 	targetID := uint64(targetIDInt)
 	st.TargetID = &targetID
 
 	if userErr, sysErr, errCode := tenant.CheckID(st.ReqInfo.Tx.Tx, st.ReqInfo.User, int(*st.DeliveryServiceID)); userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+		return api.Errors{
+			UserError:   userErr,
+			SystemError: sysErr,
+			Code:        errCode,
+		}
 	}
 
 	rows, err := st.ReqInfo.Tx.NamedQuery(updateQuery(), st)
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 	defer rows.Close()
 
@@ -283,17 +290,22 @@ func (st *TOSteeringTargetV11) Update() (error, error, int) {
 	for rows.Next() {
 		rowsAffected++
 		if err = rows.StructScan(&st); err != nil {
-			return nil, errors.New("steering target update scanning: " + err.Error()), http.StatusInternalServerError
+			errs.SystemError = errors.New("steering target update scanning: " + err.Error())
+			errs.Code = http.StatusInternalServerError
+			return errs
 		}
 	}
 	st.LastUpdated = &lastUpdated
 	if rowsAffected != 1 {
 		if rowsAffected < 1 {
-			return errors.New("steering target not found"), nil, http.StatusNotFound
+			errs.SetUserError("steering target not found")
+			errs.Code = http.StatusNotFound
+		} else {
+			errs.SetSystemError("too many ids returned from steering target update")
+			errs.Code = http.StatusInternalServerError
 		}
-		return nil, errors.New("too many ids returned from steering target update"), http.StatusInternalServerError
 	}
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 func (st *TOSteeringTargetV11) Delete() api.Errors {

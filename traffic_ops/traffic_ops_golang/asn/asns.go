@@ -123,10 +123,13 @@ JOIN
 	select max(last_updated) as t from last_deleted l where l.table_name='asn') as res`
 }
 
-func (as *TOASNV11) Update() (error, error, int) {
+func (as *TOASNV11) Update() api.Errors {
 	err := as.ASNExists(false)
 	if err != nil {
-		return err, nil, http.StatusBadRequest
+		return api.Errors{
+			UserError: err,
+			Code:      http.StatusBadRequest,
+		}
 	}
 	return api.GenericUpdate(as)
 }

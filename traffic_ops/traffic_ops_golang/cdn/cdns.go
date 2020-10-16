@@ -137,7 +137,7 @@ func (cdn *TOCDN) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *
 	return api.GenericRead(h, cdn, useIMS)
 }
 
-func (cdn *TOCDN) Update() (error, error, int) {
+func (cdn *TOCDN) Update() api.Errors {
 	*cdn.DomainName = strings.ToLower(*cdn.DomainName)
 	return api.GenericUpdate(cdn)
 }

@@ -138,7 +138,7 @@ func checkTenancy(category *tc.ServiceCategory, tenantIDs []int) bool {
 	return false
 }
 
-func (serviceCategory *TOServiceCategory) Update() (error, error, int) {
+func (serviceCategory *TOServiceCategory) Update() api.Errors {
 	return api.GenericUpdate(serviceCategory)
 }
 func (serviceCategory *TOServiceCategory) Delete() api.Errors {

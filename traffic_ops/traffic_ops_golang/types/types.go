@@ -107,9 +107,12 @@ func (tp *TOType) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors, *
 	return api.GenericRead(h, tp, useIMS)
 }
 
-func (tp *TOType) Update() (error, error, int) {
+func (tp *TOType) Update() api.Errors {
 	if !tp.AllowMutation(false) {
-		return errors.New("can not update type"), nil, http.StatusBadRequest
+		return api.Errors{
+			UserError: errors.New("can not update type"),
+			Code:      http.StatusBadRequest,
+		}
 	}
 	return api.GenericUpdate(tp)
 }

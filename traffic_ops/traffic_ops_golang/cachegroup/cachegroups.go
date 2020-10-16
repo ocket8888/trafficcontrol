@@ -537,7 +537,7 @@ LEFT JOIN cachegroup AS cgs ON cachegroup.secondary_parent_cachegroup_id = cgs.i
 }
 
 //The TOCacheGroup implementation of the Updater interface
-func (cg *TOCacheGroup) Update() (error, error, int) {
+func (cg *TOCacheGroup) Update() api.Errors {
 
 	if cg.LocalizationMethods == nil {
 		cg.LocalizationMethods = &[]tc.LocalizationMethod{}
@@ -552,9 +552,9 @@ func (cg *TOCacheGroup) Update() (error, error, int) {
 		cg.FallbackToClosest = &fbc
 	}
 
-	coordinateID, userErr, sysErr, errCode := cg.handleCoordinateUpdate()
-	if userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	coordinateID, errs := cg.handleCoordinateUpdate()
+	if errs.Occurred() {
+		return errs
 	}
 
 	err := cg.ReqInfo.Tx.Tx.QueryRow(
@@ -574,33 +574,41 @@ func (cg *TOCacheGroup) Update() (error, error, int) {
 		&cg.LastUpdated,
 	)
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 
 	if err = cg.createLocalizationMethods(); err != nil {
-		return nil, errors.New("cachegroup update: creating localization methods: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("cachegroup update: creating localization methods: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	if err = cg.createCacheGroupFallbacks(); err != nil {
-		return nil, errors.New("cachegroup update: creating cache group fallbacks: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("cachegroup update: creating cache group fallbacks: " + err.Error())
+		errs.Code = http.StatusInternalServerError
 	}
 
-	return nil, nil, http.StatusOK
+	return errs
 }
 
-func (cg *TOCacheGroup) handleCoordinateUpdate() (*int, error, error, int) {
+func (cg *TOCacheGroup) handleCoordinateUpdate() (*int, api.Errors) {
 
+	errs := api.NewErrors()
 	coordinateID, err := cg.getCoordinateID()
 
 	// This is not a logic error. Because the coordinate id is recieved from the
 	// cachegroup table, not being able to find the coordinate is equivalent to
 	// not being able to find the cachegroup.
+	// TODO: segfault possibility dereferencing cg.ID
 	if err == sql.ErrNoRows {
-		return nil, fmt.Errorf("no cachegroup with id %d found", *cg.ID), nil, http.StatusNotFound
+		errs.UserError = fmt.Errorf("no cachegroup with id %d found", *cg.ID)
+		errs.Code = http.StatusNotFound
+		return nil, errs
 	}
 	if err != nil {
-		return nil, nil, tc.DBError, http.StatusInternalServerError
+		errs.SystemError = tc.DBError
+		errs.Code = http.StatusInternalServerError
+		return nil, errs
 	}
 
 	// If partial coordinate information is given or the coordinate information is wholly
@@ -617,17 +625,19 @@ func (cg *TOCacheGroup) handleCoordinateUpdate() (*int, error, error, int) {
 	//
 	if cg.Latitude == nil || cg.Longitude == nil {
 		if err = cg.deleteCoordinate(*coordinateID); err != nil {
-			return nil, nil, tc.DBError, http.StatusInternalServerError
+			errs.SystemError = tc.DBError
+			errs.Code = http.StatusInternalServerError
 		}
 		cg.Latitude = nil
 		cg.Longitude = nil
-		return nil, nil, nil, http.StatusOK
+		return nil, errs
 	}
 
 	if err = cg.updateCoordinate(); err != nil {
-		return nil, nil, tc.DBError, http.StatusInternalServerError
+		errs.SystemError = tc.DBError
+		errs.Code = http.StatusInternalServerError
 	}
-	return coordinateID, nil, nil, http.StatusOK
+	return coordinateID, errs
 }
 
 func (cg *TOCacheGroup) getCoordinateID() (*int, error) {

@@ -209,29 +209,40 @@ func (req TODeliveryServiceRequest) IsTenantAuthorized(user *auth.CurrentUser) (
 //ParsePQUniqueConstraintError is used to determine if a request with conflicting values exists
 //if so, it will return an errorType of DataConflict and the type should be appended to the
 //generic error message returned
-func (req *TODeliveryServiceRequest) Update() (error, error, int) {
+func (req *TODeliveryServiceRequest) Update() api.Errors {
+	errs := api.NewErrors()
 	if req.ID == nil {
-		return errors.New("missing id"), nil, http.StatusBadRequest
+		errs.SetUserError("missing id")
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 
 	current := TODeliveryServiceRequest{}
 	err := req.ReqInfo.Tx.QueryRowx(selectDeliveryServiceRequestsQuery()+`WHERE r.id=$1`, *req.ID).StructScan(&current)
 	if err != nil {
-		return nil, errors.New("dsr update querying: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("dsr update querying: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	// Update can only change status between draft & submitted.  All other transitions must go thru
 	// the PUT /api/<version>/deliveryservice_request/:id/status endpoint
 	if current.Status == nil || req.Status == nil {
-		return errors.New("Missing status for DeliveryServiceRequest"), nil, http.StatusBadRequest
+		errs.SetUserError("Missing status for DeliveryServiceRequest")
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 
 	if *current.Status != tc.RequestStatusDraft && *current.Status != tc.RequestStatusSubmitted {
-		return fmt.Errorf("Cannot change DeliveryServiceRequest in '%s' status.", string(*current.Status)), nil, http.StatusBadRequest
+		errs.UserError = fmt.Errorf("Cannot change DeliveryServiceRequest in '%s' status.", string(*current.Status))
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 
 	if *req.Status != tc.RequestStatusDraft && *req.Status != tc.RequestStatusSubmitted {
-		return fmt.Errorf("Cannot change DeliveryServiceRequest status from '%s' to '%s'", string(*current.Status), string(*req.Status)), nil, http.StatusBadRequest
+		errs.UserError = fmt.Errorf("Cannot change DeliveryServiceRequest status from '%s' to '%s'", string(*current.Status), string(*req.Status))
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 
 	userID := tc.IDNoMod(req.APIInfo().User.ID)
@@ -392,23 +403,28 @@ type deliveryServiceRequestAssignment struct {
 }
 
 // Update assignee only
-func (req *deliveryServiceRequestAssignment) Update() (error, error, int) {
+func (req *deliveryServiceRequestAssignment) Update() api.Errors {
+	errs := api.NewErrors()
 	// req represents the state the deliveryservice_request is to transition to
 	// we want to limit what changes here -- only assignee can change
 	if req.ID == nil {
-		return errors.New("missing id"), nil, http.StatusBadRequest
+		errs.SetUserError("missing id")
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 
 	current := TODeliveryServiceRequest{}
 	err := req.ReqInfo.Tx.QueryRowx(selectDeliveryServiceRequestsQuery()+`WHERE r.id = $1`, *req.ID).StructScan(&current)
 	if err != nil {
-		return nil, errors.New("dsr assignment querying existing: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("dsr assignment querying existing: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	// unchanged (maybe both nil)
 	if current.AssigneeID == req.AssigneeID {
 		log.Infof("dsr assignment update: assignee unchanged")
-		return nil, nil, http.StatusOK
+		return errs
 	}
 
 	// Only assigneeID changes -- nothing else
@@ -418,15 +434,15 @@ func (req *deliveryServiceRequestAssignment) Update() (error, error, int) {
 
 	// LastEditedBy field should not change with status update
 	if _, err = req.APIInfo().Tx.Tx.Exec(`UPDATE deliveryservice_request SET assignee_id = $1 WHERE id = $2`, req.AssigneeID, *req.ID); err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 
 	if err = req.APIInfo().Tx.QueryRowx(selectDeliveryServiceRequestsQuery()+` WHERE r.id = $1`, *req.ID).StructScan(req); err != nil {
-		return nil, errors.New("dsr assignment querying: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("dsr assignment querying: " + err.Error())
+		errs.Code = http.StatusInternalServerError
 	}
 
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 func (req deliveryServiceRequestAssignment) Validate() error {
@@ -456,22 +472,29 @@ type deliveryServiceRequestStatus struct {
 	TODeliveryServiceRequest
 }
 
-func (req *deliveryServiceRequestStatus) Update() (error, error, int) {
+func (req *deliveryServiceRequestStatus) Update() api.Errors {
+	errs := api.NewErrors()
 	// req represents the state the deliveryservice_request is to transition to
 	// we want to limit what changes here -- only status can change,  and only according to the established rules
 	// for status transition
 	if req.ID == nil {
-		return errors.New("missing id"), nil, http.StatusBadRequest
+		errs.SetUserError("missing id")
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 
 	current := TODeliveryServiceRequest{}
 	err := req.APIInfo().Tx.QueryRowx(selectDeliveryServiceRequestsQuery()+` WHERE r.id = $1`, *req.ID).StructScan(&current)
 	if err != nil {
-		return nil, errors.New("dsr status querying existing: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("dsr status querying existing: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 
 	if err = current.Status.ValidTransition(*req.Status); err != nil {
-		return err, nil, http.StatusBadRequest // TODO verify err is secure to send to user
+		errs.UserError = err // TODO verify err is secure to send to user
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 
 	// keep everything else the same -- only update status
@@ -482,15 +505,15 @@ func (req *deliveryServiceRequestStatus) Update() (error, error, int) {
 	// LastEditedBy field should not change with status update
 
 	if _, err = req.APIInfo().Tx.Tx.Exec(`UPDATE deliveryservice_request SET status = $1 WHERE id = $2`, *req.Status, *req.ID); err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 
 	if err = req.APIInfo().Tx.QueryRowx(selectDeliveryServiceRequestsQuery()+` WHERE r.id = $1`, *req.ID).StructScan(req); err != nil {
-		return nil, errors.New("dsr status update querying: " + err.Error()), http.StatusInternalServerError
+		errs.SetSystemError("dsr status update querying: " + err.Error())
+		errs.Code = http.StatusInternalServerError
 	}
 
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 // Validate is not needed when only Status is updated

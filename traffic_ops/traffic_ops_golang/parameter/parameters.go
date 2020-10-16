@@ -180,7 +180,7 @@ func (param *TOParameter) Read(h http.Header, useIMS bool) ([]interface{}, api.E
 	return params, errs, &maxTime
 }
 
-func (pa *TOParameter) Update() (error, error, int) {
+func (pa *TOParameter) Update() api.Errors {
 	if pa.Value == nil {
 		pa.Value = util.StrPtr("")
 	}

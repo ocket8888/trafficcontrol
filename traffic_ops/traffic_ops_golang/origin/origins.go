@@ -319,11 +319,11 @@ func checkTenancy(originTenantID, deliveryserviceID *int, tx *sqlx.Tx, user *aut
 //ParsePQUniqueConstraintError is used to determine if an origin with conflicting values exists
 //if so, it will return an errorType of DataConflict and the type should be appended to the
 //generic error message returned
-func (origin *TOOrigin) Update() (error, error, int) {
+func (origin *TOOrigin) Update() api.Errors {
 	// TODO: enhance tenancy framework to handle this in isTenantAuthorized()
 	errs := checkTenancy(origin.TenantID, origin.DeliveryServiceID, origin.ReqInfo.Tx, origin.ReqInfo.User)
 	if errs.Occurred() {
-		return errs.UserError, errs.SystemError, errs.Code
+		return errs
 	}
 
 	isPrimary := false
@@ -331,19 +331,24 @@ func (origin *TOOrigin) Update() (error, error, int) {
 	q := `SELECT is_primary, deliveryservice FROM origin WHERE id = $1`
 	if err := origin.ReqInfo.Tx.QueryRow(q, *origin.ID).Scan(&isPrimary, &ds); err != nil {
 		if err == sql.ErrNoRows {
-			return errors.New("origin not found"), nil, http.StatusNotFound
+			errs.SetUserError("origin not found")
+			errs.Code = http.StatusNotFound
+		} else {
+			errs.SetSystemError("origin update: querying: " + err.Error())
+			errs.Code = http.StatusInternalServerError
 		}
-		return nil, errors.New("origin update: querying: " + err.Error()), http.StatusInternalServerError
+		return errs
 	}
 	if isPrimary && *origin.DeliveryServiceID != ds {
-		return errors.New("cannot update the delivery service of a primary origin"), nil, http.StatusBadRequest
+		errs.SetUserError("cannot update the delivery service of a primary origin")
+		errs.Code = http.StatusBadRequest
+		return errs
 	}
 
 	log.Debugf("about to run exec query: %s with origin: %++v", updateQuery(), origin)
 	resultRows, err := origin.ReqInfo.Tx.NamedQuery(updateQuery(), origin)
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 	defer resultRows.Close()
 
@@ -352,17 +357,21 @@ func (origin *TOOrigin) Update() (error, error, int) {
 	for resultRows.Next() {
 		rowsAffected++
 		if err := resultRows.Scan(&lastUpdated); err != nil {
-			return nil, errors.New("origin update: scanning: " + err.Error()), http.StatusInternalServerError
+			errs.SetSystemError("origin update: scanning: " + err.Error())
+			errs.Code = http.StatusInternalServerError
+			return errs
 		}
 	}
 
 	if rowsAffected == 0 {
-		return nil, errors.New("origin update: no rows returned"), http.StatusInternalServerError
+		errs.SetSystemError("origin update: no rows returned")
+		errs.Code = http.StatusInternalServerError
 	} else if rowsAffected > 1 {
-		return nil, errors.New("origin update: multiple rows returned"), http.StatusInternalServerError
+		errs.SetSystemError("origin update: multiple rows returned")
+		errs.Code = http.StatusInternalServerError
 	}
 	origin.LastUpdated = &lastUpdated
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 func updateQuery() string {

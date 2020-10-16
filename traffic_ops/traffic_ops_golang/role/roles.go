@@ -203,25 +203,28 @@ func (role *TORole) Read(h http.Header, useIMS bool) ([]interface{}, api.Errors,
 	return returnable, errs, maxTime
 }
 
-func (role *TORole) Update() (error, error, int) {
+func (role *TORole) Update() api.Errors {
+	errs := api.NewErrors()
 	if *role.PrivLevel > role.ReqInfo.User.PrivLevel {
-		return errors.New("can not create a role with a higher priv level than your own"), nil, http.StatusForbidden
+		errs.SetUserError("can not create a role with a higher priv level than your own")
+		errs.Code = http.StatusForbidden
+		return errs
 	}
-	userErr, sysErr, errCode := api.GenericUpdate(role)
-	if userErr != nil || sysErr != nil {
-		return userErr, sysErr, errCode
+	errs = api.GenericUpdate(role)
+	if errs.Occurred() {
+		return errs
 	}
 
 	// TODO cascade delete, to automatically do this in SQL?
 	if role.Capabilities != nil && *role.Capabilities != nil {
-		errs := role.deleteRoleCapabilityAssociations(role.ReqInfo.Tx)
+		errs = role.deleteRoleCapabilityAssociations(role.ReqInfo.Tx)
 		if errs.Occurred() {
-			return errs.UserError, errs.SystemError, errs.Code
+			return errs
 		}
 		errs = role.createRoleCapabilityAssociations(role.ReqInfo.Tx)
-		return errs.UserError, errs.SystemError, errs.Code
+		return errs
 	}
-	return nil, nil, http.StatusOK
+	return errs
 }
 
 func (role *TORole) Delete() api.Errors {

@@ -131,8 +131,8 @@ func (v *TOCoordinate) SelectMaxLastUpdatedQuery(where, orderBy, pagination, tab
 	select max(last_updated) as t from last_deleted l where l.table_name='` + tableName + `') as res`
 }
 
-func (coord *TOCoordinate) Update() (error, error, int) { return api.GenericUpdate(coord) }
-func (coord *TOCoordinate) Delete() api.Errors          { return api.GenericDelete(coord) }
+func (coord *TOCoordinate) Update() api.Errors { return api.GenericUpdate(coord) }
+func (coord *TOCoordinate) Delete() api.Errors { return api.GenericDelete(coord) }
 
 func selectQuery() string {
 	query := `SELECT
