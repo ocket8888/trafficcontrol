@@ -32,19 +32,19 @@ import (
 	"strings"
 	"time"
 
-	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/topology"
-
 	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-rfc"
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-tc/tovalidate"
 	"github.com/apache/trafficcontrol/lib/go-util"
+
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/auth"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/deliveryservice"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/routing/middleware"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/topology"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -651,19 +651,19 @@ func Read(w http.ResponseWriter, r *http.Request) {
 		log.Warnf("Couldn't get config %v", e)
 	}
 
-	servers, serverCount, userErr, sysErr, errCode, maxTime := getServers(r.Header, inf.Params, inf.Tx, inf.User, useIMS, *version)
+	servers, serverCount, errs, maxTime = getServers(r.Header, inf.Params, inf.Tx, inf.User, useIMS, *version)
 	if maxTime != nil && api.SetLastModifiedHeader(r, useIMS) {
 		// RFC1123
 		date := maxTime.Format("Mon, 02 Jan 2006 15:04:05 MST")
 		w.Header().Add(rfc.LastModified, date)
 	}
-	if errCode == http.StatusNotModified {
-		w.WriteHeader(errCode)
+	if errs.Code == http.StatusNotModified {
+		w.WriteHeader(errs.Code)
 		api.WriteResp(w, r, []tc.ServerNullableV2{})
 		return
 	}
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
@@ -723,9 +723,9 @@ func ReadID(w http.ResponseWriter, r *http.Request) {
 	} else {
 		log.Warnf("Couldn't get config %v", e)
 	}
-	servers, _, userErr, sysErr, errCode, _ := getServers(r.Header, inf.Params, inf.Tx, inf.User, useIMS, *version)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	servers, _, errs, _ = getServers(r.Header, inf.Params, inf.Tx, inf.User, useIMS, *version)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	if len(servers) > 1 {
@@ -766,7 +766,7 @@ JOIN type t ON s.type = t.id ` +
 	select max(last_updated) as t from last_deleted l where l.table_name='server') as res`
 }
 
-func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth.CurrentUser, useIMS bool, version api.Version) ([]tc.ServerNullable, uint64, error, error, int, *time.Time) {
+func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth.CurrentUser, useIMS bool, version api.Version) ([]tc.ServerNullable, uint64, api.Errors, *time.Time) {
 	var maxTime time.Time
 	var runSecond bool
 	// Query Parameters to Database Query column mappings
@@ -793,27 +793,34 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 	queryAddition := ""
 	dsHasRequiredCapabilities := false
 	var cdnID int
+	errs := api.NewErrors()
 	if dsIDStr, ok := params[`dsId`]; ok {
 		// don't allow query on ds outside user's tenant
 		dsID, err := strconv.Atoi(dsIDStr)
 		if err != nil {
-			return nil, 0, errors.New("dsId must be an integer"), nil, http.StatusNotFound, nil
+			errs.SetUserError("dsId must be an integer")
+			errs.Code = http.StatusNotFound
+			return nil, 0, errs, nil
 		}
 		cdnID, _, err = dbhelpers.GetDSCDNIdFromID(tx.Tx, dsID)
 		if err != nil {
-			return nil, 0, nil, err, http.StatusInternalServerError, nil
+			errs.SystemError = err
+			errs.Code = http.StatusInternalServerError
+			return nil, 0, errs, nil
 		}
 
-		userErr, sysErr, _ := tenant.CheckID(tx.Tx, user, dsID)
-		if userErr != nil || sysErr != nil {
-			return nil, 0, errors.New("Forbidden"), sysErr, http.StatusForbidden, nil
+		errs.UserError, errs.SystemError, _ = tenant.CheckID(tx.Tx, user, dsID)
+		if errs.Occurred() {
+			errs.Code = http.StatusForbidden
+			return nil, 0, errs, nil
 		}
 
 		var joinSubQuery string
 		if version.Major >= 3 {
 			if err = tx.QueryRow(deliveryservice.HasRequiredCapabilitiesQuery, dsID).Scan(&dsHasRequiredCapabilities); err != nil {
-				err = fmt.Errorf("unable to get required capabilities for deliveryservice %d: %s", dsID, err)
-				return nil, 0, nil, err, http.StatusInternalServerError, nil
+				errs.SystemError = fmt.Errorf("unable to get required capabilities for deliveryservice %d: %s", dsID, err)
+				errs.Code = http.StatusInternalServerError
+				return nil, 0, errs, nil
 			}
 			joinSubQuery = dssTopologiesJoinSubquery
 		} else {
@@ -825,10 +832,14 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 		// depending on ds type, also need to add mids
 		dsType, exists, err := dbhelpers.GetDeliveryServiceType(dsID, tx.Tx)
 		if err != nil {
-			return nil, 0, nil, err, http.StatusInternalServerError, nil
+			errs.SystemError = err
+			errs.Code = http.StatusInternalServerError
+			return nil, 0, errs, nil
 		}
 		if !exists {
-			return nil, 0, fmt.Errorf("a deliveryservice with id %v was not found", dsID), nil, http.StatusBadRequest, nil
+			errs.UserError = fmt.Errorf("a deliveryservice with id %v was not found", dsID)
+			errs.Code = http.StatusBadRequest
+			return nil, 0, errs, nil
 		}
 		usesMids = dsType.UsesMidCache()
 		log.Debugf("Servers for ds %d; uses mids? %v\n", dsID, usesMids)
@@ -841,30 +852,38 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 `
 	}
 
-	where, orderBy, pagination, queryValues, errs := dbhelpers.BuildWhereAndOrderByAndPagination(params, queryParamsToSQLCols)
+	where, orderBy, pagination, queryValues, dbErrs := dbhelpers.BuildWhereAndOrderByAndPagination(params, queryParamsToSQLCols)
 	if dsHasRequiredCapabilities {
 		where += requiredCapabilitiesCondition
 	}
-	if len(errs) > 0 {
-		return nil, 0, util.JoinErrs(errs), nil, http.StatusBadRequest, nil
+	if len(dbErrs) > 0 {
+		errs.UserError = util.JoinErrs(dbErrs)
+		errs.Code = http.StatusBadRequest
+		return nil, 0, errs, nil
 	}
 
 	// TODO there's probably a cleaner way to do this by preparing a NamedStmt first and using its QueryRow method
 	var serverCount uint64
 	countRows, err := tx.NamedQuery(serverCountQuery+queryAddition+where, queryValues)
 	if err != nil {
-		return nil, 0, nil, fmt.Errorf("failed to get servers count: %v", err), http.StatusInternalServerError, nil
+		errs.SystemError = fmt.Errorf("failed to get servers count: %v", err)
+		errs.Code = http.StatusInternalServerError
+		return nil, 0, errs, nil
 	}
 	defer countRows.Close()
 	rowsAffected := 0
 	for countRows.Next() {
 		if err = countRows.Scan(&serverCount); err != nil {
-			return nil, 0, nil, fmt.Errorf("failed to read servers count: %v", err), http.StatusInternalServerError, nil
+			errs.SystemError = fmt.Errorf("failed to read servers count: %v", err)
+			errs.Code = http.StatusInternalServerError
+			return nil, 0, errs, nil
 		}
 		rowsAffected++
 	}
 	if rowsAffected != 1 {
-		return nil, 0, nil, fmt.Errorf("incorrect rows returned for server count, want: 1 got: %v", rowsAffected), http.StatusInternalServerError, nil
+		errs.SystemError = fmt.Errorf("incorrect rows returned for server count, want: 1 got: %v", rowsAffected)
+		errs.Code = http.StatusInternalServerError
+		return nil, 0, errs, nil
 	}
 
 	serversList := []tc.ServerNullable{}
@@ -872,7 +891,7 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 		runSecond, maxTime = ims.TryIfModifiedSinceQuery(tx, h, queryValues, selectMaxLastUpdatedQuery(queryAddition, where))
 		if !runSecond {
 			log.Debugln("IMS HIT")
-			return serversList, 0, nil, nil, http.StatusNotModified, &maxTime
+			return serversList, 0, api.Errors{Code: http.StatusNotModified}, &maxTime
 		}
 		log.Debugln("IMS MISS")
 	} else {
@@ -884,7 +903,9 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 
 	rows, err := tx.NamedQuery(query, queryValues)
 	if err != nil {
-		return nil, serverCount, nil, errors.New("querying: " + err.Error()), http.StatusInternalServerError, nil
+		errs.SetSystemError("querying: " + err.Error())
+		errs.Code = http.StatusInternalServerError
+		return nil, serverCount, errs, nil
 	}
 	defer rows.Close()
 
@@ -895,7 +916,9 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 	for rows.Next() {
 		var s tc.ServerNullable
 		if err = rows.StructScan(&s); err != nil {
-			return nil, serverCount, nil, errors.New("getting servers: " + err.Error()), http.StatusInternalServerError, nil
+			errs.SetSystemError("getting servers: " + err.Error())
+			errs.Code = http.StatusInternalServerError
+			return nil, serverCount, errs, nil
 		}
 		if user.PrivLevel < auth.PrivLevelOperations {
 			s.ILOPassword = &HiddenField
@@ -903,10 +926,14 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 		}
 
 		if s.ID == nil {
-			return nil, serverCount, nil, errors.New("found server with nil ID"), http.StatusInternalServerError, nil
+			errs.SetSystemError("found server with nil ID")
+			errs.Code = http.StatusInternalServerError
+			return nil, serverCount, errs, nil
 		}
 		if _, ok := servers[*s.ID]; ok {
-			return nil, serverCount, nil, fmt.Errorf("found more than one server with ID #%d", *s.ID), http.StatusInternalServerError, nil
+			errs.SystemError = fmt.Errorf("found more than one server with ID #%d", *s.ID)
+			errs.Code = http.StatusInternalServerError
+			return nil, serverCount, errs, nil
 		}
 		servers[*s.ID] = s
 		ids = append(ids, *s.ID)
@@ -914,29 +941,33 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 
 	// if ds requested uses mid-tier caches, add those to the list as well
 	if usesMids {
-		midIDs, userErr, sysErr, errCode := getMidServers(ids, servers, cdnID, tx)
+		midIDs, errs := getMidServers(ids, servers, cdnID, tx)
 
-		log.Debugf("getting mids: %v, %v, %s\n", userErr, sysErr, http.StatusText(errCode))
+		log.Debugf("getting mids: %s", errs)
 
-		if userErr != nil || sysErr != nil {
-			return nil, serverCount, userErr, sysErr, errCode, nil
+		if errs.Occurred() {
+			return nil, serverCount, errs, nil
 		}
 		ids = append(ids, midIDs...)
 	}
 
 	if len(ids) < 1 {
-		return []tc.ServerNullable{}, serverCount, nil, nil, http.StatusOK, nil
+		return []tc.ServerNullable{}, serverCount, errs, nil
 	}
 
 	query, args, err := sqlx.In(`SELECT max_bandwidth, monitor, mtu, name, server FROM interface WHERE server IN (?)`, ids)
 	if err != nil {
-		return nil, serverCount, nil, fmt.Errorf("building interfaces query: %v", err), http.StatusInternalServerError, nil
+		errs.SystemError = fmt.Errorf("building interfaces query: %v", err)
+		errs.Code = http.StatusInternalServerError
+		return nil, serverCount, errs, nil
 	}
 	query = tx.Rebind(query)
 	interfaces := map[int]map[string]tc.ServerInterfaceInfo{}
 	interfaceRows, err := tx.Queryx(query, args...)
 	if err != nil {
-		return nil, serverCount, nil, fmt.Errorf("querying for interfaces: %v", err), http.StatusInternalServerError, nil
+		errs.SystemError = fmt.Errorf("querying for interfaces: %v", err)
+		errs.Code = http.StatusInternalServerError
+		return nil, serverCount, errs, nil
 	}
 	defer interfaceRows.Close()
 
@@ -947,7 +978,9 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 		var server int
 
 		if err = interfaceRows.Scan(&iface.MaxBandwidth, &iface.Monitor, &iface.MTU, &iface.Name, &server); err != nil {
-			return nil, serverCount, nil, fmt.Errorf("getting server interfaces: %v", err), http.StatusInternalServerError, nil
+			errs.SystemError = fmt.Errorf("getting server interfaces: %v", err)
+			errs.Code = http.StatusInternalServerError
+			return nil, serverCount, errs, nil
 		}
 
 		if _, ok := servers[server]; !ok {
@@ -962,12 +995,16 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 
 	query, args, err = sqlx.In(`SELECT address, gateway, service_address, server, interface FROM ip_address WHERE server IN (?)`, ids)
 	if err != nil {
-		return nil, serverCount, nil, fmt.Errorf("building IP addresses query: %v", err), http.StatusInternalServerError, nil
+		errs.SystemError = fmt.Errorf("building IP addresses query: %v", err)
+		errs.Code = http.StatusInternalServerError
+		return nil, serverCount, errs, nil
 	}
 	query = tx.Rebind(query)
 	ipRows, err := tx.Tx.Query(query, args...)
 	if err != nil {
-		return nil, serverCount, nil, fmt.Errorf("querying for IP addresses: %v", err), http.StatusInternalServerError, nil
+		errs.SystemError = fmt.Errorf("querying for IP addresses: %v", err)
+		errs.Code = http.StatusInternalServerError
+		return nil, serverCount, errs, nil
 	}
 	defer ipRows.Close()
 
@@ -977,7 +1014,9 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 		var iface string
 
 		if err = ipRows.Scan(&ip.Address, &ip.Gateway, &ip.ServiceAddress, &server, &iface); err != nil {
-			return nil, serverCount, nil, fmt.Errorf("getting server IP addresses: %v", err), http.StatusInternalServerError, nil
+			errs.SystemError = fmt.Errorf("getting server IP addresses: %v", err)
+			errs.Code = http.StatusInternalServerError
+			return nil, serverCount, errs, nil
 		}
 
 		if _, ok := interfaces[server]; !ok {
@@ -1001,13 +1040,14 @@ func getServers(h http.Header, params map[string]string, tx *sqlx.Tx, user *auth
 		returnable = append(returnable, server)
 	}
 
-	return returnable, serverCount, nil, nil, http.StatusOK, &maxTime
+	return returnable, serverCount, errs, &maxTime
 }
 
 // getMidServers gets the mids used by the edges provided with an option to filter for a given cdn
-func getMidServers(edgeIDs []int, servers map[int]tc.ServerNullable, cdnID int, tx *sqlx.Tx) ([]int, error, error, int) {
+func getMidServers(edgeIDs []int, servers map[int]tc.ServerNullable, cdnID int, tx *sqlx.Tx) ([]int, api.Errors) {
+	errs := api.NewErrors()
 	if len(edgeIDs) == 0 {
-		return nil, nil, nil, http.StatusOK
+		return nil, errs
 	}
 
 	filters := []interface{}{
@@ -1030,13 +1070,17 @@ func getMidServers(edgeIDs []int, servers map[int]tc.ServerNullable, cdnID int, 
 
 	query, args, err := sqlx.In(q, filters...)
 	if err != nil {
-		return nil, nil, fmt.Errorf("constructing mid servers query: %v", err), http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("constructing mid servers query: %v", err)
+		errs.Code = http.StatusInternalServerError
+		return nil, errs
 	}
 	query = tx.Rebind(query)
 
 	rows, err := tx.Queryx(query, args...)
 	if err != nil {
-		return nil, err, nil, http.StatusBadRequest
+		errs.UserError = err
+		errs.Code = http.StatusBadRequest
+		return nil, errs
 	}
 	defer rows.Close()
 
@@ -1045,10 +1089,14 @@ func getMidServers(edgeIDs []int, servers map[int]tc.ServerNullable, cdnID int, 
 		var s tc.ServerNullable
 		if err := rows.StructScan(&s); err != nil {
 			log.Errorf("could not scan mid servers: %s\n", err)
-			return nil, nil, err, http.StatusInternalServerError
+			errs.SystemError = err
+			errs.Code = http.StatusInternalServerError
+			return nil, errs
 		}
 		if s.ID == nil {
-			return nil, nil, errors.New("found server with nil ID"), http.StatusInternalServerError
+			errs.SetSystemError("found server with nil ID")
+			errs.Code = http.StatusInternalServerError
+			return nil, errs
 		}
 
 		// This may mean that the server was caught by other query parameters,
@@ -1061,49 +1109,61 @@ func getMidServers(edgeIDs []int, servers map[int]tc.ServerNullable, cdnID int, 
 		ids = append(ids, *s.ID)
 	}
 
-	return ids, nil, nil, http.StatusOK
+	return ids, errs
 }
 
-func checkTypeChangeSafety(server tc.CommonServerProperties, tx *sqlx.Tx) (error, error, int) {
+func checkTypeChangeSafety(server tc.CommonServerProperties, tx *sqlx.Tx) api.Errors {
 	// see if cdn or type changed
 	var cdnID int
 	var typeID int
+	errs := api.NewErrors()
 	if err := tx.QueryRow("SELECT type, cdn_id FROM server WHERE id = $1", *server.ID).Scan(&typeID, &cdnID); err != nil {
 		if err == sql.ErrNoRows {
-			return errors.New("no server found with this ID"), nil, http.StatusNotFound
+			errs.SetUserError("no server found with this ID")
+			errs.Code = http.StatusNotFound
+		} else {
+			errs.SystemError = fmt.Errorf("getting current server type: %v", err)
+			errs.Code = http.StatusInternalServerError
 		}
-		return nil, fmt.Errorf("getting current server type: %v", err), http.StatusInternalServerError
+		return errs
 	}
 
 	var dsIDs []int64
 	if err := tx.QueryRowx("SELECT ARRAY(SELECT deliveryservice FROM deliveryservice_server WHERE server = $1)", server.ID).Scan(pq.Array(&dsIDs)); err != nil && err != sql.ErrNoRows {
-		return nil, fmt.Errorf("getting server assigned delivery services: %v", err), http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("getting server assigned delivery services: %v", err)
+		errs.Code = http.StatusInternalServerError
+		return errs
 	}
 	// If type is changing ensure it isn't assigned to any DSes.
 	if typeID != *server.TypeID {
 		if len(dsIDs) != 0 {
-			return errors.New("server type can not be updated when it is currently assigned to Delivery Services"), nil, http.StatusConflict
+			errs.SetUserError("server type can not be updated when it is currently assigned to Delivery Services")
+			errs.Code = http.StatusConflict
+			return errs
 		}
 	}
 	// Check to see if the user is trying to change the CDN of a server, which is already linked with a DS
 	if cdnID != *server.CDNID && len(dsIDs) != 0 {
-		return errors.New("server cdn can not be updated when it is currently assigned to delivery services"), nil, http.StatusConflict
+		errs.SetUserError("server cdn can not be updated when it is currently assigned to delivery services")
+		errs.Code = http.StatusConflict
 	}
 
-	return nil, nil, http.StatusOK
+	return errs
 }
 
-func updateStatusLastUpdatedTime(id int, status_last_updated_time *time.Time, tx *sql.Tx) (error, error, int) {
+func updateStatusLastUpdatedTime(id int, status_last_updated_time *time.Time, tx *sql.Tx) api.Errors {
 	query := `UPDATE server SET
 	status_last_updated=$1
 WHERE id=$2 `
+	errs := api.NewErrors()
 	if _, err := tx.Exec(query, status_last_updated_time, id); err != nil {
-		return errors.New("updating status last updated: " + err.Error()), nil, http.StatusInternalServerError
+		errs.SetSystemError("updating status last updated: " + err.Error())
+		errs.Code = http.StatusInternalServerError
 	}
-	return nil, nil, http.StatusOK
+	return errs
 }
 
-func createInterfaces(id int, interfaces []tc.ServerInterfaceInfo, tx *sql.Tx) (error, error, int) {
+func createInterfaces(id int, interfaces []tc.ServerInterfaceInfo, tx *sql.Tx) api.Errors {
 	ifaceQry := `
 	INSERT INTO interface (
 		max_bandwidth,
@@ -1143,8 +1203,7 @@ func createInterfaces(id int, interfaces []tc.ServerInterfaceInfo, tx *sql.Tx) (
 
 	_, err := tx.Exec(ifaceQry, ifaceArgs...)
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 
 	ipQry += strings.Join(ipQueryParts, ",")
@@ -1152,25 +1211,22 @@ func createInterfaces(id int, interfaces []tc.ServerInterfaceInfo, tx *sql.Tx) (
 
 	_, err = tx.Exec(ipQry, ipArgs...)
 	if err != nil {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
-func deleteInterfaces(id int, tx *sql.Tx) (error, error, int) {
+func deleteInterfaces(id int, tx *sql.Tx) api.Errors {
 	if _, err := tx.Exec(deleteIPsQuery, id); err != nil && err != sql.ErrNoRows {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 
 	if _, err := tx.Exec(deleteInterfacesQuery, id); err != nil && err != sql.ErrNoRows {
-		errs := api.ParseDBError(err)
-		return errs.UserError, errs.SystemError, errs.Code
+		return api.ParseDBError(err)
 	}
 
-	return nil, nil, http.StatusOK
+	return api.NewErrors()
 }
 
 func Update(w http.ResponseWriter, r *http.Request) {
@@ -1190,10 +1246,12 @@ func Update(w http.ResponseWriter, r *http.Request) {
 
 	tx := inf.Tx.Tx
 	//Get original xmppid
-	origSer, _, userErr, sysErr, _, _ := getServers(r.Header, inf.Params, inf.Tx, inf.User, false, *version)
-	if userErr != nil || sysErr != nil {
+	originalCode := errs.Code
+	origSer, _, errs, _ := getServers(r.Header, inf.Params, inf.Tx, inf.User, false, *version)
+	if errs.Occurred() {
 		// TODO: I believe this is returning the wrong error code
-		api.HandleErr(w, r, tx, errs.Code, userErr, sysErr)
+		errs.Code = originalCode
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 	if len(origSer) == 0 {
@@ -1298,9 +1356,9 @@ func Update(w http.ResponseWriter, r *http.Request) {
 	server.ID = new(int)
 	*server.ID = inf.IntParams["id"]
 
-	userErr, sysErr, errCode := checkTypeChangeSafety(server.CommonServerProperties, inf.Tx)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	errs = checkTypeChangeSafety(server.CommonServerProperties, inf.Tx)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
@@ -1334,19 +1392,19 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if userErr, sysErr, errCode = deleteInterfaces(inf.IntParams["id"], tx); userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	if errs = deleteInterfaces(inf.IntParams["id"], tx); errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
-	if userErr, sysErr, errCode = createInterfaces(inf.IntParams["id"], interfaces, tx); userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	if errs = createInterfaces(inf.IntParams["id"], interfaces, tx); errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
 	if inf.Version.Major >= 3 {
-		if userErr, sysErr, errCode = updateStatusLastUpdatedTime(inf.IntParams["id"], &statusLastUpdatedTime, tx); userErr != nil || sysErr != nil {
-			api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+		if errs = updateStatusLastUpdatedTime(inf.IntParams["id"], &statusLastUpdatedTime, tx); errs.Occurred() {
+			inf.HandleErrs(w, r, errs)
 			return
 		}
 		api.WriteRespAlertObj(w, r, tc.SuccessLevel, "Server updated", tc.ServerNullable{CommonServerProperties: server.CommonServerProperties, Interfaces: interfaces, StatusLastUpdated: &statusLastUpdatedTime})
@@ -1416,8 +1474,9 @@ func createV1(inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if userErr, sysErr, errCode := createInterfaces(*server.ID, ifaces, tx); err != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	// TODO: This should be checking the errors returned, not 'err'
+	if errs := createInterfaces(*server.ID, ifaces, tx); err != nil {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
@@ -1486,8 +1545,9 @@ func createV2(inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
 		api.HandleErr(w, r, tx, http.StatusInternalServerError, nil, err)
 	}
 
-	if userErr, sysErr, errCode := createInterfaces(*server.ID, ifaces, tx); err != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	// TODO: this should be actually checking the returned errors, not 'err'
+	if errs := createInterfaces(*server.ID, ifaces, tx); err != nil {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
@@ -1555,9 +1615,9 @@ func createV3(inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userErr, sysErr, errCode := createInterfaces(*server.ID, server.Interfaces, tx)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	errs := createInterfaces(*server.ID, server.Interfaces, tx)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
@@ -1605,9 +1665,9 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	tx := inf.Tx.Tx
 
 	var servers []tc.ServerNullable
-	servers, _, userErr, sysErr, errCode, _ := getServers(r.Header, map[string]string{"id": inf.Params["id"]}, inf.Tx, inf.User, false, *version)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	servers, _, errs, _ = getServers(r.Header, map[string]string{"id": inf.Params["id"]}, inf.Tx, inf.User, false, *version)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
@@ -1628,9 +1688,9 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	userErr, sysErr, errCode = deleteInterfaces(id, tx)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	errs = deleteInterfaces(id, tx)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
