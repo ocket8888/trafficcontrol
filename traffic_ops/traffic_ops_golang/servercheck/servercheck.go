@@ -208,9 +208,9 @@ func ReadServerCheck(w http.ResponseWriter, r *http.Request) {
 	defer inf.Close()
 
 	tx := inf.Tx.Tx
-	data, userErr, sysErr, errCode := handleReadServerCheck(inf, tx)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+	data, errs := handleReadServerCheck(inf, tx)
+	if errs.Occurred() {
+		inf.HandleErrs(w, r, errs)
 		return
 	}
 
@@ -227,9 +227,9 @@ func DeprecatedReadServersChecks(w http.ResponseWriter, r *http.Request) {
 	}
 	defer inf.Close()
 
-	data, userErr, sysErr, errCode := handleReadServerCheck(inf, tx)
-	if userErr != nil || sysErr != nil {
-		api.HandleDeprecatedErr(w, r, tx, errCode, userErr, sysErr, util.StrPtr(ServerCheck_Get_Endpoint))
+	data, errs := handleReadServerCheck(inf, tx)
+	if errs.Occurred() {
+		api.HandleErrsOptionalDeprecation(w, r, tx, errs, true, util.StrPtr(ServerCheck_Get_Endpoint))
 		return
 	}
 
@@ -237,35 +237,40 @@ func DeprecatedReadServersChecks(w http.ResponseWriter, r *http.Request) {
 	api.WriteAlertsObj(w, r, http.StatusOK, alerts, data)
 }
 
-func handleReadServerCheck(inf *api.APIInfo, tx *sql.Tx) ([]tc.GenericServerCheck, error, error, int) {
+func handleReadServerCheck(inf *api.APIInfo, tx *sql.Tx) ([]tc.GenericServerCheck, api.Errors) {
 	extensions := make(map[string]string)
+	errs := api.NewErrors()
 	extRows, err := tx.Query(extensionsQuery)
 	if err != nil {
-		sysErr := fmt.Errorf("querying for extensions: %v", err)
-		return nil, nil, sysErr, http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("querying for extensions: %v", err)
+		errs.Code = http.StatusInternalServerError
+		return nil, errs
 	}
 	for extRows.Next() {
 		var shortName string
 		var checkName string
 		if err = extRows.Scan(&shortName, &checkName); err != nil {
-			sysErr := fmt.Errorf("scanning extension: %v", err)
-			return nil, nil, sysErr, http.StatusInternalServerError
+			errs.SystemError = fmt.Errorf("scanning extension: %v", err)
+			errs.Code = http.StatusInternalServerError
+			return nil, errs
 		}
 		extensions[shortName] = checkName
 	}
 
 	colRows, err := inf.Tx.Queryx(serverChecksQuery)
 	if err != nil {
-		sysErr := fmt.Errorf("Querying server checks columns: %v", err)
-		return nil, nil, sysErr, http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("Querying server checks columns: %v", err)
+		errs.Code = http.StatusInternalServerError
+		return nil, errs
 	}
 
 	columns := make(map[int]tc.ServerCheckColumns)
 	for colRows.Next() {
 		var cols tc.ServerCheckColumns
 		if err = colRows.StructScan(&cols); err != nil {
-			sysErr := fmt.Errorf("scanning server checks columns: %v", err)
-			return nil, nil, sysErr, http.StatusInternalServerError
+			errs.SystemError = fmt.Errorf("scanning server checks columns: %v", err)
+			errs.Code = http.StatusInternalServerError
+			return nil, errs
 		}
 
 		columns[cols.Server] = cols
@@ -273,16 +278,18 @@ func handleReadServerCheck(inf *api.APIInfo, tx *sql.Tx) ([]tc.GenericServerChec
 
 	serverRows, err := tx.Query(serverInfoQuery)
 	if err != nil {
-		sysErr := fmt.Errorf("Querying server info for checks: %v", err)
-		return nil, nil, sysErr, http.StatusInternalServerError
+		errs.SystemError = fmt.Errorf("Querying server info for checks: %v", err)
+		errs.Code = http.StatusInternalServerError
+		return nil, errs
 	}
 
 	data := []tc.GenericServerCheck{}
 	for serverRows.Next() {
 		var serverInfo tc.GenericServerCheck
 		if err = serverRows.Scan(&serverInfo.HostName, &serverInfo.ID, &serverInfo.Profile, &serverInfo.AdminState, &serverInfo.CacheGroup, &serverInfo.Type, &serverInfo.UpdPending, &serverInfo.RevalPending); err != nil {
-			sysErr := fmt.Errorf("scanning server info for checks: %v", err)
-			return nil, nil, sysErr, http.StatusInternalServerError
+			errs.SystemError = fmt.Errorf("scanning server info for checks: %v", err)
+			errs.Code = http.StatusInternalServerError
+			return nil, errs
 		}
 
 		serverCheckCols, ok := columns[serverInfo.ID]
@@ -363,5 +370,5 @@ func handleReadServerCheck(inf *api.APIInfo, tx *sql.Tx) ([]tc.GenericServerChec
 		data = append(data, serverInfo)
 	}
 
-	return data, nil, nil, http.StatusOK
+	return data, errs
 }
