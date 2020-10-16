@@ -165,8 +165,8 @@ func (rc RequiredCapability) Validate() error {
 }
 
 // Update implements the api.CRUDer interface.
-func (rc *RequiredCapability) Update() (error, error, int) {
-	return nil, nil, http.StatusNotImplemented
+func (rc *RequiredCapability) Update() api.Errors {
+	return api.Errors{Code: http.StatusNotImplemented}
 }
 
 // Read implements the api.CRUDer interface.
