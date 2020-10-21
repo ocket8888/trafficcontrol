@@ -144,7 +144,6 @@ Built: %(date) by %{getenv: USER}
 		%__cp %{PACKAGEDIR}/etc/logrotate.d/traffic_ops /etc/logrotate.d/traffic_ops
 		%__cp %{PACKAGEDIR}/etc/logrotate.d/traffic_ops_golang /etc/logrotate.d/traffic_ops_golang
 		%__cp %{PACKAGEDIR}/etc/logrotate.d/traffic_ops_access /etc/logrotate.d/traffic_ops_access
-		%__cp %{PACKAGEDIR}/etc/logrotate.d/traffic_ops_perl_access /etc/logrotate.d/traffic_ops_perl_access
 		%__cp %{PACKAGEDIR}/etc/profile.d/traffic_ops.sh /etc/profile.d/traffic_ops.sh
 		%__chown root:root /etc/init.d/traffic_ops
 		%__chown root:root /etc/cron.d/trafops_dnssec_refresh
@@ -153,7 +152,6 @@ Built: %(date) by %{getenv: USER}
 		%__chown root:root /etc/logrotate.d/traffic_ops
 		%__chown root:root /etc/logrotate.d/traffic_ops_golang
 		%__chown root:root /etc/logrotate.d/traffic_ops_access
-		%__chown root:root /etc/logrotate.d/traffic_ops_perl_access
 		%__chmod +x /etc/init.d/traffic_ops
 		%__chmod +x %{PACKAGEDIR}/install/bin/*
 		/sbin/chkconfig --add traffic_ops
