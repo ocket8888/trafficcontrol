@@ -37,7 +37,7 @@
 
 # Setting the monitor shell option enables job control, which we need in order
 # to bring traffic_ops_golang back to the foreground.
-set -o xtrace -o monitor;
+set -o xtrace -o monitor -o errexit;
 
 envvars=( DB_SERVER DB_PORT DB_ROOT_PASS DB_USER DB_USER_PASS ADMIN_USER ADMIN_PASS)
 for v in $envvars; do
@@ -49,8 +49,8 @@ done
 
 export PATH="$PATH:/opt/traffic_ops/go/bin"
 
-set-dns.sh
-insert-self-into-dns.sh
+/set-dns.sh
+/insert-self-into-dns.sh
 
 /set-to-ips-from-dns.sh
 
