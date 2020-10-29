@@ -291,7 +291,6 @@ TrafficOps Native Client Libraries
 ==================================
 TrafficOps client libraries are available in Java, Go and Python. You can read (very little) more about them in `the client README <https://github.com/apache/trafficcontrol/tree/master/traffic_control/clients>`_.
 
-
 API V2 Routes
 =============
 Documents all API version 2 routes.
@@ -311,5 +310,15 @@ Documents all API version 3 routes.
 	:glob:
 
 	v3/*
+
+API V4 Routes
+=============
+Documents all API version 4 routes.
+
+.. toctree::
+	:maxdepth: 4
+	:glob:
+
+	v4/*
 
 .. [1] A cookie obtained by logging in through Traffic Portal can be used to access API endpoints under the Traffic Portal domain name - since it will proxy such requests back to Traffic Ops. This is not recommended in actual deployments, however, because it will involve an extra network connection which could be avoided by simply using the Traffic Ops domain itself.

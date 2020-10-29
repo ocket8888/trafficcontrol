@@ -13,7 +13,7 @@
 .. limitations under the License.
 ..
 
-.. _to-api-types:
+.. _to-api-v3-types:
 
 *********
 ``types``
@@ -156,5 +156,3 @@ Response Structure
 			"useInTable": "server"
 		}]
 	}
-
-

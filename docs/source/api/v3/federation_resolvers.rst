@@ -13,7 +13,7 @@
 .. limitations under the License.
 ..
 
-.. _to-api-federation_resolvers:
+.. _to-api-v3-federation_resolvers:
 
 ************************
 ``federation_resolvers``
@@ -228,4 +228,3 @@ Response Structure
 		"ipAddress": "1.2.6.4/22",
 		"type": "RESOLVE6"
 	}}
-

@@ -13,7 +13,7 @@
 .. limitations under the License.
 ..
 
-.. _to-api-cdns-id:
+.. _to-api-v3-cdns-id:
 
 ***************
 ``cdns/{{ID}}``
@@ -132,4 +132,3 @@ Response Structure
 			"level": "success"
 		}
 	]}
-

@@ -14,7 +14,7 @@
 .. limitations under the License.
 ..
 
-.. _to-api-isos:
+.. _to-api-v3-isos:
 
 ********
 ``isos``
@@ -106,4 +106,3 @@ ISO image as a streaming download.
 	Transfer-Encoding: chunked
 	Whole-Content-sha512: sLSVQGrLCQ4hGQhv2reragQHWNi2aKMcz2c/HMAH45tLcZ1LenPyOzWRcRfHUNbV4PEEKOoiTfwE2HlA+WtRIQ==
 	X-Server-Name: traffic_ops_golang/
-

@@ -13,7 +13,7 @@
 .. limitations under the License.
 ..
 
-.. _to-api-deliveryservices-dnsseckeys-generate:
+.. _to-api-v3-deliveryservices-dnsseckeys-generate:
 
 ****************************************
 ``deliveryservices/dnsseckeys/generate``
@@ -45,4 +45,3 @@ Response Structure
 	{
 		"response": "Successfully created dnssec keys for cdn1"
 	}
-

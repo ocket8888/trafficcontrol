@@ -13,7 +13,7 @@
 .. limitations under the License.
 ..
 
-.. _to-api-user-login-token:
+.. _to-api-v3-user-login-token:
 
 ********************
 ``user/login/token``

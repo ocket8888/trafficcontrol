@@ -13,7 +13,7 @@
 .. limitations under the License.
 ..
 
-.. _to-api-profiles-import:
+.. _to-api-v3-profiles-import:
 
 *******************
 ``profiles/import``

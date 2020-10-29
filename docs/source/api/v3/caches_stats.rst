@@ -14,7 +14,7 @@
 ..
 
 
-.. _to-api-caches-stats:
+.. _to-api-v3-caches-stats:
 
 ****************
 ``caches/stats``
