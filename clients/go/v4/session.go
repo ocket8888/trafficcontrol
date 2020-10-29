@@ -1,5 +1,5 @@
 // Package client provides Go bindings to the Traffic Ops RPC API.
-package client
+package v4client
 
 /*
 

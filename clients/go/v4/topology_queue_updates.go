@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package client
+package v4client
 
 import (
 	"encoding/json"

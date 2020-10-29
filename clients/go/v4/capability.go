@@ -1,4 +1,4 @@
-package client
+package v4client
 
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,12 +14,14 @@ package client
  * limitations under the License.
  */
 
-import "encoding/json"
-import "errors"
-import "net/http"
-import "net/url"
+import (
+	"encoding/json"
+	"errors"
+	"net/http"
+	"net/url"
 
-import "github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/go-tc"
+)
 
 const API_CAPABILITIES = apiBase + "/capabilities"
 

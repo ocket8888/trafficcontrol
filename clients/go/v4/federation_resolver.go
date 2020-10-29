@@ -1,4 +1,4 @@
-package client
+package v4client
 
 /*
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +13,15 @@ package client
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-import "encoding/json"
-import "fmt"
-import "net/http"
-import "net/url"
-import "strconv"
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/url"
+	"strconv"
 
-import "github.com/apache/trafficcontrol/lib/go-tc"
+	"github.com/apache/trafficcontrol/lib/go-tc"
+)
 
 func (to *Session) getFederationResolvers(id *uint, ip *string, t *string, header http.Header) ([]tc.FederationResolver, ReqInf, error) {
 	var vals = url.Values{}

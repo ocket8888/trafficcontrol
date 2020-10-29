@@ -1,9 +1,5 @@
-// Package client implements methods for interacting with the Traffic Ops API.
-//
-// Warning: Using the un-versioned import path ("client") is deprecated, and the
-// ability to do so will be removed in ATC 6.0 - please use versioned client
-// imports (e.g. "v3-client") instead
-package client
+// Package v4client implements methods for interacting with the Traffic Ops API.
+package v4client
 
 /*
 

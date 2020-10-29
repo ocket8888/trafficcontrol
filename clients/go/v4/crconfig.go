@@ -13,14 +13,15 @@
    limitations under the License.
 */
 
-package client
+package v4client
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/apache/trafficcontrol/lib/go-tc"
 	"net/http"
 	"net/url"
+
+	"github.com/apache/trafficcontrol/lib/go-tc"
 )
 
 const (

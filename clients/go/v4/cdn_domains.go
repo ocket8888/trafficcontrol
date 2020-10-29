@@ -1,8 +1,9 @@
-package client
+package v4client
 
 import (
-	"github.com/apache/trafficcontrol/lib/go-tc"
 	"net/http"
+
+	"github.com/apache/trafficcontrol/lib/go-tc"
 )
 
 /*

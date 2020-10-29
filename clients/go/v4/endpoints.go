@@ -13,6 +13,6 @@
    limitations under the License.
 */
 
-package client
+package v4client
 
 const apiBase = "/api/4.0"
