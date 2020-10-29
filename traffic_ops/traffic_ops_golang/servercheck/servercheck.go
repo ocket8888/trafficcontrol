@@ -29,7 +29,6 @@ import (
 
 	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-tc"
-	"github.com/apache/trafficcontrol/lib/go-util"
 
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
 )
@@ -215,26 +214,6 @@ func ReadServerCheck(w http.ResponseWriter, r *http.Request) {
 	}
 
 	api.WriteResp(w, r, data)
-}
-
-// DeprecatedReadServersChecks is the handler for deprecated GET requests for /servers/checks
-func DeprecatedReadServersChecks(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
-	tx := inf.Tx.Tx
-	if userErr != nil || sysErr != nil {
-		api.HandleDeprecatedErr(w, r, tx, errCode, userErr, sysErr, util.StrPtr(ServerCheck_Get_Endpoint))
-		return
-	}
-	defer inf.Close()
-
-	data, userErr, sysErr, errCode := handleReadServerCheck(inf, tx)
-	if userErr != nil || sysErr != nil {
-		api.HandleDeprecatedErr(w, r, tx, errCode, userErr, sysErr, util.StrPtr(ServerCheck_Get_Endpoint))
-		return
-	}
-
-	alerts := api.CreateDeprecationAlerts(util.StrPtr(ServerCheck_Get_Endpoint))
-	api.WriteAlertsObj(w, r, http.StatusOK, alerts, data)
 }
 
 func handleReadServerCheck(inf *api.APIInfo, tx *sql.Tx) ([]tc.GenericServerCheck, error, error, int) {

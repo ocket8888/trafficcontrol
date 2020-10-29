@@ -29,7 +29,6 @@ import (
 
 	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-tc"
-	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/config"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
@@ -128,28 +127,6 @@ func GetDNSSECKeys(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	api.WriteResp(w, r, keys)
-}
-
-func GetDNSSECKeysV11(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"name"}, nil)
-	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
-		return
-	}
-	defer inf.Close()
-
-	cdnName := inf.Params["name"]
-	riakKeys, keysExist, err := riaksvc.GetDNSSECKeys(cdnName, inf.Tx.Tx, inf.Config.RiakAuthOptions, inf.Config.RiakPort)
-	if err != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, http.StatusInternalServerError, nil, errors.New("getting DNSSEC CDN keys: "+err.Error()))
-		return
-	}
-	if !keysExist {
-		// TODO emulates Perl; change to error, 404?
-		api.WriteRespAlertObj(w, r, tc.SuccessLevel, " - Dnssec keys for "+cdnName+" could not be found. ", struct{}{}) // emulates Perl
-		return
-	}
-	api.WriteResp(w, r, riakKeys)
 }
 
 func GetDSRecordTTL(tx *sql.Tx, cdn string) (time.Duration, error) {
@@ -302,57 +279,36 @@ WHERE cdn.name = $1
 }
 
 func DeleteDNSSECKeys(w http.ResponseWriter, r *http.Request) {
-	deleteDNSSECKeys(w, r, false)
-}
-
-func DeleteDNSSECKeysDeprecated(w http.ResponseWriter, r *http.Request) {
-	deleteDNSSECKeys(w, r, true)
-}
-
-func writeError(w http.ResponseWriter, r *http.Request, tx *sql.Tx, statusCode int, userErr error, sysErr error, deprecated bool) {
-	if deprecated {
-		api.HandleDeprecatedErr(w, r, tx, statusCode, userErr, sysErr, util.StrPtr(API_DNSSECKEYS))
-	} else {
-		api.HandleErr(w, r, tx, statusCode, userErr, sysErr)
-	}
-}
-
-func deleteDNSSECKeys(w http.ResponseWriter, r *http.Request, deprecated bool) {
 	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"name"}, nil)
 	if userErr != nil || sysErr != nil {
-		writeError(w, r, inf.Tx.Tx, errCode, userErr, sysErr, deprecated)
+		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
 		return
 	}
 	defer inf.Close()
 
 	cluster, err := riaksvc.GetPooledCluster(inf.Tx.Tx, inf.Config.RiakAuthOptions, inf.Config.RiakPort)
 	if err != nil {
-		writeError(w, r, inf.Tx.Tx, http.StatusInternalServerError, nil, errors.New("getting riak cluster: "+err.Error()), deprecated)
+		api.HandleErr(w, r, inf.Tx.Tx, http.StatusInternalServerError, nil, errors.New("getting riak cluster: "+err.Error()))
 		return
 	}
 
 	key := inf.Params["name"]
 	cdnID, ok, err := getCDNIDFromName(inf.Tx.Tx, tc.CDNName(key))
 	if err != nil {
-		writeError(w, r, inf.Tx.Tx, http.StatusInternalServerError, nil, errors.New("getting cdn id: "+err.Error()), deprecated)
+		api.HandleErr(w, r, inf.Tx.Tx, http.StatusInternalServerError, nil, errors.New("getting cdn id: "+err.Error()))
 		return
 	} else if !ok {
-		writeError(w, r, inf.Tx.Tx, http.StatusNotFound, nil, nil, deprecated)
+		api.HandleErr(w, r, inf.Tx.Tx, http.StatusNotFound, nil, nil)
 		return
 	}
 
 	if err := riaksvc.DeleteObject(key, CDNDNSSECKeyType, cluster); err != nil {
-		writeError(w, r, inf.Tx.Tx, http.StatusInternalServerError, nil, errors.New("deleting cdn dnssec keys: "+err.Error()), deprecated)
+		api.HandleErr(w, r, inf.Tx.Tx, http.StatusInternalServerError, nil, errors.New("deleting cdn dnssec keys: "+err.Error()))
 		return
 	}
 	api.CreateChangeLogRawTx(api.ApiChange, "CDN: "+key+", ID: "+strconv.Itoa(cdnID)+", ACTION: Deleted DNSSEC keys", inf.User, inf.Tx.Tx)
 	successMsg := "Successfully deleted " + CDNDNSSECKeyType + " for " + key
-	if deprecated {
-		api.WriteAlertsObj(w, r, http.StatusOK, api.CreateDeprecationAlerts(util.StrPtr(API_DNSSECKEYS)), successMsg)
-	} else {
-		api.WriteResp(w, r, successMsg)
-
-	}
+	api.WriteResp(w, r, successMsg)
 }
 
 // getCDNIDFromName returns the CDN's ID if a CDN with the given name exists

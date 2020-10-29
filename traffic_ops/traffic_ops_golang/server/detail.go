@@ -36,46 +36,6 @@ import (
 	"github.com/lib/pq"
 )
 
-func GetDetailHandler(w http.ResponseWriter, r *http.Request) {
-	alt := "GET servers/details with query parameters hostName"
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
-	if userErr != nil || sysErr != nil {
-		api.HandleDeprecatedErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr, &alt)
-		return
-	}
-	defer inf.Close()
-
-	servers, err := getDetailServers(inf.Tx.Tx, inf.User, inf.Params["hostName"], -1, "", 0, *inf.Version)
-	if err != nil {
-		api.HandleDeprecatedErr(w, r, inf.Tx.Tx, http.StatusInternalServerError, nil, errors.New("getting detail servers: "+err.Error()), &alt)
-		return
-	}
-	if len(servers) == 0 {
-		api.HandleDeprecatedErr(w, r, inf.Tx.Tx, http.StatusNotFound, nil, nil, &alt)
-		return
-	}
-	server := servers[0]
-	if inf.Version.Major < 3 {
-		v11server := tc.ServerDetailV11{}
-		v11server.ServerDetail = server.ServerDetail
-
-		interfaces := *server.ServerInterfaces
-		legacyInterface, err := tc.InterfaceInfoToLegacyInterfaces(interfaces)
-		if err != nil {
-			api.HandleErr(w, r, inf.Tx.Tx, http.StatusInternalServerError, nil, errors.New("converting to server detail v11: "+err.Error()))
-			return
-		}
-		v11server.LegacyInterfaceDetails = legacyInterface
-
-		server := v11server
-		alerts := api.CreateDeprecationAlerts(&alt)
-		api.WriteAlertsObj(w, r, http.StatusOK, alerts, server)
-		return
-	}
-	alerts := api.CreateDeprecationAlerts(&alt)
-	api.WriteAlertsObj(w, r, http.StatusOK, alerts, server)
-}
-
 func GetDetailParamHandler(w http.ResponseWriter, r *http.Request) {
 	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
 	if userErr != nil || sysErr != nil {

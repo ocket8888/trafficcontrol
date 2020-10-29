@@ -19,17 +19,19 @@ package tc
  * under the License.
  */
 
-import "encoding/json"
-import "errors"
-import "fmt"
-import "regexp"
-import "strconv"
-import "strings"
-import "time"
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"regexp"
+	"strconv"
+	"strings"
+	"time"
 
-import "github.com/apache/trafficcontrol/lib/go-log"
+	"github.com/apache/trafficcontrol/lib/go-log"
 
-import influx "github.com/influxdata/influxdb/client/v2"
+	influx "github.com/influxdata/influxdb/client/v2"
+)
 
 // TRAFFIC_STATS_VERSION was supposed to be the "API version", but actually the plugin (this route
 // used to be a plugin in Perl) always returned this static value
@@ -157,22 +159,6 @@ func (c *TrafficStatsConfig) OffsetString() string {
 		return "0s"
 	}
 	return fmt.Sprintf("%ds", int64(c.Start.Sub(time.Unix(0, 0))/time.Second)%iSecs)
-}
-
-// TrafficDSStatsResponseV1 represents a response from the
-// deliveryservice_stats "Traffic Stats" endpoints.
-// It contains the deprecated, legacy fields "Source" and "Version"
-type TrafficDSStatsResponseV1 struct {
-	// Series holds the actual data - it is NOT in general the same as a github.com/influxdata/influxdb1-client/models.Row
-	Series *TrafficStatsSeries `json:"series,omitempty"`
-	// Summary contains summary statistics of the data in Series
-	Summary *LegacyTrafficDSStatsSummary `json:"summary,omitempty"`
-	// Source has an unknown purpose. I believe this is supposed to name the "plugin" that provided
-	// the data - kept for compatibility with the Perl version(s) of the "Traffic Stats endpoints".
-	Source string `json:"source"`
-	// Version is supposed to represent the API version - but actually the API just reports a static
-	// number (TRAFFIC_STATS_VERSION).
-	Version string `json:"version"`
 }
 
 // TrafficDSStatsResponse represents a response from the

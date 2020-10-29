@@ -94,18 +94,8 @@ func UpdateSafe(w http.ResponseWriter, r *http.Request) {
 	ds := dses[0]
 
 	alertMsg := "Delivery Service safe update successful."
-	if inf.Version != nil && inf.Version.Major == 1 && inf.Version.Minor < 5 {
-		switch inf.Version.Minor {
-		case 4:
-			api.WriteRespAlertObj(w, r, tc.SuccessLevel, alertMsg, []tc.DeliveryServiceNullableV14{ds.DeliveryServiceNullableV14})
-		case 3:
-			api.WriteRespAlertObj(w, r, tc.SuccessLevel, alertMsg, []tc.DeliveryServiceNullableV13{ds.DeliveryServiceNullableV13})
-		default:
-			api.WriteRespAlertObj(w, r, tc.SuccessLevel, alertMsg, []tc.DeliveryServiceNullableV12{ds.DeliveryServiceNullableV12})
-		}
-	} else {
-		api.WriteRespAlertObj(w, r, tc.SuccessLevel, alertMsg, []tc.DeliveryServiceNullableV30{ds})
-	}
+
+	api.WriteRespAlertObj(w, r, tc.SuccessLevel, alertMsg, []tc.DeliveryServiceNullableV30{ds})
 
 	api.CreateChangeLogRawTx(api.ApiChange, fmt.Sprintf("DS: %s, ID: %d, ACTION: Updated safe fields", *ds.XMLID, *ds.ID), inf.User, tx)
 }
