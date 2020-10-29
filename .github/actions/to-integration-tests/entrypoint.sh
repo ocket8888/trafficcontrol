@@ -188,8 +188,11 @@ truncate --size=0 warning.log error.log # Removes output from previous API versi
 tail -f warning.log 2>&1 | color_and_prefix "${yellow_bg}" 'Traffic Ops' &
 tail -f error.log 2>&1 | color_and_prefix "${red_bg}" 'Traffic Ops' &
 
-
-cd "../testing/api/v$INPUT_VERSION"
+if [[ "$INPUT_VERSION" -lt 4 ]]; then
+	cd "../testing/api/v$INPUT_VERSION";
+else
+	cd "../../clients/go/v$INPUT_VERSION";
+fi
 
 cp "${resources}/traffic-ops-test.json" traffic-ops-test.conf
 go test -test.v --cfg traffic-ops-test.conf
