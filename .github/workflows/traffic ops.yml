@@ -78,10 +78,6 @@ jobs:
     - name: Initialize Traffic Ops Database
       id: todb
       uses: ./.github/actions/todb-init
-    - name: Run API v1 tests
-      uses: ./.github/actions/to-integration-tests
-      with:
-        version: 1
     - name: Run API v2 tests
       if: ${{ steps.todb.outcome == 'success' && always() }}
       uses: ./.github/actions/to-integration-tests
