@@ -336,7 +336,7 @@ func AddFederationResolverMappingsForCurrentUser(w http.ResponseWriter, r *http.
 	}
 	defer inf.Close()
 
-	mappings, userErr, sysErr := getMappingsFromRequestBody(*inf.Version, r.Body)
+	mappings, userErr, sysErr := getMappingsFromRequestBody(inf.Version, r.Body)
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, tx, http.StatusBadRequest, userErr, sysErr)
 		return
@@ -526,7 +526,7 @@ func ReplaceFederationResolverMappingsForCurrentUser(w http.ResponseWriter, r *h
 	changelogMsg := fmt.Sprintf("USER: %s, ID: %d, ACTION: %s", inf.User.UserName, inf.User.ID, deletedMsg)
 	api.CreateChangeLogRawTx(api.ApiChange, changelogMsg, inf.User, tx)
 
-	mappings, userErr, sysErr := getMappingsFromRequestBody(*inf.Version, r.Body)
+	mappings, userErr, sysErr := getMappingsFromRequestBody(inf.Version, r.Body)
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, tx, http.StatusBadRequest, userErr, sysErr)
 		return

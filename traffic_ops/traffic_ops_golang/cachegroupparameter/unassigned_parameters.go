@@ -39,7 +39,7 @@ import (
 
 // TOCacheGroupUnassignedParameter Unassigned Parameter TO request
 type TOCacheGroupUnassignedParameter struct {
-	api.InfoImpl `json:"-"`
+	api.InfoerImpl `json:"-"`
 	tc.CacheGroupParameterNullable
 }
 

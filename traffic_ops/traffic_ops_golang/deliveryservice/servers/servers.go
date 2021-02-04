@@ -48,7 +48,7 @@ import (
 
 // TODeliveryServiceRequest provides a type alias to define functions on
 type TODeliveryServiceServer struct {
-	api.InfoImpl `json:"-"`
+	api.InfoerImpl `json:"-"`
 	tc.DeliveryServiceServer
 	TenantIDs          pq.Int64Array `json:"-" db:"accessibleTenants"`
 	DeliveryServiceIDs pq.Int64Array `json:"-" db:"dsids"`
@@ -913,7 +913,7 @@ JOIN type t ON s.type = t.id `
 }
 
 type TODSSDeliveryService struct {
-	api.InfoImpl `json:"-"`
+	api.InfoerImpl `json:"-"`
 	tc.DeliveryServiceNullable
 }
 

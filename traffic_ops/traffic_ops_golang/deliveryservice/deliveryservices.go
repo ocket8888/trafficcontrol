@@ -55,7 +55,7 @@ const (
 
 //we need a type alias to define functions on
 type TODeliveryService struct {
-	api.InfoImpl
+	api.InfoerImpl
 	tc.DeliveryServiceV4
 }
 
@@ -305,7 +305,7 @@ func createV30(w http.ResponseWriter, r *http.Request, inf *api.Info, dsV30 tc.D
 	}
 	return nil, status, userErr, sysErr
 }
-func createV31(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, dsV31 tc.DeliveryServiceV31) (*tc.DeliveryServiceV31, int, error, error) {
+func createV31(w http.ResponseWriter, r *http.Request, inf *api.Info, dsV31 tc.DeliveryServiceV31) (*tc.DeliveryServiceV31, int, error, error) {
 	tx := inf.Tx.Tx
 	dsNullable := tc.DeliveryServiceNullableV30(dsV31)
 	ds := dsNullable.UpgradeToV4()
@@ -533,11 +533,8 @@ func createConsistentHashQueryParams(tx *sql.Tx, dsID int, consistentHashQueryPa
 }
 func (ds *TODeliveryService) Read(h http.Header, useIMS bool) ([]interface{}, error, error, int, *time.Time) {
 	version := ds.Info().Version
-	if version == nil {
-		return nil, nil, errors.New("TODeliveryService.Read called with nil API version"), http.StatusInternalServerError, nil
-	}
-	if version.Major == 1 && version.Minor < 1 {
-		return nil, nil, fmt.Errorf("TODeliveryService.Read called with invalid API version: %d.%d", version.Major, version.Minor), http.StatusInternalServerError, nil
+	if version.LessThan(api.Version{Major: 1, Minor: 1}) {
+		return nil, nil, fmt.Errorf("TODeliveryService.Read called with invalid API version: %s", version), http.StatusInternalServerError, nil
 	}
 
 	returnable := []interface{}{}
@@ -921,7 +918,7 @@ func updateV31(w http.ResponseWriter, r *http.Request, inf *api.Info, dsV31 *tc.
 	oldRes := tc.DeliveryServiceV31(ds.DowngradeToV3())
 	return &oldRes, http.StatusOK, nil, nil
 }
-func updateV40(w http.ResponseWriter, r *http.Request, inf *api.APIInfo, dsV40 *tc.DeliveryServiceV40) (*tc.DeliveryServiceV40, int, error, error) {
+func updateV40(w http.ResponseWriter, r *http.Request, inf *api.Info, dsV40 *tc.DeliveryServiceV40) (*tc.DeliveryServiceV40, int, error, error) {
 	tx := inf.Tx.Tx
 	user := inf.User
 	ds := tc.DeliveryServiceV4(*dsV40)

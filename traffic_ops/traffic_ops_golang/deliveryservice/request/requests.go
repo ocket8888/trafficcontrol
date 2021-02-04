@@ -36,7 +36,6 @@ import (
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/deliveryservice"
-	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/routing/middleware"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
@@ -169,13 +168,6 @@ func Get(w http.ResponseWriter, r *http.Request) {
 	}
 	defer inf.Close()
 
-	// Middleware should've already handled this, so idk why this is a pointer at all tbh
-	version := inf.Version
-	if version == nil {
-		middleware.NotImplementedHandler().ServeHTTP(w, r)
-		return
-	}
-
 	queryParamsToQueryCols := map[string]dbhelpers.WhereColumnInfo{
 		"assignee":   {Column: "s.username"},
 		"assigneeId": {Column: "r.assignee_id", Checker: api.IsInt},
@@ -284,7 +276,7 @@ func Get(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(rfc.LastModified, maxTime.Format(rfc.LastModifiedFormat))
 	}
 
-	if version.Major >= 4 {
+	if inf.Version.Major >= 4 {
 		errCode, userErr, sysErr = getOriginals(originalIDs, inf.Tx, needOriginals)
 		if userErr != nil || sysErr != nil {
 			api.HandleErr(w, r, tx, errCode, userErr, sysErr)
@@ -551,12 +543,6 @@ func Post(w http.ResponseWriter, r *http.Request) {
 	}
 	defer inf.Close()
 
-	// Middleware should've already handled this, so idk why this is a pointer at all tbh
-	version := inf.Version
-	if version == nil {
-		middleware.NotImplementedHandler().ServeHTTP(w, r)
-		return
-	}
 	if inf.User == nil {
 		sysErr = errors.New("no user in API Info")
 		api.HandleErr(w, r, inf.Tx.Tx, http.StatusInternalServerError, nil, sysErr)
@@ -564,7 +550,7 @@ func Post(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var result dsrManipulationResult
-	if version.Major >= 4 {
+	if inf.Version.Major >= 4 {
 		result = createV4(w, r, inf)
 	} else {
 		result = createLegacy(w, r, inf)
@@ -585,12 +571,6 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	}
 	defer inf.Close()
 
-	// Middleware should've already handled this, so idk why this is a pointer at all tbh
-	version := inf.Version
-	if version == nil {
-		middleware.NotImplementedHandler().ServeHTTP(w, r)
-		return
-	}
 	if inf.User == nil {
 		sysErr = errors.New("no user in API Info")
 		api.HandleErr(w, r, inf.Tx.Tx, http.StatusInternalServerError, nil, sysErr)
@@ -840,12 +820,6 @@ func Put(w http.ResponseWriter, r *http.Request) {
 	}
 	defer inf.Close()
 
-	// Middleware should've already handled this, so idk why this is a pointer at all tbh
-	version := inf.Version
-	if version == nil {
-		middleware.NotImplementedHandler().ServeHTTP(w, r)
-		return
-	}
 	if inf.User == nil {
 		sysErr = errors.New("no user in API Info")
 		api.HandleErr(w, r, tx, http.StatusInternalServerError, nil, sysErr)

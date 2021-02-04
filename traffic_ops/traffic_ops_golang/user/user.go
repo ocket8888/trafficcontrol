@@ -41,7 +41,7 @@ import (
 )
 
 type TOUser struct {
-	api.InfoImpl `json:"-"`
+	api.InfoerImpl `json:"-"`
 	tc.User
 }
 

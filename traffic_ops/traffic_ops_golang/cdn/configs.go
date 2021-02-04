@@ -30,7 +30,7 @@ import (
 
 // TOCDNConf used as a type alias to define functions on to satisfy shared API REST interfaces.
 type TOCDNConf struct {
-	api.InfoImpl `json:"-"`
+	api.InfoerImpl `json:"-"`
 }
 
 func (v *TOCDNConf) NewReadObj() interface{} { return &tc.CDNConfig{} }

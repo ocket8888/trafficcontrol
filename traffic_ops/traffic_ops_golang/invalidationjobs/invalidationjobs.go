@@ -43,7 +43,7 @@ import (
 )
 
 type InvalidationJob struct {
-	api.InfoImpl `json:"-"`
+	api.InfoerImpl `json:"-"`
 	tc.InvalidationJob
 }
 
