@@ -48,7 +48,7 @@ const (
 
 // AddSSLKeys adds the given ssl keys to the given delivery service.
 func AddSSLKeys(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
+	inf, userErr, sysErr, errCode := api.NewInfo(w, r, nil, nil)
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
 		return
@@ -146,7 +146,7 @@ func GetSSLKeysByHostName(w http.ResponseWriter, r *http.Request) {
 
 func getXmlIDFromRequest(w http.ResponseWriter, r *http.Request) (*api.Info, string, error) {
 	alerts := tc.CreateAlerts(tc.WarnLevel, hostnameKeyDepMsg)
-	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"hostname"}, nil)
+	inf, userErr, sysErr, errCode := api.NewInfo(w, r, []string{"hostname"}, nil)
 	if userErr != nil || sysErr != nil {
 		userErr = api.LogErr(r, errCode, userErr, sysErr)
 		alerts.AddNewAlert(tc.ErrorLevel, userErr.Error())
@@ -219,7 +219,7 @@ func getXmlIdFromHostname(inf *api.Info, hostName string) (string, error, error,
 
 // GetSSLKeysByXMLID fetches the deliveryservice ssl keys by the specified xmlID.
 func GetSSLKeysByXMLID(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"xmlid"}, nil)
+	inf, userErr, sysErr, errCode := api.NewInfo(w, r, []string{"xmlid"}, nil)
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
 		return
@@ -272,7 +272,7 @@ func getSSLKeysByXMLIDHelper(xmlID string, tv trafficvault.TrafficVault, alerts 
 
 // GetSSLKeysByXMLIDV15 fetches the deliveryservice ssl keys by the specified xmlID. V15 includes expiration date.
 func GetSSLKeysByXMLIDV15(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"xmlid"}, nil)
+	inf, userErr, sysErr, errCode := api.NewInfo(w, r, []string{"xmlid"}, nil)
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
 		return
@@ -387,7 +387,7 @@ func DeleteSSLKeysDeprecated(w http.ResponseWriter, r *http.Request) {
 
 func deleteSSLKeys(w http.ResponseWriter, r *http.Request, deprecated bool) {
 	alt := "DELETE /deliveryservices/xmlId/:xmlid/sslkeys"
-	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"xmlid"}, nil)
+	inf, userErr, sysErr, errCode := api.NewInfo(w, r, []string{"xmlid"}, nil)
 	if userErr != nil || sysErr != nil {
 		api.HandleErrOptionalDeprecation(w, r, inf.Tx.Tx, errCode, userErr, sysErr, deprecated, &alt)
 		return

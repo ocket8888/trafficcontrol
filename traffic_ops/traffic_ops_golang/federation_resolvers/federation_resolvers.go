@@ -75,7 +75,7 @@ RETURNING federation_resolver.id,
 
 // Create is the handler for POST requests to /federation_resolvers.
 func Create(w http.ResponseWriter, r *http.Request) {
-	inf, sysErr, userErr, errCode := api.NewInfo(r, nil, nil)
+	inf, sysErr, userErr, errCode := api.NewInfo(w, r, nil, nil)
 	tx := inf.Tx.Tx
 	if sysErr != nil || userErr != nil {
 		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
@@ -112,7 +112,7 @@ func Create(w http.ResponseWriter, r *http.Request) {
 func Read(w http.ResponseWriter, r *http.Request) {
 	var maxTime time.Time
 	var runSecond bool
-	inf, sysErr, userErr, errCode := api.NewInfo(r, nil, nil)
+	inf, sysErr, userErr, errCode := api.NewInfo(w, r, nil, nil)
 	tx := inf.Tx.Tx
 	if sysErr != nil || userErr != nil {
 		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
@@ -246,7 +246,7 @@ func SelectMaxLastUpdatedQuery(where string, tableName string) string {
 
 // Delete is the handler for DELETE requests to /federation_resolvers.
 func Delete(w http.ResponseWriter, r *http.Request) {
-	inf, sysErr, userErr, errCode := api.NewInfo(r, []string{"id"}, []string{"id"})
+	inf, sysErr, userErr, errCode := api.NewInfo(w, r, []string{"id"}, []string{"id"})
 	tx := inf.Tx.Tx
 	if sysErr != nil || userErr != nil {
 		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
@@ -296,7 +296,7 @@ func deleteFederationResolver(inf *api.Info) (tc.Alert, tc.FederationResolver, e
 
 // DeleteByID is the handler for DELETE requests to /federation_resolvers/{{ID}}.
 func DeleteByID(w http.ResponseWriter, r *http.Request) {
-	inf, sysErr, userErr, errCode := api.NewInfo(r, []string{"id"}, []string{"id"})
+	inf, sysErr, userErr, errCode := api.NewInfo(w, r, []string{"id"}, []string{"id"})
 	tx := inf.Tx.Tx
 	if sysErr != nil || userErr != nil {
 		api.HandleErr(w, r, tx, errCode, userErr, sysErr)

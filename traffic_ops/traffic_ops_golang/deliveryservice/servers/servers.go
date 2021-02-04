@@ -116,7 +116,7 @@ func ReadDSSHandler(w http.ResponseWriter, r *http.Request) {
 	if cfg != nil {
 		useIMS = cfg.UseIMS
 	}
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, []string{"limit", "page"})
+	inf, userErr, sysErr, errCode := api.NewInfo(w, r, nil, []string{"limit", "page"})
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
 		return
@@ -144,7 +144,7 @@ func ReadDSSHandler(w http.ResponseWriter, r *http.Request) {
 
 // ReadDSSHandler list all of the Deliveryservice Servers in response to requests to api/1.1/deliveryserviceserver$
 func ReadDSSHandlerV14(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, []string{"limit", "page"})
+	inf, userErr, sysErr, errCode := api.NewInfo(w, r, nil, []string{"limit", "page"})
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
 		return
@@ -401,7 +401,7 @@ func verifyAtLeastOneAvailableServer(ids []int, tx *sql.Tx) (bool, error) {
 
 // GetReplaceHandler is the handler for POST requests to the /deliveryserviceserver API endpoint.
 func GetReplaceHandler(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, []string{"limit", "page"})
+	inf, userErr, sysErr, errCode := api.NewInfo(w, r, nil, []string{"limit", "page"})
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
 		return
@@ -490,7 +490,7 @@ type TODeliveryServiceServers tc.DeliveryServiceServers
 
 // GetCreateHandler assigns an existing Server to and existing Deliveryservice in response to api/1.1/deliveryservices/{xml_id}/servers
 func GetCreateHandler(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"xml_id"}, nil)
+	inf, userErr, sysErr, errCode := api.NewInfo(w, r, []string{"xml_id"}, nil)
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
 		return
@@ -711,7 +711,7 @@ func GetReadUnassigned(w http.ResponseWriter, r *http.Request) {
 }
 
 func getRead(w http.ResponseWriter, r *http.Request, unassigned bool, alerts tc.Alerts) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"id"}, []string{"id"})
+	inf, userErr, sysErr, errCode := api.NewInfo(w, r, []string{"id"}, []string{"id"})
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
 		return

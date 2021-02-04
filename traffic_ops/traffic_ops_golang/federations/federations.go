@@ -74,7 +74,7 @@ RETURNING federation_resolver.ip_address
 `
 
 func Get(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
+	inf, userErr, sysErr, errCode := api.NewInfo(w, r, nil, nil)
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
 		return
@@ -328,7 +328,7 @@ WHERE
 // Confusingly, it does not create a federation, but is instead used to manipulate the resolvers
 // used by one or more particular Delivery Services for one or more particular Federations.
 func AddFederationResolverMappingsForCurrentUser(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
+	inf, userErr, sysErr, errCode := api.NewInfo(w, r, nil, nil)
 	tx := inf.Tx.Tx
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
@@ -449,7 +449,7 @@ func addFederationResolver(res []string, t tc.FederationResolverType, fedID uint
 // Confusingly, it does not delete a federation, but is instead used to remove an association
 // between all federation resolvers and all federations assigned to the authenticated user.
 func RemoveFederationResolverMappingsForCurrentUser(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
+	inf, userErr, sysErr, errCode := api.NewInfo(w, r, nil, nil)
 	tx := inf.Tx.Tx
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
@@ -507,7 +507,7 @@ func removeFederationResolverMappingsForCurrentUser(tx *sql.Tx, u *auth.CurrentU
 }
 
 func ReplaceFederationResolverMappingsForCurrentUser(w http.ResponseWriter, r *http.Request) {
-	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
+	inf, userErr, sysErr, errCode := api.NewInfo(w, r, nil, nil)
 	tx := inf.Tx.Tx
 	if userErr != nil || sysErr != nil {
 		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
