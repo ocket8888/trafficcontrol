@@ -235,7 +235,7 @@ func DeprecatedReadServersChecks(w http.ResponseWriter, r *http.Request) {
 	api.WriteAlertsObj(w, r, http.StatusOK, alerts, data)
 }
 
-func handleReadServerCheck(inf *api.APIInfo, tx *sql.Tx) ([]tc.GenericServerCheck, error, error, int) {
+func handleReadServerCheck(inf *api.Info, tx *sql.Tx) ([]tc.GenericServerCheck, error, error, int) {
 	extensions := make(map[string]string)
 
 	// Query Parameters to Database Query column mappings

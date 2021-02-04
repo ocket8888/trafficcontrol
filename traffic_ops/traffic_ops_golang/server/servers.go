@@ -483,9 +483,9 @@ RETURNING
 `
 
 const originServerQuery = `
-JOIN deliveryservice_server dsorg 
-ON dsorg.server = s.id 
-WHERE t.name = '` + tc.OriginTypeName + `' 
+JOIN deliveryservice_server dsorg
+ON dsorg.server = s.id
+WHERE t.name = '` + tc.OriginTypeName + `'
 AND dsorg.deliveryservice=:dsId
 `
 const deleteServerQuery = `DELETE FROM server WHERE id=$1`
@@ -1710,7 +1710,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 	api.CreateChangeLogRawTx(api.ApiChange, changeLogMsg, inf.User, tx)
 }
 
-func createV1(inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
+func createV1(inf *api.Info, w http.ResponseWriter, r *http.Request) {
 	var server tc.ServerNullableV11
 
 	tx := inf.Tx.Tx
@@ -1779,7 +1779,7 @@ func createV1(inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
 	api.CreateChangeLogRawTx(api.ApiChange, changeLogMsg, inf.User, tx)
 }
 
-func createV2(inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
+func createV2(inf *api.Info, w http.ResponseWriter, r *http.Request) {
 	var server tc.ServerNullableV2
 
 	tx := inf.Tx.Tx
@@ -1849,7 +1849,7 @@ func createV2(inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
 	api.CreateChangeLogRawTx(api.ApiChange, changeLogMsg, inf.User, tx)
 }
 
-func createV3(inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
+func createV3(inf *api.Info, w http.ResponseWriter, r *http.Request) {
 	var server tc.ServerV30
 
 	tx := inf.Tx.Tx
@@ -1923,7 +1923,7 @@ func createV3(inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
 	api.CreateChangeLogRawTx(api.ApiChange, changeLogMsg, inf.User, tx)
 }
 
-func createV4(inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
+func createV4(inf *api.Info, w http.ResponseWriter, r *http.Request) {
 	var server tc.ServerV40
 
 	tx := inf.Tx.Tx

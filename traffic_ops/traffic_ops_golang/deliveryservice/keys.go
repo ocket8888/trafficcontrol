@@ -144,7 +144,7 @@ func GetSSLKeysByHostName(w http.ResponseWriter, r *http.Request) {
 	getSSLKeysByXMLIDHelper(xmlID, inf.Vault, tc.CreateAlerts(tc.WarnLevel, hostnameKeyDepMsg), inf, w, r)
 }
 
-func getXmlIDFromRequest(w http.ResponseWriter, r *http.Request) (*api.APIInfo, string, error) {
+func getXmlIDFromRequest(w http.ResponseWriter, r *http.Request) (*api.Info, string, error) {
 	alerts := tc.CreateAlerts(tc.WarnLevel, hostnameKeyDepMsg)
 	inf, userErr, sysErr, errCode := api.NewInfo(r, []string{"hostname"}, nil)
 	if userErr != nil || sysErr != nil {
@@ -184,7 +184,7 @@ func GetSSLKeysByHostNameV15(w http.ResponseWriter, r *http.Request) {
 	getSSLKeysByXMLIDHelperV15(xmlID, tc.CreateAlerts(tc.WarnLevel, hostnameKeyDepMsg), inf, w, r)
 }
 
-func getXmlIdFromHostname(inf *api.APIInfo, hostName string) (string, error, error, int) {
+func getXmlIdFromHostname(inf *api.Info, hostName string) (string, error, error, int) {
 	domainName := ""
 	hostRegex := ""
 	strArr := strings.Split(hostName, ".")
@@ -233,7 +233,7 @@ func GetSSLKeysByXMLID(w http.ResponseWriter, r *http.Request) {
 	getSSLKeysByXMLIDHelper(xmlID, inf.Vault, tc.Alerts{}, inf, w, r)
 }
 
-func getSSLKeysByXMLIDHelper(xmlID string, tv trafficvault.TrafficVault, alerts tc.Alerts, inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
+func getSSLKeysByXMLIDHelper(xmlID string, tv trafficvault.TrafficVault, alerts tc.Alerts, inf *api.Info, w http.ResponseWriter, r *http.Request) {
 	version := inf.Params["version"]
 	decode := inf.Params["decode"]
 	if userErr, sysErr, errCode := tenant.Check(inf.User, xmlID, inf.Tx.Tx); userErr != nil || sysErr != nil {
@@ -286,7 +286,7 @@ func GetSSLKeysByXMLIDV15(w http.ResponseWriter, r *http.Request) {
 	getSSLKeysByXMLIDHelperV15(xmlID, tc.Alerts{}, inf, w, r)
 }
 
-func getSSLKeysByXMLIDHelperV15(xmlID string, alerts tc.Alerts, inf *api.APIInfo, w http.ResponseWriter, r *http.Request) {
+func getSSLKeysByXMLIDHelperV15(xmlID string, alerts tc.Alerts, inf *api.Info, w http.ResponseWriter, r *http.Request) {
 	version := inf.Params["version"]
 	decode := inf.Params["decode"]
 	if userErr, sysErr, errCode := tenant.Check(inf.User, xmlID, inf.Tx.Tx); userErr != nil || sysErr != nil {

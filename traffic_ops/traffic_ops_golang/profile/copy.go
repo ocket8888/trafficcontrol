@@ -68,7 +68,7 @@ func CopyProfileHandler(w http.ResponseWriter, r *http.Request) {
 	api.WriteRespAlertObj(w, r, tc.SuccessLevel, successMsg, p.Response)
 }
 
-func copyProfile(inf *api.APIInfo, p *tc.ProfileCopy) errorDetails {
+func copyProfile(inf *api.Info, p *tc.ProfileCopy) errorDetails {
 	// check if the newProfile already exists
 	ok, err := tc.ProfileExistsByName(p.Name, inf.Tx.Tx)
 	if ok {
@@ -89,7 +89,7 @@ func copyProfile(inf *api.APIInfo, p *tc.ProfileCopy) errorDetails {
 		"name": p.ExistingName,
 	}
 	toProfile := &TOProfile{
-		api.APIInfoImpl{
+		api.InfoImpl{
 			ReqInfo: inf,
 		},
 		tc.ProfileNullable{},
@@ -135,14 +135,14 @@ func copyProfile(inf *api.APIInfo, p *tc.ProfileCopy) errorDetails {
 	return errorDetails{}
 }
 
-func copyParameters(inf *api.APIInfo, p *tc.ProfileCopy) errorDetails {
+func copyParameters(inf *api.Info, p *tc.ProfileCopy) errorDetails {
 	// use existing ProfileParameter CRUD helpers to find parameters for the existing profile
 	inf.Params = map[string]string{
 		"profileId": fmt.Sprintf("%d", p.ExistingID),
 	}
 
 	toParam := &profileparameter.TOProfileParameter{
-		APIInfoImpl: api.APIInfoImpl{
+		InfoImpl: api.InfoImpl{
 			ReqInfo: inf,
 		},
 	}
