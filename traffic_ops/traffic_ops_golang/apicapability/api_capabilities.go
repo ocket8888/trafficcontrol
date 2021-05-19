@@ -1,9 +1,16 @@
+// Package apicapability defines the API handlers for Traffic Ops's API's
+// /api_capabilities endpoint.
+//
+// Deprecated: "Capabilities" (now called Permissions) are no longer handled
+// this way, and this package should be removed once API versions that use it
+// have been fully removed.
 package apicapability
 
 import (
 	"fmt"
 	"net/http"
 
+	"github.com/apache/trafficcontrol/lib/go-log"
 	"github.com/apache/trafficcontrol/lib/go-tc"
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
@@ -35,31 +42,31 @@ import (
 // it will return only those with an exact match.
 func GetAPICapabilitiesHandler(w http.ResponseWriter, r *http.Request) {
 	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
+	tx := inf.Tx.Tx
 	if userErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, userErr, sysErr)
+		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
 		return
 	}
 	defer inf.Close()
 
 	results, errCode, usrErr, sysErr := getAPICapabilities(inf.Tx, inf.Params)
 	if usrErr != nil || sysErr != nil {
-		api.HandleErr(w, r, inf.Tx.Tx, errCode, usrErr, sysErr)
+		api.HandleErr(w, r, tx, errCode, usrErr, sysErr)
 		return
 	}
 
-	api.WriteResp(w, r, results)
-	return
+	api.WriteRespAlertObj(w, r, tc.WarnLevel, "This endpoint is deprecated, and will be removed in the future", results)
 }
 
 func getAPICapabilities(tx *sqlx.Tx, params map[string]string) ([]tc.APICapability, int, error, error) {
 	var err error
 	selectQuery := `SELECT id, http_method, route, capability, last_updated FROM api_capability`
 	queryParamsToQueryCols := map[string]dbhelpers.WhereColumnInfo{
-		"id":          dbhelpers.WhereColumnInfo{Column: "id", Checker: api.IsInt},
-		"capability":  dbhelpers.WhereColumnInfo{Column: "capability"},
-		"httpMethod":  dbhelpers.WhereColumnInfo{Column: "http_method"},
-		"route":       dbhelpers.WhereColumnInfo{Column: "route"},
-		"lastUpdated": dbhelpers.WhereColumnInfo{Column: "last_updated"},
+		"id":          {Column: "id", Checker: api.IsInt},
+		"capability":  {Column: "capability"},
+		"httpMethod":  {Column: "http_method"},
+		"route":       {Column: "route"},
+		"lastUpdated": {Column: "last_updated"},
 	}
 
 	where, orderBy, pagination, queryValues, errs :=
@@ -68,7 +75,7 @@ func getAPICapabilities(tx *sqlx.Tx, params map[string]string) ([]tc.APICapabili
 	if len(errs) > 0 {
 		err = util.JoinErrs(errs)
 		return nil, http.StatusInternalServerError, nil, fmt.Errorf(
-			"query exception: could not build api_capability query with params: %v, error: %v",
+			"query exception: could not build api_capability query with params: %v, error: %w",
 			params,
 			err,
 		)
@@ -81,7 +88,7 @@ func getAPICapabilities(tx *sqlx.Tx, params map[string]string) ([]tc.APICapabili
 		usrErr, sysErr, errCode := api.ParseDBError(err)
 		return nil, errCode, usrErr, sysErr
 	}
-	defer rows.Close()
+	defer log.Close(rows, "reading APICapabilities from database")
 
 	apiCaps := []tc.APICapability{}
 	for rows.Next() {
@@ -95,7 +102,7 @@ func getAPICapabilities(tx *sqlx.Tx, params map[string]string) ([]tc.APICapabili
 		)
 		if err != nil {
 			return nil, http.StatusInternalServerError, nil, fmt.Errorf(
-				"api capability read: scanning: %v", err,
+				"api capability read: scanning: %w", err,
 			)
 		}
 		apiCaps = append(apiCaps, ac)

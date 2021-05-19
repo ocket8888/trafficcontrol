@@ -18,6 +18,10 @@
 ********************
 ``api_capabilities``
 ********************
+
+.. deprecated:: ATCv6
+	This endpoint is deprecated, and has been removed from API versions released with ATCv6 and later.
+
 Deals with the capabilities that may be associated with API endpoints and methods. These capabilities are assigned to :term:`Roles`, of which a user may have one or more. Capabilities support "wildcarding" or "globbing" using asterisks to group multiple routes into a single capability
 
 ``GET``
@@ -79,7 +83,11 @@ Response Structure
 	Whole-Content-Sha512: wptErtIop/AfTTQ+1MZdA2YpPXEOuLFfrPQvvaHqO/uX5fRruOVYW+7p8JTrtH1xg1WN+x6FnjQnSHuWwcpyJg==
 	Content-Length: 393
 
-	{ "response": [
+	{ "alerts": [{
+		"level": "warning",
+		"text": "This endpoint is deprecated, and will be removed in the future",
+	}],
+	"response": [
 		{
 			"httpMethod": "POST",
 			"lastUpdated": "2018-11-01 14:10:22.794114+00",
