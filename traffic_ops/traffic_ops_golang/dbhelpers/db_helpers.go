@@ -182,6 +182,20 @@ func BuildWhereAndOrderByAndPagination(parameters map[string]string, queryParams
 	return whereClause, orderBy, paginationClause, queryValues, errs
 }
 
+// AppendWhere appends 'extra' safely to the WHERE clause 'where'. What is
+// returned is guaranteed to be a valid WHERE clause (including a blank string).
+func AppendWhere(where, extra string) string {
+	if where == "" && extra == "" {
+		return ""
+	}
+	if where == "" {
+		where = BaseWhere + " "
+	} else {
+		where += " AND "
+	}
+	return where + extra
+}
+
 func parseCriteriaAndQueryValues(queryParamsToSQLCols map[string]WhereColumnInfo, parameters map[string]string) (string, map[string]interface{}, []error) {
 	var criteria string
 
