@@ -24,6 +24,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/apache/trafficcontrol/lib/go-rfc"
 	"github.com/apache/trafficcontrol/lib/go-util"
@@ -109,7 +110,243 @@ type User struct {
 	commonUserFields
 }
 
-// UserCurrent represents the profile for the authenticated user
+// A UserV40 is a representation of a Traffic Ops user as it appears in version
+// 4.0 of Traffic Ops's API.
+type UserV40 struct {
+	AddressLine1         *string    `json:"addressLine1" db:"address_line1"`
+	AddressLine2         *string    `json:"addressLine2" db:"address_line2"`
+	City                 *string    `json:"city" db:"city"`
+	Company              *string    `json:"company" db:"company"`
+	ConfirmLocalPassword *string    `json:"confirmLocalPasswd,omitempty" db:"confirm_local_passwd"`
+	Country              *string    `json:"country" db:"country"`
+	Email                *string    `json:"email" db:"email"`
+	FullName             string     `json:"fullName" db:"full_name"`
+	GID                  *int       `json:"gid"`
+	ID                   *int       `json:"id" db:"id"`
+	LastUpdated          time.Time  `json:"lastUpdated" db:"last_updated"`
+	LocalPassword        *string    `json:"localPasswd,omitempty" db:"local_passwd"`
+	NewUser              bool       `json:"newUser" db:"new_user"`
+	PhoneNumber          *string    `json:"phoneNumber" db:"phone_number"`
+	PostalCode           *string    `json:"postalCode" db:"postal_code"`
+	PublicSSHKey         *string    `json:"publicSshKey" db:"public_ssh_key"`
+	RegistrationSent     *time.Time `json:"registrationSent" db:"registration_sent"`
+	Role                 string     `json:"role" db:"role"`
+	StateOrProvince      *string    `json:"stateOrProvince" db:"state_or_province"`
+	Tenant               *string    `json:"tenant"`
+	TenantID             int        `json:"tenantId" db:"tenant_id"`
+	Token                *string    `json:"-" db:"token"`
+	UID                  *int       `json:"uid"`
+	Username             string     `json:"username" db:"username"`
+}
+
+// A UserV4 is a representation of a Traffic Ops user as it appears in the
+// latest minor version in version 4 of Traffic Ops's API.
+type UserV4 = UserV40
+
+// Downgrade converts a UserV4 to a User as seen in API versions 1.1 through
+// 3.x.
+func (u UserV4) Downgrade() User {
+	var ret User
+	ret.FullName = new(string)
+	*ret.FullName = u.FullName
+	ret.LastUpdated = TimeNoModFromTime(u.LastUpdated)
+	ret.NewUser = new(bool)
+	*ret.NewUser = u.NewUser
+	ret.RoleName = new(string)
+	*ret.RoleName = u.Role
+	ret.Role = nil
+	ret.TenantID = new(int)
+	*ret.TenantID = u.TenantID
+	ret.Username = new(string)
+	*ret.Username = u.Username
+
+	if u.AddressLine1 != nil {
+		ret.AddressLine1 = new(string)
+		*ret.AddressLine1 = *u.AddressLine1
+	}
+	if u.AddressLine2 != nil {
+		ret.AddressLine2 = new(string)
+		*ret.AddressLine2 = *u.AddressLine2
+	}
+	if u.City != nil {
+		ret.City = new(string)
+		*ret.City = *u.City
+	}
+	if u.Company != nil {
+		ret.Company = new(string)
+		*ret.Company = *u.Company
+	}
+	if u.ConfirmLocalPassword != nil {
+		ret.ConfirmLocalPassword = new(string)
+		*ret.ConfirmLocalPassword = *u.ConfirmLocalPassword
+	}
+	if u.Country != nil {
+		ret.Country = new(string)
+		*ret.Country = *u.Country
+	}
+	if u.Email != nil {
+		ret.Email = new(string)
+		*ret.Email = *u.Email
+	}
+	if u.GID != nil {
+		ret.GID = new(int)
+		*ret.GID = *u.GID
+	}
+	if u.ID != nil {
+		ret.ID = new(int)
+		*ret.ID = *u.ID
+	}
+	if u.LocalPassword != nil {
+		ret.LocalPassword = new(string)
+		*ret.LocalPassword = *u.LocalPassword
+	}
+	if u.PhoneNumber != nil {
+		ret.PhoneNumber = new(string)
+		*ret.PhoneNumber = *u.PhoneNumber
+	}
+	if u.PostalCode != nil {
+		ret.PostalCode = new(string)
+		*ret.PostalCode = *u.PostalCode
+	}
+	if u.PublicSSHKey != nil {
+		ret.PublicSSHKey = new(string)
+		*ret.PublicSSHKey = *u.PublicSSHKey
+	}
+	if u.RegistrationSent != nil {
+		ret.RegistrationSent = TimeNoModFromTime(*u.RegistrationSent)
+	}
+	if u.StateOrProvince != nil {
+		ret.StateOrProvince = new(string)
+		*ret.StateOrProvince = *u.StateOrProvince
+	}
+	if u.Tenant != nil {
+		ret.Tenant = new(string)
+		*ret.Tenant = *u.Tenant
+	}
+	if u.Token != nil {
+		ret.Token = new(string)
+		*ret.Token = *u.Token
+	}
+	if u.UID != nil {
+		ret.UID = new(int)
+		*ret.UID = *u.UID
+	}
+
+	return ret
+}
+
+// Upgrade converts a User as seen in API versions 1.1 through 3.x to a UserV4.
+func (u User) Upgrade() UserV4 {
+	var ret UserV4
+
+	if u.AddressLine1 != nil {
+		ret.AddressLine1 = new(string)
+		*ret.AddressLine1 = *u.AddressLine1
+	}
+	if u.AddressLine2 != nil {
+		ret.AddressLine2 = new(string)
+		*ret.AddressLine2 = *u.AddressLine2
+	}
+	if u.City != nil {
+		ret.City = new(string)
+		*ret.City = *u.City
+	}
+	if u.Company != nil {
+		ret.Company = new(string)
+		*ret.Company = *u.Company
+	}
+	if u.ConfirmLocalPassword != nil {
+		ret.ConfirmLocalPassword = new(string)
+		*ret.ConfirmLocalPassword = *u.ConfirmLocalPassword
+	}
+	if u.Country != nil {
+		ret.Country = new(string)
+		*ret.Country = *u.Country
+	}
+	if u.Email != nil {
+		ret.Email = new(string)
+		*ret.Email = *u.Email
+	}
+	if u.FullName != nil {
+		ret.FullName = *u.FullName
+	}
+	if u.GID != nil {
+		ret.GID = new(int)
+		*ret.GID = *u.GID
+	}
+	if u.ID != nil {
+		ret.ID = new(int)
+		*ret.ID = *u.ID
+	}
+	if u.LastUpdated != nil {
+		ret.LastUpdated = u.LastUpdated.Time
+	}
+	if u.LocalPassword != nil {
+		ret.LocalPassword = new(string)
+		*ret.LocalPassword = *u.LocalPassword
+	}
+	if u.NewUser != nil {
+		ret.NewUser = *u.NewUser
+	}
+	if u.PhoneNumber != nil {
+		ret.PhoneNumber = new(string)
+		*ret.PhoneNumber = *u.PhoneNumber
+	}
+	if u.PostalCode != nil {
+		ret.PostalCode = new(string)
+		*ret.PostalCode = *u.PostalCode
+	}
+	if u.PublicSSHKey != nil {
+		ret.PublicSSHKey = new(string)
+		*ret.PublicSSHKey = *u.PublicSSHKey
+	}
+	if u.RegistrationSent != nil {
+		ret.RegistrationSent = new(time.Time)
+		*ret.RegistrationSent = u.RegistrationSent.Time
+	}
+	if u.RoleName != nil {
+		ret.Role = *u.RoleName
+	}
+	if u.StateOrProvince != nil {
+		ret.StateOrProvince = new(string)
+		*ret.StateOrProvince = *u.StateOrProvince
+	}
+	if u.Tenant != nil {
+		ret.Tenant = new(string)
+		*ret.Tenant = *u.Tenant
+	}
+	if u.TenantID != nil {
+		ret.TenantID = *u.TenantID
+	}
+	if u.Token != nil {
+		ret.Token = new(string)
+		*ret.Token = *u.Token
+	}
+	if u.UID != nil {
+		ret.UID = new(int)
+		*ret.UID = *u.UID
+	}
+	if u.Username != nil {
+		ret.Username = *u.Username
+	}
+	return ret
+}
+
+// UsersResponseV4 is the type of a response from Traffic Ops to requests made
+// to /users which return more than one user.
+type UsersResponseV4 struct {
+	Response []UserV4 `json:"response"`
+	Alerts
+}
+
+// UserResponseV4 is the type of a response from Traffic Ops to requests made
+// to /users which return one user.
+type UserResponseV4 struct {
+	Response UserV4 `json:"response"`
+	Alerts
+}
+
+// UserCurrent represents the profile for the authenticated user.
 type UserCurrent struct {
 	UserName  *string `json:"username"`
 	LocalUser *bool   `json:"localUser"`

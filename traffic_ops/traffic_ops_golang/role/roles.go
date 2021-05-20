@@ -69,6 +69,7 @@ func readExtremeLegacy(rows *sqlx.Rows) ([]tc.RoleV11, error) {
 
 	return roles, nil
 }
+
 func readLegacy(rows *sqlx.Rows) ([]tc.Role, error) {
 	if rows == nil {
 		return nil, errors.New("cannot read from nil rows")
@@ -86,6 +87,7 @@ func readLegacy(rows *sqlx.Rows) ([]tc.Role, error) {
 
 	return roles, nil
 }
+
 func read(rows *sqlx.Rows) ([]tc.RoleV4, error) {
 	if rows == nil {
 		return nil, errors.New("cannot read from nil rows")

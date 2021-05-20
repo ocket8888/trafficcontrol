@@ -1,3 +1,5 @@
+// Package user contains handlers and logic pertaining to the Traffic Ops API's
+// endpoints dealing with Users.
 package user
 
 /*
@@ -21,6 +23,7 @@ package user
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -35,10 +38,152 @@ import (
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
+	"github.com/jmoiron/sqlx"
 
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
 )
+
+const readBaseQuery = `
+SELECT
+	u.id,
+	u.username AS username,
+	u.public_ssh_key,
+	u.company,
+	u.email,
+	u.full_name,
+	u.new_user,
+	u.address_line1,
+	u.address_line2,
+	u.city,
+	u.state_or_province,
+	u.phone_number,
+	u.postal_code,
+	u.country,
+	u.registration_sent,
+	u.tenant_id,
+	t.name AS tenant,
+	u.last_updated,`
+
+const readQuery = readBaseQuery + `
+	r.name as role
+FROM tm_user u
+LEFT JOIN tenant t ON u.tenant_id = t.id
+LEFT JOIN role r ON u.role = r.id
+`
+
+const legacyReadQuery = readBaseQuery + `
+	r.name AS rolename,
+	u.role
+FROM tm_user u
+LEFT JOIN tenant t ON u.tenant_id = t.id
+LEFT JOIN role r ON u.role = r.id
+`
+
+// this is necessary because tc.User doesn't read its RoleName field in sql
+// driver scans.
+type userGet struct {
+	RoleName *string `json:"rolename" db:"rolename"`
+	tc.User
+}
+
+func readLegacy(rows *sqlx.Rows) ([]userGet, error) {
+	if rows == nil {
+		return nil, errors.New("cannot read from nil rows")
+	}
+
+	users := []userGet{}
+	for rows.Next() {
+		var user userGet
+		if err := rows.StructScan(&user); err != nil {
+			return nil, fmt.Errorf("scanning User row: %w", err)
+		}
+		users = append(users, user)
+	}
+
+	return users, nil
+}
+
+func read(rows *sqlx.Rows) ([]tc.UserV4, error) {
+	if rows == nil {
+		return nil, errors.New("cannot read from nil rows")
+	}
+
+	users := []tc.UserV4{}
+	for rows.Next() {
+		var user tc.UserV4
+		if err := rows.StructScan(&user); err != nil {
+			return nil, fmt.Errorf("scanning UserV4 row: %w", err)
+		}
+		users = append(users, user)
+	}
+
+	return users, nil
+}
+
+// Get is the handler for GET requests made to /users.
+func Get(w http.ResponseWriter, r *http.Request) {
+	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
+	tx := inf.Tx.Tx
+	if userErr != nil || sysErr != nil {
+		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+		return
+	}
+	defer inf.Close()
+
+	params := map[string]dbhelpers.WhereColumnInfo{
+		"id":       {Column: "u.id", Checker: api.IsInt},
+		"role":     {Column: "r.name"},
+		"tenant":   {Column: "t.name"},
+		"username": {Column: "u.username"},
+	}
+
+	if inf.Version.Major >= 4 {
+		params["company"] = dbhelpers.WhereColumnInfo{Column: "u.company"}
+		params["email"] = dbhelpers.WhereColumnInfo{Column: "u.email"}
+		params["fullName"] = dbhelpers.WhereColumnInfo{Column: "u.full_name"}
+		params["newUser"] = dbhelpers.WhereColumnInfo{Column: "u.new_user"}
+		params["city"] = dbhelpers.WhereColumnInfo{Column: "u.city"}
+		params["stateOrProvince"] = dbhelpers.WhereColumnInfo{Column: "u.state_or_province"}
+		params["country"] = dbhelpers.WhereColumnInfo{Column: "u.country"}
+		params["postalCode"] = dbhelpers.WhereColumnInfo{Column: "u.postal_code"}
+	}
+
+	where, orderBy, pagination, queryValues, errs := dbhelpers.BuildWhereAndOrderByAndPagination(inf.Params, params)
+	if len(errs) != 0 {
+		api.HandleErr(w, r, tx, http.StatusBadRequest, util.JoinErrs(errs), nil)
+		return
+	}
+
+	query := where + orderBy + pagination
+	if inf.Version.Major >= 4 {
+		query = readQuery + query
+	} else {
+		query = legacyReadQuery + query
+	}
+
+	rows, err := inf.Tx.NamedQuery(readQuery+where+orderBy+pagination, queryValues)
+	if err != nil {
+		api.HandleErr(w, r, tx, http.StatusInternalServerError, nil, fmt.Errorf("querying Users: %w", err))
+		return
+	}
+	defer log.Close(rows, "reading in Users from the database")
+
+	var response struct {
+		Response interface{}
+	}
+	if inf.Version.Major >= 4 {
+		response.Response, err = read(rows)
+	} else {
+		response.Response, err = readLegacy(rows)
+	}
+	if err != nil {
+		api.HandleErr(w, r, tx, http.StatusInternalServerError, nil, err)
+		return
+	}
+
+	api.WriteResp(w, r, response)
+}
 
 type TOUser struct {
 	api.APIInfoImpl `json:"-"`
