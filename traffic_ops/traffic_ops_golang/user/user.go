@@ -36,7 +36,7 @@ import (
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/tenant"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/util/ims"
 
-	"github.com/go-ozzo/ozzo-validation"
+	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
 )
 
@@ -97,7 +97,7 @@ func (user *TOUser) Validate() error {
 	validateErrs := validation.Errors{
 		"email":    validation.Validate(user.Email, validation.Required, is.Email),
 		"fullName": validation.Validate(user.FullName, validation.Required),
-		"role":     validation.Validate(user.Role, validation.Required),
+		// "role":     validation.Validate(user.Role, validation.Required),
 		"username": validation.Validate(user.Username, validation.Required),
 		"tenantID": validation.Validate(user.TenantID, validation.Required),
 	}
@@ -140,7 +140,13 @@ func (user *TOUser) Create() (error, error, int) {
 		return err, nil, http.StatusBadRequest
 	}
 
-	resultRows, err := user.ReqInfo.Tx.NamedQuery(user.InsertQuery(), user)
+	var query string
+	if user.APIInfo().Version.Major >= 4 {
+		query = user.InsertQuery()
+	} else {
+		query = user.LegacyInsertQuery()
+	}
+	resultRows, err := user.ReqInfo.Tx.NamedQuery(query, user)
 	if err != nil {
 		return api.ParseDBError(err)
 	}
@@ -235,7 +241,13 @@ func selectMaxLastUpdatedQuery(where string) string {
 }
 
 func (user *TOUser) privCheck() (error, error, int) {
-	requestedPrivLevel, _, err := dbhelpers.GetPrivLevelFromRoleID(user.ReqInfo.Tx.Tx, *user.Role)
+	var requestedPrivLevel int
+	var err error
+	if user.Role == nil {
+		requestedPrivLevel, _, err = dbhelpers.GetPrivLevelFromRole(user.ReqInfo.Tx.Tx, *user.RoleName)
+	} else {
+		requestedPrivLevel, _, err = dbhelpers.GetPrivLevelFromRoleID(user.ReqInfo.Tx.Tx, *user.Role)
+	}
 	if err != nil {
 		return nil, err, http.StatusInternalServerError
 	}
@@ -406,7 +418,7 @@ func (user *TOUser) UpdateQuery() string {
 	 (SELECT r.name FROM role r WHERE id = u.role)`
 }
 
-func (user *TOUser) InsertQuery() string {
+func (user *TOUser) LegacyInsertQuery() string {
 	return `
 	INSERT INTO tm_user (
 	username,
@@ -429,6 +441,47 @@ func (user *TOUser) InsertQuery() string {
 	:username,
 	:public_ssh_key,
 	:role,
+	:company,
+	:email,
+	:full_name,
+	COALESCE(:new_user, FALSE),
+	:address_line1,
+	:address_line2,
+	:city,
+	:state_or_province,
+	:phone_number,
+	:postal_code,
+	:country,
+	:tenant_id,
+	:local_passwd
+	) RETURNING id, last_updated,
+	(SELECT t.name FROM tenant t WHERE id = tm_user.tenant_id),
+	(SELECT r.name FROM role r WHERE id = tm_user.role)`
+}
+
+func (user *TOUser) InsertQuery() string {
+	return `
+	INSERT INTO tm_user (
+	username,
+	public_ssh_key,
+	role,
+	company,
+	email,
+	full_name,
+	new_user,
+	address_line1,
+	address_line2,
+	city,
+	state_or_province,
+	phone_number,
+	postal_code,
+	country,
+	tenant_id,
+	local_passwd
+	) VALUES (
+	:username,
+	:public_ssh_key,
+	(SELECT id FROM role WHERE name = :role_name),
 	:company,
 	:email,
 	:full_name,

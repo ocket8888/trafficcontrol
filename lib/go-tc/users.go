@@ -19,16 +19,18 @@ package tc
  * under the License.
  */
 
-import "database/sql"
-import "encoding/json"
-import "errors"
-import "fmt"
+import (
+	"database/sql"
+	"encoding/json"
+	"errors"
+	"fmt"
 
-import "github.com/apache/trafficcontrol/lib/go-rfc"
-import "github.com/apache/trafficcontrol/lib/go-util"
+	"github.com/apache/trafficcontrol/lib/go-rfc"
+	"github.com/apache/trafficcontrol/lib/go-util"
 
-import "github.com/go-ozzo/ozzo-validation"
-import "github.com/go-ozzo/ozzo-validation/is"
+	validation "github.com/go-ozzo/ozzo-validation"
+	"github.com/go-ozzo/ozzo-validation/is"
+)
 
 // UserCredentials contains Traffic Ops login credentials
 type UserCredentials struct {
@@ -103,7 +105,7 @@ type User struct {
 	// https://github.com/apache/trafficcontrol/blob/3b5dd406bf1a0bb456c062b0f6a465ec0617d8ef/traffic_ops/traffic_ops_golang/user/user.go#L197
 	// It's done that way in order to maintain "rolename" vs "roleName" JSON field capitalization for the different users APIs.
 	// TODO: make the breaking API change to make all user APIs use "roleName" consistently.
-	RoleName *string `json:"roleName,omitempty" db:"-"`
+	RoleName *string `json:"roleName,omitempty" db:"role_name"`
 	commonUserFields
 }
 
