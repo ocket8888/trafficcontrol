@@ -1,3 +1,5 @@
+// Package role contains handlers and logic pertaining to Traffic Ops's /roles
+// API endpoint.
 package role
 
 /*
@@ -32,11 +34,155 @@ import (
 	"github.com/apache/trafficcontrol/lib/go-util"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/api"
 	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/dbhelpers"
+	"github.com/apache/trafficcontrol/traffic_ops/traffic_ops_golang/routing/middleware"
 
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 )
+
+const readRolesQuery = `
+SELECT
+	id,
+	name,
+	description,
+	priv_level,
+	last_updated,
+	ARRAY(SELECT rc.cap_name FROM role_capability AS rc WHERE rc.role_id=id) AS permissions
+FROM role
+`
+
+func readExtremeLegacy(rows *sqlx.Rows) ([]tc.RoleV11, error) {
+	if rows == nil {
+		return nil, errors.New("cannot read from nil rows")
+	}
+
+	roles := []tc.RoleV11{}
+	for rows.Next() {
+		var role tc.RoleV11
+		throwAway := new(interface{})
+		if err := rows.Scan(&role.ID, &role.Name, &role.Description, &role.PrivLevel, throwAway, throwAway); err != nil {
+			return nil, fmt.Errorf("scanning RoleV11 row: %w", err)
+		}
+		roles = append(roles, role)
+	}
+
+	return roles, nil
+}
+func readLegacy(rows *sqlx.Rows) ([]tc.Role, error) {
+	if rows == nil {
+		return nil, errors.New("cannot read from nil rows")
+	}
+
+	roles := []tc.Role{}
+	for rows.Next() {
+		var role tc.Role
+		throwAway := new(interface{})
+		if err := rows.Scan(&role.ID, &role.Name, &role.Description, &role.PrivLevel, throwAway, pq.Array(&role.Capabilities)); err != nil {
+			return nil, fmt.Errorf("scanning RoleV11 row: %w", err)
+		}
+		roles = append(roles, role)
+	}
+
+	return roles, nil
+}
+func read(rows *sqlx.Rows) ([]tc.RoleV4, error) {
+	if rows == nil {
+		return nil, errors.New("cannot read from nil rows")
+	}
+
+	roles := []tc.RoleV4{}
+	for rows.Next() {
+		var role tc.RoleV4
+		throwAway := new(interface{})
+		if err := rows.Scan(throwAway, &role.Name, &role.Description, throwAway, &role.LastUpdated, pq.Array(&role.Permissions)); err != nil {
+			return nil, fmt.Errorf("scanning RoleV11 row: %w", err)
+		}
+		roles = append(roles, role)
+	}
+
+	return roles, nil
+}
+
+// Query parameters allowed in APIv4 (that can be handled by dbhelpers).
+var v4Params = map[string]dbhelpers.WhereColumnInfo{
+	"name": {Column: "name"},
+}
+
+// Query parameters allowed in API versions < 4 (that can be handled by
+// dbhelpers).
+var legacyParams = map[string]dbhelpers.WhereColumnInfo{
+	"name":      {Column: "name"},
+	"id":        {Column: "id", Checker: api.IsInt},
+	"privLevel": {Column: "priv_level", Checker: api.IsInt},
+}
+
+// Get is the handler for GET requests made to /roles.
+func Get(w http.ResponseWriter, r *http.Request) {
+	inf, userErr, sysErr, errCode := api.NewInfo(r, nil, nil)
+	tx := inf.Tx.Tx
+	if userErr != nil || sysErr != nil {
+		api.HandleErr(w, r, tx, errCode, userErr, sysErr)
+		return
+	}
+	defer inf.Close()
+
+	// Middleware should've already handled this, so idk why this is a pointer at all tbh
+	version := inf.Version
+	if version == nil {
+		middleware.NotImplementedHandler().ServeHTTP(w, r)
+		return
+	}
+
+	var params map[string]dbhelpers.WhereColumnInfo
+	if version.Major >= 4 {
+		params = v4Params
+	} else {
+		params = legacyParams
+	}
+	if _, ok := inf.Params["orderby"]; !ok {
+		inf.Params["orderby"] = "name"
+	}
+
+	where, orderBy, pagination, queryValues, errs := dbhelpers.BuildWhereAndOrderByAndPagination(inf.Params, params)
+	if len(errs) != 0 {
+		api.HandleErr(w, r, tx, http.StatusBadRequest, util.JoinErrs(errs), nil)
+		return
+	}
+
+	if version.Major >= 4 {
+		if perm, ok := inf.Params["can"]; ok {
+			queryValues["can"] = perm
+			where = dbhelpers.AppendWhere(where, "permissions @> :can")
+		}
+	}
+
+	query := readRolesQuery + where + orderBy + pagination
+
+	rows, err := inf.Tx.NamedQuery(query, queryValues)
+	if err != nil {
+		api.HandleErr(w, r, tx, http.StatusInternalServerError, nil, fmt.Errorf("querying Roles: %w", err))
+		return
+	}
+	defer log.Close(rows, "reading in Roles from the database")
+
+	var response struct {
+		Response interface{}
+	}
+	if version.Major >= 4 {
+		response.Response, err = read(rows)
+	} else if version.Major == 1 && version.Minor <= 2 {
+		response.Response, err = readLegacy(rows)
+	} else {
+		response.Response, err = readExtremeLegacy(rows)
+	}
+	if err != nil {
+		api.HandleErr(w, r, tx, http.StatusInternalServerError, nil, err)
+		return
+	}
+
+	api.WriteResp(w, r, response)
+}
 
 type TORole struct {
 	api.APIInfoImpl `json:"-"`
@@ -62,9 +208,9 @@ func (v *TORole) NewReadObj() interface{}       { return &TORole{} }
 func (v *TORole) SelectQuery() string           { return selectQuery() }
 func (v *TORole) ParamColumns() map[string]dbhelpers.WhereColumnInfo {
 	return map[string]dbhelpers.WhereColumnInfo{
-		"name":      dbhelpers.WhereColumnInfo{Column: "name"},
-		"id":        dbhelpers.WhereColumnInfo{Column: "id", Checker: api.IsInt},
-		"privLevel": dbhelpers.WhereColumnInfo{Column: "priv_level", Checker: api.IsInt}}
+		"name":      {Column: "name"},
+		"id":        {Column: "id", Checker: api.IsInt},
+		"privLevel": {Column: "priv_level", Checker: api.IsInt}}
 }
 func (v *TORole) UpdateQuery() string { return updateQuery() }
 func (v *TORole) DeleteQuery() string { return deleteQuery() }

@@ -96,7 +96,7 @@ func (r RoleV40) String() string {
 type RoleV4 = RoleV40
 
 // Downgrade converts a Role from API versions 4.0 and later to a Role as it
-// appeared in API versions between 1.1 and 3.x (inclusive).
+// appeared in API versions between 1.3 and 3.x (inclusive).
 //
 // This makes a "deep" copy of the Role, so the return value and the original
 // Role can both be freely manipulated without affecting each other.
@@ -124,7 +124,7 @@ func (r RoleV4) Downgrade() Role {
 	return role
 }
 
-// Upgrade converts a Role from API versions between 1.1 and 3.x (inclusive) to
+// Upgrade converts a Role from API versions between 1.3 and 3.x (inclusive) to
 // a Role as it appears in API version 4.0 and later.
 //
 // This makes a "deep" copy of the Role, so the return value and the original
