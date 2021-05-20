@@ -65,18 +65,18 @@ func (to *Session) CreateUser(user tc.User, opts RequestOptions) (tc.CreateUserR
 		user.TenantID = &tenant.Response[0].ID
 	}
 
-	if user.RoleName != nil && *user.RoleName != "" {
-		innerOpts := NewRequestOptions()
-		innerOpts.QueryParameters.Set("name", *user.RoleName)
-		roles, _, err := to.GetRoles(innerOpts)
-		if err != nil {
-			return tc.CreateUserResponse{Alerts: roles.Alerts}, toclientlib.ReqInf{}, fmt.Errorf("resolving Role name '%s' to an ID: %w", *user.RoleName, err)
-		}
-		if len(roles.Response) == 0 || roles.Response[0].ID == nil {
-			return tc.CreateUserResponse{Alerts: roles.Alerts}, toclientlib.ReqInf{}, fmt.Errorf("no such Role: '%s'", *user.RoleName)
-		}
-		user.Role = roles.Response[0].ID
-	}
+	// if user.RoleName != nil && *user.RoleName != "" {
+	// 	innerOpts := NewRequestOptions()
+	// 	innerOpts.QueryParameters.Set("name", *user.RoleName)
+	// 	roles, _, err := to.GetRoles(innerOpts)
+	// 	if err != nil {
+	// 		return tc.CreateUserResponse{Alerts: roles.Alerts}, toclientlib.ReqInf{}, fmt.Errorf("resolving Role name '%s' to an ID: %w", *user.RoleName, err)
+	// 	}
+	// 	if len(roles.Response) == 0 || roles.Response[0].ID == nil {
+	// 		return tc.CreateUserResponse{Alerts: roles.Alerts}, toclientlib.ReqInf{}, fmt.Errorf("no such Role: '%s'", *user.RoleName)
+	// 	}
+	// 	user.Role = roles.Response[0].ID
+	// }
 
 	route := "/users"
 	var clientResp tc.CreateUserResponse
